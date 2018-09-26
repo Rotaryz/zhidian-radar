@@ -50,7 +50,7 @@
                       <div class="text">预计成交率</div>
                     </div>
                   </div>
-                  <div class="bottom-number" @click="showModel">
+                  <div class="bottom-number">
                     <div class="number-top" v-if="clientData.progress < 110">
                       <div class="number">{{clientData.progress}}</div>
                       <div class="icon" :class="slide === 'slide'? '' : 'iosicon'">%</div>
@@ -58,7 +58,7 @@
                     <div class="number-top" v-if="clientData.progress === '无法签单' || clientData.progress === '成交'">
                       <div class="text">{{clientData.progress}}</div>
                     </div>
-                    <div class="number-bottom">
+                    <div class="number-bottom" @click="showModel">
                       <div class="text">实际跟进阶段</div>
                       <div class="img-box">
                         <img class="img" src="./icon-switch@2x.png" alt="">
@@ -87,50 +87,54 @@
                   <img :src="item.image_url" class="msgs-left">
                   <div class="msgs-right">
                     <div class="msgs-container">
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10000">{{item.nickname}}<span
-                        class="green">查看</span>了<span
-                        class="green">你的名片</span>第{{item.count_sum}}次，看来TA对你感兴趣</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10001">{{item.nickname}}给你<span
-                        class="green">点了</span><span class="green">赞</span>，看来认可你</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10002">{{item.nickname}}<span
-                        class="green">取消</span>给你点的<span
-                        class="green">赞</span></p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10003">{{item.nickname}}<span
-                        class="green">复制</span>了你的<span
-                        class="green">邮箱</span>，请留意邮件</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10004">{{item.nickname}}<span
-                        class="green">浏览</span>了你的<span
-                        class="green">地址</span></p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10005">{{item.nickname}}<span
-                        class="green">转发</span>了你的<span
-                        class="green">名片</span>，你的人脉圈正在裂变</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10006">{{item.nickname}}<span
-                        class="green">保存</span>了你的<span
-                        class="green">名片海报</span>，看来TA对你感兴趣</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10007">{{item.nickname}}<span
-                        class="green">拨打</span>了你的<span
-                        class="green">手机</span>，请记录跟进内容</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10008">{{item.nickname}}<span
-                        class="green">保存</span>了你的<span
-                        class="green">电话</span>，可以考虑主动沟通</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 10010">{{item.nickname}}<span class="green">复制</span>了你的<span class="green">微信</span>，可以考虑主动沟通</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 20001">{{item.nickname}}正在<span
-                        class="green">查看</span>你的<span class="green">产品</span>第{{item.count_sum}}次，请把握商机</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 20002">{{item.nickname}}正在<span
-                        class="green">查看</span><span class="green">{{item.title | titleCut}}</span>，可能对该产品感兴趣</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 20003">{{item.nickname}}正在对<span class="green">{{item.title | titleCut}}</span>向你<span
-                        class="green">咨询</span>，请做好准备应答</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 20004">{{item.nickname}}<span
-                        class="green">转发</span>了<span
-                        class="green">{{item.title | titleCut}}</span>，可能在咨询他人建议</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 30001">{{item.nickname}}正在<span
-                        class="green">查看</span>你发布的<span class="green">动态</span>第{{item.count_sum}}次</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 30002">{{item.nickname}}给你发布的动态<span
-                        class="green">点了</span><span class="green">赞</span></p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 40001">{{item.nickname}}正在<span
-                        class="green">查看</span>你公司的<span class="green">官网</span>第{{item.count_sum}}次</p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 50001">{{item.nickname}}正在向你<span
-                        class="green">咨询</span>，请做好准备应答</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10000">{{item.nickname}}通过扫描他人分享的名片海报<span class="green">查看</span>了<span class="green">你的名片</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10001">{{item.nickname}}通过点击他人分享的名片链接<span class="green">查看</span>了<span class="green">你的名片</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10002">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了<span class="green">你的名片</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10003">{{item.nickname}}给你<span class="green">点了</span><span class="green">赞</span>，看来认可你</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10004">{{item.nickname}}<span class="green">取消</span>给你点的<span class="green">赞</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10005">{{item.nickname}}<span class="green">转发</span>了你的<span class="green">名片</span>，你的人脉圈正在裂变</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10006">{{item.nickname}}<span class="green">保存</span>了你的<span class="green">名片海报</span>，看来TA对你感兴趣</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10007">{{item.nickname}}<span class="green">拨打</span>了你的<span class="green">手机</span>，请记录跟进内容</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10008">{{item.nickname}}<span class="green">保存</span>了你的<span class="green">电话</span>，可以考虑主动沟通</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10009">{{item.nickname}}<span class="green">复制</span>了你的<span class="green">邮箱</span>，请留意邮件</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10010">{{item.nickname}}<span class="green">浏览</span>了你的<span class="green">地址</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20002">{{item.nickname}}正在对砍价活动<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20003">{{item.nickname}}正在对商品<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20004">{{item.nickname}}正在对拼团活动<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20006">{{item.nickname}}通过扫描他人分享的商品海报<span class="green">查看</span>了<span class="green">你的商品</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20007">{{item.nickname}}通过点击他人分享的商品链接<span class="green">查看</span>了<span class="green">你的商品</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20008">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了<span class="green">你的商品</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20009">{{item.nickname}}正在<span class="green">购买</span>拼团活动<span class="green">{{item.title  | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20010">{{item.nickname}}提交了拼团活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20011">{{item.nickname}}提交了拼团活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20012">{{item.nickname}}正在参与砍价活动<span class="green">{{item.title  | titleCut}}</span>，成功砍掉<span class="green">{{item.total}}元</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20013">{{item.nickname}}转发了砍价活动<span class="green">{{item.title  | titleCut}}</span>，你的活动正在裂变</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20014">{{item.nickname}}通过他人分享的链接<span class="green">查看</span>了砍价活动<span class="green">{{item.title  | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20015">{{item.nickname}}正在<span class="green">购买</span>砍价活动<span class="green">{{item.title  | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20016">{{item.nickname}}提交了砍价活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20017">{{item.nickname}}提交了砍价活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20018">{{item.nickname}}<span class="green">转发</span>了你的商品<span class="green">{{item.title  | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20019">{{item.nickname}}<span class="green">保存</span>了你的商品<span class="green">{{item.title  | titleCut}}</span>的海报图片</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20020">{{item.nickname}}提交了商品<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20021">{{item.nickname}}正在<span class="green">查看</span>你的<span class="green">商城</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30001">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了你发布的<span class="green">动态</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30002">{{item.nickname}}给你发布的动态<span class="green">点了</span><span class="green">赞</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30003">{{item.nickname}}<span class="green">评论</span>了你发布的<span class="green">动态</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 40001">{{item.nickname}}主动<span class="green">添加</span>了<span class="green">收货地址</span>，该客户有望成交</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 50001">{{item.nickname}}正在向你<span class="green">咨询</span>，请做好准备应答</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60001">{{item.nickname}}通过扫描他人分享的小店海报<span class="green">访问</span>了<span class="green">你的小店</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60002">{{item.nickname}}通过扫描他人分享的小店链接<span class="green">访问</span>了<span class="green">你的小店</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60003">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了<span class="green">你的小店</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60004">{{item.nickname}}<span class="green">转发</span>了你的<span class="green">小店</span>，你的人脉圈正在裂变</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60005">{{item.nickname}}<span class="green">保存</span>了你的<span class="green">小店海报</span>，看来TA对你感兴趣</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60006">{{item.nickname}}正在<span class="green">查看</span>你的<span class="green">名片</span>，看来TA对你感兴趣</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60007">{{item.nickname}}给你的名片<span class="green">点了</span><span class="green">赞</span>，看来认可你</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60008">{{item.nickname}}正在<span class="green">查看</span>拼团活动<span class="green">{{item.title  | titleCut}}</span>，可能对该活动感兴趣</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60009">{{item.nickname}}给拼团活动<span class="green">{{item.title  | titleCut}}</span>点了<span class="green">赞</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60010">{{item.nickname}}正在<span class="green">查看</span>砍价活动<span class="green">{{item.title  | titleCut}}</span>，可能对该活动感兴趣</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60011">{{item.nickname}}给砍价活动<span class="green">{{item.title  | titleCut}}</span>点了<span class="green">赞</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60012">{{item.nickname}}正在<span class="green">查看</span>商品<span class="green">{{item.title  | titleCut}}</span>，可能对该活动感兴趣</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60013">{{item.nickname}}给商品<span class="green">{{item.title  | titleCut}}</span>点了<span class="green">赞</span></p>
                     </div>
                     <!--<img src="./icon-pressed@2x.png" class="msgs-rt">-->
                   </div>
@@ -229,7 +233,7 @@
   import Exception from 'components/exception/exception'
   import {mapActions, mapGetters} from 'vuex'
   import utils from 'common/js/utils'
-  const PIEHINT = [{text: '对我感兴趣', icon: 'one'}, {text: '对产品感兴趣', icon: 'two'}, {text: '对公司感兴趣', icon: 'thr'}]
+  const PIEHINT = [{text: '动态', icon: 'one'}, {text: '商品', icon: 'two'}, {text: '拼团', icon: 'thr'}, {text: '砍价', icon: 'four'}]
   export default {
     name: 'client-detail',
     data() {
@@ -306,8 +310,8 @@
           x: [],
           y: []
         },
-        showTab: false,
-        pieHint: PIEHINT
+        pieHint: PIEHINT,
+        showTab: false
       }
     },
     created() {
@@ -331,10 +335,10 @@
         'setCurrent'
       ]),
       refresh() {
-        this.flowPage = 1
-        this.getClientId(this.id)
-        this.getCusomerTagList()
-        this.getActionLineData()
+        setTimeout(() => {
+          this.getClientId(this.id)
+          this.getCusomerTagList()
+        }, 300)
       },
       getCusomerTagList() {
         Client.getCusomerTagList({customer_id: this.id}).then(res => {
@@ -603,7 +607,6 @@
       selectBar(index, item) {
         this.barIndex = index
         this.flow.progress = item.text
-        this.flowPage = 1
         setTimeout(() => {
           this.showMode = true
           ClientDetail.saveClientDetail(this.clientData.id, this.flow).then((res) => {
@@ -644,7 +647,6 @@
             this.clientData = res.data
             this.id = res.data.id
             this.flowId = res.data.flow_id
-            this.mobile = res.data.mobile
             ClientDetail.getClientDetail(id).then(res => {
               if (res.error === ERR_OK) {
                 if (res.data.flow.real_name.length !== 0) {
@@ -654,6 +656,7 @@
                 }
               }
             })
+            this.mobile = res.data.mobile
             this.getNewFlowList(this.id, this.flowId)
             this.getNewActionList(this.id)
           }
@@ -702,12 +705,12 @@
           this.$refs.scroll.forceUpdate()
           return
         }
-        // this.actionPage++
+        this.actionPage++
         const number = this.actionList.length
         ClientDetail.getActionList(id, number).then((res) => {
           if (res.error === ERR_OK) {
             if (res.data.length * 1 === 0) {
-              // this.actionPage--
+              this.actionPage--
               this.noActionMore = true
             } else {
               this.actionList.push(...res.data)
@@ -740,7 +743,7 @@
           account: this.clientData.im_account
         }
         this.setCurrent(currentMsg)
-        let url = '/chat?id=' + this.clientData.im_account
+        let url = '/chat/' + this.clientData.im_account
         this.$router.push(url)
       },
       onPullingUp() {
@@ -937,6 +940,31 @@
               top: 0
               bottom: 0
               margin: auto
+        .label-box
+          overflow-x: auto
+          position:relative
+          margin-top: 10px
+          z-index: 66
+          .label-content
+            display: inline-block
+            white-space: nowrap
+          .label
+            padding: 0 10px
+            height: 20px
+            line-height: 20px
+            text-align: center
+            display: inline-block
+            font-size: $font-size-12
+            color: $color-text-88
+            font-family: $font-family-regular
+            background: #F0F2F5
+            margin-right: 5px
+          .active
+            background: rgba(86, 186, 21, 0.2)
+            color: #56BA15
+        .cliten-top
+          padding-bottom: 10px
+          border-bottom-1px(#e5e5e5)
         .cliten-bottom
           position: relative
           z-index: 1
@@ -1079,7 +1107,6 @@
   .visitor-box
     padding: 0 15px
     .box-list
-      padding-top: 10px
       font-family: $font-family-regular
       .time
         font-size: $font-size-medium
@@ -1121,7 +1148,6 @@
         font-size: $font-size-medium
         color: $color-text-88
       .text
-        word-break: break-word
         margin-top: 10px
         font-size: $font-size-medium
         color: $color-text
@@ -1165,6 +1191,7 @@
       background: #CCCCCC
       top: 15px
       left: 18px
+
   .ai-box
     padding: 15px
     .pie-box
@@ -1351,31 +1378,6 @@
         height: 11.5px
         margin-left: 33px
 
-  .label-box
-    overflow-x: auto
-    position:relative
-    margin-top: 10px
-    z-index: 66
-    .label-content
-      display: inline-block
-      white-space: nowrap
-    .label
-      padding: 0 10px
-      height: 20px
-      line-height: 20px
-      text-align: center
-      display: inline-block
-      font-size: $font-size-12
-      color: $color-text-88
-      font-family: $font-family-regular
-      background: #F0F2F5
-      margin-right: 5px
-    .active
-      background: rgba(86, 186, 21, 0.2)
-      color: #56BA15
-  .cliten-top
-    padding-bottom: 10px
-    border-bottom-1px(#e5e5e5)
   .msgs-item:last-child
     margin-bottom: 0
 </style>

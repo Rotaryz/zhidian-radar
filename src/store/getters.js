@@ -16,8 +16,6 @@ export const ios = state => state.platform === 'ios'
 
 export const imIng = state => state.imIng
 
-export const img = state => state.img
-
 export const groupItem = state => state.groupItem
 
 export const currentGroupMsg = state => state.currentGroupMsg

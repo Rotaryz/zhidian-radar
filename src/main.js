@@ -7,8 +7,6 @@ import 'common/stylus/index.styl'
 // import fastclick from 'fastclick'
 import store from './store'
 import echarts from 'echarts'
-import AwesomePicker from 'vue-awesome-picker'
-Vue.use(AwesomePicker)
 Vue.prototype.$echarts = echarts
 
 // fastclick.attach(document.body)

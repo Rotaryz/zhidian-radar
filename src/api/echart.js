@@ -6,7 +6,7 @@ export default {
    * @returns {*}
    */
   getPie(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/interest-rate-chart'
+    let url = 'api/employee/ws-interest-rate-chart'
     let data = {
       customer_id,
       merchant_id,
@@ -19,7 +19,7 @@ export default {
    * @returns {*}
    */
   getActionLine(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/active-chart'
+    let url = 'api/employee/ws-active-chart'
     let data = {
       customer_id,
       merchant_id,
@@ -32,7 +32,7 @@ export default {
    * @returns {*}
    */
   getAddLine(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/new-customer-sum-chart'
+    let url = 'api/employee/ws-new-customer-sum-chart'
     let data = {
       customer_id,
       merchant_id,
@@ -45,7 +45,7 @@ export default {
    * @returns {*}
    */
   getSuccess(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/close-deal-rate-chart'
+    let url = 'api/employee/ws-close-deal-rate-chart'
     let data = {
       customer_id,
       merchant_id,
@@ -58,7 +58,7 @@ export default {
    * @returns {*}
    */
   getBar(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/interactive-chart'
+    let url = 'api/employee/ws-interactive-chart'
     let data = {
       customer_id,
       merchant_id,
@@ -71,7 +71,7 @@ export default {
    * @returns {*}
    */
   getEmployee(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/interactive-chart'
+    let url = 'api/employee/ws-interactive-chart'
     let data = {
       customer_id,
       merchant_id,
@@ -84,7 +84,7 @@ export default {
    * @returns {*}
    */
   getAllData(time = 'all', merchant_id = 0, employee_id = 0) {
-    let url = 'api/employee/data_overview'
+    let url = 'api/employee/ws-data-overview'
     let data = {
       time,
       merchant_id,

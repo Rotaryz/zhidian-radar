@@ -3,19 +3,19 @@ import Utils from 'common/js/utils'
 import {TIMELAG} from 'common/js/config'
 
 const mutations = {
-  [TYPES.SET_TAB_MODE] (state, tabMode) {
+  [TYPES.SET_TAB_MODE](state, tabMode) {
     state.tabMode = tabMode
   },
   [TYPES.SET_SIGNSTURE] (state, signature) {
     state.signature = signature
   },
-  [TYPES.SET_LATELY_LIST] (state, latelyList) {
+  [TYPES.SET_LATELY_LIST](state, latelyList) {
     state.latelyList = latelyList
   },
-  [TYPES.SET_CURRENT] (state, current) {
+  [TYPES.SET_CURRENT](state, current) {
     state.currentMsg = current
   },
-  [TYPES.SET_UNREAD_COUNT] (state, id) {
+  [TYPES.SET_UNREAD_COUNT](state, id) {
     state.latelyList = state.latelyList.map((item) => {
       if (item.sessionId === id) {
         item.unreadMsgCount = 0
@@ -23,17 +23,17 @@ const mutations = {
       return item
     })
   },
-  [TYPES.SET_NEW_MSG] (state, msg) {
+  [TYPES.SET_NEW_MSG](state, msg) {
     state.newMsg = msg
   },
-  [TYPES.SET_CUSTOM_COUNT] (state, type) {
+  [TYPES.SET_CUSTOM_COUNT](state, type) {
     if (type === 'add') {
       state.customCount++
     } else if (type === 'clear') {
       state.customCount = 0
     }
   },
-  [TYPES.ADD_LIST_COUNT] (state, msg) {
+  [TYPES.ADD_LIST_COUNT](state, msg) {
     let hasArr = state.latelyList.filter((item) => {
       return item.sessionId === msg.fromAccount
     })
@@ -55,7 +55,7 @@ const mutations = {
       }
     }
   },
-  [TYPES.ADD_LIST_MSG] (state, typeObj) {
+  [TYPES.ADD_LIST_MSG](state, typeObj) {
     let msg = typeObj.msg
     if (msg.desc) {
       let desc = JSON.parse(msg.desc)
@@ -89,12 +89,9 @@ const mutations = {
     }
     state.latelyList = [inItem, ...notIn]
   },
-  [TYPES.SET_IM_INFO] (state, imInfo) {
+  [TYPES.SET_IM_INFO](state, imInfo) {
     state.imInfo = imInfo
   },
-  // [TYPES.SET_NOW_CHAT] (state, arr) {
-  //   state.nowChat = arr
-  // },
   [TYPES.SET_NOW_CHAT](state, arr) {
     state.nowChat = arr.map((item) => {
       item.html = Utils.msgFaceToHtml(item.content)
@@ -145,49 +142,8 @@ const mutations = {
     }
     state.nowChat = [...state.nowChat, newMsg]
   },
-  // [TYPES.ADD_NOW_CHAT] (state, msg) {
-  //   let newMsg
-  //   if (msg.type === 'chat') {
-  //     newMsg = {
-  //       from_account_id: msg.fromAccount,
-  //       avatar: state.currentMsg.avatar,
-  //       content: msg.text,
-  //       time: msg.time,
-  //       msgTimeStamp: msg.time,
-  //       nickName: state.currentMsg.nickName,
-  //       sessionId: msg.fromAccount,
-  //       unreadMsgCount: 0,
-  //       type: 1
-  //     }
-  //   } else {
-  //     let data = JSON.parse(msg.data)
-  //     newMsg = {
-  //       from_account_id: msg.fromAccount,
-  //       avatar: state.currentMsg.avatar,
-  //       time: msg.time,
-  //       url: data.url,
-  //       title: data.title,
-  //       msgTimeStamp: msg.time,
-  //       nickName: state.currentMsg.nickName,
-  //       sessionId: msg.fromAccount,
-  //       unreadMsgCount: 0,
-  //       type: 2
-  //     }
-  //   }
-  //   if (state.nowChat.length) {
-  //     let lastItem = state.nowChat[state.nowChat.length - 1]
-  //     let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
-  //     newMsg.is_showtime = msg.time - lastTime > TIMELAG
-  //   } else {
-  //     newMsg.is_showtime = true
-  //   }
-  //   state.nowChat = [...state.nowChat, newMsg]
-  // },
-  [TYPES.SET_IM_ING] (state, boolean) {
+  [TYPES.SET_IM_ING](state, boolean) {
     state.imIng = boolean
-  },
-  [TYPES.SET_CUT_IMAGE] (state, img) {
-    state.img = img
   },
   [TYPES.SET_GROUP_ITEM] (state, msg) {
     state.groupItem = {

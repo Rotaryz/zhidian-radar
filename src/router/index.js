@@ -29,12 +29,15 @@ const AddFlow = () => import('pages/add-flow/add-flow')
 const MyData = () => import('pages/my-data/my-data')
 const PageError = () => import('pages/page-error/page-error')
 const Home = () => import('pages/home/home')
+const SelectGoods = () => import('pages/select-goods/select-goods')
 const NewGroupMsg = () => import('pages/new-group-msg/new-group-msg')
 const NewsAddGroup = () => import('pages/news-add-group/news-add-group')
 const NewsChatGroup = () => import('pages/news-chat-group/news-chat-group')
-const ActionDetail = () => import('pages/action-detail/action-detail')
-const MineInfo = () => import('pages/mine-info/mine-info')
-const AddAdress = () => import('pages/addAdress/addAdress')
+const UsefulWord = () => import('pages/useful-word/useful-word')
+const AddWord = () => import('pages/add-word/add-word')
+const GroupCode = () => import('pages/group-code/group-code')
+const PersonCode = () => import('pages/person-code/person-code')
+const RobotCode = () => import('pages/robot-code/robot-code')
 
 Vue.use(Router)
 
@@ -70,13 +73,6 @@ const route = new Router({
             meta: {
               title: '修改签名'
             }
-          },
-          {
-            path: 'addAdress',
-            component: AddAdress,
-            meta: {
-              title: '编辑地址'
-            }
           }]
         },
         {
@@ -87,18 +83,25 @@ const route = new Router({
           }
         },
         {
-          path: 'mine-info',
-          component: MineInfo,
+          path: 'group-code',
+          component: GroupCode,
           meta: {
-            title: '个人信息'
+            title: '微信群码'
           }
         },
         {
-          path: 'shareCard',
-          component: ShareCard,
+          path: 'person-code',
+          component: PersonCode,
           meta: {
-            title: '查看名片'
-          }
+            title: '个人微信'
+          },
+          children: [{
+            path: 'robot-code',
+            component: RobotCode,
+            meta: {
+              title: '机器人微信'
+            }
+          }]
         },
         {
           path: 'goodList',
@@ -129,11 +132,53 @@ const route = new Router({
           }]
         }]
       }, {
-        path: '/chat',
+        path: '/chat/:id',
         component: Chat,
         meta: {
           title: ''
-        }
+        },
+        children: [{
+          path: 'select-goods',
+          component: SelectGoods,
+          meta: {
+            title: '选择商品'
+          }
+        }, {
+          path: 'useful-word',
+          component: UsefulWord,
+          meta: {
+            title: '常用语'
+          },
+          children: [
+            {
+              path: 'add-word',
+              component: AddWord,
+              meta: {
+                title: '常用语'
+              }
+            }
+          ]
+        }, {
+          path: 'group-code',
+          component: GroupCode,
+          meta: {
+            title: '微信群码'
+          }
+        },
+        {
+          path: 'person-code',
+          component: PersonCode,
+          meta: {
+            title: '个人微信'
+          },
+          children: [{
+            path: 'robot-code',
+            component: RobotCode,
+            meta: {
+              title: '机器人微信'
+            }
+          }]
+        }]
       },
       {
         path: '/scroll-demo',
@@ -154,13 +199,6 @@ const route = new Router({
         component: Cdata,
         meta: {
           title: '客户资料'
-        }
-      },
-      {
-        path: '/action-detail',
-        component: ActionDetail,
-        meta: {
-          title: '查看名片'
         }
       },
       {
@@ -205,13 +243,6 @@ const route = new Router({
                 }
               }
             ]
-          },
-          {
-            path: '/action-detail',
-            component: ActionDetail,
-            meta: {
-              title: '查看名片'
-            }
           }
         ]
       },
@@ -234,7 +265,53 @@ const route = new Router({
         component: NewsChatGroup,
         meta: {
           title: '群发'
-        }
+        },
+        children: [ // todo
+          {
+            path: 'select-goods',
+            component: SelectGoods,
+            meta: {
+              title: '选择商品'
+            }
+          },
+          {
+            path: 'group-code',
+            component: GroupCode,
+            meta: {
+              title: '微信群码'
+            }
+          },
+          {
+            path: 'person-code',
+            component: PersonCode,
+            meta: {
+              title: '个人微信'
+            },
+            children: [{
+              path: 'robot-code',
+              component: RobotCode,
+              meta: {
+                title: '机器人微信'
+              }
+            }]
+          },
+          {
+            path: 'useful-word',
+            component: UsefulWord,
+            meta: {
+              title: '常用语'
+            },
+            children: [
+              {
+                path: 'add-word',
+                component: AddWord,
+                meta: {
+                  title: '常用语'
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         path: '/new-group-msg',
@@ -411,7 +488,7 @@ const route = new Router({
       path: '/shareCard',
       component: ShareCard,
       meta: {
-        title: '查看名片'
+        title: '分享名片'
       }
     }
   ]

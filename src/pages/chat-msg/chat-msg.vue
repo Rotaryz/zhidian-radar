@@ -1,7 +1,7 @@
 <template>
   <transition :name="slide">
     <div class="chat">
-      <section class="chat-container" ref="chat" @click.stop="hideInput">
+      <div class="chat-container" ref="chat">
         <scroll ref="scroll"
                 :data="nowChat"
                 :pullDownRefresh="pullDownRefreshObj"
@@ -9,12 +9,12 @@
           <div class="chat-list" ref="list">
             <div class="list-line"></div>
             <div class="chat-item" v-for="(item, index) in nowChat" :key="index">
-              <article class="item-time" v-if="item.is_showtime">
+              <div class="item-time" v-if="item.is_showtime">
                 <span class="time-box">{{item.created_at ? item.created_at : item.msgTimeStamp | timeFormat}}</span>
-              </article>
-              <article class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
-                <div class="avatar" :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <section class="chat-msg-box other" v-if="item.type * 1 == 1">
+              </div>
+              <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
+                <div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>
+                <div class="chat-msg-box other" v-if="item.type * 1 === 1">
                   <div class="arrow-box">
                     <div class="gray-arrow">
                       <div class="white-arrow"></div>
@@ -23,70 +23,88 @@
                   <div class="chat-msg-content-max-box">
                     <div class="chat-msg-content other" v-html="item.html"></div>
                   </div>
-                </section>
-                <section class="chat-msg-goods" v-if="item.type * 1 == 2">
+                </div>
+                <div class="chat-msg-goods" v-if="item.type * 1 == 2">
                   <img :src="item.url" class="goods-img" @load="refushBox">
                   <p class="goods-title">{{item.title}}</p>
-                </section>
-                <!--<section class="chat-msg-new-goods other" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">-->
-                <!--<div class="new-goods-top">-->
-                <!--<div class="shop-title">-->
-                <!--<div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>-->
-                <!--<div class="shop-name">{{item.shop_name}}的小店</div>-->
-                <!--</div>-->
-                <!--<div class="goods-title">-->
-                <!--<img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">-->
-                <!--<img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">-->
-                <!--<span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '底价'}}只要{{item.goods_price}}元！</span>-->
-                <!--</div>-->
-                <!--<div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>-->
-                <!--</div>-->
-                <!--<div class="new-goods-down border-top-1px">-->
-                <!--<img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">-->
-                <!--<span>赞播微店</span>-->
-                <!--</div>-->
-                <!--</section>-->
-                <section>
+                </div>
+                <div class="chat-msg-new-goods other" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">
+                  <div class="new-goods-top">
+                    <div class="shop-title">
+                      <div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
+                      <div class="shop-name">{{item.shop_name}}的小店</div>
+                    </div>
+                    <div class="goods-title">
+                      <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
+                      <img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">
+                      <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '现价'}}只要{{item.goods_price}}元！</span>
+                    </div>
+                    <div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>
+                  </div>
+                  <div class="new-goods-down border-top-1px">
+                    <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
+                    <span>赞播微店</span>
+                  </div>
+                </div>
+                <div>
                   <img class="chat-msg-img other" :src="item.url" v-if="item.type * 1 == 20" @load="refushBox" @click.stop="showPic(item)">
-                </section>
-              </article>
-              <article class="chat-content mine" v-if="item.from_account_id === imInfo.im_account">
-                <section class="chat-msg-box mine" v-if="item.type * 1 === 1">
+                </div>
+              </div>
+              <div class="chat-content mine" v-if="item.from_account_id === imInfo.im_account">
+                <div class="chat-msg-box mine" v-if="item.type * 1 === 1">
                   <div class="chat-msg-content-max-box">
                     <div class="chat-msg-content mine" v-html="item.html"></div>
                   </div>
                   <div class="arrow-box">
                     <div class="green-arrow"></div>
                   </div>
-                </section>
-                <!--<section class="chat-msg-new-goods mine" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">-->
-                <!--<div class="new-goods-top">-->
-                <!--<div class="shop-title">-->
-                <!--<div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>-->
-                <!--<div class="shop-name">{{item.shop_name}}的小店</div>-->
-                <!--</div>-->
-                <!--<div class="goods-title">-->
-                <!--<img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">-->
-                <!--<img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">-->
-                <!--<span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '底价'}}只要{{item.goods_price}}元！</span>-->
-                <!--</div>-->
-                <!--<div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>-->
-                <!--</div>-->
-                <!--<div class="new-goods-down border-top-1px">-->
-                <!--<img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">-->
-                <!--<span>赞播微店</span>-->
-                <!--</div>-->
-                <!--</section>-->
+                </div>
+                <div class="chat-msg-new-goods mine" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">
+                  <div class="new-goods-top">
+                    <div class="shop-title">
+                      <div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
+                      <div class="shop-name">{{item.shop_name}}的小店</div>
+                    </div>
+                    <div class="goods-title">
+                      <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
+                      <img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">
+                      <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '现价'}}只要{{item.goods_price}}元！</span>
+                    </div>
+                    <div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>
+                  </div>
+                  <div class="new-goods-down border-top-1px">
+                    <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
+                    <span>赞播微店</span>
+                  </div>
+                </div>
                 <div>
                   <img class="chat-msg-img mine" :src="item.url" v-if="item.type * 1 == 20" @load="refushBox" @click.stop="showPic(item)">
                 </div>
+                <div class="chat-msg-qrCode mine" v-if="item.type * 1 === 6">
+                  <div class="qrCode-content">
+                    <p class="qrCode-title">欢迎光临我的小店</p>
+                    <div class="qrCode-text-content">
+                      <div class="qrCode-txt">点击本条消息加微信，随时找我聊天</div>
+                      <img src="./pic-code@3x.png" class="qrCode-img">
+                    </div>
+                  </div>
+                </div>
+                <div class="chat-msg-qrCode mine" v-if="item.type * 1 === 7">
+                  <div class="qrCode-content">
+                    <p class="qrCode-title">欢迎加入我的微信福利群</p>
+                    <div class="qrCode-text-content">
+                      <div class="qrCode-txt">点击本条消息加入微信群，不定时抢购福利</div>
+                      <img src="./pic-code@3x.png" class="qrCode-img">
+                    </div>
+                  </div>
+                </div>
                 <div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-              </article>
+              </div>
             </div>
           </div>
         </scroll>
-      </section>
-      <section class="chat-input border-top-1px">
+      </div>
+      <div class="chat-input border-top-1px">
         <div class="chat-input-box">
           <div class="face-box" @click.stop="showEmoji">
             <img src="../../../static/img/icon-emoji@2x.png" class="face-icon">
@@ -106,15 +124,29 @@
             </div>
           </div>
           <div class="addimg-list" v-if="mortListShow">
-            <label class="addimg-item" :for="item.type == 1?'choose-pic':''" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">
-              <img :src="item.icon" class="item-icon">
+            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">
+              <div class="img-box">
+                <div class="item-icon" :class="item.icon"></div>
+              </div>
               <p class="item-txt">{{item.txt}}</p>
-              <input type="file" id="choose-pic" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
-            </label>
+              <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+      <transition name="fade">
+        <div class="cover-full" v-if="coverFullShow">
+          <div class="cover-container">
+            <div class="cover-top">
+              <span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>
+              <span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>
+            </div>
+            <div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>
+          </div>
+        </div>
+      </transition>
       <toast ref="toast"></toast>
+      <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
 </template>
@@ -122,48 +154,28 @@
 <script>
   import Scroll from 'components/scroll/scroll'
   import Toast from 'components/toast/toast'
-  import { ease } from 'common/js/ease'
-  import { mapActions, mapGetters } from 'vuex'
+  import {ease} from 'common/js/ease'
+  import {mapActions, mapGetters} from 'vuex'
   import webimHandler from 'common/js/webim_handler'
   import storage from 'storage-controller'
-  import { Im, UpLoad, Global } from 'api'
-  import { ERR_OK, TIMELAG } from 'common/js/config'
+  import {Im, UpLoad, Global} from 'api'
+  import {ERR_OK, TIMELAG} from 'common/js/config'
   import utils from 'common/js/utils'
-  import { emotionsFaceArr } from 'common/js/constants'
+  import {emotionsFaceArr} from 'common/js/constants'
   import wx from 'weixin-js-sdk'
 
   const MORELIST = [
-    {txt: '图片', icon: '../../../static/img/icon-pic-_im@2x.png', type: 1}
-    // {txt: '发送商品', icon: '../../../static/img/icon-goods_im@2x.png', type: 2},
-    // {txt: '发送活动', icon: '../../../static/img/icon-send_im@2x.png', type: 3}
+    {txt: '图片', icon: 'im-image', type: 1},
+    {txt: '个人微信', icon: 'im-weixin', type: 4},
+    {txt: '微信群码', icon: 'im-group', type: 5},
+    {txt: '常用语', icon: 'im-useful', type: 6},
+    {txt: '发送商品', icon: 'im-goods', type: 2},
+    {txt: '发送活动', icon: 'im-activity', type: 3}
   ]
   export default {
     name: 'Chat',
-    data() {
-      return {
-        textareaDom: '',
-        heightBoxDom: '',
-        txtHeight: '36px',
-        inputMsg: '',
-        list: [],
-        pullDownRefresh: true,
-        pullDownRefreshThreshold: 90,
-        pullDownRefreshStop: 40,
-        startY: '',
-        scrollToEasing: 'bounce',
-        scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
-        id: '',
-        page: 1,
-        noMore: false,
-        moreLists: MORELIST,
-        emojiList: emotionsFaceArr,
-        emojiShow: false,
-        mortListShow: false
-      }
-    },
     created() {
-      this.id = this.$route.query.id
-      if (this.exceptionHandle(!this.id)) return
+      this.id = this.$route.params.id
       let data = {
         'end_date': this.endDate,
         limit: 40,
@@ -181,13 +193,13 @@
             } else {
               startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
             }
-            this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
+            this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
             clearTimeout(timer)
           }, 20)
         }
       })
       let url = location.href
-      Global.jssdkConfig({weixin: 'ai_radar', url, current_type: 'zantui'}).then((res) => {
+      Global.jssdkConfig({weixin: 'ai_radar', url, current_type: 'weishang'}).then((res) => {
         if (res.error === ERR_OK) {
           res = res.data
           wx.config({
@@ -200,13 +212,13 @@
           })
         }
       })
+      this.getQrCodeStatus()
     },
     mounted() {
       this.textareaDom = this.$refs.inputTxt
       this.textBoxDom = this.$refs.textBox
       this.chatDom = this.$refs.chat
       this.listDom = this.$refs.list
-      if (this.exceptionHandle(!this.currentMsg.account)) return
       document.title = this.currentMsg.nickName
       webimHandler.getC2CMsgList(this.currentMsg.account) // 消息已读处理
       this.setUnreadCount(this.currentMsg.account) // vuex
@@ -222,19 +234,283 @@
         'addListMsg',
         'setNowChat'
       ]),
-      exceptionHandle(flag) {
-        if (flag) {
-          this.$refs.toast.show('网络异常, 请稍后重试')
-          this.$router.go(-1)
-          return true
-        }
-      },
-      hideInput() {
-        this.mortListShow = false
-        this.emojiShow = false
-      },
       showPic(item) {
         wx.previewImage({urls: [item.url]})
+      },
+      getQrCodeStatus() {
+        Im.getCodeStatus().then(res => {
+          if (res.error === ERR_OK) {
+            this.codeStatus = res.data
+          }
+        })
+      },
+      textHeight() {
+        let timer = setTimeout(() => {
+          this.textareaDom.style.height = 'auto'
+          this.textareaDom.style.height = this.textareaDom.scrollHeight + 'px'
+          this.textBoxDom.scrollTop = this.textareaDom.scrollHeight
+          clearTimeout(timer)
+        }, 20)
+      },
+      refushBox() {
+        let timer = setTimeout(() => {
+          let startY
+          if (this.listDom.clientHeight < this.chatDom.clientHeight) {
+            startY = 20
+          } else {
+            startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+          }
+          this.$refs.scroll.refresh()
+          this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
+          clearTimeout(timer)
+        }, 20)
+      },
+      onPullingDown() {
+        let heightBegin = this.listDom.clientHeight
+        let data = {
+          'end_date': this.endDate,
+          limit: 40,
+          customer_im_account: this.id,
+          employee_im_account: this.imInfo.im_account
+        }
+        Im.getMsgList(data).then((res) => {
+          if (res.error === ERR_OK) {
+            if (res.data.length) {
+              let resData = res.data.reverse()
+              let list = [...resData, ...this.nowChat]
+              this.setNowChat(list)
+              this.$refs.scroll.forceUpdate()
+              let timer = setTimeout(() => {
+                let heightEnd = this.listDom.clientHeight
+                this.$refs.scroll.scrollTo(0, heightBegin - heightEnd, 10, ease[this.scrollToEasing])
+                clearTimeout(timer)
+              }, 30)
+            } else {
+              this.noMore = true
+              this.page--
+            }
+            this.$refs.scroll.forceUpdate()
+          }
+        })
+      },
+      rebuildScroll() {
+        this.$nextTick(() => {
+          this.$refs.scroll.destroy()
+          this.$refs.scroll.initScroll()
+        })
+      },
+      sendMsg() {
+        let value = this.inputMsg.trim()
+        if (!value) {
+          this.$refs.toast.show('发送消息不能为空')
+          return
+        }
+        let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+        let msg = {
+          from_account_id: this.imInfo.im_account,
+          avatar: this.userInfo.avatar,
+          content: value,
+          time: timeStamp,
+          msgTimeStamp: timeStamp,
+          nickName: this.userInfo.nickName,
+          sessionId: this.userInfo.account,
+          unreadMsgCount: 0,
+          type: 1
+        }
+        if (this.nowChat.length) {
+          let lastItem = this.nowChat[this.nowChat.length - 1]
+          let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+          msg.is_showtime = timeStamp - lastTime > TIMELAG
+        } else {
+          msg.is_showtime = true
+        }
+        let list = [...this.nowChat, msg]
+        this.setNowChat(list)
+        let addMsg = {
+          text: value,
+          time: timeStamp,
+          msgTimeStamp: timeStamp,
+          fromAccount: this.id,
+          sessionId: this.id,
+          unreadMsgCount: 0,
+          avatar: this.currentMsg.avatar,
+          nickName: this.currentMsg.nickName
+        }
+        this.addListMsg({msg: addMsg, type: 'mineAdd'})
+        this.inputMsg = ''
+        this.emojiShow = false
+        this.$refs.scroll.forceUpdate()
+        if (this.listDom.clientHeight > this.chatDom.clientHeight) {
+          let timer = setTimeout(() => {
+            let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+            this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+            clearTimeout(timer)
+          }, 20)
+        }
+        webimHandler.onSendMsg(value, this.id).then(res => {
+        }, () => {
+          this.$refs.toast.show('网络异常, 请稍后重试')
+        })
+      },
+      nextWork(item) {
+        let type = item.type * 1
+        let url
+        switch (type) {
+          case 1:
+            break
+          case 2:
+            url = this.$route.fullPath + '/select-goods?type=1'
+            this.mortListShow = false
+            this.$router.push({path: url})
+            break
+          case 3:
+            url = this.$route.fullPath + '/select-goods?type=2'
+            this.mortListShow = false
+            this.$router.push({path: url})
+            break
+          case 4:
+            if (!this.codeStatus.have_personal_qrcode) {
+              this.coverFullShow = true
+              this.coverShowType = 'person'
+            } else {
+              let data = {}
+              let desc = {log_type: 6}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+              let msg = {
+                from_account_id: this.imInfo.im_account,
+                avatar: this.userInfo.avatar,
+                content: '',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                nickName: this.userInfo.nickName,
+                sessionId: this.userInfo.account,
+                unreadMsgCount: 0,
+                type: 6
+              }
+              if (this.nowChat.length) {
+                let lastItem = this.nowChat[this.nowChat.length - 1]
+                let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+                msg.is_showtime = timeStamp - lastTime > TIMELAG
+              } else {
+                msg.is_showtime = true
+              }
+              let list = [...this.nowChat, msg]
+              this.setNowChat(list)
+              let addMsg = {
+                text: '[其他消息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: this.id,
+                sessionId: this.id,
+                unreadMsgCount: 0,
+                avatar: this.currentMsg.avatar,
+                nickName: this.currentMsg.nickName
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+              this.mortListShow = false
+              this.$refs.scroll.forceUpdate()
+              if (this.listDom.clientHeight > this.chatDom.clientHeight) {
+                let timer = setTimeout(() => {
+                  let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+                  this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+                  clearTimeout(timer)
+                }, 20)
+              }
+              webimHandler.onSendCustomMsg(opt, this.id).then(res => {
+              }, () => {
+                this.$refs.toast.show('发送失败，请重新发送')
+              })
+            }
+            break
+          case 5:
+            if (!this.codeStatus.have_wxgroup_qrcode) {
+              this.coverFullShow = true
+              this.coverShowType = 'group'
+            } else {
+              let data = {}
+              let desc = {log_type: 7}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+              let msg = {
+                from_account_id: this.imInfo.im_account,
+                avatar: this.userInfo.avatar,
+                content: '',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                nickName: this.userInfo.nickName,
+                sessionId: this.userInfo.account,
+                unreadMsgCount: 0,
+                type: 7
+              }
+              if (this.nowChat.length) {
+                let lastItem = this.nowChat[this.nowChat.length - 1]
+                let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+                msg.is_showtime = timeStamp - lastTime > TIMELAG
+              } else {
+                msg.is_showtime = true
+              }
+              let list = [...this.nowChat, msg]
+              this.setNowChat(list)
+              let addMsg = {
+                text: '[其他消息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: this.id,
+                sessionId: this.id,
+                unreadMsgCount: 0,
+                avatar: this.currentMsg.avatar,
+                nickName: this.currentMsg.nickName
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+              this.mortListShow = false
+              this.$refs.scroll.forceUpdate()
+              if (this.listDom.clientHeight > this.chatDom.clientHeight) {
+                let timer = setTimeout(() => {
+                  let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+                  this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+                  clearTimeout(timer)
+                }, 20)
+              }
+              webimHandler.onSendCustomMsg(opt, this.id).then(res => {
+              }, () => {
+                this.$refs.toast.show('发送失败，请重新发送')
+              })
+            }
+            break
+          case 6:
+            url = this.$route.fullPath + '/useful-word'
+            this.mortListShow = false
+            this.$router.push({path: url})
+            break
+        }
+      },
+      toMineCode() {
+        let url
+        switch (this.coverShowType) {
+          case 'person':
+            url = this.$route.fullPath + '/person-code'
+            break
+          case 'group':
+            url = this.$route.fullPath + '/group-code'
+            break
+        }
+        this.coverFullShow = false
+        this.$router.push({path: url})
       },
       chioceEmoji(item) {
         this.inputMsg = this.inputMsg + item.txt
@@ -266,7 +542,7 @@
               desc,
               ext
             }
-            let timeStamp = parseInt(Date.now() / 1000)
+            let timeStamp = parseInt(Date.parse(new Date()) / 1000)
             let msg = {
               from_account_id: this.imInfo.im_account,
               avatar: this.userInfo.avatar,
@@ -302,143 +578,51 @@
             this.mortListShow = false
             webimHandler.onSendCustomMsg(opt, this.id).then(res => {
             }, () => {
-              this.$refs.toast.show('发送消息不能为空')
+              this.$refs.toast.show('图片发送失败，请重新发送')
             })
           } else {
             this.$refs.toast.show('图片发送失败，请重新发送')
           }
         })
-      },
-      nextWork(item) {
-        let type = item.type * 1
-        let url
-        switch (type) {
-          case 1:
-            break
-          case 2:
-            url = this.$route.fullPath + '/select-goods?type=1'
-            this.mortListShow = false
-            this.$router.push({path: url})
-            break
-          case 3:
-            url = this.$route.fullPath + '/select-goods?type=2'
-            this.mortListShow = false
-            this.$router.push({path: url})
-            break
-        }
-      },
-      refushBox() {
-        let timer = setTimeout(() => {
-          let startY
-          if (this.listDom.clientHeight < this.chatDom.clientHeight) {
-            startY = 20
-          } else {
-            startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
-          }
-          this.$refs.scroll && this.$refs.scroll.refresh()
-          this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
-          clearTimeout(timer)
-        }, 20)
-      },
-      textHeight() {
-        let timer = setTimeout(() => {
-          this.textareaDom.style.height = 'auto'
-          this.textareaDom.style.height = this.textareaDom.scrollHeight + 'px'
-          this.textBoxDom.scrollTop = this.textareaDom.scrollHeight
-          clearTimeout(timer)
-        }, 20)
-      },
-      onPullingDown() {
-        if (this.noMore) return
-        let heightBegin = this.listDom.clientHeight
-        let data = {
-          'end_date': this.endDate,
-          limit: 40,
-          customer_im_account: this.id,
-          employee_im_account: this.imInfo.im_account
-        }
-        Im.getMsgList(data).then((res) => {
-          if (res.error === ERR_OK) {
-            if (res.data.length) {
-              let resData = res.data.reverse()
-              let list = [...resData, ...this.nowChat]
-              this.setNowChat(list)
-              this.$refs.scroll.forceUpdate()
-              let timer = setTimeout(() => {
-                let heightEnd = this.listDom.clientHeight
-                this.$refs.scroll.scrollTo(0, heightBegin - heightEnd, 10, ease[this.scrollToEasing])
-                clearTimeout(timer)
-              }, 30)
-            } else {
-              this.noMore = true
-              this.page--
-            }
-          }
-        })
-      },
-      rebuildScroll() {
-        this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
-        })
-      },
-      sendMsg() {
-        let value = this.inputMsg.trim()
-        if (!value) {
-          this.$refs.toast.show('发送消息不能为空')
-          return
-        }
-        let timeStamp = parseInt(Date.now() / 1000)
-        let msg = {
-          from_account_id: this.imInfo.im_account,
-          avatar: this.userInfo.avatar,
-          content: value,
-          time: timeStamp,
-          msgTimeStamp: timeStamp,
-          nickName: this.userInfo.nickName,
-          sessionId: this.userInfo.account,
-          unreadMsgCount: 0,
-          type: 1
-        }
-        if (this.nowChat.length) {
-          let lastItem = this.nowChat[this.nowChat.length - 1]
-          let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
-          msg.is_showtime = timeStamp - lastTime > TIMELAG
-        } else {
-          msg.is_showtime = true
-        }
-        let list = [...this.nowChat, msg]
-        this.setNowChat(list)
-        let addMsg = {
-          text: value,
-          time: timeStamp,
-          msgTimeStamp: timeStamp,
-          fromAccount: this.id,
-          sessionId: this.id,
-          unreadMsgCount: 0,
-          avatar: this.currentMsg.avatar,
-          nickName: this.currentMsg.nickName
-        }
-        this.addListMsg({msg: addMsg, type: 'mineAdd'})
-        this.inputMsg = ''
-        this.hideInput()
-        this.$refs.scroll.forceUpdate()
-        if (this.listDom.clientHeight > this.chatDom.clientHeight) {
-          let timer = setTimeout(() => {
-            let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
-            this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
-            clearTimeout(timer)
-          }, 20)
-        }
-        webimHandler.onSendMsg(value, this.id).then(res => {
-        }, () => {
-          this.$refs.toast.show('网络异常, 请稍后重试')
-        })
+      }
+    },
+    data() {
+      return {
+        textareaDom: '',
+        heightBoxDom: '',
+        txtHeight: '36px',
+        inputMsg: '',
+        list: [],
+        pullDownRefresh: true,
+        pullDownRefreshThreshold: 90,
+        pullDownRefreshStop: 40,
+        startY: '',
+        scrollToEasing: 'bounce',
+        scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
+        id: '',
+        page: 1,
+        noMore: false,
+        moreLists: MORELIST,
+        emojiList: emotionsFaceArr,
+        emojiShow: false,
+        mortListShow: false,
+        codeStatus: {},
+        coverFullShow: false,
+        coverShowType: ''
       }
     },
     components: {
       Scroll,
       Toast
+    },
+    filters: {
+      timeFormat(val) {
+        if (val) {
+          let res = utils.radarTimeFormat(val)
+          return res.time
+        }
+        return ''
+      }
     },
     watch: {
       inputMsg() {
@@ -449,15 +633,6 @@
           this.rebuildScroll()
         },
         deep: true
-      }
-    },
-    filters: {
-      timeFormat(val) {
-        if (val) {
-          let res = utils.radarTimeFormat(val)
-          return res.time
-        }
-        return ''
       }
     },
     computed: {
@@ -577,20 +752,20 @@
               height: 45px
               position: relative
               .gray-arrow
-                width: 0
-                height: 0
+                width:0
+                height:0
                 border-width: 5px 6px 5px 0
                 border-style: solid
-                border-color: transparent #D6DCE0 transparent transparent /*透明 灰 透明 透明 */
+                border-color: transparent #D6DCE0 transparent transparent/*透明 灰 透明 透明 */
                 position: absolute
                 right: 0
                 top: 17.5px
                 .white-arrow
-                  width: 0
-                  height: 0
+                  width:0
+                  height:0
                   border-width: 5px 6px 5px 0
                   border-style: solid
-                  border-color: transparent #FFF transparent transparent /*透明 灰 透明 透明 */
+                  border-color: transparent #FFF transparent transparent/*透明 灰 透明 透明 */
                   position: absolute
                   left: 1px
                   top: -5px
@@ -603,11 +778,11 @@
               height: 45px
               position: relative
               .green-arrow
-                width: 0
-                height: 0
+                width:0
+                height:0
                 border-width: 5px 0 5px 6px
                 border-style: solid
-                border-color: transparent transparent transparent $color-green /*透明 灰 透明 透明 */
+                border-color: transparent transparent transparent $color-green/*透明 灰 透明 透明 */
                 position: absolute
                 left: 0
                 top: 17.5px
@@ -621,7 +796,7 @@
             margin-right: 10px
           .chat-msg-new-goods
             width: 226px
-            border: 0.5px solid rgba(0, 0, 0, 0.10)
+            border: 0.5px solid rgba(0,0,0,0.10)
             border-radius: 4px
             background: $color-white
             overflow: hidden
@@ -640,7 +815,7 @@
                 .shop-icon
                   width: 18px
                   height: 18px
-                  border: 0.5px solid rgba(0, 0, 0, 0.10)
+                  border: 0.5px solid rgba(0,0,0,0.10)
                   border-radius: 50%
                   margin-right: 6px
                 .shop-name
@@ -687,7 +862,7 @@
             margin-right: 10px
           .chat-msg-goods
             width: 200px
-            border: 0.5px solid rgba(0, 0, 0, 0.10)
+            border: 0.5px solid rgba(0,0,0,0.10)
             border-radius: 4px
             background: $color-white
             margin-left: 10px
@@ -703,6 +878,35 @@
               overflow: hidden
               text-overflow: ellipsis
               white-space: nowrap
+          .chat-msg-qrCode
+            margin-right: 10px
+            .qrCode-content
+              width: 230px
+              padding: 10px 12px
+              border: 0.5px solid rgba(0,0,0,0.10)
+              border-radius: 4px
+              background: $color-white
+              overflow: hidden
+              .qrCode-title
+                font-family: $font-family-regular
+                font-size: $font-size-16
+                color: $color-20202E
+                margin: 0 0 6px
+              .qrCode-text-content
+                width: 100%
+                display: flex
+                font-size: 0
+                .qrCode-txt
+                  flex: 1
+                  overflow: hidden
+                  line-height: 18px
+                  font-size: $font-size-12
+                  color: $color-888888
+                  font-family: $font-family-regular
+                .qrCode-img
+                  width: 45px
+                  height: 45px
+                  margin-left: 12px
         .chat-content.mine
           justify-content: flex-end
 
@@ -711,7 +915,6 @@
       box-sizing: border-box
       min-height: 38px
       background: $color-background-f9
-      padding: 6px 0
       position: absolute
       left: 0
       right: 0
@@ -721,6 +924,7 @@
         display: flex
         align-items: flex-end
         min-height: 38px
+        padding: 6px 0
         .face-box
           width: 53px
           display: flex
@@ -743,7 +947,7 @@
           width: 43px
           height: 36px
           margin: 0 5px
-          border: 1px solid rgba(0, 0, 0, 0.10)
+          border: 1px solid rgba(0,0,0,0.10)
           border-radius: 2px
           background: $color-white
           text-align: center
@@ -755,7 +959,7 @@
           flex: 1
           overflow-x: hidden
           min-height: 28px
-          border: 1px solid rgba(0, 0, 0, 0.10)
+          border: 1px solid rgba(0,0,0,0.10)
           background: $color-white
           max-height: 100px
           overflow-y: auto
@@ -787,22 +991,42 @@
               width: 6.666666vw
               height: 6.666666vw
         .addimg-list
-          height: 140px
-          padding: 25px 0 0 30px
+          padding: 25px 0 0 8vw
           display: flex
+          flex-wrap: wrap
           .addimg-item
-            width: 48px
-            height: 70px
+            width: 16vw
             display: flex
             flex-direction: column
             justify-content: space-between
             font-size: 0
-            margin-right: 44px
+            margin-right: 6.6666vw
+            margin-bottom: 15px
             position: relative
-            .item-icon
-              width: 48px
-              height: 48px
+            .img-box
+              width: 16vw
+              height: 16vw
+              border-1px(#ccc, 12px)
+              display: flex
+              justify-content: center
+              align-items: center
+              .item-icon
+                width: 33px
+                height: 33px
+              .im-image
+                icon-image('./icon-picture')
+              .im-weixin
+                icon-image('./icon-wechat')
+              .im-group
+                icon-image('./icon-groupcode')
+              .im-useful
+                icon-image('./icon-Comlanguage')
+              .im-goods
+                icon-image('./icon-sendgoods')
+              .im-activity
+                icon-image('./icon-activity')
             .item-txt
+              margin-top: 5px
               font-size: $font-size-12
               font-family: $font-family-regular
               color: #828AA2
@@ -816,4 +1040,38 @@
               height: 100%
               z-index: 10
 
+    .cover-full
+      fill-box()
+      z-index: 100
+      layout()
+      align-items: center
+      background: rgba(32,32,46,0.8)
+      .cover-container
+        width: 300px
+        height: 160px
+        background: $color-white
+        border: 1px solid rgba(32,32,46,0.10)
+        border-radius: 2px
+        all-center()
+        .cover-top
+          width: 100%
+          height: 115px
+          display: flex
+          align-items: center
+          justify-content: center
+          .top-txt
+            font-size: $font-size-16
+            font-family: $font-family-regular
+            color: $color-20202E
+            letter-spacing: 0.8px
+            line-height: 18px
+        .cover-down
+          width: 100%
+          height: 45px
+          line-height: 44px
+          text-align: center
+          font-family: $font-family-medium
+          font-size: $font-size-14
+          color: $color-56BA15
+          letter-spacing: 0.6px
 </style>

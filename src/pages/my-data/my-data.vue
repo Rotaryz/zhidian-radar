@@ -16,20 +16,20 @@
                   <div class="text">客户总数</div>
                 </div>
                 <div class="list-box">
-                  <div class="number">{{allDatas.follow_up_sum}}</div>
-                  <div class="text">跟进总数</div>
+                  <div class="number">{{allDatas.order_sum}}</div>
+                  <div class="text">订单总数</div>
                 </div>
                 <div class="list-box">
-                  <div class="number">{{allDatas.card_visits_sum}}</div>
-                  <div class="text">名片访问数</div>
-                </div>
-                <div class="list-box">
-                  <div class="number">{{allDatas.website_visits_sum}}</div>
-                  <div class="text">官网访问数</div>
+                  <div class="number">{{allDatas.order_finish_sum}}</div>
+                  <div class="text">成交总数</div>
                 </div>
                 <div class="list-box">
                   <div class="number">{{allDatas.goods_visits_sum}}</div>
                   <div class="text">产品访问数</div>
+                </div>
+                <div class="list-box">
+                  <div class="number">{{allDatas.activity_visits_sum}}</div>
+                  <div class="text">活动访问数</div>
                 </div>
                 <div class="list-box">
                   <div class="number">{{allDatas.live_logs_sum}}</div>
@@ -40,7 +40,7 @@
           </div>
         </div>
         <div class="ai-box">
-          <div class="pie-box">
+          <div class="pie-box ">
             <div id="myChartfour"></div>
             <div class="title-box">
               <div class="title">成交率漏斗</div>
@@ -102,7 +102,7 @@
   import storage from 'storage-controller'
   import {mapGetters} from 'vuex'
 
-  const PIEHINT = [{text: '对我感兴趣', icon: 'one'}, {text: '对产品感兴趣', icon: 'two'}, {text: '对公司感兴趣', icon: 'thr'}]
+  const PIEHINT = [{text: '动态', icon: 'one'}, {text: '商品', icon: 'two'}, {text: '拼团', icon: 'thr'}, {text: '砍价', icon: 'four'}]
   const SUCCESSHINT = [{text: '0-50%', icon: ''}, {text: '51-80%', icon: 'two'}, {text: '81-99%', icon: 'thr'}, {text: '100%', icon: 'four'}]
   export default {
     name: 'my-data',
@@ -500,11 +500,6 @@
         let myChart = this.$echarts.init(document.getElementById('myChartfour'))
         // 绘制图表
         myChart.setOption({
-          // title: {
-          //   text: '成交漏斗图',
-          //   subtext: '(每小时更新)',
-          //   x: 'center'
-          // },
           tooltip: {
             trigger: 'item',
             formatter: '{b}'
@@ -550,7 +545,6 @@
             data: this.successData
           }]
         })
-        // myChart.on('click', this.eConsole)
       },
       getPieData() {
         Echart.getPie(this.userInfo.merchant_id, this.userInfo.id).then(res => {
@@ -718,6 +712,7 @@
               color: #20202e
               font-family: $font-family-regular
               margin-top: 5px
+
   .ai-box
     padding: 10px 15px
     .pie-box

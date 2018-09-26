@@ -7,8 +7,8 @@
         <div class="tab-item" @click="_change(0)">全部产品</div>
         <span class="line" :class="{'line-buss': !tabIndex}"></span>
       </div>
-      <div class="goods-box">
-        <keep-alive>
+      <transition name="slide-left">
+        <div class="goods-box">
           <scroll
             ref="scroll"
             :data="goodsListMine"
@@ -18,7 +18,6 @@
             @pullingUp="onPullingUp"
             @pullingDown="onPullingDown"
           >
-            <div style="height: 1px;"></div>
             <div class="goods-item" v-for="(item, index) in goodsListMine" :key="index" @click="_goDetail(item.id)">
               <div class="img-box">
                 <img class="goods-image" :src="item.image_url">
@@ -34,10 +33,10 @@
               </div>
             </div>
           </scroll>
-        </keep-alive>
-      </div>
-      <div class="goods-box">
-        <keep-alive>
+        </div>
+      </transition>
+      <transition name="slide-right">
+        <div class="goods-box">
           <scroll
             ref="scrolls"
             v-if="tabIndex === 0"
@@ -47,7 +46,6 @@
             @pullingUp="onPullingUp"
             @pullingDown="onPullingDown"
           >
-            <div style="height: 1px;"></div>
             <div class="goods-item" v-for="(item, index) in goodsList" :key="index" @click="_goDetail(item.id)">
               <div class="img-box">
                 <img class="goods-image" :src="item.image_url">
@@ -63,8 +61,8 @@
               </div>
             </div>
           </scroll>
-        </keep-alive>
-      </div>
+        </div>
+      </transition>
       <toast ref="toast"></toast>
       <router-view></router-view>
     </div>
@@ -74,14 +72,14 @@
 <script>
   // import { ERR_OK } from 'api/config'
   import Scroll from 'components/scroll/scroll'
-  import { Goods } from 'api'
-  import { ERR_OK } from '../../common/js/config'
+  import {Goods} from 'api'
+  import {ERR_OK} from '../../common/js/config'
   import Toast from 'components/toast/toast'
-  import { mapGetters } from 'vuex'
+  import {mapGetters} from 'vuex'
 
   export default {
     name: 'goods-list',
-    data () {
+    data() {
       return {
         startY: 0,
         goodsList: [],
@@ -100,22 +98,22 @@
         pullDownRefresh: true
       }
     },
-    created () {
+    created() {
       this._goodslist()
     },
     methods: {
-      _goDetail (id) {
+      _goDetail(id) {
         this.$router.push({path: 'goodList/goodsDetail', query: {id}})
       },
-      onPullingUp () {
+      onPullingUp() {
         this.page++
         this._goodslist()
       },
-      onPullingDown () {
+      onPullingDown() {
         this.page = 1
         this._goodslist()
       },
-      _presellGoods (id, status) {
+      _presellGoods(id, status) {
         let index = this.tabIndex ? this.goodsListMine.findIndex(item => item.id === id) : this.goodsList.findIndex(item => item.id === id)
         if (status) {
           Goods.unPresellGoods({goods_id: id}).then((res) => {
@@ -141,13 +139,13 @@
           this.$refs.toast.show(res.message)
         })
       },
-      _change (status) {
+      _change(status) {
         this.loadMore = true
         this.tabIndex = status
         this.page = 1
         this._goodslist()
       },
-      _goodslist () {
+      _goodslist() {
         let data = {is_self: this.tabIndex, limit: 15, page: this.page}
         Goods.goods(data).then((res) => {
           if (res.error === ERR_OK) {
@@ -160,11 +158,8 @@
               return
             }
             if (res.data.length === 0) {
-              if (this.tabIndex) {
-                this.$refs.scroll.forceUpdate()
-              } else {
-                this.$refs.scrolls.forceUpdate()
-              }
+              this.$refs.scroll.forceUpdate()
+              this.$refs.scrolls.forceUpdate()
               this.loadMore = false
               return
             }
@@ -194,30 +189,30 @@
         } : false
       },
       ...mapGetters(['ios']),
-      slide () {
+      slide() {
         return this.ios ? '' : 'slide'
       }
     },
     watch: {
       scrollbarObj: {
-        handler () {
+        handler() {
           this.rebuildScroll()
         },
         deep: true
       },
       pullDownRefreshObj: {
-        handler () {
+        handler() {
           this.rebuildScroll()
         },
         deep: true
       },
       pullUpLoadObj: {
-        handler () {
+        handler() {
           this.rebuildScroll()
         },
         deep: true
       },
-      startY () {
+      startY() {
         this.rebuildScroll()
       }
     },
@@ -268,15 +263,13 @@
     .line-buss
       left: 67.5vw
       transition: all 0.3s
-
   .goods-box
     position: absolute
     width: 100vw
+    height: 93.35vh
     top: 45px
+    background :$color-text
     left: 0
-    bottom: 0
-
-  /*margin-top: 10px*/
 
   .goods-item
     width: 92vw
@@ -288,8 +281,6 @@
     font-family: $font-family-regular
     font-size: $font-size-small
     color: $color-text-88
-    /*&:last-child*/
-    /*margin-bottom: 0*/
     .img-box
       overflow: hidden
       height: 70px
