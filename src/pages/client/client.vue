@@ -207,7 +207,7 @@
         this.$router.push({path, query: {id: item.id}}) // 客户id
       },
       changeGroup() {
-        const data = {order_by: this.checkedGroup.orderBy}
+        const data = {order_by: this.checkedGroup.orderBy, limit: this.limit}
         Client.getCustomerList(data).then(res => {
           if (res.data) {
             this.dataArray = res.data

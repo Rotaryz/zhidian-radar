@@ -6,14 +6,14 @@ const LOCAL_URL = {
   api: 'http://zantui-api.com'
 }
 
-// const DEV_URL = {
-//   api: 'https://ws-api.jerryf.cn',
-//   image: 'https://img.jerryf.cn/defaults'
-// }
 const DEV_URL = {
-  api: 'https://ws-api.jkweixin.net' + version,
-  image: 'https://img.jkweixin.net/defaults'
+  api: 'https://ws-api.jerryf.cn',
+  image: 'https://img.jerryf.cn/defaults'
 }
+// const DEV_URL = {
+//   api: 'https://ws-api.jkweixin.net' + version,
+//   image: 'https://img.jkweixin.net/defaults'
+// }
 
 const TEST_URL = {
   api: 'https://ws-api.jkweixin.net' + version,
