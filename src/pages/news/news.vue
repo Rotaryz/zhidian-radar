@@ -76,7 +76,7 @@
           account: item.sessionId
         }
         this.setCurrent(currentMsg)
-        let url = '/chat?id=' + item.sessionId
+        let url = '/chat/' + item.sessionId
         this.$router.push(url)
       },
       createGroup() {
@@ -108,7 +108,6 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
-
   .news
     position: fixed
     left: 0

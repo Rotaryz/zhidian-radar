@@ -36,10 +36,10 @@
               </div>
             </li>
           </ul>
-          <div style="height: 45px;"></div>
+          <!--<div style="height: 45px;"></div>-->
         </scroll>
       </div>
-      <footer class="btn" @click="submit" v-if="dataArray.length">确定</footer>
+      <footer class="btn" @click="submit">确定</footer>
       <section class="exception-box" v-if="isEmpty">
         <exception errType="nodata"></exception>
       </section>
@@ -224,7 +224,6 @@
 
   .exception-box
     padding-top: 70px
-
   .client-add-user
     fill-box()
     background-color: $color-white-fff
@@ -236,8 +235,8 @@
         layout(row, block, no-warp)
         align-items: center
         padding: 15px 0
-        height: 45px
         lr-border-bottom-1px($color-col-line,0)
+        height: 45px
         .check-box
           width: 21px
           height: 21px
@@ -274,7 +273,6 @@
             font-size: $font-size-12
             color: $color-56BA15
         .ai
-          text-align: right
           width: 142px
           height: 100%
           padding-right: 15px
@@ -282,6 +280,7 @@
           font-family: $font-family-regular
           font-size: $font-size-12
           color: $color-888888
+          text-align: right
           .type
             text-align: right
             height: 20px
@@ -299,7 +298,6 @@
             font-family: $font-family-regular
             font-size: $font-size-12
             color: $color-888888
-
     .btn
       height: 45px
       position: fixed
@@ -337,7 +335,7 @@
       font-size: $font-size-14
       color: $color-20202E
       font-family: $font-family-regular
-      transition: all 0.5s
+      transition: all 0.3s
     .active
       font-size: $font-size-14
       color: $color-56BA15

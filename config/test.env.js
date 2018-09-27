@@ -1,7 +1,7 @@
 'use strict'
 const merge = require('webpack-merge')
-const devEnv = require('./prod.env')
+const prodEnv = require('./prod.env')
 
-module.exports = merge(devEnv, {
+module.exports = merge(prodEnv, {
   NODE_ENV: '"test"'
 })

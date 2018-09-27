@@ -1,24 +1,27 @@
 const env = process.env
 
+const version = ``
+
 const LOCAL_URL = {
   api: 'http://zantui-api.com'
 }
 
-const DEV_URL = {
-  api: 'http://business-api.jerryf.cn',
-  image: 'https://img.jerryf.cn/defaults'
-}
 // const DEV_URL = {
-//   api: 'https://business-api.jkweixin.com'
+//   api: 'https://ws-api.jerryf.cn',
+//   image: 'https://img.jerryf.cn/defaults'
 // }
+const DEV_URL = {
+  api: 'https://ws-api.jkweixin.net' + version,
+  image: 'https://img.jkweixin.net/defaults'
+}
 
 const TEST_URL = {
-  api: 'https://business-api.jkweixin.net',
+  api: 'https://ws-api.jkweixin.net' + version,
   image: 'https://img.jkweixin.net/defaults'
 }
 
 const PROD_URL = {
-  api: 'https://business-api.jkweixin.com',
+  api: 'https://ws-api.jkweixin.com' + version,
   image: 'https://img.jkweixin.com/defaults'
 }
 

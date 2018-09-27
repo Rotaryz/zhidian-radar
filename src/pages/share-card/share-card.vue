@@ -1,59 +1,34 @@
 <template>
-  <transition :name="slide">
-    <div class="share-card" v-if="show">
-      <div class="share-box">
-        <div class="share-con">
-          <img class="share-top" :src="card.avatar" alt="">
-          <div class="share-bottom">
-            <div class="name-profession">
-              <div class="name">{{card.name}}</div>
-              <div class="line" v-if="showPosition"></div>
-              <div class="name-profession">{{card.position}}</div>
-            </div>
-            <div class="buss-name">{{card.department}}</div>
-            <div class="code-padding"></div>
-            <div class="code-phone">
-              <div class="code-phone-box" v-if="showMobile">
-                <img src="./icon-telephone_ash@2x.png" alt="" class="img-phone">
-                <div class="text">{{card.business_card_mobile}}</div>
-              </div>
-              <img :src="card.qrcode" alt="" class="share-code">
-            </div>
-          </div>
-          <!--<p class="peo-name">{{card.name}}</p>-->
-          <!--<p class="peo-position">{{card.position}}</p>-->
-          <!--<p class="buss-name">{{card.department}}</p>-->
-          <!--<img class="qr-code" :src="card.qrcode" alt="">-->
-        </div>
+  <div class="share-card" v-if="show">
+    <div class="card-con"></div>
+    <div class="card-main">
+      <div class="main-con" v-if="card">
+        <div class="title">{{card.name}}</div>
+        <div class="title-img"></div>
+        <img :src="card.avatar" alt="" class="avatar-img">
+        <img :src="card.qrcode" alt="" class="avatar-card">
+        <div class="qrcode-text">长按识别二维码</div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
-  // import { ERR_OK } from 'api/config'
-  import Scroll from 'components/scroll/scroll'
   import { Business } from 'api'
   import { mapGetters } from 'vuex'
 
   export default {
     name: 'share-card',
-    data () {
+    data() {
       return {
-        card: {},
-        showPosition: true,
-        showMobile: true,
+        card: null,
         show: false
       }
     },
-    created () {
-      Business.Myqrcode({is_hyaline: 0}).then((res) => {
-        this.card = res.data || {}
-        if (this.card.position.length === 0) {
-          this.showPosition = false
-        }
-        if (this.card.business_card_mobile.length === 0) {
-          this.showMobile = false
+    created() {
+      Business.Myshop({is_hyaline: 1}).then((res) => {
+        if (res.data) {
+          this.card = res.data
         }
       })
       if (this.ios) {
@@ -65,90 +40,66 @@
       }
     },
     computed: {
-      ...mapGetters(['ios']),
-      slide () {
-        return this.ios ? '' : 'slide'
-      }
-    },
-    components: {
-      Scroll
+      ...mapGetters([
+        'ios'
+      ])
     }
   }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
-  .share-card
-    z-index: 100
-    height: 100vh
-    padding-top: 20px
+
+  .card-con
+    padding-top: 31px
+
+  .card-main
     box-sizing: border-box
-    background: $color-background
-    .share-box
-      display: flex
-      flex-direction: column
-      width: 305px
+    width: 317px
+    padding: 20px 20px 25px
+    margin: auto
+    background: url("./bg-shopcode@2x.png") no-repeat center center
+    .main-con
+      background: $color-white
+      padding-top: 29px
+      padding-bottom: 15px
+      width: 275px
       margin: 0 auto
-    .share-con
-      background: $color-white-fff
-      border-radius: 2px
-      box-shadow: 0 2px 6px 0 rgba(43, 43, 145, 0.04)
-      .share-top
+      layout()
+      align-items: center
+      .title
+        font-family: $font-family-medium
+        font-size: $font-size-18
+        color: $color-20202E
+      .title-img
         display: block
-        width: 305px
-        height: 305px
-        border: 0px solid #fff
-      .share-bottom
-        padding: 20px
-        position: relative
-        .name-profession
-          layout(row)
-          align-items: flex-end
-          .name
-            font-family: 'PingFangSC-Semibold'
-            font-size: $font-size-18
-            color: $color-20202E
-          .name-profession
-            font-family: $font-family-regular
-            font-size: $font-size-medium
-            color: $color-text-88
-          .line
-            height: 16px
-            width: 1px
-            margin: 0 10px
-            background: rgba(0, 0, 0, .1)
+        width: 175px
+        height: 16px
+        margin-top: 13.5px
+        background-image: url("./pic-myshop@2x.png")
+        background-repeat: no-repeat
+        background-position: center center
+        background-size: cover
+      .avatar-img
+        display: block
+        width: 235px
+        height: 235px
+        margin-top: 21px
+      .avatar-card
+        display: block
+        width: 80px
+        height: 80px
+        padding: 100px
+        margin-top: -80px
+        z-index: 50
+      .qrcode-text
+        font-family: $font-family-regular
+        font-size: $font-size-12
+        color: #7C7C8F
+        margin-top: -90px
 
-        .buss-name
-          font-family: $font-family-regular
-          font-size: $font-size-medium
-          color: $color-20202E
-          margin-top: 15px
-        .code-padding
-          padding-bottom: 31px
-          width: 100%
-        .code-phone
-          layout(row)
-          display :flex
-          height: 74px
-          align-items :flex-end
-          justify-content :space-between
-          .code-phone-box
-            display :flex
-          .img-phone
-            display: block
-            width: 14px
-            height: 14px
-            margin-right: 5px
-          .text
-            height: $font-size-medium
-            font-family: $font-family-regular
-            font-size: $font-size-medium
-            color: $color-text-88
-
-  .share-code
-    display :block
-    width: 74px
-    height: 74px
-    padding: 25px
-    margin: -25px
+  .share-card
+    height: 100vh
+    box-sizing: border-box
+    overflow: hidden
 </style>

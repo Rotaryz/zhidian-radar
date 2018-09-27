@@ -51,10 +51,6 @@ export const setImIng = ({commit, state}, boolean) => {
   commit(TYPES.SET_IM_ING, boolean)
 }
 
-export const setCutImg = ({commit, state}, boolean) => {
-  commit(TYPES.SET_CUT_IMAGE, boolean)
-}
-
 export const setGroupItem = ({commit, state}, msg) => {
   commit(TYPES.SET_GROUP_ITEM, msg)
 }

@@ -5,7 +5,7 @@ export default {
    * 我的名片信息
    * @returns {*}
    */
-  liveLogs(data) {
+  liveLogs (data) {
     let url = 'api/employee/live-logs'
     return request.post(url, data)
   },
@@ -13,7 +13,7 @@ export default {
    * 我的名片信息
    * @returns {*}
    */
-  liveLogsList(data) {
+  liveLogsList (data) {
     let url = 'api/employee/live-logs'
     return request.get(url, data)
   },
@@ -21,7 +21,7 @@ export default {
    * 删除动态
    * @returns {*}
    */
-  delLogsList(id) {
+  delLogsList (id) {
     let url = `api/employee/live-logs/${id}`
     return request.delete(url)
   },
@@ -29,16 +29,8 @@ export default {
    * 点赞取消点赞动态
    * @returns {*}
    */
-  likeLog(data) {
+  likeLog (data) {
     let url = `api/employee/like-log`
     return request.post(url, data)
-  },
-  /**
-   * 发布企业动态权限
-   * @returns {*}
-   */
-  isBoss(data) {
-    let url = `api/employee/is-boss`
-    return request.get(url, data)
   }
 }

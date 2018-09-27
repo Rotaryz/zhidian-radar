@@ -1,6 +1,5 @@
-import { tabMode } from 'common/js/constants'
+import {tabMode} from 'common/js/constants'
 import utils from 'common/js/utils'
-
 const platform = utils.getPlatform()
 const state = {
   tabMode: tabMode.show,
@@ -13,7 +12,6 @@ const state = {
   nowChat: [], // 当前会话
   platform, // 平台信息
   imIng: false,
-  img: '',
   groupItem: {}, // 群发助手对象
   currentGroupMsg: [], // 当前群发对象
   newsGetType: false, // 是否刷新群发助手

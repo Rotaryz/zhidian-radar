@@ -16,7 +16,8 @@
     'nodata': ['pic-nodata', '暂无数据'],
     'nogroup': ['pic-nogroup', '暂无分组'],
     'nonews': ['pic-nonews', '暂无消息'],
-    'noresult': ['pic-noresult', '找不到您所要的结果']
+    'noresult': ['pic-noresult', '找不到您所要的结果'],
+    'nocode': ['pic-nocode', '暂无群二维码']
   }
   export default {
     props: {
@@ -63,6 +64,8 @@
           icon-image("pic-nonews")
         &.pic-noresult
           icon-image("pic-noresult")
+        &.pic-nocode
+          icon-image("pic-nocode")
       .err-msg
         font-family: $font-family-regular
         font-size: $font-size-14

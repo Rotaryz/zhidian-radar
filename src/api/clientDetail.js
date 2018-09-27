@@ -60,13 +60,13 @@ export default {
   getActionList(customer_id = 0, from = 0, limit = 30, page = 0) {
     const info = storage.get('info', {})
     const employeeId = info.id
-    let url = `api/employee/action-logs`
+    let url = `api/employee/ws-action-logs`
     let data = {
       employee_id: employeeId,
       customer_id,
+      page,
       from,
-      limit,
-      page
+      limit
     }
     return request.post(url, data)
   }

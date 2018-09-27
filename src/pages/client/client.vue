@@ -1,13 +1,13 @@
 <template>
   <div class="client">
-    <article>
+    <header>
       <search @toNav="toSearch"></search>
       <dl class="tab-wrapper">
         <dt class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></dt>
         <dd class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.title}}({{item.number}})</dd>
       </dl>
-      <section class="f3"></section>
-    </article>
+      <div class="f3"></div>
+    </header>
     <section class="custom-content" v-if="selectTab === 0">
       <ul class="custom-tab border-bottom-1px" v-if="dataArray.length">
         <li v-for="(item, index) in groupList" :key="index" class="tab-item" :class="item.isCheck?'active':''" @click="checkCustom(item)">{{item.name}}</li>
@@ -20,7 +20,11 @@
                 @pullingUp="onPullingUp"
         >
           <ul class="user-list">
-            <li class="user-list-item" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
+            <li class="user-list-item"
+                v-for="(item,index) in dataArray"
+                :key="index"
+                @click="check(item)"
+            >
               <slide-view :useType="1" @grouping="groupingHandler" :item="item">
                 <user-card :userInfo="item" slot="content" :useType="checkedGroup.orderBy"></user-card>
               </slide-view>
@@ -41,7 +45,7 @@
         <scroll bcColor="#fff"
                 :data="userListArr"
         >
-          <ul class="user-list-box">
+          <ul class="user-list-box" v-if="userListArr.length">
             <li class="user-list-item"
                 v-for="(item,index) in userListArr"
                 :key="index"
@@ -82,13 +86,11 @@
   import Scroll from 'components/scroll/scroll'
   import UserCard from 'components/client-user-card/client-user-card'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  import { Client } from 'api'
+  import {Client} from 'api'
   import ActionSheet from 'components/action-sheet/action-sheet'
   import Toast from 'components/toast/toast'
-  import { ERR_OK } from '../../common/js/config'
+  import {ERR_OK} from '../../common/js/config'
   import Exception from 'components/exception/exception'
-
-  const tabList = [{title: '客户', number: 0}, {title: '分组', number: 0}]
 
   const groupList = [{
     orderBy: 'join',
@@ -113,7 +115,8 @@
     data() {
       return {
         groupList: groupList,
-        tabList: tabList,
+        tabList: [{title: '客户', number: 0}, {title: '分组', number: 0}],
+        selectTab: 0,
         userListArr: [],
         dataArray: [],
         userListIsEmpty: false,
@@ -126,14 +129,13 @@
         page: 1,
         limit: LIMIT,
         isAll: false,
-        total: 0,
-        selectTab: 0
+        total: 0
       }
     },
     created() {
       this.$emit('tabChange', 3)
+      this.getGroupList()
       this.getCustomerList()
-      this._getGroupList()
     },
     beforeDestroy() {
     },
@@ -156,22 +158,23 @@
         this.isAll = false
         this.page = 1
         this.limit = LIMIT
-        this._getGroupList()
+        this.getGroupList()
         this.getCustomerList()
       },
       toSearch() {
         const path = `/client/client-search`
         this.$router.push({path})
       },
-      _getGroupList(data) {
-        Client.getGroupList(data).then(res => {
-          if (res.error !== ERR_OK) {
-            return this.$refs.toast.show(res.message)
+      getGroupList() {
+        Client.getGroupList().then(res => {
+          if (res.error === ERR_OK) {
+            let arr = res.data
+            this.userListArr = arr
+            this.tabList[1].number = arr.length
+            this.userListIsEmpty = !arr.length
+          } else {
+            this.$refs.toast.show(res.message)
           }
-          let arr = res.data
-          this.userListArr = arr
-          this.tabList[1].number = arr.length
-          this.userListIsEmpty = !arr.length
         })
       },
       getCustomerList() {
@@ -204,11 +207,11 @@
         this.$router.push({path, query: {id: item.id}}) // 客户id
       },
       changeGroup() {
-        const data = {order_by: this.checkedGroup.orderBy}
+        const data = {order_by: this.checkedGroup.orderBy, limit: this.limit}
         Client.getCustomerList(data).then(res => {
           if (res.data) {
             this.dataArray = res.data
-            this.total = res.meta.total
+            this.total = res.meta.total // 共多少人
           }
         })
       },
@@ -237,9 +240,10 @@
       },
       onPullingUp() {
         // 更新数据
+        console.info('pulling up and load data')
         if (!this.pullUpLoad) return
         if (this.isAll) return this.$refs.scroll.forceUpdate()
-        console.info('pulling up and load data')
+
         let page = ++this.page
         let limit = this.limit
         const data = {order_by: this.checkedGroup.orderBy, page, limit}
@@ -314,69 +318,68 @@
     right: 0
     bottom: 45px
     background-color: $color-white-fff
-
-  .tab-wrapper
-    height: 44.5px
-    background: $color-white-fff
-    layout(row, block, nowrap)
-    margin: 0 45px
-    position: relative
-    .tab
-      flex: 1
-      font-family: $font-family-regular
-      font-size: $font-size-16
-      color: $color-20202E
-      letter-spacing: 0.6px
-      text-align: center;
-      line-height: 44.5px
-    .line-wrap
-      position: absolute
-      left: 0
-      bottom: 0
-      right: 0
-      width: 50%
-      layout()
-      align-items: center
-      transition: all 0.3s
-      &:after
-        content: ''
-        width: 30px
-        height: 3px
-        background: $color-20202E
-
-  .f3
-    height: 10px
-    background: $color-F0F2F5
-
-  .custom-content
-    .custom-tab
-      height: 45px
+    .tab-wrapper
+      height: 44.5px
+      background: $color-white-fff
       layout(row, block, nowrap)
-      align-items: center
-      padding: 0 20px
-      justify-content: space-between
-      font-family: $font-family-medium
-      font-size: $font-size-14
-      color: $color-20202E
-      letter-spacing: 0.52px
-      text-align: center
-      line-height: 45px
-      .tab-item
+      margin: 0 45px
+      position: relative
+      .tab
+        flex: 1
+        font-family: $font-family-regular
+        font-size: $font-size-16
+        color: $color-20202E
+        letter-spacing: 0.6px
+        text-align: center;
+        line-height: 44.5px
+      .line-wrap
+        position: absolute
+        left: 0
+        bottom: 0
+        right: 0
+        width: 50%
+        layout()
+        align-items: center
         transition: all 0.3s
-      .active
-        color: #56BA15
-    .custom-scroll
-      position: absolute
-      top: 145px
-      bottom: 0
-      left: 0
-      right: 0
-      overflow: hidden
-      .user-list
-        position: relative
-        .user-list-item
-          height: 75px
-          lr-border-bottom-1px()
+        &:after
+          content: ''
+          width: 30px
+          height: 3px
+          background: $color-20202E
+
+    .f3
+      height: 10px
+      background: $color-F0F2F5
+
+    .custom-content
+      .custom-tab
+        height: 45px
+        layout(row, block, nowrap)
+        align-items: center
+        padding: 0 20px
+        justify-content: space-between
+        font-family: $font-family-medium
+        font-size: $font-size-14
+        color: $color-20202E
+        letter-spacing: 0.52px
+        text-align: center
+        line-height: 45px
+        .tab-item
+          transition: all 0.3s
+        .active
+          color: #56BA15
+      .custom-scroll
+        position: absolute
+        top: 145px
+        bottom: 0
+        left: 0
+        right: 0
+        overflow: hidden
+        .user-list
+          position: relative
+          .user-list-item
+            height: 75px
+            lr-border-bottom-1px()
 
   .group-content
     font-family: $font-family-regular
@@ -434,4 +437,5 @@
               color: $color-888888
               letter-spacing: 0.3px
               margin-right: 15px
+
 </style>

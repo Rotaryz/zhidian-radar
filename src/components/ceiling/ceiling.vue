@@ -29,8 +29,7 @@
       return {
         glideShow: false,
         newMsgIn: false,
-        timer: '',
-        userInfo: ''
+        timer: ''
       }
     },
     created() {
@@ -58,6 +57,7 @@
           if (res.error === ERR_OK) {
             let imInfo = res.data
             this.setImInfo(imInfo)
+            // console.log(imInfo)
             this.sdkLogin(imInfo).then(() => {
               this.setImIng(true)
             })
@@ -92,13 +92,14 @@
             let res = await webimHandler.onMsgNotify(msg)
             if (res.type === 'custom') {
               this.setCustomCount('add')
-              if (res.ext * 1 === 20005 && res.fromAccount === this.currentMsg.account) {
+              if (Number(res.ext) === 20005 && res.fromAccount === this.currentMsg.account) {
                 let goods = JSON.parse(res.data)
-                let url = goods.url ? goods.url : ''
-                let title = goods.title ? goods.title : ''
-                let goodsId = goods.goods_id
-                let goodsRes = Object.assign({}, res, {url, title, goods_id: goodsId})
+                let goodsRes = Object.assign({}, res, goods)
                 this.addNowChat(goodsRes)
+              }
+              if (Number(res.ext) === 20005) {
+                this.addListCount(res)
+                this.addListMsg({msg: res, type: ''})
               }
             } else {
               this.addListCount(res)
@@ -125,7 +126,6 @@
 
         let avatar = this.userInfo.avatar
         await webimHandler.sdkLogin(loginInfo, listeners, options, avatar)
-        // 下一版本才上
         let userInfo = storage.get('info')
         let reqData = {
           merchant_id: userInfo.merchant_id,
@@ -148,14 +148,13 @@
         })
         /** let res = await webimHandler.getRecentContact(50)
         let msgList = await webimHandler.initUnread(res)
-
         let noMsgList = msgList.filter((item) => {
           return item.lastMsg === '[其他]'
         })
         let requireArr = noMsgList.map((item) => {
           return item.sessionId
         })
-        if (noMsgList.length) {
+        if (requireArr.length) {
           let reqdata = {
             customer_ims: requireArr,
             employee_id: this.userInfo.id

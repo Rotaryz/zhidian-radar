@@ -7,28 +7,19 @@
           <textarea class="words-span" placeholder="这一刻的想法…" v-model="title"></textarea>
           <!--:style="height: {{comHeight}}px"-->
           <div class="com-box">
-            <div class="com-image" v-for="(item, index) in image" :key="index" :style="{'background-image': 'url('+item.image_url+')'}">
-              <!--<img class="img-item" :src="item.image_url">-->
+            <div class="com-image" v-for="(item, index) in image" :key="index">
+              <img class="img-item" :src="item.image_url">
               <!--<input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" multiple>-->
               <div class="close-icon" @click.stop="_delImage(index)">
                 <img class="close-icon" src="./icon-del@2x.png">
               </div>
             </div>
-            <div class="com-image com-image-add" v-show="image.length < 9">
+            <div class="com-image" v-show="image.length < 9">
               <img class="img-item" src="./Group3@2x.png">
               <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" multiple>
             </div>
           </div>
           <!--style="bottom: {{height}}px"-->
-        </div>
-        <div class="synchronization" v-if="isBoss">
-          <img src="./icon-member@2x.png" class="synchronization-icon">
-          <span class="synchronization-text">以企业身份发布</span>
-          <div class="tip">
-            <div :class="{move_fa:share}" @click="_defaultCard()">
-              <span class="circular" :class="{move: share}"></span>
-            </div>
-          </div>
         </div>
       </scroll>
       <div class="btn">
@@ -54,26 +45,10 @@
       return {
         title: '',
         image: [],
-        send: true,
-        share: false,
-        isBoss: false
+        send: true
       }
     },
-    created() {
-      this._checkBoss()
-    },
     methods: {
-      _checkBoss() {
-        Live.isBoss().then((res) => {
-          if (res.error !== ERR_OK) {
-            return
-          }
-          this.isBoss = res.data.is_boss
-        })
-      },
-      _defaultCard() {
-        this.share = !this.share
-      },
       async _fileImage(e) {
         // let param = this._infoImage(e.target.files[0])
         await this._moreImage(e.target.files)
@@ -101,8 +76,6 @@
           item = this._infoImage(item)
           await this._upLoad(item)
         }
-        let els = document.querySelector('.image-file')
-        els.value = ''
       },
       _delImage(index) {
         this.image.splice(index, 1)
@@ -118,7 +91,7 @@
           this.$refs.toast.show('发布图片不能为空')
           return
         }
-        let data = {content: this.title, live_log_details: this.image, is_business: this.share ? 1 : 0}
+        let data = {content: this.title, live_log_details: this.image}
         Live.liveLogs(data).then((res) => {
           this.send = false
           if (res.error === ERR_OK) {
@@ -174,6 +147,8 @@
         font-size: $font-size-medium-x
         color: #CCCCCC
     .com-box
+      height: 19.5vh
+      overflow-y: auto
       padding: 0 4vw 0 2.4vw
     .com-words
       color: #CCCCCC
@@ -244,18 +219,17 @@
       opacity: 1 !important
 
   .com-image
-    background-repeat: no-repeat
-    background-size: cover
-    background-position: center
     position: relative
     display: inline-block
-    height: 28.4vw
-    width: @height
-    margin: 1.6vw 0 0 1.6vw
     .img-item
       height: 28.4vw
-      display: block
+      margin: 1.6vw 0 0 1.6vw
       width: @height
+      position: relative
+      .play
+        all-center()
+        width: 36.363%
+        height: @width
     .close-icon
       height: 16.5px
       width: 16.5px
@@ -266,7 +240,7 @@
       font-size: $font-size-small-s
       position: absolute
       right: 0px
-      top: 0px
+      top: 3px
       background: $color-background
       .close-icon
         cll-center()
@@ -281,9 +255,6 @@
       .add-image
         height: 98%
         width: @height
-
-  .com-image-add
-    margin: 0px
 
   .btn
     position: relative
@@ -307,80 +278,4 @@
     height: 76%
     width: 76%
     all-center()
-
-  .synchronization
-    position: relative
-    display: flex
-    height: 49px
-    width: 92vw
-    margin: 0 auto
-    align-items: center
-    margin-top: 30px
-    border-bottom-1px(#E5E5E5)
-    border-top-1px(#E5E5E5)
-    .synchronization-icon
-      width: 20px
-      height: @width
-    .synchronization-text
-      font-size: $font-size-16
-      font-family: $font-family-regular
-      color: $color-20202E
-      white-space: nowrap
-      margin-left: 8.5px
-    .synchronization-switch
-      display: block
-      right: 1px
-      col-center()
-    .wx-switch-input
-      width: 51px !important
-      height: 30px !important
-      &::before
-        width: 49px !important
-        height: 28px !important
-      &::after
-        width: 28px !important
-        height: 28px !important
-
-  .tip
-    col-center()
-    right: 0
-    font-size: $font-size-small
-    color: $color-text-d
-    margin-top: 6px
-    margin-bottom: 10px
-    width: 44px
-    height: 24px
-    .move_fa
-      width: 44px
-      height: 24px
-      background: $color-56
-    div
-      position: absolute
-      height: 24px
-      width: 44px
-      right: $padding-all
-      top: 50%
-      transform: translateY(-50%)
-      background: #DDDDDD
-      border-radius: @height
-      transition: background 1s
-      .circular
-        display: inline-block
-        height: 21px
-        width: 21px
-        margin: 1px 2px
-        border-radius: 50%
-        background: $color-white
-        transition: transform .5s
-      .move
-        transform: translateX(19px)
-      .status
-        font-size: $font-size-small12
-        col-center()
-        font-family: $fontFamilyRegular
-        color: $color-white
-      .status-right
-        right: 7px
-      .status-left
-        left: 7px
 </style>

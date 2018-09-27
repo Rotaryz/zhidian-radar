@@ -37,7 +37,7 @@
                 <div class="right">
                   <input type="number" placeholder="未完善" class="right-input"
                          oninput="if(value.length > 11)value = value.slice(0, 11)" v-model="flow.mobile">
-                  <img v-if="flow.mobile.length > 0" src="./icon-telephone_khzl@2x.png" alt="" class="right-img-phone" @click="phoneCall()">
+                  <img v-if="flow.mobile.length > 0" src="./icon-telephone_khzl@2x.png" alt="" class="right-img-phone" @click="phoneCall">
                 </div>
               </div>
               <div class="data-list">
@@ -98,7 +98,7 @@
             <div class="data-bottom">
               <div class="title">备注</div>
               <div class="textarea-number">{{flow.note.length}}<span>/500</span></div>
-              <textarea class="data-area" v-model="flow.note" @focus="focusText" @blur="blurText" @touchmove.stop maxlength="500" name="" id="" cols="30" rows="10"
+              <textarea class="data-area" v-model="flow.note" maxlength="500" @focus="focusText" @blur="blurText" @touchmove.stop name="" id="" cols="30" rows="10"
                         placeholder="请输入备注"></textarea>
             </div>
           </div>
@@ -219,7 +219,7 @@
       focusText() {
         console.log('scroll', this.$refs.scroll, this.slide)
         if (this.slide === 'slide') {
-          this.$refs.scroll && this.$refs.scroll.scrollTo(0, -240)
+          this.$refs.scroll && this.$refs.scroll.scrollTo(0, -480)
         }
       },
       blurText() {

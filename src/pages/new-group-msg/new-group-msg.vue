@@ -16,6 +16,11 @@
               <div class="item-title">群发组：<span v-for="(item1, index1) in item.groups" :key="index1">{{index1 == (item.groups.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
               +
               <div class="item-text" v-html="item.html" v-if="item.type == 1"></div>
+              <div class="item-text"  v-if="item.type == 3">[商品信息]</div>
+              <div class="item-text"  v-if="item.type == 4">[活动信息]</div>
+              <div class="item-text"  v-if="item.type == 5">[活动信息]</div>
+              <div class="item-text"  v-if="item.type == 6">[个人微信二维码]</div>
+              <div class="item-text"  v-if="item.type == 7">[群微信二维码]</div>
               <img class="item-img" @load="refushBox" v-if="item.type == 20" :src="item.url"/>
             </div>
             <div class="item-down" @click="toChat(item)">再发一条</div>
@@ -24,10 +29,12 @@
       </div>
     </scroll>
     <div class="new-btn" @click="newGroup">新建群发</div>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script>
+  import Toast from 'components/toast/toast'
   import {mapActions, mapGetters} from 'vuex'
   import Scroll from 'components/scroll/scroll'
   import { Im } from 'api'
@@ -173,7 +180,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Toast
     }
   }
 </script>

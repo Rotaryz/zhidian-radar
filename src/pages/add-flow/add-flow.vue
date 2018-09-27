@@ -115,15 +115,13 @@
       font-family: $font-family-regular
       height: 185px
       outline:none
-      -webkit-appearance: none
-      box-shadow:0 0 0 rgba(0,0,0,0)
     .textarea-number
       position: absolute
       bottom: 25px
       right: 25px
       font-size: $font-size-small
       font-family: $font-family-regular
-      color: #202020 e
+      color: #202020
       span
         color: #ddd
 

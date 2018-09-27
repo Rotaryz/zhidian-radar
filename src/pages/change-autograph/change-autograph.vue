@@ -2,13 +2,14 @@
   <transition :name="slide">
     <div class="change-autograph">
       <scroll ref="scroll">
-        <textarea name="autograph" v-model="title" maxlength="50" placeholder="请输入签名内容" id="autograph"></textarea>
+        <textarea name="autograph" v-model="title" maxlength="50"  @touchmove.stop placeholder="请输入签名内容" id="autograph"></textarea>
         <div class="text-num">
           <span class="text-dark">{{title.length}}</span>
           <span class="text-light">/50</span>
         </div>
       </scroll>
       <div class="btn">
+        <div class="btn-item btn-dark" @click="_back">取消</div>
         <div class="btn-item btn-green" @click="_submit">确定</div>
       </div>
       <toast ref="toast"></toast>
@@ -118,5 +119,5 @@
     .btn-dark
       background: $color-text
     .btn-green
-      background: $color-text
+      background: $color-56
 </style>

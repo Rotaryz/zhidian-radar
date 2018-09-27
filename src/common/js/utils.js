@@ -1,26 +1,13 @@
 import _this from '@/main'
 import storage from 'storage-controller'
-import CITY_JSON from 'common/js/city'
 import {emotionsFace} from 'common/js/constants'
 
 const LOSE_EFFICACY = 10000
 const DISABLE = 11001 // 11001 AI雷达没有权限, 11002 BOSS雷达没有权限
 const DELETE = 1 // TODO
 const NET_404 = 404
-const REGPHONE = /^1[3|4|5|6|7|8][0-9]{9}$/
-const REGEMAIL = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/
-const CHINA = /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/
 
 export default class utils {
-  static checkIsPhoneNumber(phoneNum) {
-    return REGPHONE.test(phoneNum)
-  }
-  static checkIsEMAIL(email) {
-    return REGEMAIL.test(email)
-  }
-  static checkIsCHINA(email) {
-    return CHINA.test(email)
-  }
   static formatDate (time) {
     if (!time) {
       return {
@@ -122,6 +109,16 @@ export default class utils {
     }
   }
 
+  static breakArr (arr, num) {
+    let res = []
+    let max = Math.ceil(arr.length / num)
+    for (let i = 0; i < max; i++) {
+      let arrSlice = arr.slice(i * num, num + i * num)
+      res.push(arrSlice)
+      if (i === max - 1) return res
+    }
+  }
+
   // 获取设备信息
   static getPlatform () {
     const navigator = window.navigator
@@ -152,16 +149,6 @@ export default class utils {
       timer = setTimeout(() => {
         func.apply(this, args)
       }, delay)
-    }
-  }
-
-  static breakArr (arr, num) {
-    let res = []
-    let max = Math.ceil(arr.length / num)
-    for (let i = 0; i < max; i++) {
-      let arrSlice = arr.slice(i * num, num + i * num)
-      res.push(arrSlice)
-      if (i === max - 1) return res
     }
   }
 
@@ -212,27 +199,3 @@ function _handleLoseEfficacy () {
   storage.remove('token')
   _this.$router.replace('/oauth')
 }
-
-function doCity(city) {
-  let arr = []
-  for (let [, value] of Object.entries(city)) {
-    let obj1 = {}
-    obj1.value = value.name
-    obj1.children = []
-    const two = value.child
-    for (let [, val] of Object.entries(two)) {
-      let obj2 = {}
-      obj2.value = val.name
-      obj2.children = []
-      const three = val.child
-      for (let [, cc] of Object.entries(three)) {
-        obj2.children.push({value: cc})
-      }
-      obj1.children.push({value: obj2.value, children: obj2.children})
-    }
-    arr.push(obj1)
-  }
-  return arr
-}
-
-export const cityData = doCity(CITY_JSON)

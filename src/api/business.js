@@ -6,7 +6,7 @@ export default {
    * @returns {*}
    */
   myBusinessCard () {
-    let url = 'api/employee/my-business-card'
+    let url = 'api/employee/shop-detail'
     return request.get(url)
   },
   /**
@@ -31,6 +31,14 @@ export default {
    */
   Myqrcode (data) {
     let url = 'api/employee/my-new-qrcode'
+    return request.get(url, data)
+  },
+  /**
+   * 我的店铺-个性签名编辑
+   * @returns {*}
+   */
+  Myshop (data) {
+    let url = 'api/employee/shop-qrcode'
     return request.get(url, data)
   }
 }
