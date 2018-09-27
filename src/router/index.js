@@ -38,6 +38,8 @@ const AddWord = () => import('pages/add-word/add-word')
 const GroupCode = () => import('pages/group-code/group-code')
 const PersonCode = () => import('pages/person-code/person-code')
 const RobotCode = () => import('pages/robot-code/robot-code')
+const MyGoods = () => import('pages/my-goods/my-goods')
+const MyActivity = () => import('pages/my-activity/my-activity')
 
 Vue.use(Router)
 
@@ -130,6 +132,20 @@ const route = new Router({
               title: '发布动态'
             }
           }]
+        },
+        {
+          path: 'my-activity',
+          component: MyActivity,
+          meta: {
+            title: '我的活动'
+          }
+        },
+        {
+          path: 'my-goods',
+          component: MyGoods,
+          meta: {
+            title: '我的产品'
+          }
         }]
       }, {
         path: '/chat/:id',

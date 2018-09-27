@@ -50,7 +50,13 @@
   import storage from 'storage-controller'
   import {mapGetters} from 'vuex'
 
-  const CONTENTLIST = [{title: '微信群码', src: 'mine/group-code', icon: 'code'}, {title: '个人微信', src: 'mine/person-code', icon: 'wechat'}, {title: '我的报表', src: 'mine/my-data', icon: 'data'}]
+  const CONTENTLIST = [
+    {title: '微信群码', src: 'mine/group-code', icon: 'code'},
+    {title: '个人微信', src: 'mine/person-code', icon: 'wechat'},
+    {title: '我的商品', src: 'mine/my-goods', icon: 'wechat'},
+    {title: '我的活动', src: 'mine/my-activity', icon: 'wechat'},
+    {title: '我的报表', src: 'mine/my-data', icon: 'data'}
+  ]
 
   export default {
     name: 'Mine',
