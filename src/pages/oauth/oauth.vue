@@ -1,6 +1,9 @@
 <template>
   <div class="oauth">
     <img class="loading" src="./loading.gif" alt="" width="20" height="20">
+    <div class="cover" v-if="coverShow">
+      <div class="content">{{errorMsg}}</div>
+    </div>
   </div>
 </template>
 
@@ -17,8 +20,32 @@
 
   export default {
     name: COMPONENT_NAME,
+    data() {
+      return {
+        type: '',
+        coverShow: false,
+        errorMsg: ''
+      }
+    },
     created() {
-      this._checkAuthorize()
+      const message = this.$route.query.message
+      if (message) {
+        this.coverShow = true
+        this.errorMsg = message
+        return
+      }
+      const accessToken = this.$route.query.access_token
+      if (accessToken) {
+        storage.set('token', accessToken)
+        Jwt.getEmployeeInfo().then((res) => {
+          if (res.error === ERR_OK) {
+            storage.set('info', res.data)
+            this.$router.replace(NORMAL_ROUTE)
+          }
+        })
+      } else {
+        !storage.get('token') && window.location.replace(oauth)
+      }
     },
     computed: {
       code() {
@@ -75,4 +102,22 @@
     justify-content: center
     z-index: 100
     background: $color-white
+    .cover
+      position: absolute
+      z-index: 9999
+      top: 42%
+      left: 50%
+      min-width: 200px
+      max-width: 300px
+      margin-left: -100px
+      padding: 10px 0
+      opacity: .9
+      border-radius: 6px
+      transition: all .5s ease-out
+      text-align: center
+      background-color: rgba(0, 0, 0, .8)
+      .content
+        line-height: 20px
+        font-size: $font-size-medium
+        color: $color-white
 </style>
