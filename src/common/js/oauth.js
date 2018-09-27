@@ -5,6 +5,6 @@ export default class Oauth {
     const suffix = env.NODE_ENV === 'production' ? 'com' : 'net'
     const uri = location.origin + '/oauth'
     const redirectUri = encodeURIComponent(uri)
-    this.oauthUri = `http://zhidian-api.${suffix}/wechat/oauth?type=ai&redirect=${redirectUri}`
+    this.oauthUri = `https://zhidian-api.jkweixin.${suffix}/wechat/oauth?type=ai&redirect=${redirectUri}`
   }
 }
