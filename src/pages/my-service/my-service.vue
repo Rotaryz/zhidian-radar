@@ -1,15 +1,39 @@
 <template>
   <div class="my-service">
+    <div class="tab-wrapper">
+      <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
+      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.id}})</div>
+    </div>
     <div class="container">
-      <div class="big-container" :style="'transform: translate(-' + selectTab*33.333 + '%,0)'">
+      <div class="big-container" :style="'transform: translate(-' + selectTab*50 + '%,0)'">
         <div class="container-item">
           <scroll ref="scroll"
-                  :data="dataArray"
-                  :pullUpLoad="pullUpLoadObj"
-                  @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore">
+                  :data="dataArray0"
+                  :pullUpLoad="pullUpLoadObj0"
+                  @pullingUp="onPullingUp0"
+                  :showNoMore="showNoMore0">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
+              <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
+                <service-item :tabIdx="selectTab"
+                              :item="item"
+                              :showEdit="item.showEdit"
+                              @showEdit="showEditor"
+                              @itemEditor="itemEditor"
+                              @itemDown="itemDown"
+                              @itemDelete="itemDelete">
+                </service-item>
+              </div>
+            </div>
+          </scroll>
+        </div>
+        <div class="container-item">
+          <scroll ref="scroll"
+                  :data="dataArray1"
+                  :pullUpLoad="pullUpLoadObj1"
+                  @pullingUp="onPullingUp1"
+                  :showNoMore="showNoMore1">
+            <div class="list-container">
+              <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
                 <service-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
@@ -41,17 +65,27 @@
   // import storage from 'storage-controller'
 
   const LIMIT = 10
-
+  const TABS = [
+    {txt: '待上线', id: 10},
+    {txt: '出售中', id: 10}
+  ]
   export default {
     name: 'MyService',
     data () {
       return {
         dataArray: [{id: 1, showEdit: false}, {id: 2, showEdit: false}],
+        tabList: TABS,
+        dataArray0: [{id: 1}, {id: 2}],
+        dataArray1: [{id: 1}, {id: 2}, {id: 3}],
         selectTab: 0,
-        pullUpLoad: true,
-        pullUpLoadThreshold: 0,
-        showNoMore: true,
-        page: 1,
+        pullUpLoad0: true,
+        pullUpLoadThreshold0: 0,
+        showNoMore0: true,
+        page0: 1,
+        pullUpLoad1: true,
+        pullUpLoadThreshold1: 0,
+        showNoMore1: true,
+        page1: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         limit: LIMIT,
@@ -72,7 +106,10 @@
           this.$refs.scroll.initScroll()
         })
       },
-      onPullingUp() {
+      onPullingUp0() {
+        console.log(7776767)
+      },
+      onPullingUp1() {
         console.log(7776767)
       },
       msgConfirm() {
@@ -82,13 +119,13 @@
         this.$refs.confirm.show('确定下架该服务')
       },
       showEditor(item) {
-        this['list' + this.selectTab] = this['list' + this.selectTab].map((item1) => {
-          if (+item.id === +item1.id) {
-            item1.showEdit = !item1.showEdit
+        this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
+          if (+item.id === +data.id) {
+            data.showEdit = !data.showEdit
           } else {
-            item1.showEdit = false
+            data.showEdit = false
           }
-          return item1
+          return data
         })
       },
       itemEditor(item) {
@@ -104,9 +141,15 @@
       }
     },
     computed: {
-      pullUpLoadObj: function () {
-        return this.pullUpLoad ? {
-          threshold: parseInt(this.pullUpLoadThreshold),
+      pullUpLoadObj0: function () {
+        return this.pullUpLoad0 ? {
+          threshold: parseInt(this.pullUpLoadThreshold0),
+          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
+        } : false
+      },
+      pullUpLoadObj1: function () {
+        return this.pullUpLoad1 ? {
+          threshold: parseInt(this.pullUpLoadThreshold1),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
       }
@@ -142,11 +185,39 @@
     right: 0
     bottom: 0
     top: 0
+    .tab-wrapper
+      height: 44.5px
+      background: $color-white-fff
+      layout(row, block, nowrap)
+      position: relative
+      .tab
+        flex: 1
+        font-family: $font-family-regular
+        font-size: $font-size-16
+        color: $color-20202E
+        letter-spacing: 0.6px
+        text-align: center;
+        line-height: 44.5px
+      .line-wrap
+        position: absolute
+        left: 0
+        bottom: 0
+        right: 0
+        width: 50%
+        layout()
+        align-items: center
+        transition: all 0.3s
+        &:after
+          content: ''
+          width: 30px
+          height: 3px
+          background: $color-20202E
+
     .container
       width: 100vw
       height: 100vh
       .big-container
-        width: 300vw
+        width: 200vw
         height: 100vh
         display: flex
         transition: all 0.3s

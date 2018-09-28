@@ -8,7 +8,7 @@
         <div class="right-title">较好的附件汇丰晋亨弗交话费和继父回家发好多件返回的海沸江翻活动经费的</div>
         <div class="right-down">
           <div class="down-left">
-            <p class="down-txt">现价：¥88.00</p>
+            <p class="down-txt"><span class="first-txt">现价：¥88.00</span><span class="earn">(赚￥9.50)</span></p>
             <p class="down-txt second"><span class="first-txt">库存：550</span><span v-if="tabIdx != 0">销量：888</span></p>
           </div>
           <div class="down-right">
@@ -27,10 +27,10 @@
               <div class="item-icon down"></div>
               <div class="item-txt">下架</div>
             </div>
-            <div class="editor-item" v-if="tabIdx == 2" @click.stop="itemDelete(item)">
-              <div class="item-icon del"></div>
-              <div class="item-txt">删除</div>
-            </div>
+            <!--<div class="editor-item" v-if="tabIdx == 2" @click.stop="itemDelete(item)">-->
+              <!--<div class="item-icon del"></div>-->
+              <!--<div class="item-txt">删除</div>-->
+            <!--</div>-->
           </div>
           <div class="editor-arrow"></div>
         </div>
@@ -112,7 +112,7 @@
         justify-content: space-between
         .right-title
           font-size: $font-size-16
-          color: $color-4A4657
+          color: $color-20202E
           font-family: $font-family-regular
           letter-spacing: 0.8px
           width: 100%
@@ -120,6 +120,7 @@
           text-overflow: ellipsis
           white-space: nowrap
         .right-down
+          width: 51vw
           display: flex
           justify-content: space-between
           align-items: flex-end
@@ -128,18 +129,28 @@
             overflow: hidden
             .down-txt
               font-family: $font-family-regular
-              color: $color-706B82
+              color: $color-888888
               font-size: $font-size-14
               letter-spacing: 0.6px
+              overflow: hidden
+              text-overflow: ellipsis
+              white-space: nowrap
+              .earn
+                font-size: 12px
+                margin-left: 3px
+                letter-spacing: 0.3px
+                color: $color-F9543C
             .second
-              margin-top: 7px
+              margin-top: 5px
               display: flex
               justify-content: space-between
           .down-right
             width: 10.6vw
             height: 5.3vw
             margin-left: 6vw
-            position: relative
+            position: absolute
+            right: 3vw
+            bottom: 16px
             .down-right-icon
               width: 10.6vw
               height: 5.3vw
@@ -163,7 +174,7 @@
         top: 0
         transition: all 0.3s
         .editor-content
-          background: rgba(0, 0, 0, 0.8)
+          background: rgba(32,32,46, 0.8)
           box-shadow: 0 1px 10px 0 rgba(54,53,71,0.50)
           border-radius: 2px
           height: 100%
