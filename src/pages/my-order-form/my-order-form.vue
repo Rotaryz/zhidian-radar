@@ -1,5 +1,5 @@
 <template>
-  <div class="my-goods">
+  <div class="my-service">
     <Scroll bcColor="#f1f2f5">
       <div class="tab-wrap">
         什么
@@ -10,12 +10,12 @@
 
 <script>
   import Scroll from 'components/scroll/scroll'
-  import { Business } from 'api'
-  import { ERR_OK } from '../../common/js/config'
-  import storage from 'storage-controller'
+  // import { Business } from 'api'
+  // import { ERR_OK } from '../../common/js/config'
+  // import storage from 'storage-controller'
 
   export default {
-    name: 'MyGoods',
+    name: 'MyService',
     data () {
       return {
       }
@@ -37,7 +37,7 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .my-goods
+  .my-service
     position: fixed
     background: $color-background
     z-index: 10

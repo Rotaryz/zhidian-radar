@@ -38,8 +38,9 @@ const AddWord = () => import('pages/add-word/add-word')
 const GroupCode = () => import('pages/group-code/group-code')
 const PersonCode = () => import('pages/person-code/person-code')
 const RobotCode = () => import('pages/robot-code/robot-code')
-const MyGoods = () => import('pages/my-goods/my-goods')
+const MyService = () => import('pages/my-service/my-service')
 const MyActivity = () => import('pages/my-activity/my-activity')
+const MyOrderForm = () => import('pages/my-order-form/my-order-form')
 
 Vue.use(Router)
 
@@ -141,10 +142,17 @@ const route = new Router({
           }
         },
         {
-          path: 'my-goods',
-          component: MyGoods,
+          path: 'my-service',
+          component: MyService,
           meta: {
-            title: '我的产品'
+            title: '我的服务'
+          }
+        },
+        {
+          path: 'my-order-form',
+          component: MyOrderForm,
+          meta: {
+            title: '我的订单'
           }
         }]
       }, {

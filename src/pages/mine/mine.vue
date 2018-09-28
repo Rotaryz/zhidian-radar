@@ -5,7 +5,10 @@
         <div class="top-box">
           <div class="top-box-left">
             <img class="mine-header" :src="mine.avatar">
-            <p class="peo-name">{{mine.name}}</p>
+            <p class="peo-name">
+              {{mine.name}}
+              <span class="tag">角色:{{mine.tag || '店长'}}</span>
+            </p>
           </div>
           <div class="top-box-right" @click="toShareCard">
             <span class="code"></span>
@@ -14,28 +17,34 @@
         </div>
         <div class="mine-shadow">
           <router-link class="mian-box" to="mine/my-data">
-            <div class="item-box">
-              <div class="number">{{allDatas.customer_sum || 0}}</div>
-              <div class="text">客户总数</div>
-            </div>
-            <div class="item-box">
-              <div class="number">{{allDatas.order_sum || 0}}</div>
-              <div class="text">订单总数</div>
-            </div>
-            <div class="item-box">
-              <div class="number">{{allDatas.order_finish_sum || 0}}</div>
-              <div class="text">成交总数</div>
+            <h4 class="title">店员数据概览</h4>
+            <div class="main">
+              <div class="item-box">
+                <div class="number">{{allDatas.customer_sum || 0}}</div>
+                <div class="text">客户总数</div>
+              </div>
+              <div class="item-box">
+                <div class="number">{{allDatas.order_sum || 0}}</div>
+                <div class="text">订单总数</div>
+              </div>
+              <div class="item-box">
+                <div class="number">{{allDatas.order_finish_sum || 0}}</div>
+                <div class="text">成交总数</div>
+              </div>
             </div>
           </router-link>
         </div>
       </div>
       <ul class="content-list">
         <li class="content-item" v-for="(item, index) in contentList" :key="index" @click="_goPage(item.src)">
-          <div class="span-left">
-            <span class="icon-box" :class="item.icon"></span>
-            <span class="text">{{item.title}}</span>
+          <div class="list-wrap">
+            <div class="span-left">
+              <span class="icon-box" :class="item.icon"></span>
+              <span class="text">{{item.title}}</span>
+            </div>
+            <span v-if="item.src" class="icon"></span>
+            <span v-else class="total-price">{{totalPrice}}</span>
           </div>
-          <span class="icon"></span>
         </li>
       </ul>
     </Scroll>
@@ -51,11 +60,15 @@
   import {mapGetters} from 'vuex'
 
   const CONTENTLIST = [
-    {title: '微信群码', src: 'mine/group-code', icon: 'code'},
-    {title: '个人微信', src: 'mine/person-code', icon: 'wechat'},
-    {title: '我的商品', src: 'mine/my-goods', icon: 'wechat'},
-    {title: '我的活动', src: 'mine/my-activity', icon: 'wechat'},
-    {title: '我的报表', src: 'mine/my-data', icon: 'data'}
+    {title: '我的信息', src: 'mine/icon-perinfor', icon: 'perinfor'},
+    {title: '我的服务', src: 'mine/my-service', icon: 'goods'},
+    {title: '我的活动', src: 'mine/my-activity', icon: 'activity'},
+    {title: '我的订单', src: 'mine/my-order-form', icon: 'myorder'},
+    // {title: '微信群码', src: 'mine/group-code', icon: 'code'},
+    // {title: '个人微信', src: 'mine/person-code', icon: 'wechat'},
+    // {title: '我的报表', src: 'mine/my-data', icon: 'data'}
+    {title: '我的收入', src: '', icon: 'income'},
+    {title: '我的报表', src: 'mine/my-data', icon: 'myform'}
   ]
 
   export default {
@@ -66,7 +79,8 @@
         mine: {},
         allDatas: {},
         show: true,
-        count: 0
+        count: 0,
+        totalPrice: '200.00'
       }
     },
     created () {
@@ -144,9 +158,11 @@
     bottom: 45px
     top: 0
   .mine-top
-    background: $color-20202E
+    bg-image('pic-mybg')
     padding: 20px 15px
-    height: 150px
+    height: 172px
+    background-size: 100% 100%
+    box-sizing: border-box
     position: relative
     margin-bottom: 56px
     .top-box
@@ -157,17 +173,28 @@
         layout(row)
         align-items: center
         .mine-header
-          width: 50px
-          height: 50px
+          width: 60px
+          height: 60px
           display: block
           border-radius: 50%
-          margin-right: 15px
+          margin-right: 10px
         .peo-name
           font-size: $font-size-16
           font-family: $font-family-medium
           color: $color-white
           width: 180px
           no-wrap()
+          .tag
+            display: block
+            background: rgba(255,255,255,0.2)
+            width: 60px
+            height: 20px
+            line-height: 20px
+            text-align: center
+            font-size: 12px
+            color: $color-white
+            margin-top: 10px
+            border-radius: 2px
       .top-box-right
         layout(row)
         align-items: center
@@ -190,36 +217,43 @@
         box-shadow: 0 4px 12px 0 rgba(43,43,145,0.04)
         border-radius: 2px
         background: $color-white
-        padding: 20px 0
-        layout(row)
-        align-items: center
-        .item-box
-          width: 33.33%
-          text-align: center
-          position: relative
-          &:after
-            content: ''
-            display: block
-            position: absolute
-            height: 25px
-            right: 0
-            top: 0
-            margin: auto
-            bottom: 0
-            width:1px
-            border-right: 0.5px solid #e5e5e5
-            opacity: 0.5
-          &:last-child:after
-            width: 0
-          .number
-            color: $color-20202E
-            font-family: 'DINCondensed-Bold'
-            font-size: 40px
-            margin-bottom: 5px
-          .text
-            color: $color-20202E
-            font-family: $font-family-regular
-            font-size: $font-size-12
+        padding: 15px 15px
+        display: block
+        .title
+          font-size: 14px
+          margin-bottom: 20px
+          color: $color-20202E
+        .main
+          layout(row)
+          align-items: center
+          .item-box
+            width: 33.33%
+            text-align: center
+            position: relative
+            &:after
+              content: ''
+              display: block
+              position: absolute
+              height: 25px
+              right: 0
+              top: 0
+              margin: auto
+              bottom: 0
+              width:1px
+              border-right: 0.5px solid #e5e5e5
+              opacity: 0.5
+            &:last-child:after
+              width: 0
+              border: 0
+            .number
+              color: $color-20202E
+              font-family: 'DINCondensed-Bold'
+              font-size: 40px
+              margin-bottom: 5px
+            .text
+              color: $color-20202E
+              font-family: $font-family-regular
+              font-size: $font-size-12
   .ba-dark
     background-color: $color-text
     text-align: center
@@ -303,24 +337,38 @@
             width: 14px
 
   .content-list
-    background-color: $color-white
     width: 92vw
     margin: 0 auto
-    padding-left: 15px
     box-sizing: border-box
     border-radius: 2px
-    border-1px($color-row-line)
     .content-item
       font-family: $font-family-regular
       font-size: $font-size-14
       color: $color-text
-      height: 55px
-      align-items: center
-      display: flex
-      padding-right: 15px
-      justify-content: space-between
-      position: relative
-      border-bottom-1px($color-row-line)
+      background-color: $color-white
+      box-shadow: 0 4px 12px 0 rgba(43,43,145,0.02)
+      &:first-child
+        border-top-left-radius: 3px
+        border-top-right-radius: 3px
+      &:nth-of-type(5)
+        border-bottom-left-radius: 3px
+        border-bottom-right-radius: 3px
+        .list-wrap:after
+          border: 0
+      &:last-child
+        margin-top: 15px
+        border-radius: 3px
+        .list-wrap:after
+          border: 0
+      .list-wrap
+        margin-left: 15px
+        align-items: center
+        display: flex
+        padding-right: 15px
+        height: 55px
+        justify-content: space-between
+        position: relative
+        border-bottom-1px($color-row-line)
       .span-left
         layout(row)
         align-items: center
@@ -328,11 +376,17 @@
           width: 18px
           height: 18px
           margin-right: 10px
-          &.code
-            icon-image('icon-groupcodetwo')
-          &.wechat
-            icon-image('icon-personalwechat')
-          &.data
+          &.perinfor
+            icon-image('icon-perinfor')
+          &.goods
+            icon-image('icon-goods')
+          &.activity
+            icon-image('icon-activity')
+          &.myorder
+            icon-image('icon-myorder')
+          &.income
+            icon-image('icon-income')
+          &.myform
             icon-image('icon-myforms')
       &:last-child
         border-none()
@@ -340,4 +394,7 @@
         icon-image('icon-pressed')
         width: 5px
         height: 10px
+      .total-price
+        color: $color-9B9B9B
+        font-size: 14px
 </style>

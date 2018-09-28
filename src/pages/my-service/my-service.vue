@@ -1,64 +1,15 @@
 <template>
-  <div class="my-activity">
-    <div class="tab-container">
-      <div class="tab-wrapper">
-        <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
-        <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.id}})</div>
-      </div>
-    </div>
+  <div class="my-service">
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + selectTab*33.333 + '%,0)'">
         <div class="container-item">
-          <scroll ref="scroll0"
-                  :data="dataArray0"
-                  bcColor="#fff"
-                  :pullUpLoad="pullUpLoadObj0"
-                  @pullingUp="onPullingUp0"
-                  :showNoMore="showNoMore0">
+          <scroll ref="scroll"
+                  :data="dataArray"
+                  :pullUpLoad="pullUpLoadObj"
+                  @pullingUp="onPullingUp"
+                  :showNoMore="showNoMore">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
-                <service-item :tabIdx="selectTab"
-                              :item="item"
-                              :showEdit="item.showEdit"
-                              @showEdit="showEditor"
-                              @itemEditor="itemEditor"
-                              @itemDown="itemDown"
-                              @itemDelete="itemDelete">
-                </service-item>
-              </div>
-            </div>
-          </scroll>
-        </div>
-        <div class="container-item">
-          <scroll ref="scroll1"
-                  :data="dataArray1"
-                  bcColor="#f6f6f6"
-                  :pullUpLoad="pullUpLoadObj1"
-                  @pullingUp="onPullingUp1"
-                  :showNoMore="showNoMore1">
-            <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
-                <service-item :tabIdx="selectTab"
-                              :item="item"
-                              :showEdit="item.showEdit"
-                              @showEdit="showEditor"
-                              @itemEditor="itemEditor"
-                              @itemDown="itemDown"
-                              @itemDelete="itemDelete">
-                </service-item>
-              </div>
-            </div>
-          </scroll>
-        </div>
-        <div class="container-item">
-          <scroll ref="scroll2"
-                  :data="dataArray2"
-                  bcColor="#f6f6f6"
-                  :pullUpLoad="pullUpLoadObj2"
-                  @pullingUp="onPullingUp2"
-                  :showNoMore="showNoMore2">
-            <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray2" :key="index">
+              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
                 <service-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
@@ -74,7 +25,7 @@
       </div>
     </div>
     <div class="footer-box">
-      <div class="footer-btn" @click="toDetail('new')">新建服务</div>
+      <div class="footer-btn" @click="toDetail('new')">上架服务</div>
     </div>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
   </div>
@@ -90,33 +41,17 @@
   // import storage from 'storage-controller'
 
   const LIMIT = 10
-  const TABS = [
-    {txt: '未开始', id: 10},
-    {txt: '进行中', id: 10},
-    {txt: '已下架', id: 10}
-  ]
 
   export default {
-    name: 'MyActivity',
+    name: 'MyService',
     data () {
       return {
-        tabList: TABS,
-        dataArray0: [{id: 1, showEdit: false}, {id: 2, showEdit: false}],
-        dataArray1: [{id: 1, showEdit: false}, {id: 2, showEdit: false}, {id: 3, showEdit: false}],
-        dataArray2: [{id: 1, showEdit: false}],
+        dataArray: [{id: 1, showEdit: false}, {id: 2, showEdit: false}],
         selectTab: 0,
-        pullUpLoad0: true,
-        pullUpLoadThreshold0: 0,
-        showNoMore0: true,
-        page0: 1,
-        pullUpLoad1: true,
-        pullUpLoadThreshold1: 0,
-        showNoMore1: true,
-        page1: 1,
-        pullUpLoad2: true,
-        pullUpLoadThreshold2: 0,
-        showNoMore2: true,
-        page2: 1,
+        pullUpLoad: true,
+        pullUpLoadThreshold: 0,
+        showNoMore: true,
+        page: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         limit: LIMIT,
@@ -137,13 +72,7 @@
           this.$refs.scroll.initScroll()
         })
       },
-      onPullingUp0() {
-        console.log(7776767)
-      },
-      onPullingUp1() {
-        console.log(7776767)
-      },
-      onPullingUp2() {
+      onPullingUp() {
         console.log(7776767)
       },
       msgConfirm() {
@@ -175,21 +104,9 @@
       }
     },
     computed: {
-      pullUpLoadObj0: function () {
-        return this.pullUpLoad0 ? {
-          threshold: parseInt(this.pullUpLoadThreshold0),
-          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
-        } : false
-      },
-      pullUpLoadObj1: function () {
-        return this.pullUpLoad1 ? {
-          threshold: parseInt(this.pullUpLoadThreshold1),
-          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
-        } : false
-      },
-      pullUpLoadObj2: function () {
-        return this.pullUpLoad2 ? {
-          threshold: parseInt(this.pullUpLoadThreshold2),
+      pullUpLoadObj: function () {
+        return this.pullUpLoad ? {
+          threshold: parseInt(this.pullUpLoadThreshold),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
       }
@@ -217,7 +134,7 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .my-activity
+  .my-service
     position: fixed
     background: $color-background
     z-index: 10
@@ -225,34 +142,6 @@
     right: 0
     bottom: 0
     top: 0
-    .tab-wrapper
-      height: 44.5px
-      background: $color-white-fff
-      layout(row, block, nowrap)
-      position: relative
-      .tab
-        flex: 1
-        font-family: $font-family-regular
-        font-size: $font-size-16
-        color: $color-20202E
-        letter-spacing: 0.6px
-        text-align: center;
-        line-height: 44.5px
-      .line-wrap
-        position: absolute
-        left: 0
-        bottom: 0
-        right: 0
-        width: 33.333%
-        layout()
-        align-items: center
-        transition: all 0.3s
-        &:after
-          content: ''
-          width: 30px
-          height: 3px
-          background: $color-20202E
-          border-radius: 3px
     .container
       width: 100vw
       height: 100vh
@@ -265,7 +154,6 @@
           width: 100vw
           height: 100vh
           box-sizing: border-box
-          padding: 15px 0 64px
           .list-container
             padding: 0 15px
             .list-item
@@ -273,19 +161,17 @@
     .footer-box
       position: fixed
       width: 100vw
-      height: 64px
+      height: 44.5px
       z-index: 60
       bottom: 0
       left: 0
       background: $color-white
       box-sizing: border-box
-      padding: 10px 15px
       .footer-btn
         width: 100%
         height: 100%
-        background: $color-363537
-        border-radius: 2px
-        line-height: 44px
+        background: $color-20202E
+        line-height: 44.5px
         text-align: center
         font-family: $font-family-regular
         color: $color-white

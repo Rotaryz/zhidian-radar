@@ -188,39 +188,51 @@
       {
         icon: 'ckdp',
         name: '查看店铺',
-        event_no: '60001',
+        event_no: '10001',
         count_sum: 0
       },
       {
         icon: 'fxdp',
         name: '分享店铺',
-        event_no: '60004',
+        event_no: '10004',
         count_sum: 0
       }
     ],
     [
       {
-        icon: 'ckpt',
+        icon: 'ckpthd',
         name: '查看拼团活动',
-        event_no: '60008',
+        event_no: '30004',
         count_sum: 0
       },
       {
-        icon: 'ckkj',
+        icon: 'ckkjhd',
         name: '查看砍价活动',
-        event_no: '20014',
+        event_no: '30013',
+        count_sum: 0
+      },
+      {
+        icon: 'ckfwxm',
+        name: '查看服务项目',
+        event_no: '40001',
+        count_sum: 0
+      },
+      {
+        icon: 'ckppgs',
+        name: '查看品牌故事',
+        event_no: '40007',
         count_sum: 0
       },
       {
         icon: 'ckdt',
         name: '查看动态',
-        event_no: '30001',
+        event_no: '50001',
         count_sum: 0
       }
     ],
     [
       {
-        icon: 'ckdt',
+        icon: 'wykd',
         name: '我要开店',
         event_no: '30001',
         count_sum: 0
@@ -610,39 +622,21 @@
             margin-right: 10px
             background-size: 18px 18px
             &.ckdp
-              bg-image('./icon-shop')
+              bg-image('./icon-viewdetail')
             &.fxdp
               bg-image('./icon-shareshop')
-            &.ckpt
+            &.ckpthd
               bg-image('./icon-spell')
-            &.fxpt
-              bg-image('./icon-sharespell')
-            &.tjpt
-              bg-image('./icon-referspell')
-            &.zfpt
-              bg-image('./icon-payspell')
-            &.ckkj
+            &.ckkjhd
               bg-image('./icon-bargain')
-            &.fxkj
-              bg-image('./icon-sharebargain')
-            &.tjkj
-              bg-image('./icon-referbargain')
-            &.zfkj
-              bg-image('./icon-paybargain')
-            &.cksp
+            &.ckfwxm
               bg-image('./icon-goods')
-            &.fxsp
-              bg-image('./icon-sharegoods')
-            &.tjsp
-              bg-image('./icon-refergoods')
-            &.zfsp
-              bg-image('./icon-paygoods')
+            &.ckppgs
+              bg-image('./icon-brand')
             &.ckdt
-              bg-image('./icon-viewdetail')
-            &.dzdt
-              bg-image('./icon-zan')
-            &.pldt
               bg-image('./icon-comment')
+            &.wykd
+              bg-image('./icon-openshop')
           .item-right
             layout(row)
             padding-right: 15px
