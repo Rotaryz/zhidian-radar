@@ -41,6 +41,7 @@ const RobotCode = () => import('pages/robot-code/robot-code')
 const MyService = () => import('pages/my-service/my-service')
 const MyActivity = () => import('pages/my-activity/my-activity')
 const MyOrderForm = () => import('pages/my-order-form/my-order-form')
+const ShelfService = () => import('pages/shelf-service/shelf-service')
 
 Vue.use(Router)
 
@@ -146,7 +147,14 @@ const route = new Router({
           component: MyService,
           meta: {
             title: '我的服务'
-          }
+          },
+          children: [{
+            path: 'shelf-service',
+            component: ShelfService,
+            meta: {
+              title: '上架服务'
+            }
+          }]
         },
         {
           path: 'my-order-form',

@@ -1,5 +1,5 @@
 <template>
-  <div class="my-service">
+  <div class="shelf-service">
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
       <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.id}})</div>
@@ -18,8 +18,8 @@
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
-                              @itemDown="itemDown"
-                              :page="pageType">
+                              :page="pageType"
+                              >
                 </service-item>
               </div>
             </div>
@@ -37,7 +37,6 @@
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
-                              @itemDown="itemDown"
                               :page="pageType">
                 </service-item>
               </div>
@@ -45,9 +44,6 @@
           </scroll>
         </div>
       </div>
-    </div>
-    <div class="footer-box">
-      <div class="footer-btn" @click="toDetail">上架服务</div>
     </div>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
   </div>
@@ -68,7 +64,7 @@
     {txt: '出售中', id: 10}
   ]
   export default {
-    name: 'MyService',
+    name: 'ShelfService',
     data () {
       return {
         dataArray: [{id: 1, showEdit: false}, {id: 2, showEdit: false}],
@@ -126,7 +122,7 @@
           return data
         })
       },
-      itemDown(item) { // 点击下架按钮
+      itemUp(item) { // 点击上架按钮
         this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
           if (+item.id === +data.id) {
             data.showEdit = !data.showEdit
@@ -135,9 +131,6 @@
           }
           return data
         })
-      },
-      toDetail() {
-        this.$router.push('/mine/my-service/shelf-service')
       }
     },
     computed: {

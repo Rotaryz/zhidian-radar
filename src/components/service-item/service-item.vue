@@ -23,9 +23,13 @@
               <!--<div class="item-icon edit"></div>-->
               <!--<div class="item-txt">编辑</div>-->
             <!--</div>-->
-            <div class="editor-item" v-if="tabIdx != 2" @click.stop="itemDown(item)">
+            <div class="editor-item" v-if="page === 'myService'" @click.stop="itemDown(item)">
               <div class="item-icon down"></div>
               <div class="item-txt">下架</div>
+            </div>
+            <div class="editor-item" v-if="page === 'shelf'" @click.stop="itemUp(item)">
+              <div class="item-icon down"></div>
+              <div class="item-txt">上架</div>
             </div>
             <!--<div class="editor-item" v-if="tabIdx == 2" @click.stop="itemDelete(item)">-->
               <!--<div class="item-icon del"></div>-->
@@ -41,10 +45,13 @@
 
 <script type="text/ecmascript-6">
   export default {
-    props: ['tabIdx', 'item', 'showEdit'],
+    props: ['tabIdx', 'item', 'showEdit', 'page'],
     data() {
       return {
       }
+    },
+    created() {
+      console.log(this.page, 'page', this.page === 'shelf')
     },
     methods: {
       showEditCover(item) {
@@ -57,6 +64,9 @@
         this.$emit('itemDown', item)
       },
       itemDelete(item) {
+        this.$emit('itemDelete', item)
+      },
+      itemUp(item) {
         this.$emit('itemDelete', item)
       }
     }
