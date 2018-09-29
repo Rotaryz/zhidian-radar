@@ -11,6 +11,7 @@ import echart from './echart'
 import global from './global'
 import news from './news'
 import mine from './mine'
+import service from './service'
 // 授权模块
 export const Jwt = jwt
 
@@ -46,3 +47,6 @@ export const News = news
 
 // 我的
 export const Mine = mine
+
+// 我的服务
+export const Service = service

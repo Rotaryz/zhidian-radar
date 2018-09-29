@@ -2,7 +2,7 @@
   <div class="service-item">
     <div class="item-content">
       <div class="item-left" :style="{backgroundImage: 'url(' +  + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
-        <div class="left-cover" :class="tabIdx == 2 ? '' : 'hide'">已下架</div>
+        <!--<div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>-->
       </div>
       <div class="item-right">
         <div class="right-title">较好的附件汇丰晋亨弗交话费和继父回家发好多件返回的海沸江翻活动经费的</div>
@@ -28,7 +28,7 @@
               <div class="item-txt">下架</div>
             </div>
             <div class="editor-item" v-if="page === 'shelf'" @click.stop="itemUp(item)">
-              <div class="item-icon down"></div>
+              <div class="item-icon up"></div>
               <div class="item-txt">上架</div>
             </div>
             <!--<div class="editor-item" v-if="tabIdx == 2" @click.stop="itemDelete(item)">-->
@@ -51,7 +51,7 @@
       }
     },
     created() {
-      console.log(this.page, 'page', this.page === 'shelf')
+      console.log(this.page)
     },
     methods: {
       showEditCover(item) {
@@ -67,7 +67,7 @@
         this.$emit('itemDelete', item)
       },
       itemUp(item) {
-        this.$emit('itemDelete', item)
+        this.$emit('itemUp', item)
       }
     }
   }
@@ -164,9 +164,9 @@
             .down-right-icon
               width: 10.6vw
               height: 5.3vw
-              icon-image('./icon-function')
+              icon-image('./pic-more')
             .down-right-icon.active
-              icon-image('./icon-function_click')
+              icon-image('./pic-more_click')
     .editor-box
       position: absolute
       height: 55px
@@ -207,6 +207,8 @@
                 icon-image('./icon-delete')
               &.down
                 icon-image('./icon-offline')
+              &.up
+                icon-image('./icon-online')
             .item-txt
               font-size: $font-size-10
               font-family: $font-family-regular

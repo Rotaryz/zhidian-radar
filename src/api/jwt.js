@@ -7,7 +7,7 @@ export default {
    * @returns {*|AxiosPromise<any>|void}
    */
   employeeLogin(code) {
-    const url = '/api/jwt/employee-login'
+    const url = '/api/employee/profile'
     const data = {
       code,
       suite_alias: 'ai_radar',

@@ -271,7 +271,7 @@
         page: 0,
         tabTime: ['', 'today', 'week', 'month'],
         tabContent: ['scroll', 'scrollAction', 'scrollPeople'],
-        loading: true,
+        loading: false,
         loaded: false
       }
     },

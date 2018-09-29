@@ -23,6 +23,14 @@
                 </service-item>
               </div>
             </div>
+            <div class="null-data"  v-if="loaded && list.length === 0">
+              <exception errType="nodata"></exception>
+            </div>
+            <div class="loading" v-if="loading">
+              <div class="load-bg">
+                <img src="./loading.gif" class="gif">
+              </div>
+            </div>
           </scroll>
         </div>
         <div class="container-item">
@@ -50,6 +58,7 @@
       <div class="footer-btn" @click="toDetail">上架服务</div>
     </div>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -58,9 +67,8 @@
   import Exception from 'components/exception/exception'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import ServiceItem from 'components/service-item/service-item'
-  // import { Business } from 'api'
-  // import { ERR_OK } from '../../common/js/config'
-  // import storage from 'storage-controller'
+  import { Service } from 'api'
+  import { ERR_OK } from '../../common/js/config'
 
   const LIMIT = 10
   const TABS = [
@@ -71,10 +79,9 @@
     name: 'MyService',
     data () {
       return {
-        dataArray: [{id: 1, showEdit: false}, {id: 2, showEdit: false}],
         tabList: TABS,
-        dataArray0: [{id: 1}, {id: 2}],
-        dataArray1: [{id: 1}, {id: 2}, {id: 3}],
+        dataArray0: [],
+        dataArray1: [],
         selectTab: 0,
         pullUpLoad0: true,
         pullUpLoadThreshold0: 0,
@@ -89,32 +96,57 @@
         limit: LIMIT,
         popShow: true,
         loaded: false,
-        loading: true
+        loading: false,
+        pageType: 'myService'
       }
     },
     created () {
+      this.getServiceList()
     },
     methods: {
       changeTab(index) {
         this.selectTab = index
       },
-      rebuildScroll() {
-        this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
-        })
+      getServiceList(page = 1) { // 我的服务
+        Service.getServiceList({page, limit: 10})
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$ref.tost.show(res.message)
+              return
+            }
+            this.serviceList = res.data
+          })
+      },
+      activity() { // 下架服务时查询是否绑定活动
+        Service.activity()
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$ref.tost.show(res.message)
+              return
+            }
+            this.serviceList = res.data
+          })
       },
       onPullingUp0() {
         console.log(7776767)
       },
       onPullingUp1() {
-        console.log(7776767)
+        Service.getServiceList()
+          .then((res) => {
+            if (res.error === ERR_OK) {
+            }
+            this.$ref.tost.show(res.status)
+          })
       },
       msgConfirm() {
-        console.log('confirm')
-      },
-      delClick() {
-        this.$refs.confirm.show('确定下架该服务')
+        Service.serviceHandle() // 下架服务
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$ref.tost.show(res.message)
+              return
+            }
+            this.serviceList = res.data
+          })
       },
       showEditor(item) { // 点击右边小按钮
         this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
@@ -133,11 +165,17 @@
           } else {
             data.showEdit = false
           }
-          return data
         })
+        this.$refs.confirm.show('确定下架该服务吗？')
       },
       toDetail() {
         this.$router.push('/mine/my-service/shelf-service')
+      },
+      rebuildScroll() {
+        this.$nextTick(() => {
+          this.$refs.scroll.destroy()
+          this.$refs.scroll.initScroll()
+        })
       }
     },
     computed: {
@@ -228,7 +266,8 @@
           .list-container
             padding: 0 15px
             .list-item
-              padding-top: 10px
+              margin-top: 15px
+              box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
     .footer-box
       position: fixed
       width: 100vw
@@ -290,5 +329,23 @@
             &.right
               border: 0
               color: $color-C3A66C
-
+    .loading
+      position: fixed
+      width: 100%
+      top: 45px
+      bottom: 45px
+      display: flex
+      justify-content: center
+      align-items: center
+      .load-bg
+        width: 60px
+        height: 60px
+        border-radius: 4px
+        background: rgba(0,0,0,0.3)
+        display: flex
+        justify-content: center
+        align-items: center
+      .gif
+        width: 30px
+        height: 30px
 </style>

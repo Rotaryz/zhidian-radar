@@ -7,7 +7,7 @@ const LOCAL_URL = {
 }
 
 const DEV_URL = {
-  api: 'https://ws-api.jerryf.cn',
+  api: 'https://zhidian-api.jerryf.cn',
   image: 'https://img.jerryf.cn/defaults'
 }
 // const DEV_URL = {
@@ -16,12 +16,12 @@ const DEV_URL = {
 // }
 
 const TEST_URL = {
-  api: 'https://ws-api.jkweixin.net' + version,
+  api: 'https://zhidian-api.jkweixin.net' + version,
   image: 'https://img.jkweixin.net/defaults'
 }
 
 const PROD_URL = {
-  api: 'https://ws-api.jkweixin.com' + version,
+  api: 'https://zhidian-api.jkweixin.com' + version,
   image: 'https://img.jkweixin.com/defaults'
 }
 

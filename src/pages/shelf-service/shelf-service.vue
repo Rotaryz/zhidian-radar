@@ -18,6 +18,7 @@
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
+                              @itemUp="itemUp"
                               :page="pageType"
                               >
                 </service-item>
@@ -54,9 +55,8 @@
   import Exception from 'components/exception/exception'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import ServiceItem from 'components/service-item/service-item'
-  // import { Business } from 'api'
-  // import { ERR_OK } from '../../common/js/config'
-  // import storage from 'storage-controller'
+  import { Service } from 'api'
+  import { ERR_OK } from '../../common/js/config'
 
   const LIMIT = 10
   const TABS = [
@@ -85,10 +85,12 @@
         limit: LIMIT,
         popShow: true,
         loaded: false,
-        loading: true
+        loading: true,
+        pageType: 'shelf'
       }
     },
     created () {
+      this.getServiceAll()
     },
     methods: {
       changeTab(index) {
@@ -100,11 +102,35 @@
           this.$refs.scroll.initScroll()
         })
       },
+      getServiceAll(page = 1) { // 服务库
+        Service.getServiceAll({page, limit: LIMIT})
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$ref.tost.show(res.message)
+              return
+            }
+            if (page > 1) {
+              if (this.selectTab === 0) {
+                this.dataArray0 = this.dataArray0.concat(res.data)
+              } else {
+                this.dataArray1 = this.dataArray1.concat(res.data)
+              }
+            } else {
+              this.dataArray0 = res.data
+              this.dataArray1 = res.data
+            }
+            if (res.data.length === LIMIT) {
+              this.showNoMore0 = false
+            }
+          })
+      },
       onPullingUp0() {
-        console.log(7776767)
+        this.page0++
+        this.getServiceAll(this.page0)
       },
       onPullingUp1() {
-        console.log(7776767)
+        this.page1++
+        this.getServiceAll(this.page0)
       },
       msgConfirm() {
         console.log('confirm')
@@ -170,10 +196,10 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .my-service
+  .shelf-service
     position: fixed
     background: $color-background
-    z-index: 10
+    z-index: 60
     left: 0
     right: 0
     bottom: 0
@@ -221,26 +247,8 @@
           .list-container
             padding: 0 15px
             .list-item
-              padding-top: 10px
-    .footer-box
-      position: fixed
-      width: 100vw
-      height: 44.5px
-      z-index: 60
-      bottom: 0
-      left: 0
-      background: $color-white
-      box-sizing: border-box
-      .footer-btn
-        width: 100%
-        height: 100%
-        background: $color-20202E
-        line-height: 44.5px
-        text-align: center
-        font-family: $font-family-regular
-        color: $color-white
-        font-size: $font-size-16
-        letter-spacing: 0.8px
+              margin-top: 15px
+              box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
     .pop
       position: fixed
       left: 0

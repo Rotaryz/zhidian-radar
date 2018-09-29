@@ -119,7 +119,7 @@
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {
-            this.$refs.toast.show(res.message)
+            // this.$refs.toast.show(res.message)
           }
         })
       }

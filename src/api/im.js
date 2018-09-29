@@ -12,7 +12,7 @@ export default {
 
   // 雷达消息（所有人）
   getRadarList(from = 0, limit = 30, id, loading = true) {
-    const url = `/api/employee/ws-action-logs`
+    const url = `/api/employee/analysis/logs`
     const data = {
       page: 0,
       limit,
@@ -20,12 +20,12 @@ export default {
       customer_id: 0,
       employee_id: id
     }
-    return request.post(url, data, loading)
+    return request.get(url, data, loading)
   },
 
   // 行为雷达消息（所有人）
   getActionList(from = 0, limit = 30, id, type = 1, time, loading = true) {
-    const url = `/api/employee/ws-action-logs`
+    const url = `/api/employee/analysis/logs`
     const data = {
       from,
       limit,
@@ -35,7 +35,7 @@ export default {
       customer_id: 0,
       employee_id: id
     }
-    return request.post(url, data, loading)
+    return request.get(url, data, loading)
   },
   // 聊天记录
   getMsgList(data, loading = true) {
