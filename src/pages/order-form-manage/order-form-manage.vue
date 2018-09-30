@@ -1,5 +1,5 @@
 <template>
-  <div class="shelf-service">
+  <div class="my-activity">
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
       <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
@@ -18,14 +18,13 @@
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
-                              @itemUp="itemUp"
-                              :page="pageType"
-                              >
+                              @itemDown="itemDown"
+                              :page="pageType">
                 </service-item>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray0.length === 0">
-              <exception errType="noservice"></exception>
+              <exception errType="nodata"></exception>
             </div>
             <div class="loading" v-if="loading">
               <list-loading></list-loading>
@@ -44,13 +43,13 @@
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
-                              @itemUp="itemUp"
+                              @itemDown="itemDown"
                               :page="pageType">
                 </service-item>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray1.length === 0">
-              <exception errType="noservice"></exception>
+              <exception errType="nodata"></exception>
             </div>
             <div class="loading" v-if="loading">
               <list-loading></list-loading>
@@ -59,15 +58,21 @@
         </div>
       </div>
     </div>
+    <div class="footer-box">
+      <div class="footer-btn" @click="toTeam">上架活动</div>
+    </div>
+    <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
+    <router-view @refresh="refresh"></router-view>
   </div>
 </template>
 
 <script>
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
+  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import ServiceItem from 'components/service-item/service-item'
-  import { Service } from 'api'
+  import { Activity } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import {ease} from 'common/js/ease'
@@ -75,16 +80,17 @@
 
   const LIMIT = 15
   const TABS = [
-    {txt: '待上线', num: 0},
-    {txt: '出售中', num: 0}
+    {txt: '未开始', num: 0},
+    {txt: '进行中', num: 0}
   ]
   export default {
-    name: 'ShelfService',
+    name: 'MyActivity',
     data () {
       return {
         tabList: TABS,
         dataArray0: [],
         dataArray1: [],
+        dataArray2: [],
         selectTab: 0,
         pullUpLoad0: true,
         pullUpLoadThreshold0: 0,
@@ -98,22 +104,23 @@
         pullUpLoadNoMoreTxt: '没有更多了',
         popShow: true,
         loaded: false,
-        loading: true,
-        pageType: 'shelf',
+        loading: false,
+        pageType: 'myService',
         tabLoad: true,
-        status: 0
+        status: 0,
+        downItem: ''
       }
     },
     created () {
-      this.getServiceAll()
+      this.getActivityList()
     },
     methods: {
       changeTab(index) {
-        this.status = index
         this.selectTab = index
+        this.status = index
         this._defaultData()
         this._defaultArray()
-        this.getServiceAll()
+        this.getActivityList()
       },
       _defaultData() {
         this[`page${this.selectTab}`] = 1
@@ -128,21 +135,19 @@
           })
         }
       },
-      getServiceAll(page = 1, loading = true) { // 服务库
-        console.log('shelf')
+      getActivityList(page = 1) { // 我的服务
+        console.log('service')
         if (!this.loaded) {
           this.loading = true
         }
-        Service.getServiceAll({page, status: this.status})
+        Activity.getActivityList({page, status: this.status})
           .then((res) => {
-            console.log('loaded')
             this.loaded = true
             this.loading = false
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
               return
             }
-            this.$emit('refresh')
             this.tabList[0].num = res.wait_online_count
             this.tabList[1].num = res.online_count
             this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
@@ -165,10 +170,12 @@
           return
         }
         this[`page${this.selectTab}`]++
-        this.getServiceAll(this[`page${this.selectTab}`])
+        this.getActivityList(this[`page${this.selectTab}`])
       },
-      delClick() {
-        this.$refs.confirm.show('确定下架该服务')
+      refresh() {
+        this._defaultData()
+        this._defaultArray()
+        this.getActivityList()
       },
       showEditor(item) { // 点击右边小按钮
         this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
@@ -180,25 +187,46 @@
           return data
         })
       },
-      itemUp(item) { // 点击上架按钮
-        Service.serviceHandle(item.id, 1) // 上架服务
+      itemDown(item) { // 点击下架按钮
+        this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
+          if (+item.id === +data.id) {
+            data.showEdit = !data.showEdit
+          } else {
+            data.showEdit = false
+          }
+          return data
+        })
+        this.downItem = item
+        Activity.activity(this.downItem.goods_id)
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+              return
+            }
+            if (res.data.length) {
+              this.$refs.confirm.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
+            } else {
+              this.$refs.confirm.show({msg: '确定下架该服务吗？'})
+            }
+          })
+      },
+      msgConfirm() {
+        Activity.activityHandle(this.downItem.goods_id, 0) // 下架服务
           .then((res) => {
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
             }
-            this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
-              if (+item.id === +data.id) {
-                data.showEdit = !data.showEdit
-                data.status = 1
-              } else {
-                data.showEdit = false
-              }
-              return data
+            this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].filter((data) => {
+              return +this.downItem.id !== +data.id
             })
+            this.tabList[this.selectTab].num--
             setTimeout(() => {
               this.$refs[`scroll${this.selectTab}`].forceUpdate()
             }, 20)
           })
+      },
+      toTeam() {
+        this.$router.push('/mine/my-activity/team-activity')
       },
       rebuildScroll() {
         this.$nextTick(() => {
@@ -233,6 +261,7 @@
     components: {
       Scroll,
       Exception,
+      ConfirmMsg,
       ServiceItem,
       Toast,
       ListLoading
@@ -245,10 +274,10 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .shelf-service
+  .my-activity
     position: fixed
     background: $color-background
-    z-index: 60
+    z-index: 10
     left: 0
     right: 0
     bottom: 0
@@ -282,16 +311,20 @@
           background: $color-20202E
 
     .container
-      width: 100vw
-      height: 100vh
+      overflow: hidden
+      position: absolute
+      top: 45px
+      left: 0
+      right: 0
+      bottom: 0
       .big-container
         width: 200vw
-        height: 100vh
+        height: 100%
         display: flex
         transition: all 0.3s
         .container-item
           width: 100vw
-          height: 100vh
+          height: 100%
           box-sizing: border-box
           .null-data
             padding-top: 150px
@@ -300,6 +333,25 @@
             .list-item
               padding-top: 15px
               box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
+    .footer-box
+      position: fixed
+      width: 100vw
+      height: 44.5px
+      z-index: 60
+      bottom: 0
+      left: 0
+      background: $color-white
+      box-sizing: border-box
+      .footer-btn
+        width: 100%
+        height: 100%
+        background: $color-20202E
+        line-height: 44.5px
+        text-align: center
+        font-family: $font-family-regular
+        color: $color-white
+        font-size: $font-size-16
+        letter-spacing: 0.8px
     .loading
       position: fixed
       width: 100%

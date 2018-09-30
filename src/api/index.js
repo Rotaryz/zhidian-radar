@@ -12,6 +12,7 @@ import global from './global'
 import news from './news'
 import mine from './mine'
 import service from './service'
+import activity from './activity'
 // 授权模块
 export const Jwt = jwt
 
@@ -50,3 +51,6 @@ export const Mine = mine
 
 // 我的服务
 export const Service = service
+
+// 我的活动
+export const Activity = activity

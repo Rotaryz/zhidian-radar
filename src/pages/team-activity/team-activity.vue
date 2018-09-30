@@ -1,5 +1,5 @@
 <template>
-  <div class="shelf-service">
+  <div class="team-activity">
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
       <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
@@ -14,18 +14,18 @@
                   :showNoMore="showNoMore0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
-                <service-item :tabIdx="selectTab"
+                <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemUp="itemUp"
                               :page="pageType"
-                              >
-                </service-item>
+                >
+                </activity-item>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray0.length === 0">
-              <exception errType="noservice"></exception>
+              <exception errType="nodata"></exception>
             </div>
             <div class="loading" v-if="loading">
               <list-loading></list-loading>
@@ -40,17 +40,17 @@
                   :showNoMore="showNoMore1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
-                <service-item :tabIdx="selectTab"
+                <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemUp="itemUp"
                               :page="pageType">
-                </service-item>
+                </activity-item>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray1.length === 0">
-              <exception errType="noservice"></exception>
+              <exception errType="nodata"></exception>
             </div>
             <div class="loading" v-if="loading">
               <list-loading></list-loading>
@@ -66,8 +66,8 @@
 <script>
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
-  import ServiceItem from 'components/service-item/service-item'
-  import { Service } from 'api'
+  import ActivityItem from 'components/activity-item/activity-item'
+  import { Activity } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import {ease} from 'common/js/ease'
@@ -75,8 +75,8 @@
 
   const LIMIT = 15
   const TABS = [
-    {txt: '待上线', num: 0},
-    {txt: '出售中', num: 0}
+    {txt: '未开始', num: 0},
+    {txt: '进行中', num: 0}
   ]
   export default {
     name: 'ShelfService',
@@ -99,13 +99,13 @@
         popShow: true,
         loaded: false,
         loading: true,
-        pageType: 'shelf',
+        pageType: 'team',
         tabLoad: true,
         status: 0
       }
     },
     created () {
-      this.getServiceAll()
+      this.getActivityAll()
     },
     methods: {
       changeTab(index) {
@@ -113,7 +113,7 @@
         this.selectTab = index
         this._defaultData()
         this._defaultArray()
-        this.getServiceAll()
+        this.getActivityAll()
       },
       _defaultData() {
         this[`page${this.selectTab}`] = 1
@@ -128,12 +128,12 @@
           })
         }
       },
-      getServiceAll(page = 1, loading = true) { // 服务库
+      getActivityAll(page = 1, loading = true) { // 服务库
         console.log('shelf')
         if (!this.loaded) {
           this.loading = true
         }
-        Service.getServiceAll({page, status: this.status})
+        Activity.getActivityAll({page, status: this.status})
           .then((res) => {
             console.log('loaded')
             this.loaded = true
@@ -165,7 +165,7 @@
           return
         }
         this[`page${this.selectTab}`]++
-        this.getServiceAll(this[`page${this.selectTab}`])
+        this.getActivityAll(this[`page${this.selectTab}`])
       },
       delClick() {
         this.$refs.confirm.show('确定下架该服务')
@@ -181,7 +181,7 @@
         })
       },
       itemUp(item) { // 点击上架按钮
-        Service.serviceHandle(item.id, 1) // 上架服务
+        Activity.activityHandle(item.id, 1) // 上架服务
           .then((res) => {
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
@@ -233,7 +233,7 @@
     components: {
       Scroll,
       Exception,
-      ServiceItem,
+      ActivityItem,
       Toast,
       ListLoading
     }
@@ -245,7 +245,7 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .shelf-service
+  .team-activity
     position: fixed
     background: $color-background
     z-index: 60

@@ -178,6 +178,7 @@
         })
       },
       getCustomerList() {
+        console.log('getCust')
         const data = {order_by: this.checkedGroup.orderBy, page: 1, limit: LIMIT}
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
