@@ -354,4 +354,23 @@
         color: $color-white
         font-size: $font-size-16
         letter-spacing: 0.8px
+    .loading
+      position: fixed
+      width: 100%
+      top: 45px
+      bottom: 45px
+      display: flex
+      justify-content: center
+      align-items: center
+      .load-bg
+        width: 60px
+        height: 60px
+        border-radius: 4px
+        background: rgba(0,0,0,0.3)
+        display: flex
+        justify-content: center
+        align-items: center
+      .gif
+        width: 30px
+        height: 30px
 </style>
