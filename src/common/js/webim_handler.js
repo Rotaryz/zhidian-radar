@@ -411,8 +411,7 @@ export default class webimHandler {
           resTxt = nickName + '通过点击他人分享的小店链接访问了你的小店'
           break
         case 10003:
-          data = JSON.parse(msg.data)
-          resTxt = `${nickName}第${data.count_sum}次查看了你的小店`
+          resTxt = `${nickName}查看了你的小店`
           break
         case 10004:
           resTxt = nickName + '转发了你的小店, 你的人脉圈正在裂变'
@@ -640,8 +639,7 @@ export default class webimHandler {
           resTxt = `${nickName}通过点击他人分享的服务链接查看了你的服务`
           break
         case 40003:
-          data = JSON.parse(msg.data)
-          resTxt = `${nickName}第${data.count_sum}次查看了你的服务，请把握商机`
+          resTxt = `${nickName}查看了你的服务，请把握商机`
           break
         case 40004:
           data = JSON.parse(msg.data)
@@ -671,12 +669,10 @@ export default class webimHandler {
           resTxt = `${nickName}提交了服务${productName}的订单,金额为${data.total}元，并完成支付`
           break
         case 40007:
-          data = JSON.parse(msg.data)
-          resTxt = `${nickName}第${data.count_sum}次查看了你的品牌故事，请把握商机`
+          resTxt = `${nickName}查看了你的品牌故事，请把握商机`
           break
         case 50001:
-          data = JSON.parse(msg.data)
-          resTxt = `${nickName}第${data.count_sum}次查看了你的动态`
+          resTxt = `${nickName}查看了你的动态`
           break
         case 50002:
           data = JSON.parse(msg.data)
