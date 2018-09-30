@@ -35,24 +35,25 @@
 <script>
   import {mapActions, mapGetters} from 'vuex'
   import Scroll from 'components/scroll/scroll'
-  import { Im } from 'api'
-  import {ERR_OK} from '../../common/js/config'
+  // import { Im } from 'api'
+  // import {ERR_OK} from '../../common/js/config'
   export default {
     name: 'News',
     created() {
       if (this.newsGetType) {
         this.setNewsGetType(false)
-        return
+        // return
       }
-      Im.getLastGroupMsg().then(res => {
-        if (res.error === ERR_OK) {
-          let msg = {
-            time: res.data.created_at || '',
-            lastMsg: res.data.content || ''
-          }
-          this.setGroupItem(msg)
-        }
-      })
+      // todo
+      // Im.getLastGroupMsg().then(res => {
+      //   if (res.error === ERR_OK) {
+      //     let msg = {
+      //       time: res.data.created_at || '',
+      //       lastMsg: res.data.content || ''
+      //     }
+      //     this.setGroupItem(msg)
+      //   }
+      // })
     },
     mounted() {
       setTimeout(() => {

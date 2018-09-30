@@ -165,12 +165,12 @@
   import wx from 'weixin-js-sdk'
 
   const MORELIST = [
-    {txt: '图片', icon: 'im-image', type: 1},
-    {txt: '个人微信', icon: 'im-weixin', type: 4},
-    {txt: '微信群码', icon: 'im-group', type: 5},
-    {txt: '常用语', icon: 'im-useful', type: 6},
-    {txt: '发送商品', icon: 'im-goods', type: 2},
-    {txt: '发送活动', icon: 'im-activity', type: 3}
+    {txt: '图片', icon: 'im-image', type: 1}
+    // {txt: '个人微信', icon: 'im-weixin', type: 4},
+    // {txt: '微信群码', icon: 'im-group', type: 5},
+    // {txt: '常用语', icon: 'im-useful', type: 6},
+    // {txt: '发送商品', icon: 'im-goods', type: 2},
+    // {txt: '发送活动', icon: 'im-activity', type: 3}
   ]
   export default {
     name: 'Chat',
@@ -179,8 +179,8 @@
       let data = {
         'end_date': this.endDate,
         limit: 40,
-        customer_im_account: this.id,
-        employee_im_account: this.imInfo.im_account
+        customer_im_account: this.id
+        // employee_im_account: this.imInfo.im_account // todo
       }
       Im.getMsgList(data).then((res) => {
         if (res.error === ERR_OK) {
@@ -270,8 +270,8 @@
         let data = {
           'end_date': this.endDate,
           limit: 40,
-          customer_im_account: this.id,
-          employee_im_account: this.imInfo.im_account
+          customer_im_account: this.id
+          // employee_im_account: this.imInfo.im_account // todo
         }
         Im.getMsgList(data).then((res) => {
           if (res.error === ERR_OK) {

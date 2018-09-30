@@ -39,8 +39,8 @@ export default {
   },
   // 聊天记录
   getMsgList(data, loading = true) {
-    const url = `/api/employee/ws-message-logs`
-    return request.post(url, data, loading)
+    const url = `/api/employee/contacts/${data.customer_im_account}`
+    return request.get(url, data, loading)
   },
 
   // 最近联系人最后一条聊天记录
@@ -51,8 +51,8 @@ export default {
 
   // 最近联系人列表
   getContactList(data, loading = true) {
-    const url = `/api/employee/ws-customers-recent-contacts`
-    return request.post(url, data, loading)
+    const url = `/api/employee/contacts`
+    return request.get(url, data, loading)
   },
 
   // 推荐商品
