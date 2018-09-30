@@ -68,7 +68,7 @@
             }
           })
         } else {
-          !storage.get('token') && window.location.replace(oauth)
+          !storage.get('token') && window.location.replace(oauth.oauthUri)
         }
       },
       _getCode() {
