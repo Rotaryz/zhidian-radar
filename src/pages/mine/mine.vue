@@ -48,6 +48,7 @@
         </li>
       </ul>
     </Scroll>
+    <toast ref="toast"></toast>
     <router-view @refresh="refresh" v-if="show"></router-view>
   </div>
 </template>
@@ -58,6 +59,7 @@
   import { ERR_OK } from '../../common/js/config'
   import storage from 'storage-controller'
   import {mapGetters} from 'vuex'
+  import Toast from 'components/toast/toast'
 
   const CONTENTLIST = [
     {title: '我的信息', src: 'mine/icon-perinfor', icon: 'perinfor'},
@@ -119,7 +121,7 @@
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {
-            // this.$refs.toast.show(res.message)
+            this.$refs.toast.show(res.message)
           }
         })
       }
@@ -136,7 +138,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Toast
     }
   }
 </script>

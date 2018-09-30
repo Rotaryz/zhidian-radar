@@ -2,15 +2,15 @@
   <div class="my-service">
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
-      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.id}})</div>
+      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
     </div>
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + selectTab*50 + '%,0)'">
         <div class="container-item">
-          <scroll ref="scroll"
+          <scroll ref="scroll0"
                   :data="dataArray0"
                   :pullUpLoad="pullUpLoadObj0"
-                  @pullingUp="onPullingUp0"
+                  @pullingUp="onPullingUp"
                   :showNoMore="showNoMore0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
@@ -23,8 +23,8 @@
                 </service-item>
               </div>
             </div>
-            <div class="null-data"  v-if="loaded && list.length === 0">
-              <exception errType="nodata"></exception>
+            <div class="null-data"  v-if="loaded && dataArray0.length === 0">
+              <exception errType="noservice"></exception>
             </div>
             <div class="loading" v-if="loading">
               <div class="load-bg">
@@ -34,10 +34,10 @@
           </scroll>
         </div>
         <div class="container-item">
-          <scroll ref="scroll"
+          <scroll ref="scroll1"
                   :data="dataArray1"
                   :pullUpLoad="pullUpLoadObj1"
-                  @pullingUp="onPullingUp1"
+                  @pullingUp="onPullingUp"
                   :showNoMore="showNoMore1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
@@ -50,6 +50,14 @@
                 </service-item>
               </div>
             </div>
+            <div class="null-data"  v-if="loaded && dataArray1.length === 0">
+              <exception errType="noservice"></exception>
+            </div>
+            <div class="loading" v-if="loading">
+              <div class="load-bg">
+                <img src="./loading.gif" class="gif">
+              </div>
+            </div>
           </scroll>
         </div>
       </div>
@@ -58,7 +66,8 @@
       <div class="footer-btn" @click="toDetail">上架服务</div>
     </div>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
-    <router-view></router-view>
+    <toast ref="toast"></toast>
+    <router-view @refresh="refresh"></router-view>
   </div>
 </template>
 
@@ -69,11 +78,12 @@
   import ServiceItem from 'components/service-item/service-item'
   import { Service } from 'api'
   import { ERR_OK } from '../../common/js/config'
+  import Toast from 'components/toast/toast'
 
   const LIMIT = 10
   const TABS = [
-    {txt: '待上线', id: 10},
-    {txt: '出售中', id: 10}
+    {txt: '待上线', num: 10},
+    {txt: '出售中', num: 10}
   ]
   export default {
     name: 'MyService',
@@ -85,11 +95,11 @@
         selectTab: 0,
         pullUpLoad0: true,
         pullUpLoadThreshold0: 0,
-        showNoMore0: true,
+        showNoMore0: false,
         page0: 1,
         pullUpLoad1: true,
         pullUpLoadThreshold1: 0,
-        showNoMore1: true,
+        showNoMore1: false,
         page1: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
@@ -97,7 +107,10 @@
         popShow: true,
         loaded: false,
         loading: false,
-        pageType: 'myService'
+        pageType: 'myService',
+        tabLoad: true,
+        status: 0,
+        downItem: ''
       }
     },
     created () {
@@ -106,47 +119,54 @@
     methods: {
       changeTab(index) {
         this.selectTab = index
+        this.status = index
+        if (this.tabLoad && index === 1) {
+          this.tabLoad = false
+          this.getServiceList()
+        }
       },
       getServiceList(page = 1) { // 我的服务
-        Service.getServiceList({page, limit: 10})
+        if (!this.loaded) {
+          this.loading = true
+        }
+        Service.getServiceList({page, limit: LIMIT, status: this.status})
           .then((res) => {
+            this.loaded = true
+            this.loading = false
             if (res.error !== ERR_OK) {
-              this.$ref.tost.show(res.message)
+              this.$refs.toast.show(res.message)
               return
             }
-            this.serviceList = res.data
-          })
-      },
-      activity() { // 下架服务时查询是否绑定活动
-        Service.activity()
-          .then((res) => {
-            if (res.error !== ERR_OK) {
-              this.$ref.tost.show(res.message)
-              return
+            this.tabList[0].num = res.wait_online_count
+            this.tabList[1].num = res.online_count
+            if (page > 1) {
+              if (this.selectTab === 0) {
+                this.dataArray0 = this.dataArray0.concat(res.data)
+                if (res.data.length < LIMIT) {
+                  this.showNoMore0 = true
+                }
+              } else {
+                this.dataArray1 = this.dataArray1.concat(res.data)
+                if (res.data.length < LIMIT) {
+                  this.showNoMore1 = true
+                }
+              }
+            } else {
+              this.dataArray0 = res.data
+              this.dataArray1 = res.data
             }
-            this.serviceList = res.data
           })
       },
-      onPullingUp0() {
-        console.log(7776767)
+      onPullingUp() {
+        if (this[`showNoMore${this.selectTab}`]) {
+          this.$refs[`scroll${this.selectTab}`].forceUpdate()
+          return
+        }
+        this[`page${this.selectTab}`]++
+        this.getServiceList(this[`page${this.selectTab}`])
       },
-      onPullingUp1() {
-        Service.getServiceList()
-          .then((res) => {
-            if (res.error === ERR_OK) {
-            }
-            this.$ref.tost.show(res.status)
-          })
-      },
-      msgConfirm() {
-        Service.serviceHandle() // 下架服务
-          .then((res) => {
-            if (res.error !== ERR_OK) {
-              this.$ref.tost.show(res.message)
-              return
-            }
-            this.serviceList = res.data
-          })
+      refresh() {
+        this.getServiceList()
       },
       showEditor(item) { // 点击右边小按钮
         this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
@@ -165,16 +185,44 @@
           } else {
             data.showEdit = false
           }
+          return data
         })
-        this.$refs.confirm.show('确定下架该服务吗？')
+        this.downItem = item
+        Service.activity(this.downItem.goods_id)
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+              return
+            }
+            if (res.data.length) {
+              this.$refs.confirm.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
+            } else {
+              this.$refs.confirm.show({msg: '确定下架该服务吗？'})
+            }
+          })
+      },
+      msgConfirm() {
+        Service.serviceHandle(this.downItem.goods_id, 0) // 下架服务
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+            }
+            this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].filter((data) => {
+              return +this.downItem.id !== +data.id
+            })
+            this.tabList[this.selectTab].num--
+            setTimeout(() => {
+              this.$refs[`scroll${this.selectTab}`].forceUpdate()
+            }, 20)
+          })
       },
       toDetail() {
         this.$router.push('/mine/my-service/shelf-service')
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs[`scroll${this.selectTab}`].destroy()
+          this.$refs[`scroll${this.selectTab}`].initScroll()
         })
       }
     },
@@ -205,7 +253,8 @@
       Scroll,
       Exception,
       ConfirmMsg,
-      ServiceItem
+      ServiceItem,
+      Toast
     }
   }
 </script>
@@ -252,21 +301,28 @@
           background: $color-20202E
 
     .container
-      width: 100vw
-      height: 100vh
+      width: 100%
+      overflow: hidden
+      position: absolute
+      top: 45px
+      left: 0
+      right: 0
+      bottom: 0
       .big-container
         width: 200vw
-        height: 100vh
+        height: 100%
         display: flex
         transition: all 0.3s
         .container-item
           width: 100vw
-          height: 100vh
+          height: 100%
           box-sizing: border-box
+          .null-data
+            padding-top: 150px
           .list-container
             padding: 0 15px
             .list-item
-              margin-top: 15px
+              padding-top: 15px
               box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
     .footer-box
       position: fixed

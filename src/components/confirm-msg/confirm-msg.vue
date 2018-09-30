@@ -75,6 +75,9 @@
         font-size: $font-size-16
         color: $color-20202E
         letter-spacing: 0.8px
+        text-align: center
+        line-height: 24px
+        padding: 0 30px
       .btn-group
         height: 45px
         layout(row)

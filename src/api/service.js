@@ -5,17 +5,17 @@ export default {
    * 我的服务列表
    * @returns {*}
    */
-  getServiceList (data) {
+  getServiceList (data, loading) {
     let url = '/api/employee/recommend-goods'
-    return request.get(url, data)
+    return request.get(url, data, loading)
   },
   /**
    * 服务库
    * @returns {*}
    */
-  getServiceAll (data) {
+  getServiceAll (data, loading) {
     let url = '/api/employee/goods'
-    return request.get(url, data)
+    return request.get(url, data, loading)
   },
   /**
    * 服务上下线
@@ -27,14 +27,14 @@ export default {
       goods_id: goodsId,
       is_online: isOnline
     }
-    return request.get(url, data)
+    return request.post(url, data)
   },
   /**
    * 查询下架服务是否绑定活动
    * @returns {*}
    */
   activity (id) {
-    let url = `/api/employee/change-goods-status/${id}`
+    let url = `/api/employee/goods/before-destroy/${id}`
     return request.get(url)
   }
 }

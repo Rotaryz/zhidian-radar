@@ -1,18 +1,20 @@
 <template>
   <div class="service-item">
     <div class="item-content">
-      <div class="item-left" :style="{backgroundImage: 'url(' +  + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
+      <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
         <!--<div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>-->
       </div>
       <div class="item-right">
-        <div class="right-title">较好的附件汇丰晋亨弗交话费和继父回家发好多件返回的海沸江翻活动经费的</div>
+        <div class="right-title">{{item.title}}</div>
         <div class="right-down">
           <div class="down-left">
-            <p class="down-txt"><span class="first-txt">现价：¥88.00</span><span class="earn">(赚￥9.50)</span></p>
-            <p class="down-txt second"><span class="first-txt">库存：550</span><span v-if="tabIdx != 0">销量：888</span></p>
+            <p class="down-txt"><span class="first-txt">现价：¥{{item.platform_price}}</span><span v-if="item.earn_money" class="earn">(赚￥{{item.earn_money}})</span></p>
+            <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span><span v-if="tabIdx != 0">销量：{{item.sale_count}}</span></p>
           </div>
           <div class="down-right">
-            <div class="down-right-icon" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
+            <div class="down-right-icon"  v-if="page === 'myService'" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
+            <div class="down-right-icon"  v-if="item[`${page === 'shelf' && 'status'}`] * 1 === 0" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
+            <div class="down-right-text" v-if="item[`${page === 'shelf' && 'status'}`] *1 === 1">已上架</div>
           </div>
         </div>
       </div>
@@ -49,9 +51,6 @@
     data() {
       return {
       }
-    },
-    created() {
-      console.log(this.page)
     },
     methods: {
       showEditCover(item) {
@@ -130,7 +129,7 @@
           text-overflow: ellipsis
           white-space: nowrap
         .right-down
-          width: 51vw
+          width: 46vw
           display: flex
           justify-content: space-between
           align-items: flex-end
@@ -155,7 +154,7 @@
               display: flex
               justify-content: space-between
           .down-right
-            width: 10.6vw
+            width: 13.2vw
             height: 5.3vw
             margin-left: 6vw
             position: absolute
@@ -165,12 +164,15 @@
               width: 10.6vw
               height: 5.3vw
               icon-image('./pic-more')
+            .down-right-text
+              font-size: 14px
+              color: $color-20202E
             .down-right-icon.active
               icon-image('./pic-more_click')
     .editor-box
       position: absolute
       height: 55px
-      right: 14.6vw
+      right: 17vw
       bottom: 9px
       width: 110px
       overflow: hidden
