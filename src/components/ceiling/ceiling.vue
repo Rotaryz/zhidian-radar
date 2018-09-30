@@ -57,7 +57,6 @@
           if (res.error === ERR_OK) {
             let imInfo = res.data
             this.setImInfo(imInfo)
-            // console.log(imInfo)
             this.sdkLogin(imInfo).then(() => {
               this.setImIng(true)
             })
@@ -129,7 +128,7 @@
         let userInfo = storage.get('info')
         let reqData = {
           merchant_id: userInfo.merchant_id,
-          employee_id: userInfo.id,
+          shop_id: userInfo.shop_id,
           page: 1,
           limit: 50
         }

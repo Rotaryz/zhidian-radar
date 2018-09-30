@@ -25,24 +25,7 @@
       }
     },
     created() {
-      const message = this.$route.query.message
-      if (message) {
-        this.coverShow = true
-        this.errorMsg = message
-        return
-      }
-      const accessToken = this.$route.query.access_token
-      if (accessToken) {
-        storage.set('token', accessToken)
-        Jwt.employeeLogin().then((res) => {
-          if (res.error === ERR_OK) {
-            storage.set('info', res.data)
-            this.$router.replace(NORMAL_ROUTE)
-          }
-        })
-      } else {
-        !storage.get('token') && window.location.replace(oauth)
-      }
+      this._checkAuthorize()
     },
     computed: {
       code() {
@@ -56,14 +39,36 @@
       }
     },
     methods: {
+      // 微店-企业微型
+      // _checkAuthorize() {
+      //   if (this.code && !this.hasToken) {
+      //     // 有code没有token -> 申请拿token
+      //     this._applyOauth()
+      //   } else if (!this.hasToken && !this.code) {
+      //     this._getCode()
+      //   } else {
+      //     this.$router.replace(NORMAL_ROUTE)
+      //   }
+      // },
+      // 智店-公众号
       _checkAuthorize() {
-        if (this.code && !this.hasToken) {
-          // 有code没有token -> 申请拿token
-          this._applyOauth()
-        } else if (!this.hasToken && !this.code) {
-          this._getCode()
+        const message = this.$route.query.message
+        if (message) {
+          this.coverShow = true
+          this.errorMsg = message
+          return
+        }
+        const accessToken = this.$route.query.access_token
+        if (accessToken) {
+          storage.set('token', accessToken)
+          Jwt.employeeLogin().then((res) => {
+            if (res.error === ERR_OK) {
+              storage.set('info', res.data)
+              this.$router.replace(NORMAL_ROUTE)
+            }
+          })
         } else {
-          this.$router.replace(NORMAL_ROUTE)
+          !storage.get('token') && window.location.replace(oauth)
         }
       },
       _getCode() {

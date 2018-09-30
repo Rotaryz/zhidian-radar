@@ -2,18 +2,18 @@
   <div class="news">
     <scroll :data="latelyList" :bcColor="'#ffffff'" ref="scroll">
       <div class="news-list">
-        <div class="news-item border-bottom-1px" @click="createGroup">
-          <div class="news-left">
-            <img src="./icon-Group@2x.png" class="left-img">
-          </div>
-          <div class="news-right">
-            <div class="right-top">
-              <span class="top-name">群发助手</span>
-              <span class="top-time">{{groupItem.time}}</span>
-            </div>
-            <div class="right-down" v-html="groupItem.html"></div>
-          </div>
-        </div>
+        <!--<div class="news-item border-bottom-1px" @click="createGroup">-->
+          <!--<div class="news-left">-->
+            <!--<img src="./icon-Group@2x.png" class="left-img">-->
+          <!--</div>-->
+          <!--<div class="news-right">-->
+            <!--<div class="right-top">-->
+              <!--<span class="top-name">群发助手</span>-->
+              <!--<span class="top-time">{{groupItem.time}}</span>-->
+            <!--</div>-->
+            <!--<div class="right-down" v-html="groupItem.html"></div>-->
+          <!--</div>-->
+        <!--</div>-->
         <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)">
           <div class="news-left">
             <img :src="item.avatar" class="left-img">

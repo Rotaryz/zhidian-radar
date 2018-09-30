@@ -305,7 +305,7 @@
           this.$refs.toast.show('发送消息不能为空')
           return
         }
-        let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+        let timeStamp = parseInt(Date.now() / 1000)
         let msg = {
           from_account_id: this.imInfo.im_account,
           avatar: this.userInfo.avatar,

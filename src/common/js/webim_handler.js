@@ -404,7 +404,7 @@ export default class webimHandler {
       let code = msg.ext * 1
       let nickName = msg.fromAccountNick
       switch (code) {
-        case 10000:
+        case 10001:
           resTxt = nickName + '通过扫描他人分享的名片海报查看了你的名片'
           break
         case 10001:
