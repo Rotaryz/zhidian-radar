@@ -89,7 +89,6 @@
               this.newMsgIn = false
             }, 5000)
             let res = await webimHandler.onMsgNotify(msg)
-            console.log(res, '=+++==')
             if (res.type === 'custom') {
               this.setCustomCount('add')
               if (Number(res.ext) === 20005 && res.fromAccount === this.currentMsg.account) {
