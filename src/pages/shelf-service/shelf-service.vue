@@ -74,6 +74,7 @@
   import { Service } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
+  import {ease} from 'common/js/ease'
 
   const LIMIT = 10
   const TABS = [
@@ -110,24 +111,19 @@
     },
     created () {
       this.getServiceAll()
-      this._defaultData()
     },
     methods: {
       changeTab(index) {
         this.status = index
         this.selectTab = index
         this._defaultData()
+        this._defaultArray()
         this.getServiceAll()
-      },
-      rebuildScroll() {
-        this.$nextTick(() => {
-          this.$refs[`scroll${this.selectTab}`].destroy()
-          this.$refs[`scroll${this.selectTab}`].initScroll()
-        })
       },
       _defaultData() {
         this[`page${this.selectTab}`] = 1
         this[`showNoMore${this.selectTab}`] = false
+        this[`dataArray${this.selectTab}`] = []
       },
       _defaultArray() {
         for (let i = 0; i < 2; i++) {
@@ -138,30 +134,34 @@
         }
       },
       getServiceAll(page = 1, loading = true) { // 服务库
+        console.log('shelf')
         if (!this.loaded) {
           this.loading = true
         }
         Service.getServiceAll({page, limit: LIMIT, status: this.status})
           .then((res) => {
+            console.log('loaded')
             this.loaded = true
             this.loading = false
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
               return
             }
+            this.$emit('refresh')
             this.tabList[0].id = res.wait_online_count
             this.tabList[1].id = res.online_count
-            if (this.selectTab === 0) {
-              this.dataArray0 = this.dataArray0.concat(res.data)
-              if (res.data.length < LIMIT) {
-                this.showNoMore0 = true
-              }
-            } else {
-              this.dataArray1 = this.dataArray1.concat(res.data)
-              if (res.data.length < LIMIT) {
-                this.showNoMore1 = true
-              }
+            this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
+            if (res.data.length < LIMIT) {
+              this[`showNoMore${this.selectTab}`] = true
             }
+            setTimeout(() => {
+              if (page === 1) {
+                this.$refs[`scroll${this.selectTab}`].forceUpdate()
+                this.$refs[`scroll${this.selectTab}`].scrollTo(0, 0, 0, ease[this.scrollToEasing])
+              } else {
+                this.$refs[`scroll${this.selectTab}`].forceUpdate()
+              }
+            }, 20)
           })
       },
       onPullingUp() {
@@ -204,6 +204,12 @@
               this.$refs[`scroll${this.selectTab}`].forceUpdate()
             }, 20)
           })
+      },
+      rebuildScroll() {
+        this.$nextTick(() => {
+          this.$refs[`scroll${this.selectTab}`].destroy()
+          this.$refs[`scroll${this.selectTab}`].initScroll()
+        })
       }
     },
     computed: {
@@ -298,48 +304,6 @@
             .list-item
               padding-top: 15px
               box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
-    .pop
-      position: fixed
-      left: 0
-      right: 0
-      top: 0
-      bottom: 0
-      z-index: 100
-      background: rgba(0, 0, 0, 0.6)
-      .pop-main
-        position: absolute
-        top: 30%
-        left: 0
-        right: 0
-        width: 80%
-        height: 170px
-        background: $color-white
-        border-radius: 4px
-        margin: 0 auto
-        padding-top: 60px
-        text-align: center
-        box-sizing: border-box
-        .tip
-          font-size: $font-size-14
-          color: $color-20202E
-        .confirm-btn
-          height: 45px
-          line-height: 45px
-          border-top-1px($color-E3E6E9)
-          color: $color-C1C3C3
-          display: flex
-          position: absolute
-          bottom: 0
-          left: 0
-          right: 0
-          .pop-btn
-            width: 50%
-            border-right-1px($color-E3E6E9)
-            color: $color-A3A2A0
-            font-size: 16px
-            &.right
-              border: 0
-              color: $color-C3A66C
     .loading
       position: fixed
       width: 100%

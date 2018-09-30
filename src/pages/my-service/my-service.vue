@@ -79,6 +79,7 @@
   import { Service } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
+  import {ease} from 'common/js/ease'
 
   const LIMIT = 10
   const TABS = [
@@ -120,12 +121,25 @@
       changeTab(index) {
         this.selectTab = index
         this.status = index
-        if (this.tabLoad && index === 1) {
-          this.tabLoad = false
-          this.getServiceList()
+        this._defaultData()
+        this._defaultArray()
+        this.getServiceList()
+      },
+      _defaultData() {
+        this[`page${this.selectTab}`] = 1
+        this[`showNoMore${this.selectTab}`] = false
+        this[`dataArray${this.selectTab}`] = []
+      },
+      _defaultArray() {
+        for (let i = 0; i < 2; i++) {
+          this['dataArray' + i] = this['dataArray' + i].map((item) => {
+            item.showEdit = false
+            return item
+          })
         }
       },
       getServiceList(page = 1) { // 我的服务
+        console.log('service')
         if (!this.loaded) {
           this.loading = true
         }
@@ -139,22 +153,18 @@
             }
             this.tabList[0].num = res.wait_online_count
             this.tabList[1].num = res.online_count
-            if (page > 1) {
-              if (this.selectTab === 0) {
-                this.dataArray0 = this.dataArray0.concat(res.data)
-                if (res.data.length < LIMIT) {
-                  this.showNoMore0 = true
-                }
-              } else {
-                this.dataArray1 = this.dataArray1.concat(res.data)
-                if (res.data.length < LIMIT) {
-                  this.showNoMore1 = true
-                }
-              }
-            } else {
-              this.dataArray0 = res.data
-              this.dataArray1 = res.data
+            this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
+            if (res.data.length < LIMIT) {
+              this[`showNoMore${this.selectTab}`] = true
             }
+            setTimeout(() => {
+              if (page === 1) {
+                this.$refs[`scroll${this.selectTab}`].forceUpdate()
+                this.$refs[`scroll${this.selectTab}`].scrollTo(0, 0, 0, ease[this.scrollToEasing])
+              } else {
+                this.$refs[`scroll${this.selectTab}`].forceUpdate()
+              }
+            }, 20)
           })
       },
       onPullingUp() {
@@ -166,6 +176,8 @@
         this.getServiceList(this[`page${this.selectTab}`])
       },
       refresh() {
+        this._defaultData()
+        this._defaultArray()
         this.getServiceList()
       },
       showEditor(item) { // 点击右边小按钮
@@ -301,7 +313,6 @@
           background: $color-20202E
 
     .container
-      width: 100%
       overflow: hidden
       position: absolute
       top: 45px
@@ -343,65 +354,4 @@
         color: $color-white
         font-size: $font-size-16
         letter-spacing: 0.8px
-    .pop
-      position: fixed
-      left: 0
-      right: 0
-      top: 0
-      bottom: 0
-      z-index: 100
-      background: rgba(0, 0, 0, 0.6)
-      .pop-main
-        position: absolute
-        top: 30%
-        left: 0
-        right: 0
-        width: 80%
-        height: 170px
-        background: $color-white
-        border-radius: 4px
-        margin: 0 auto
-        padding-top: 60px
-        text-align: center
-        box-sizing: border-box
-        .tip
-          font-size: $font-size-14
-          color: $color-20202E
-        .confirm-btn
-          height: 45px
-          line-height: 45px
-          border-top-1px($color-E3E6E9)
-          color: $color-C1C3C3
-          display: flex
-          position: absolute
-          bottom: 0
-          left: 0
-          right: 0
-          .pop-btn
-            width: 50%
-            border-right-1px($color-E3E6E9)
-            color: $color-A3A2A0
-            font-size: 16px
-            &.right
-              border: 0
-              color: $color-C3A66C
-    .loading
-      position: fixed
-      width: 100%
-      top: 45px
-      bottom: 45px
-      display: flex
-      justify-content: center
-      align-items: center
-      .load-bg
-        width: 60px
-        height: 60px
-        border-radius: 4px
-        background: rgba(0,0,0,0.3)
-        display: flex
-        justify-content: center
-        align-items: center
-      .gif
-        width: 30px
-        height: 30px
 </style>
