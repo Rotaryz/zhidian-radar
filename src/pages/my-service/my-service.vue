@@ -27,9 +27,7 @@
               <exception errType="noservice"></exception>
             </div>
             <div class="loading" v-if="loading">
-              <div class="load-bg">
-                <img src="./loading.gif" class="gif">
-              </div>
+              <list-loading></list-loading>
             </div>
           </scroll>
         </div>
@@ -51,19 +49,17 @@
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray1.length === 0">
-              <exception errType="noservice"></exception>
+              <exception errType="nodata"></exception>
             </div>
             <div class="loading" v-if="loading">
-              <div class="load-bg">
-                <img src="./loading.gif" class="gif">
-              </div>
+              <list-loading></list-loading>
             </div>
           </scroll>
         </div>
       </div>
     </div>
     <div class="footer-box">
-      <div class="footer-btn" @click="toDetail">上架服务</div>
+      <div class="footer-btn" @click="toShelf">上架服务</div>
     </div>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
@@ -80,11 +76,12 @@
   import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import {ease} from 'common/js/ease'
+  import ListLoading from 'components/list-loading/list-loading'
 
-  const LIMIT = 10
+  const LIMIT = 15
   const TABS = [
-    {txt: '待上线', num: 10},
-    {txt: '出售中', num: 10}
+    {txt: '待上线', num: 0},
+    {txt: '出售中', num: 0}
   ]
   export default {
     name: 'MyService',
@@ -104,7 +101,6 @@
         page1: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
-        limit: LIMIT,
         popShow: true,
         loaded: false,
         loading: false,
@@ -143,7 +139,7 @@
         if (!this.loaded) {
           this.loading = true
         }
-        Service.getServiceList({page, limit: LIMIT, status: this.status})
+        Service.getServiceList({page, status: this.status})
           .then((res) => {
             this.loaded = true
             this.loading = false
@@ -228,7 +224,7 @@
             }, 20)
           })
       },
-      toDetail() {
+      toShelf() {
         this.$router.push('/mine/my-service/shelf-service')
       },
       rebuildScroll() {
@@ -266,7 +262,8 @@
       Exception,
       ConfirmMsg,
       ServiceItem,
-      Toast
+      Toast,
+      ListLoading
     }
   }
 </script>
@@ -313,6 +310,7 @@
           background: $color-20202E
 
     .container
+      width: 100%
       overflow: hidden
       position: absolute
       top: 45px
@@ -321,12 +319,12 @@
       bottom: 0
       .big-container
         width: 200vw
-        height: 100%
+        height: 100vh
         display: flex
         transition: all 0.3s
         .container-item
           width: 100vw
-          height: 100%
+          height: 100vh
           box-sizing: border-box
           .null-data
             padding-top: 150px
@@ -362,15 +360,4 @@
       display: flex
       justify-content: center
       align-items: center
-      .load-bg
-        width: 60px
-        height: 60px
-        border-radius: 4px
-        background: rgba(0,0,0,0.3)
-        display: flex
-        justify-content: center
-        align-items: center
-      .gif
-        width: 30px
-        height: 30px
 </style>

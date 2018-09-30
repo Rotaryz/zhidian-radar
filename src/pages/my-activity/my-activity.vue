@@ -5,7 +5,7 @@
       <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
     </div>
     <div class="container">
-      <div class="big-container" :style="'transform: translate(-' + selectTab*33.333 + '%,0)'">
+      <div class="big-container" :style="'transform: translate(-' + selectTab*50 + '%,0)'">
         <div class="container-item">
           <scroll ref="scroll0"
                   :data="dataArray0"
@@ -14,22 +14,20 @@
                   :showNoMore="showNoMore0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
-                <service-item :tabIdx="selectTab"
+                <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemDown="itemDown"
                               :page="pageType">
-                </service-item>
+                </activity-item>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray0.length === 0">
-              <exception errType="noservice"></exception>
+              <exception errType="nodata"></exception>
             </div>
             <div class="loading" v-if="loading">
-              <div class="load-bg">
-                <img src="./loading.gif" class="gif">
-              </div>
+              <list-loading></list-loading>
             </div>
           </scroll>
         </div>
@@ -41,29 +39,27 @@
                   :showNoMore="showNoMore1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
-                <service-item :tabIdx="selectTab"
+                <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemDown="itemDown"
                               :page="pageType">
-                </service-item>
+                </activity-item>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray1.length === 0">
-              <exception errType="noservice"></exception>
+              <exception errType="nodata"></exception>
             </div>
             <div class="loading" v-if="loading">
-              <div class="load-bg">
-                <img src="./loading.gif" class="gif">
-              </div>
+              <list-loading></list-loading>
             </div>
           </scroll>
         </div>
       </div>
     </div>
     <div class="footer-box">
-      <div class="footer-btn" @click="toDetail">上架服务</div>
+      <div class="footer-btn" @click="toTeam">上架活动</div>
     </div>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
@@ -75,24 +71,26 @@
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  import ServiceItem from 'components/service-item/service-item'
-  import { Service } from 'api'
+  import ActivityItem from 'components/activity-item/activity-item'
+  import { Activity } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import {ease} from 'common/js/ease'
+  import ListLoading from 'components/list-loading/list-loading'
 
-  const LIMIT = 10
+  const LIMIT = 15
   const TABS = [
-    {txt: '待上线', num: 10},
-    {txt: '出售中', num: 10}
+    {txt: '未开始', num: 0},
+    {txt: '进行中', num: 0}
   ]
   export default {
-    name: 'MyService',
+    name: 'MyActivity',
     data () {
       return {
         tabList: TABS,
         dataArray0: [],
         dataArray1: [],
+        dataArray2: [],
         selectTab: 0,
         pullUpLoad0: true,
         pullUpLoadThreshold0: 0,
@@ -104,18 +102,17 @@
         page1: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
-        limit: LIMIT,
         popShow: true,
         loaded: false,
         loading: false,
-        pageType: 'myService',
+        pageType: 'activity',
         tabLoad: true,
         status: 0,
         downItem: ''
       }
     },
     created () {
-      this.getServiceList()
+      this.getActivityList()
     },
     methods: {
       changeTab(index) {
@@ -123,7 +120,7 @@
         this.status = index
         this._defaultData()
         this._defaultArray()
-        this.getServiceList()
+        this.getActivityList()
       },
       _defaultData() {
         this[`page${this.selectTab}`] = 1
@@ -138,12 +135,12 @@
           })
         }
       },
-      getServiceList(page = 1) { // 我的服务
+      getActivityList(page = 1) { // 我的服务
         console.log('service')
         if (!this.loaded) {
           this.loading = true
         }
-        Service.getServiceList({page, limit: LIMIT, status: this.status})
+        Activity.getActivityList({page, status: this.status})
           .then((res) => {
             this.loaded = true
             this.loading = false
@@ -173,12 +170,12 @@
           return
         }
         this[`page${this.selectTab}`]++
-        this.getServiceList(this[`page${this.selectTab}`])
+        this.getActivityList(this[`page${this.selectTab}`])
       },
       refresh() {
         this._defaultData()
         this._defaultArray()
-        this.getServiceList()
+        this.getActivityList()
       },
       showEditor(item) { // 点击右边小按钮
         this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
@@ -200,7 +197,7 @@
           return data
         })
         this.downItem = item
-        Service.activity(this.downItem.goods_id)
+        Activity.activity(this.downItem.goods_id)
           .then((res) => {
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
@@ -214,7 +211,7 @@
           })
       },
       msgConfirm() {
-        Service.serviceHandle(this.downItem.goods_id, 0) // 下架服务
+        Activity.activityHandle(this.downItem.goods_id, 0) // 下架服务
           .then((res) => {
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
@@ -228,8 +225,8 @@
             }, 20)
           })
       },
-      toDetail() {
-        this.$router.push('/mine/my-service/shelf-service')
+      toTeam() {
+        this.$router.push('/mine/my-activity/team-activity')
       },
       rebuildScroll() {
         this.$nextTick(() => {
@@ -265,8 +262,9 @@
       Scroll,
       Exception,
       ConfirmMsg,
-      ServiceItem,
-      Toast
+      ActivityItem,
+      Toast,
+      ListLoading
     }
   }
 </script>
@@ -320,7 +318,7 @@
       right: 0
       bottom: 0
       .big-container
-        width: 300vw
+        width: 200vw
         height: 100%
         display: flex
         transition: all 0.3s
@@ -362,15 +360,4 @@
       display: flex
       justify-content: center
       align-items: center
-      .load-bg
-        width: 60px
-        height: 60px
-        border-radius: 4px
-        background: rgba(0,0,0,0.3)
-        display: flex
-        justify-content: center
-        align-items: center
-      .gif
-        width: 30px
-        height: 30px
 </style>

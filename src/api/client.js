@@ -13,7 +13,7 @@ export default {
   },
   // 获取客户列表
   getCustomerList(data, loading) {
-    const url = `/api/employee/employee-customer`
+    const url = `/api/employee/customers`
     return request.get(url, data, loading)
   },
   // 获取设置分组的客户列表
