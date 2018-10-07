@@ -83,13 +83,8 @@ export default {
    * 数据总览
    * @returns {*}
    */
-  getAllData(time = 'all', merchant_id = 0, employee_id = 0) {
-    let url = 'api/employee/ws-data-overview'
-    let data = {
-      time,
-      merchant_id,
-      employee_id
-    }
-    return request.post(url, data)
+  getAllData() {
+    let url = '/api/employee/dashboard'
+    return request.get(url)
   }
 }

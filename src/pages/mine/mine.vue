@@ -20,15 +20,15 @@
             <h4 class="title">店员数据概览</h4>
             <div class="main">
               <div class="item-box">
-                <div class="number">{{allDatas.customer_sum || 0}}</div>
+                <div class="number">{{allDatas.customer_total || 0}}</div>
                 <div class="text">客户总数</div>
               </div>
               <div class="item-box">
-                <div class="number">{{allDatas.order_sum || 0}}</div>
+                <div class="number">{{allDatas.order_total || 0}}</div>
                 <div class="text">订单总数</div>
               </div>
               <div class="item-box">
-                <div class="number">{{allDatas.order_finish_sum || 0}}</div>
+                <div class="number">{{allDatas.success_order_total || 0}}</div>
                 <div class="text">成交总数</div>
               </div>
             </div>
@@ -62,7 +62,7 @@
   import Toast from 'components/toast/toast'
 
   const CONTENTLIST = [
-    {title: '个人信息', src: 'mine/icon-perinfor', icon: 'perinfor'},
+    {title: '个人信息', src: 'mine/my-msg', icon: 'perinfor'},
     {title: '我的服务', src: 'mine/my-service', icon: 'goods'},
     {title: '我的活动', src: 'mine/my-activity', icon: 'activity'},
     {title: '我的订单', src: 'mine/order-form-manage', icon: 'myorder'},
@@ -116,8 +116,8 @@
           }
         })
       },
-      getAllDataObj(time) {
-        Echart.getAllData(time, this.userInfo.merchant_id, this.userInfo.id).then(res => {
+      getAllDataObj() {
+        Echart.getAllData().then(res => {
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {

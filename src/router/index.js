@@ -44,6 +44,7 @@ const TeamActivity = () => import('pages/team-activity/team-activity')
 const OrderFormManage = () => import('pages/order-form-manage/order-form-manage')
 const OrderDetail = () => import('pages/order-detail/order-detail')
 const ShelfService = () => import('pages/shelf-service/shelf-service')
+const MyMsg = () => import('pages/my-msg/my-msg')
 
 Vue.use(Router)
 
@@ -150,6 +151,13 @@ const route = new Router({
               title: '团队活动'
             }
           }]
+        },
+        {
+          path: 'my-msg',
+          component: MyMsg,
+          meta: {
+            title: '个人信息'
+          }
         },
         {
           path: 'my-service',

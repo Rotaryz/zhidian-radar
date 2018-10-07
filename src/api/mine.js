@@ -6,6 +6,15 @@ export default {
    * @param data
    * @returns {*}
    */
+  saveMsg (data) {
+    let url = '/api/employee/profile'
+    return request.post(url, data)
+  },
+  /**
+   * 更新个人微信二维码
+   * @param data
+   * @returns {*}
+   */
   upLoadPerson (data) {
     let url = 'api/employee/update-personal-qrcode'
     return request.post(url, data)
