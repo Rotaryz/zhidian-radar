@@ -11,6 +11,7 @@
   const imgJson = {
     '404': ['pic-404', '网络异常，请刷新重试'],
     'customer': ['pic-customer', '暂无客户'],
+    'orderfrom': ['pic-customer', '暂无订单'],
     'delcard': ['pic-delcard', '名片被删除，请联系公司管理员'],
     'disablecard': ['pic-disablecard', '名片被禁用，请联系公司管理员'],
     'nodata': ['pic-nodata', '暂无数据'],

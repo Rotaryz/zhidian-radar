@@ -14,6 +14,12 @@
                   :showNoMore="showNoMore0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
+                <div class="time-down">
+                  <div class="time-box">
+                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
+                    <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
+                  </div>
+                </div>
                 <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
@@ -39,6 +45,12 @@
                   :showNoMore="showNoMore1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
+                <div class="time-down">
+                  <div class="time-box">
+                    <p class="title">火爆拼团</p>
+                    <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
+                  </div>
+                </div>
                 <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
@@ -90,7 +102,6 @@
         tabList: TABS,
         dataArray0: [],
         dataArray1: [],
-        dataArray2: [],
         selectTab: 0,
         pullUpLoad0: true,
         pullUpLoadThreshold0: 0,
@@ -102,13 +113,15 @@
         page1: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
-        popShow: true,
         loaded: false,
         loading: false,
         pageType: 'activity',
         tabLoad: true,
         status: 0,
-        downItem: ''
+        downItem: '',
+        clickConfirm: true,
+        timeArr: ['start_at_timestamp', 'end_at_timestamp'],
+        timestamp: 'start_at_timestamp'
       }
     },
     created () {
@@ -118,6 +131,7 @@
       changeTab(index) {
         this.selectTab = index
         this.status = index
+        this.timestamp = this.timeArr[index]
         this._defaultData()
         this._defaultArray()
         this.getActivityList()
@@ -135,8 +149,7 @@
           })
         }
       },
-      getActivityList(page = 1) { // 我的服务
-        console.log('service')
+      getActivityList(page = 1) { // 我的活动
         if (!this.loaded) {
           this.loading = true
         }
@@ -151,6 +164,7 @@
             this.tabList[0].num = res.wait_online_count
             this.tabList[1].num = res.online_count
             this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
+            this._endTimePlay()
             if (res.data.length < LIMIT) {
               this[`showNoMore${this.selectTab}`] = true
             }
@@ -197,33 +211,71 @@
           return data
         })
         this.downItem = item
-        Activity.activity(this.downItem.goods_id)
-          .then((res) => {
-            if (res.error !== ERR_OK) {
-              this.$refs.toast.show(res.message)
-              return
-            }
-            if (res.data.length) {
-              this.$refs.confirm.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
-            } else {
-              this.$refs.confirm.show({msg: '确定下架该服务吗？'})
-            }
-          })
+        this.clickConfirm = true
+        this.$refs.confirm.show({msg: '确定下架该活动吗？'})
       },
       msgConfirm() {
-        Activity.activityHandle(this.downItem.goods_id, 0) // 下架服务
-          .then((res) => {
-            if (res.error !== ERR_OK) {
-              this.$refs.toast.show(res.message)
-            }
-            this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].filter((data) => {
-              return +this.downItem.id !== +data.id
+        if (this.clickConfirm) {
+          this.clickConfirm = false
+          Activity.activityHandle(this.downItem.activity_id, 0) // 下架活动
+            .then((res) => {
+              if (res.error !== ERR_OK) {
+                this.$refs.toast.show(res.message)
+                return
+              }
+              this.$refs.toast.show('下架成功')
+              this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].filter((data) => {
+                return +this.downItem.id !== +data.id
+              })
+              this.tabList[this.selectTab].num--
+              setTimeout(() => {
+                this.$refs[`scroll${this.selectTab}`].forceUpdate()
+              }, 20)
             })
-            this.tabList[this.selectTab].num--
-            setTimeout(() => {
-              this.$refs[`scroll${this.selectTab}`].forceUpdate()
-            }, 20)
+        }
+      },
+      _endTimePlay() {
+        clearInterval(this.timer)
+        this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((item) => {
+          item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
+          return item
+        })
+        this.timer = setInterval(() => {
+          this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((item, index) => {
+            item.current_timestamp++
+            item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
+            return item
           })
+        }, 1000)
+      },
+      _groupTimeCheckout(time, nowTime) {
+        let nowSecond = new Date(nowTime)
+        let differ = new Date(time) - nowSecond
+        let day = Math.floor(differ / (60 * 60 * 24))
+        day = day >= 10 ? day : '0' + day
+        let hour = Math.floor(differ / (60 * 60)) - (day * 24)
+        hour = hour >= 10 ? hour : '0' + hour
+        let minute = Math.floor(differ / 60) - (day * 24 * 60) - (hour * 60)
+        minute = minute >= 10 ? minute : '0' + minute
+        let second = Math.floor(differ) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60)
+        second = second >= 10 ? second : '0' + second
+        let times
+        if (differ > 0) {
+          times = {
+            day,
+            hour,
+            minute,
+            second
+          }
+        } else {
+          times = {
+            day: '00',
+            hour: '00',
+            minute: '00',
+            second: '00'
+          }
+        }
+        return times
       },
       toTeam() {
         this.$router.push('/mine/my-activity/team-activity')
@@ -333,6 +385,22 @@
             .list-item
               padding-top: 15px
               box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
+              .time-down
+                height: 46px
+                padding: 0 15px
+                background: $color-white
+              .time-box
+                height: 100%
+                display: flex
+                align-items: center
+                justify-content: space-between
+                border-bottom-1px($color-F3F3F3)
+              .title
+                font-size: 16px
+                color: $color-20202E
+              .time
+                font-size: 14px
+                color: $color-20202E
     .footer-box
       position: fixed
       width: 100vw

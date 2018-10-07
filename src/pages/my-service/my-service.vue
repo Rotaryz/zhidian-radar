@@ -214,6 +214,7 @@
           .then((res) => {
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
+              return
             }
             this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].filter((data) => {
               return +this.downItem.id !== +data.id

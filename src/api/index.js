@@ -13,6 +13,7 @@ import news from './news'
 import mine from './mine'
 import service from './service'
 import activity from './activity'
+import orderForm from './orderForm'
 // 授权模块
 export const Jwt = jwt
 
@@ -54,3 +55,6 @@ export const Service = service
 
 // 我的活动
 export const Activity = activity
+
+// 我的订单
+export const OrderForm = orderForm

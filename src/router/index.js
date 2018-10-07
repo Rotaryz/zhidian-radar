@@ -42,6 +42,7 @@ const MyService = () => import('pages/my-service/my-service')
 const MyActivity = () => import('pages/my-activity/my-activity')
 const TeamActivity = () => import('pages/team-activity/team-activity')
 const OrderFormManage = () => import('pages/order-form-manage/order-form-manage')
+const OrderDetail = () => import('pages/order-detail/order-detail')
 const ShelfService = () => import('pages/shelf-service/shelf-service')
 
 Vue.use(Router)
@@ -169,7 +170,14 @@ const route = new Router({
           component: OrderFormManage,
           meta: {
             title: '订单管理'
-          }
+          },
+          children: [{
+            path: 'order-detail',
+            component: OrderDetail,
+            meta: {
+              title: '订单详情'
+            }
+          }]
         }]
       }, {
         path: '/chat/:id',

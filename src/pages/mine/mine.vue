@@ -62,10 +62,10 @@
   import Toast from 'components/toast/toast'
 
   const CONTENTLIST = [
-    {title: '我的信息', src: 'mine/icon-perinfor', icon: 'perinfor'},
+    {title: '个人信息', src: 'mine/icon-perinfor', icon: 'perinfor'},
     {title: '我的服务', src: 'mine/my-service', icon: 'goods'},
     {title: '我的活动', src: 'mine/my-activity', icon: 'activity'},
-    {title: '我的订单', src: 'mine/my-order-form', icon: 'myorder'},
+    {title: '我的订单', src: 'mine/order-form-manage', icon: 'myorder'},
     // {title: '微信群码', src: 'mine/group-code', icon: 'code'},
     // {title: '个人微信', src: 'mine/person-code', icon: 'wechat'},
     // {title: '我的报表', src: 'mine/my-data', icon: 'data'}

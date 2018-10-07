@@ -185,6 +185,7 @@
           .then((res) => {
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
+              return
             }
             this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
               if (+item.id === +data.id) {
