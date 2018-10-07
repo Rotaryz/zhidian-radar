@@ -6,7 +6,7 @@
         <input class="txt" type="text" placeholder="手机号/订单号/店员名称" v-model="searchTxt" @focus="inputFocus" @blur="inputBlur" @change="inputChange">
         <div class="clear" v-if="searchTxt.length > 0" @click="clearSearch"></div>
       </div>
-      <div class="btn" v-if="input" :class="{'show-btn' : input}" @click="searchBtn">{{searchTxt.length > 0 ? '搜索' : '取消'}}</div>
+      <div class="btn" :class="{'show-btn' : input}" @click="searchBtn">{{searchTxt.length > 0 ? '搜索' : '取消'}}</div>
     </section>
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
@@ -194,7 +194,8 @@
         this.dataArray = []
       },
       orderFormList(page = 1) { // 我的订单
-        if (!this.loaded) {
+        if (page === 1) {
+          this.loaded = false
           this.loading = true
         }
         let data = {
@@ -211,7 +212,11 @@
               return
             }
             this.dataArray = this.dataArray.concat(res.data)
-            if (this.dataArray.length === 0) this.pullUpLoad = false
+            if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
+              this.pullUpLoad = false
+            } else {
+              this.pullUpLoad = true
+            }
             if (res.data.length < LIMIT) {
               this.showNoMore = true
             }
@@ -296,7 +301,7 @@
         border-radius: 2px
         padding-left: 15px
         width: 100%
-        transition: all 0.3s
+        transition: all 0.4s
         padding-right: 10px
         justify-content: space-between
         .icon
@@ -322,6 +327,7 @@
           background-position: center
       .short-box
         width: 85%
+        margin-right: 15px
       .btn
         width: 0
         text-align: center
@@ -330,8 +336,7 @@
         color: $color-20202E
         font-size: 14px
         overflow: hidden
-        transition: all 0.3s
-        margin-left: 15px
+        transition: all 0.4s
         box-sizing: border-box
       .show-btn
         width: 15%

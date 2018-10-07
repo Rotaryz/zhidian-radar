@@ -11,12 +11,13 @@
                   :data="dataArray0"
                   :pullUpLoad="pullUpLoadObj0"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore0">
+                  :showNoMore="showNoMore0"
+                  v-if="selectTab === 0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
                 <div class="time-down">
                   <div class="time-box">
-                    <p class="title">火爆拼团</p>
+                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
                     <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
                   </div>
                 </div>
@@ -25,16 +26,12 @@
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemUp="itemUp"
-                              :page="pageType"
-                >
+                              :page="pageType">
                 </activity-item>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray0.length === 0">
               <exception errType="nodata"></exception>
-            </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
             </div>
           </scroll>
         </div>
@@ -43,12 +40,13 @@
                   :data="dataArray1"
                   :pullUpLoad="pullUpLoadObj1"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore1">
+                  :showNoMore="showNoMore1"
+                  v-if="selectTab === 1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
                 <div class="time-down">
                   <div class="time-box">
-                    <p class="title">火爆拼团</p>
+                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
                     <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
                   </div>
                 </div>
@@ -64,12 +62,12 @@
             <div class="null-data"  v-if="loaded && dataArray1.length === 0">
               <exception errType="nodata"></exception>
             </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
-            </div>
           </scroll>
         </div>
       </div>
+    </div>
+    <div class="loading" v-if="loading">
+      <list-loading></list-loading>
     </div>
     <toast ref="toast"></toast>
   </div>
@@ -144,7 +142,8 @@
         }
       },
       getActivityAll(page = 1, loading = true) { // 活动库
-        if (!this.loaded) {
+        if (page === 1) {
+          this.loaded = false
           this.loading = true
         }
         Activity.getActivityAll({page, status: this.status})
@@ -160,6 +159,11 @@
             this.tabList[1].num = res.online_count
             this._endTimePlay()
             this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
+            if (this[`dataArray${this.selectTab}`].length === 0) { // 无数据时，上拉不现实文字
+              this[`pullUpLoad${this.selectTab}`] = false
+            } else {
+              this[`pullUpLoad${this.selectTab}`] = true
+            }
             if (res.data.length < LIMIT) {
               this[`showNoMore${this.selectTab}`] = true
             }
@@ -342,16 +346,20 @@
           background: $color-20202E
 
     .container
-      width: 100vw
-      height: 100vh
+      overflow: hidden
+      position: absolute
+      top: 45px
+      left: 0
+      right: 0
+      bottom: 0
       .big-container
         width: 200vw
-        height: 100vh
+        height: 100%
         display: flex
         transition: all 0.3s
         .container-item
           width: 100vw
-          height: 100vh
+          height: 100%
           box-sizing: border-box
           .null-data
             padding-top: 150px

@@ -11,7 +11,8 @@
                   :data="dataArray0"
                   :pullUpLoad="pullUpLoadObj0"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore0">
+                  :showNoMore="showNoMore0"
+                  v-if="selectTab === 0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
                 <service-item :tabIdx="selectTab"
@@ -27,9 +28,6 @@
             <div class="null-data"  v-if="loaded && dataArray0.length === 0">
               <exception errType="noservice"></exception>
             </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
-            </div>
           </scroll>
         </div>
         <div class="container-item">
@@ -37,7 +35,8 @@
                   :data="dataArray1"
                   :pullUpLoad="pullUpLoadObj1"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore1">
+                  :showNoMore="showNoMore1"
+                  v-if="selectTab === 1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
                 <service-item :tabIdx="selectTab"
@@ -52,12 +51,12 @@
             <div class="null-data"  v-if="loaded && dataArray1.length === 0">
               <exception errType="noservice"></exception>
             </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
-            </div>
           </scroll>
         </div>
       </div>
+    </div>
+    <div class="loading" v-if="loading">
+      <list-loading></list-loading>
     </div>
     <toast ref="toast"></toast>
   </div>
@@ -129,13 +128,12 @@
         }
       },
       getServiceAll(page = 1, loading = true) { // 服务库
-        console.log('shelf')
-        if (!this.loaded) {
+        if (page === 1) {
+          this.loaded = false
           this.loading = true
         }
         Service.getServiceAll({page, status: this.status})
           .then((res) => {
-            console.log('loaded')
             this.loaded = true
             this.loading = false
             if (res.error !== ERR_OK) {
@@ -146,6 +144,11 @@
             this.tabList[0].num = res.wait_online_count
             this.tabList[1].num = res.online_count
             this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
+            if (this[`dataArray${this.selectTab}`].length === 0) { // 无数据时，上拉不现实文字
+              this[`pullUpLoad${this.selectTab}`] = false
+            } else {
+              this[`pullUpLoad${this.selectTab}`] = true
+            }
             if (res.data.length < LIMIT) {
               this[`showNoMore${this.selectTab}`] = true
             }
@@ -171,7 +174,7 @@
         this.$refs.confirm.show('确定下架该服务')
       },
       showEditor(item) { // 点击右边小按钮
-        this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
+        this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((data) => {
           if (+item.id === +data.id) {
             data.showEdit = !data.showEdit
           } else {
@@ -189,7 +192,7 @@
             }
             this.$refs.toast.show('上架成功')
             this.$emit('refresh')
-            this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
+            this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((data) => {
               if (+item.id === +data.id) {
                 data.showEdit = !data.showEdit
                 data.status = 1
@@ -285,16 +288,21 @@
           background: $color-20202E
 
     .container
-      width: 100vw
-      height: 100vh
+      width: 100%
+      overflow: hidden
+      position: absolute
+      top: 45px
+      left: 0
+      right: 0
+      bottom: 0
       .big-container
         width: 200vw
-        height: 100vh
+        height: 100%
         display: flex
         transition: all 0.3s
         .container-item
           width: 100vw
-          height: 100vh
+          height: 100%
           box-sizing: border-box
           .null-data
             padding-top: 150px

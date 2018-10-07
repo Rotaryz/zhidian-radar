@@ -28,7 +28,7 @@
     },
     methods: {
       saveMsg() {
-        const REGPHONE = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/
+        const REGPHONE = /(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}/
         // if (!this.weixin_no || this.weixin_no.replace(/^\s+|\s+$/g, '') === '') {
         //   this.$refs.toast.show('请输入微信号')
         //   return

@@ -11,7 +11,8 @@
                   :data="dataArray0"
                   :pullUpLoad="pullUpLoadObj0"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore0">
+                  :showNoMore="showNoMore0"
+                  v-if="selectTab === 0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
                 <div class="time-down">
@@ -32,9 +33,6 @@
             <div class="null-data"  v-if="loaded && dataArray0.length === 0">
               <exception errType="nodata"></exception>
             </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
-            </div>
           </scroll>
         </div>
         <div class="container-item">
@@ -42,12 +40,13 @@
                   :data="dataArray1"
                   :pullUpLoad="pullUpLoadObj1"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore1">
+                  :showNoMore="showNoMore1"
+                  v-if="selectTab === 1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
                 <div class="time-down">
                   <div class="time-box">
-                    <p class="title">火爆拼团</p>
+                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
                     <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
                   </div>
                 </div>
@@ -63,15 +62,15 @@
             <div class="null-data"  v-if="loaded && dataArray1.length === 0">
               <exception errType="nodata"></exception>
             </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
-            </div>
           </scroll>
         </div>
       </div>
     </div>
     <div class="footer-box">
       <div class="footer-btn" @click="toTeam">上架活动</div>
+    </div>
+    <div class="loading" v-if="loading">
+      <list-loading></list-loading>
     </div>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
@@ -150,7 +149,8 @@
         }
       },
       getActivityList(page = 1) { // 我的活动
-        if (!this.loaded) {
+        if (page === 1) {
+          this.loaded = false
           this.loading = true
         }
         Activity.getActivityList({page, status: this.status})
@@ -164,6 +164,11 @@
             this.tabList[0].num = res.wait_online_count
             this.tabList[1].num = res.online_count
             this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
+            if (this[`dataArray${this.selectTab}`].length === 0) { // 无数据时，上拉不现实文字
+              this[`pullUpLoad${this.selectTab}`] = false
+            } else {
+              this[`pullUpLoad${this.selectTab}`] = true
+            }
             this._endTimePlay()
             if (res.data.length < LIMIT) {
               this[`showNoMore${this.selectTab}`] = true
@@ -228,6 +233,9 @@
                 return +this.downItem.id !== +data.id
               })
               this.tabList[this.selectTab].num--
+              if (this[`dataArray${this.selectTab}`].length === 0) { // 无数据时，上拉不现实文字
+                this[`pullUpLoad${this.selectTab}`] = false
+              }
               setTimeout(() => {
                 this.$refs[`scroll${this.selectTab}`].forceUpdate()
               }, 20)
