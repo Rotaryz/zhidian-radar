@@ -216,6 +216,7 @@
               this.$refs.toast.show(res.message)
               return
             }
+            this.$refs.toast.show('下架成功')
             this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].filter((data) => {
               return +this.downItem.id !== +data.id
             })

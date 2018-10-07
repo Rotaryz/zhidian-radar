@@ -19,7 +19,8 @@
                   :data="dataArray"
                   :pullUpLoad="pullUpLoadObj"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore">
+                  :showNoMore="showNoMore"
+                  v-if="selectTab === 0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray" :key="index">
                 <div class="title">
@@ -43,7 +44,8 @@
                   :data="dataArray"
                   :pullUpLoad="pullUpLoadObj"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore">
+                  :showNoMore="showNoMore"
+                  v-if="selectTab === 1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray" :key="index">
                 <div class="title">
@@ -67,7 +69,8 @@
                   :data="dataArray"
                   :pullUpLoad="pullUpLoadObj"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore">
+                  :showNoMore="showNoMore"
+                  v-if="selectTab === 2">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray" :key="index">
                 <div class="title">
@@ -91,7 +94,8 @@
                   :data="dataArray"
                   :pullUpLoad="pullUpLoadObj"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore">
+                  :showNoMore="showNoMore"
+                  v-if="selectTab === 3">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray" :key="index">
                 <div class="title">
@@ -175,6 +179,7 @@
       },
       clearSearch() {
         this.searchTxt = ''
+        this.orderFormList()
       },
       searchBtn() {
         if (this.searchTxt.length) {
@@ -189,8 +194,9 @@
         this.dataArray = []
       },
       orderFormList(page = 1) { // 我的订单
-        this.loaded = false
-        this.loading = true
+        if (!this.loaded) {
+          this.loading = true
+        }
         let data = {
           page,
           keyword: this.searchTxt,
@@ -205,6 +211,7 @@
               return
             }
             this.dataArray = this.dataArray.concat(res.data)
+            if (this.dataArray.length === 0) this.pullUpLoad = false
             if (res.data.length < LIMIT) {
               this.showNoMore = true
             }

@@ -187,6 +187,8 @@
               this.$refs.toast.show(res.message)
               return
             }
+            this.$refs.toast.show('上架成功')
+            this.$emit('refresh')
             this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
               if (+item.id === +data.id) {
                 data.showEdit = !data.showEdit

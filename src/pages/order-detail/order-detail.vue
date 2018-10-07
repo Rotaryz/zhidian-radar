@@ -1,11 +1,6 @@
 <template>
   <div class="order-detail">
-    <scroll
-      ref="scroll"
-      :data="arr"
-      bcColor="#f0f2f5"
-      :pullUpLoad="pullUpLoadObj"
-      :showNoMore="false">
+    <scroll bcColor="#f0f2f5" :showNoMore="false">
       <div class="msg">
         <header class="top-msg">
           <p class="title">{{data.title}}</p>
@@ -63,7 +58,6 @@
     },
     created() {
       this.shopId = this.$route.query.id
-      console.log(this.$route)
       this.orderFormDetail()
     },
     methods: {
@@ -84,21 +78,8 @@
       }
     },
     computed: {
-      pullUpLoadObj: function () {
-        return this.pullUpLoad ? {
-          threshold: parseInt(this.pullUpLoadThreshold),
-          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
-        } : false
-      }
     },
     watch: {
-      pullUpLoadObj: {
-        handler() {
-          if (!this.pullUpLoad) return // 防止下拉报错
-          this.rebuildScroll()
-        },
-        deep: true
-      }
     },
     components: {
       Scroll,
