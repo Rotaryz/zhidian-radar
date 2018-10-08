@@ -11,24 +11,27 @@
                   :data="dataArray0"
                   :pullUpLoad="pullUpLoadObj0"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore0">
+                  :showNoMore="showNoMore0"
+                  v-if="selectTab === 0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
+                <div class="time-down">
+                  <div class="time-box">
+                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
+                    <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
+                  </div>
+                </div>
                 <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemUp="itemUp"
-                              :page="pageType"
-                >
+                              :page="pageType">
                 </activity-item>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray0.length === 0">
               <exception errType="nodata"></exception>
-            </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
             </div>
           </scroll>
         </div>
@@ -37,9 +40,16 @@
                   :data="dataArray1"
                   :pullUpLoad="pullUpLoadObj1"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore1">
+                  :showNoMore="showNoMore1"
+                  v-if="selectTab === 1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
+                <div class="time-down">
+                  <div class="time-box">
+                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
+                    <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
+                  </div>
+                </div>
                 <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
@@ -52,12 +62,12 @@
             <div class="null-data"  v-if="loaded && dataArray1.length === 0">
               <exception errType="nodata"></exception>
             </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
-            </div>
           </scroll>
         </div>
       </div>
+    </div>
+    <div class="loading" v-if="loading">
+      <list-loading></list-loading>
     </div>
     <toast ref="toast"></toast>
   </div>
@@ -101,7 +111,9 @@
         loading: true,
         pageType: 'team',
         tabLoad: true,
-        status: 0
+        status: 0,
+        timeArr: ['start_at_timestamp', 'end_at_timestamp'],
+        timestamp: 'start_at_timestamp'
       }
     },
     created () {
@@ -111,6 +123,7 @@
       changeTab(index) {
         this.status = index
         this.selectTab = index
+        this.timestamp = this.timeArr[index]
         this._defaultData()
         this._defaultArray()
         this.getActivityAll()
@@ -128,14 +141,13 @@
           })
         }
       },
-      getActivityAll(page = 1, loading = true) { // 服务库
-        console.log('shelf')
-        if (!this.loaded) {
+      getActivityAll(page = 1, loading = true) { // 活动库
+        if (page === 1) {
+          this.loaded = false
           this.loading = true
         }
         Activity.getActivityAll({page, status: this.status})
           .then((res) => {
-            console.log('loaded')
             this.loaded = true
             this.loading = false
             if (res.error !== ERR_OK) {
@@ -145,7 +157,13 @@
             this.$emit('refresh')
             this.tabList[0].num = res.wait_online_count
             this.tabList[1].num = res.online_count
+            this._endTimePlay()
             this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
+            if (this[`dataArray${this.selectTab}`].length === 0) { // 无数据时，上拉不现实文字
+              this[`pullUpLoad${this.selectTab}`] = false
+            } else {
+              this[`pullUpLoad${this.selectTab}`] = true
+            }
             if (res.data.length < LIMIT) {
               this[`showNoMore${this.selectTab}`] = true
             }
@@ -168,7 +186,7 @@
         this.getActivityAll(this[`page${this.selectTab}`])
       },
       delClick() {
-        this.$refs.confirm.show('确定下架该服务')
+        this.$refs.confirm.show('确定下架该活动')
       },
       showEditor(item) { // 点击右边小按钮
         this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
@@ -181,11 +199,14 @@
         })
       },
       itemUp(item) { // 点击上架按钮
-        Activity.activityHandle(item.id, 1) // 上架服务
+        Activity.activityHandle(item.id, 1) // 上架活动
           .then((res) => {
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
+              return
             }
+            this.$refs.toast.show('上架成功')
+            this.$emit('refresh')
             this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
               if (+item.id === +data.id) {
                 data.showEdit = !data.showEdit
@@ -199,6 +220,49 @@
               this.$refs[`scroll${this.selectTab}`].forceUpdate()
             }, 20)
           })
+      },
+      _endTimePlay() {
+        clearInterval(this.timer)
+        this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((item) => {
+          item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
+          return item
+        })
+        this.timer = setInterval(() => {
+          this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((item, index) => {
+            item.current_timestamp++
+            item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
+            return item
+          })
+        }, 1000)
+      },
+      _groupTimeCheckout(time, nowTime) {
+        let nowSecond = new Date(nowTime)
+        let differ = new Date(time) - nowSecond
+        let day = Math.floor(differ / (60 * 60 * 24))
+        day = day >= 10 ? day : '0' + day
+        let hour = Math.floor(differ / (60 * 60)) - (day * 24)
+        hour = hour >= 10 ? hour : '0' + hour
+        let minute = Math.floor(differ / 60) - (day * 24 * 60) - (hour * 60)
+        minute = minute >= 10 ? minute : '0' + minute
+        let second = Math.floor(differ) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60)
+        second = second >= 10 ? second : '0' + second
+        let times
+        if (differ > 0) {
+          times = {
+            day,
+            hour,
+            minute,
+            second
+          }
+        } else {
+          times = {
+            day: '00',
+            hour: '00',
+            minute: '00',
+            second: '00'
+          }
+        }
+        return times
       },
       rebuildScroll() {
         this.$nextTick(() => {
@@ -282,16 +346,20 @@
           background: $color-20202E
 
     .container
-      width: 100vw
-      height: 100vh
+      overflow: hidden
+      position: absolute
+      top: 45px
+      left: 0
+      right: 0
+      bottom: 0
       .big-container
         width: 200vw
-        height: 100vh
+        height: 100%
         display: flex
         transition: all 0.3s
         .container-item
           width: 100vw
-          height: 100vh
+          height: 100%
           box-sizing: border-box
           .null-data
             padding-top: 150px
@@ -300,6 +368,22 @@
             .list-item
               padding-top: 15px
               box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
+            .time-down
+              height: 46px
+              padding: 0 15px
+              background: $color-white
+            .time-box
+              height: 100%
+              display: flex
+              align-items: center
+              justify-content: space-between
+              border-bottom-1px($color-F3F3F3)
+            .title
+              font-size: 16px
+              color: $color-20202E
+            .time
+              font-size: 14px
+              color: $color-20202E
     .loading
       position: fixed
       width: 100%

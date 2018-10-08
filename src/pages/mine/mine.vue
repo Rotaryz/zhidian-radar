@@ -6,8 +6,8 @@
           <div class="top-box-left">
             <img class="mine-header" :src="mine.avatar">
             <p class="peo-name">
-              {{mine.name}}
-              <span class="tag">角色:{{mine.tag || '店长'}}</span>
+              {{mine.name}}<br />
+              <span class="tag">角色:{{tag}}</span>
             </p>
           </div>
           <div class="top-box-right" @click="toShareCard">
@@ -55,20 +55,17 @@
 
 <script>
   import Scroll from 'components/scroll/scroll'
-  import { Business, Echart } from 'api'
+  import { Echart } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import storage from 'storage-controller'
   import {mapGetters} from 'vuex'
   import Toast from 'components/toast/toast'
 
   const CONTENTLIST = [
-    {title: '我的信息', src: 'mine/icon-perinfor', icon: 'perinfor'},
+    {title: '个人信息', src: 'mine/my-msg', icon: 'perinfor'},
     {title: '我的服务', src: 'mine/my-service', icon: 'goods'},
     {title: '我的活动', src: 'mine/my-activity', icon: 'activity'},
-    {title: '我的订单', src: 'mine/my-order-form', icon: 'myorder'},
-    // {title: '微信群码', src: 'mine/group-code', icon: 'code'},
-    // {title: '个人微信', src: 'mine/person-code', icon: 'wechat'},
-    // {title: '我的报表', src: 'mine/my-data', icon: 'data'}
+    {title: '我的订单', src: 'mine/order-form-manage', icon: 'myorder'},
     {title: '我的收入', src: '', icon: 'income'},
     {title: '我的报表', src: 'mine/my-data', icon: 'myform'}
   ]
@@ -107,17 +104,13 @@
         this.$router.push(src)
       },
       refresh () {
-        this.mine = storage.get('info', {})
+        this.mine = storage.get('info')
       },
       getMine () {
-        Business.myBusinessCard().then((res) => {
-          if (res.error === ERR_OK) {
-            this.mine = res.data
-          }
-        })
+        this.mine = storage.get('info')
       },
       getAllDataObj(time) {
-        Echart.getAllData(time, this.userInfo.merchant_id, this.userInfo.id).then(res => {
+        Echart.getAllData(time).then(res => {
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {
@@ -135,6 +128,18 @@
       },
       slide() {
         return 'slide'
+      },
+      tag() {
+        switch (this.mine.role_id) {
+          case 0:
+            return '未知'
+          case 1:
+            return '店长'
+          case 2:
+            return '普通店员'
+          case 3:
+            return '财务'
+        }
       }
     },
     components: {
@@ -188,13 +193,11 @@
           width: 180px
           no-wrap()
           .tag
-            display: block
             background: rgba(255,255,255,0.2)
-            width: 60px
-            height: 20px
-            line-height: 20px
             text-align: center
             font-size: 12px
+            display: inline-block
+            padding: 4px 5px
             color: $color-white
             margin-top: 10px
             border-radius: 2px

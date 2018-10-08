@@ -6,7 +6,7 @@ export default {
    * @returns {*}
    */
   getPie(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/ws-interest-rate-chart'
+    let url = '/api/employee/analysis/interest-rate-chart'
     let data = {
       customer_id,
       merchant_id,
@@ -19,7 +19,7 @@ export default {
    * @returns {*}
    */
   getActionLine(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/ws-active-chart'
+    let url = '/api/employee/analysis/active-chart'
     let data = {
       customer_id,
       merchant_id,
@@ -58,7 +58,7 @@ export default {
    * @returns {*}
    */
   getBar(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/ws-interactive-chart'
+    let url = 'api/employee/analysis/interactive-chart'
     let data = {
       customer_id,
       merchant_id,
@@ -83,12 +83,10 @@ export default {
    * 数据总览
    * @returns {*}
    */
-  getAllData(time = 'all', merchant_id = 0, employee_id = 0) {
-    let url = 'api/employee/ws-data-overview'
+  getAllData(time) {
+    let url = '/api/employee/analysis/data-overview'
     let data = {
-      time,
-      merchant_id,
-      employee_id
+      time
     }
     return request.post(url, data)
   }

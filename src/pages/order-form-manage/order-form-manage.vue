@@ -1,78 +1,133 @@
 <template>
-  <div class="my-activity">
+  <div class="order-form">
+    <section class="search-box">
+      <div class="input-box" :class="{'short-box' : input}">
+        <img class="icon" src="./icon-search@3x.png" alt=""/>
+        <input class="txt" type="text" placeholder="手机号/订单号/店员名称" v-model="searchTxt" @focus="inputFocus" @blur="inputBlur" @change="inputChange">
+        <div class="clear" v-if="searchTxt.length > 0" @click="clearSearch"></div>
+      </div>
+      <div class="btn" :class="{'show-btn' : input}" @click="searchBtn">{{searchTxt.length > 0 ? '搜索' : '取消'}}</div>
+    </section>
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
-      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
+      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}</div>
     </div>
     <div class="container">
-      <div class="big-container" :style="'transform: translate(-' + selectTab*50 + '%,0)'">
+      <div class="big-container" :style="'transform: translate(-' + selectTab*25 + '%,0)'">
         <div class="container-item">
-          <scroll ref="scroll0"
-                  :data="dataArray0"
-                  :pullUpLoad="pullUpLoadObj0"
+          <scroll ref="scroll"
+                  :data="dataArray"
+                  :pullUpLoad="pullUpLoadObj"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore0">
+                  :showNoMore="showNoMore"
+                  v-if="selectTab === 0">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
-                <service-item :tabIdx="selectTab"
-                              :item="item"
-                              :showEdit="item.showEdit"
-                              @showEdit="showEditor"
-                              @itemDown="itemDown"
-                              :page="pageType">
-                </service-item>
+              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
+                <div class="title">
+                  <span class="left">{{item.title}}</span>
+                  <span class="right">{{item.status_str}}</span>
+                </div>
+                <div class="order-num">下单号码: {{item.customer_mobile}}</div>
+                <div class="bottom">
+                  <div class="form-num">订单编号: {{item.order_sn}}</div>
+                  <div class="go-detail" @click="toOrderDetail(item.shop_id)">查看详情</div>
+                </div>
               </div>
             </div>
-            <div class="null-data"  v-if="loaded && dataArray0.length === 0">
-              <exception errType="nodata"></exception>
-            </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
+            <div class="null-data"  v-if="loaded && dataArray.length === 0">
+              <exception errType="orderfrom"></exception>
             </div>
           </scroll>
         </div>
         <div class="container-item">
-          <scroll ref="scroll1"
-                  :data="dataArray1"
-                  :pullUpLoad="pullUpLoadObj1"
+          <scroll ref="scroll"
+                  :data="dataArray"
+                  :pullUpLoad="pullUpLoadObj"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore1">
+                  :showNoMore="showNoMore"
+                  v-if="selectTab === 1">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
-                <service-item :tabIdx="selectTab"
-                              :item="item"
-                              :showEdit="item.showEdit"
-                              @showEdit="showEditor"
-                              @itemDown="itemDown"
-                              :page="pageType">
-                </service-item>
+              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
+                <div class="title">
+                  <span class="left">{{item.title}}</span>
+                  <span class="right">{{item.status_str}}</span>
+                </div>
+                <div class="order-num">下单号码: {{item.customer_mobile}}</div>
+                <div class="bottom">
+                  <div class="form-num">订单编号: {{item.order_sn}}</div>
+                  <div class="go-detail" @click="toOrderDetail(item.shop_id)">查看详情</div>
+                </div>
               </div>
             </div>
-            <div class="null-data"  v-if="loaded && dataArray1.length === 0">
-              <exception errType="nodata"></exception>
+            <div class="null-data"  v-if="loaded && dataArray.length === 0">
+              <exception errType="orderfrom"></exception>
             </div>
-            <div class="loading" v-if="loading">
-              <list-loading></list-loading>
+          </scroll>
+        </div>
+        <div class="container-item">
+          <scroll ref="scroll"
+                  :data="dataArray"
+                  :pullUpLoad="pullUpLoadObj"
+                  @pullingUp="onPullingUp"
+                  :showNoMore="showNoMore"
+                  v-if="selectTab === 2">
+            <div class="list-container">
+              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
+                <div class="title">
+                  <span class="left">{{item.title}}</span>
+                  <span class="right">{{item.status_str}}</span>
+                </div>
+                <div class="order-num">下单号码: {{item.customer_mobile}}</div>
+                <div class="bottom">
+                  <div class="form-num">订单编号: {{item.order_sn}}</div>
+                  <div class="go-detail" @click="toOrderDetail(item.shop_id)">查看详情</div>
+                </div>
+              </div>
+            </div>
+            <div class="null-data"  v-if="loaded && dataArray.length === 0">
+              <exception errType="orderfrom"></exception>
+            </div>
+          </scroll>
+        </div>
+        <div class="container-item">
+          <scroll ref="scroll"
+                  :data="dataArray"
+                  :pullUpLoad="pullUpLoadObj"
+                  @pullingUp="onPullingUp"
+                  :showNoMore="showNoMore"
+                  v-if="selectTab === 3">
+            <div class="list-container">
+              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
+                <div class="title">
+                  <span class="left">{{item.title}}</span>
+                  <span class="right">{{item.status_str}}</span>
+                </div>
+                <div class="order-num">下单号码: {{item.customer_mobile}}</div>
+                <div class="bottom">
+                  <div class="form-num">订单编号: {{item.order_sn}}</div>
+                  <div class="go-detail" @click="toOrderDetail(item.shop_id)">查看详情</div>
+                </div>
+              </div>
+            </div>
+            <div class="null-data"  v-if="loaded && dataArray.length === 0">
+              <exception errType="orderfrom"></exception>
             </div>
           </scroll>
         </div>
       </div>
     </div>
-    <div class="footer-box">
-      <div class="footer-btn" @click="toTeam">上架活动</div>
+    <div class="loading" v-if="loading">
+      <list-loading></list-loading>
     </div>
-    <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
-    <router-view @refresh="refresh"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
-  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  import ServiceItem from 'components/service-item/service-item'
-  import { Activity } from 'api'
+  import { OrderForm } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import {ease} from 'common/js/ease'
@@ -80,67 +135,75 @@
 
   const LIMIT = 15
   const TABS = [
-    {txt: '未开始', num: 0},
-    {txt: '进行中', num: 0}
+    {txt: '全部'},
+    {txt: '交易中'},
+    {txt: '交易完成'},
+    {txt: '交易关闭'}
   ]
   export default {
-    name: 'MyActivity',
+    name: 'OrderFormManage',
     data () {
       return {
         tabList: TABS,
-        dataArray0: [],
-        dataArray1: [],
-        dataArray2: [],
+        dataArray: [],
         selectTab: 0,
-        pullUpLoad0: true,
-        pullUpLoadThreshold0: 0,
-        showNoMore0: false,
-        page0: 1,
-        pullUpLoad1: true,
-        pullUpLoadThreshold1: 0,
-        showNoMore1: false,
-        page1: 1,
+        pullUpLoad: true,
+        pullUpLoadThreshold: 0,
+        showNoMore: false,
+        page: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
-        popShow: true,
         loaded: false,
         loading: false,
-        pageType: 'myService',
-        tabLoad: true,
-        status: 0,
-        downItem: ''
+        input: false,
+        searchTxt: ''
       }
     },
     created () {
-      this.getActivityList()
+      this.orderFormList()
     },
     methods: {
+      inputFocus() {
+        this.input = true
+      },
+      inputBlur() {
+        this.input = false
+      },
+      inputChange() {
+        console.log(this.searchTxt)
+      },
       changeTab(index) {
         this.selectTab = index
-        this.status = index
         this._defaultData()
-        this._defaultArray()
-        this.getActivityList()
+        this.orderFormList()
+      },
+      clearSearch() {
+        this.searchTxt = ''
+        this.orderFormList()
+      },
+      searchBtn() {
+        if (this.searchTxt.length) {
+          this.selectTab = 0
+          this._defaultData()
+          this.orderFormList()
+        }
       },
       _defaultData() {
-        this[`page${this.selectTab}`] = 1
-        this[`showNoMore${this.selectTab}`] = false
-        this[`dataArray${this.selectTab}`] = []
+        this.page = 1
+        this.showNoMore = false
+        this.dataArray = []
       },
-      _defaultArray() {
-        for (let i = 0; i < 2; i++) {
-          this['dataArray' + i] = this['dataArray' + i].map((item) => {
-            item.showEdit = false
-            return item
-          })
-        }
-      },
-      getActivityList(page = 1) { // 我的服务
-        console.log('service')
-        if (!this.loaded) {
+      orderFormList(page = 1) { // 我的订单
+        if (page === 1) {
+          this.loaded = false
           this.loading = true
         }
-        Activity.getActivityList({page, status: this.status})
+        let data = {
+          page,
+          keyword: this.searchTxt,
+          trading_status: this.selectTab === 0 ? '' : this.selectTab - 1
+        }
+        OrderForm.orderFormList(data)
           .then((res) => {
             this.loaded = true
             this.loading = false
@@ -148,103 +211,47 @@
               this.$refs.toast.show(res.message)
               return
             }
-            this.tabList[0].num = res.wait_online_count
-            this.tabList[1].num = res.online_count
-            this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
+            this.dataArray = this.dataArray.concat(res.data)
+            if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
+              this.pullUpLoad = false
+            } else {
+              this.pullUpLoad = true
+            }
             if (res.data.length < LIMIT) {
-              this[`showNoMore${this.selectTab}`] = true
+              this.showNoMore = true
             }
             setTimeout(() => {
               if (page === 1) {
-                this.$refs[`scroll${this.selectTab}`].forceUpdate()
-                this.$refs[`scroll${this.selectTab}`].scrollTo(0, 0, 0, ease[this.scrollToEasing])
+                this.$refs.scroll.forceUpdate()
+                this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
               } else {
-                this.$refs[`scroll${this.selectTab}`].forceUpdate()
+                this.$refs.scroll.forceUpdate()
               }
             }, 20)
           })
       },
       onPullingUp() {
-        if (this[`showNoMore${this.selectTab}`]) {
-          this.$refs[`scroll${this.selectTab}`].forceUpdate()
+        if (this.showNoMore) {
+          this.$refs.scroll.forceUpdate()
           return
         }
-        this[`page${this.selectTab}`]++
-        this.getActivityList(this[`page${this.selectTab}`])
+        this.page++
+        this.orderFormList(this.page)
       },
-      refresh() {
-        this._defaultData()
-        this._defaultArray()
-        this.getActivityList()
-      },
-      showEditor(item) { // 点击右边小按钮
-        this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
-          if (+item.id === +data.id) {
-            data.showEdit = !data.showEdit
-          } else {
-            data.showEdit = false
-          }
-          return data
-        })
-      },
-      itemDown(item) { // 点击下架按钮
-        this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
-          if (+item.id === +data.id) {
-            data.showEdit = !data.showEdit
-          } else {
-            data.showEdit = false
-          }
-          return data
-        })
-        this.downItem = item
-        Activity.activity(this.downItem.goods_id)
-          .then((res) => {
-            if (res.error !== ERR_OK) {
-              this.$refs.toast.show(res.message)
-              return
-            }
-            if (res.data.length) {
-              this.$refs.confirm.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
-            } else {
-              this.$refs.confirm.show({msg: '确定下架该服务吗？'})
-            }
-          })
-      },
-      msgConfirm() {
-        Activity.activityHandle(this.downItem.goods_id, 0) // 下架服务
-          .then((res) => {
-            if (res.error !== ERR_OK) {
-              this.$refs.toast.show(res.message)
-            }
-            this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].filter((data) => {
-              return +this.downItem.id !== +data.id
-            })
-            this.tabList[this.selectTab].num--
-            setTimeout(() => {
-              this.$refs[`scroll${this.selectTab}`].forceUpdate()
-            }, 20)
-          })
-      },
-      toTeam() {
-        this.$router.push('/mine/my-activity/team-activity')
+      toOrderDetail(shopId) {
+        this.$router.push({path: '/mine/order-form-manage/order-detail', query: {id: shopId}})
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs[`scroll${this.selectTab}`].destroy()
-          this.$refs[`scroll${this.selectTab}`].initScroll()
+          this.$refs.scroll.destroy()
+          this.$refs.scroll.initScroll()
         })
       }
     },
     computed: {
-      pullUpLoadObj0: function () {
-        return this.pullUpLoad0 ? {
-          threshold: parseInt(this.pullUpLoadThreshold0),
-          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
-        } : false
-      },
-      pullUpLoadObj1: function () {
-        return this.pullUpLoad1 ? {
-          threshold: parseInt(this.pullUpLoadThreshold1),
+      pullUpLoadObj: function () {
+        return this.pullUpLoad ? {
+          threshold: parseInt(this.pullUpLoadThreshold),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
       }
@@ -261,8 +268,6 @@
     components: {
       Scroll,
       Exception,
-      ConfirmMsg,
-      ServiceItem,
       Toast,
       ListLoading
     }
@@ -274,7 +279,7 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .my-activity
+  .order-form
     position: fixed
     background: $color-background
     z-index: 10
@@ -282,6 +287,59 @@
     right: 0
     bottom: 0
     top: 0
+    font-family: $font-family-regular
+    .search-box
+      background-color: $color-white-fff
+      padding: 9.5px 15px 4px
+      display: flex
+      flex-wrap: nowrap
+      .input-box
+        height: 36px
+        background-color: $color-F0F2F5
+        layout(row, block, nowrap)
+        align-items: center
+        border-radius: 2px
+        padding-left: 15px
+        width: 100%
+        transition: all 0.4s
+        padding-right: 10px
+        justify-content: space-between
+        .icon
+          width: 15px
+          height: 15px
+          margin-right: 5px
+        .txt
+          font-family: $font-family-regular
+          font-size: $font-size-14
+          height: 36px
+          flex: 1
+          background: $color-F0F2F5
+          line-height: 36px
+          outline: none
+          color: $color-20202E
+          &::-webkit-input-placeholder
+            color: $color-9B9B9B
+        .clear
+          width: 15px
+          height: 15px
+          bg-image('./clear')
+          background-size: cover
+          background-position: center
+      .short-box
+        width: 85%
+        margin-right: 15px
+      .btn
+        width: 0
+        text-align: center
+        height: 36px
+        line-height: 36px
+        color: $color-20202E
+        font-size: 14px
+        overflow: hidden
+        transition: all 0.4s
+        box-sizing: border-box
+      .show-btn
+        width: 15%
     .tab-wrapper
       height: 44.5px
       background: $color-white-fff
@@ -300,25 +358,24 @@
         left: 0
         bottom: 0
         right: 0
-        width: 50%
+        width: 25%
         layout()
         align-items: center
         transition: all 0.3s
         &:after
           content: ''
-          width: 50px
+          width: 30px
           height: 3px
           background: $color-20202E
-
     .container
       overflow: hidden
       position: absolute
-      top: 45px
+      top: 94px
       left: 0
       right: 0
       bottom: 0
       .big-container
-        width: 200vw
+        width: 400vw
         height: 100%
         display: flex
         transition: all 0.3s
@@ -328,30 +385,55 @@
           box-sizing: border-box
           .null-data
             padding-top: 150px
-          .list-container
-            padding: 0 15px
-            .list-item
-              padding-top: 15px
-              box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
-    .footer-box
-      position: fixed
-      width: 100vw
-      height: 44.5px
-      z-index: 60
-      bottom: 0
-      left: 0
-      background: $color-white
-      box-sizing: border-box
-      .footer-btn
-        width: 100%
-        height: 100%
-        background: $color-20202E
-        line-height: 44.5px
-        text-align: center
-        font-family: $font-family-regular
-        color: $color-white
-        font-size: $font-size-16
-        letter-spacing: 0.8px
+        .list-container
+          padding: 15px 15px
+          .list-item
+            margin-bottom: 15px
+            box-shadow: 0 4px 12px 0 rgba(43,43,145,0.08)
+            padding: 20px 15px 12px
+            background: $color-white
+            border-radius: 2px
+            .title
+              font-size: 16px
+              color: $color-20202E
+              display: flex
+              justify-content: space-between
+              align-items: center
+              .left
+                width: 80%
+                overflow: hidden
+                white-space: nowrap
+                text-overflow: ellipsis
+              .right
+                font-size: 14px
+                color: $color-9B9B9B
+            .order-num
+              font-size: 14px
+              color: $color-9B9B9B
+              padding: 12px 0 18px
+              overflow: hidden
+              white-space: nowrap
+              text-overflow: ellipsis
+            .bottom
+              padding-top: 12px
+              display: flex
+              justify-content: space-between
+              align-items: center
+              border-top-1px($color-F3F3F3)
+              .form-num
+                font-size: 14px
+                color: $color-9B9B9B
+                overflow: hidden
+                white-space: nowrap
+                text-overflow: ellipsis
+              .go-detail
+                font-size: 12px
+                color: $color-56BA15
+                border-1px($color-56BA15, 0)
+                text-align: center
+                width: 65px
+                height: 26px
+                line-height: 26px
     .loading
       position: fixed
       width: 100%

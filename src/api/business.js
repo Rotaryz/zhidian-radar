@@ -6,7 +6,7 @@ export default {
    * @returns {*}
    */
   myBusinessCard () {
-    let url = 'api/employee/shop-detail'
+    let url = '/api/employee/profile'
     return request.get(url)
   },
   /**

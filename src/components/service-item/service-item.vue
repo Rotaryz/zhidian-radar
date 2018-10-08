@@ -5,7 +5,7 @@
         <!--<div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>-->
       </div>
       <div class="item-right">
-        <div class="right-title">{{item.title}}</div>
+        <div class="right-title">{{item.goods_title}}</div>
         <div class="right-down">
           <div class="down-left">
             <p class="down-txt"><span class="first-txt">现价：¥{{item.platform_price}}</span><span v-if="item.earn_money" class="earn">(赚￥{{item.earn_money}})</span></p>
@@ -96,7 +96,6 @@
       .item-left
         width: 18.666vw
         height: @width
-        background: #ddd
         margin-right: 10px
         position: relative
         .left-cover
