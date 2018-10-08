@@ -7,14 +7,14 @@
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + selectTab*50 + '%,0)'">
         <div class="container-item">
-          <scroll ref="scroll0"
-                  :data="dataArray0"
-                  :pullUpLoad="pullUpLoadObj0"
+          <scroll ref="scroll"
+                  :data="dataArray"
+                  :pullUpLoad="pullUpLoadObj"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore0"
+                  :showNoMore="showNoMore"
                   v-if="selectTab === 0">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
+              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
                 <div class="time-down">
                   <div class="time-box">
                     <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
@@ -30,20 +30,20 @@
                 </activity-item>
               </div>
             </div>
-            <div class="null-data"  v-if="loaded && dataArray0.length === 0">
+            <div class="null-data"  v-if="loaded && dataArray.length === 0">
               <exception errType="nodata"></exception>
             </div>
           </scroll>
         </div>
         <div class="container-item">
-          <scroll ref="scroll1"
-                  :data="dataArray1"
-                  :pullUpLoad="pullUpLoadObj1"
+          <scroll ref="scroll"
+                  :data="dataArray"
+                  :pullUpLoad="pullUpLoadObj"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore1"
+                  :showNoMore="showNoMore"
                   v-if="selectTab === 1">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
+              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
                 <div class="time-down">
                   <div class="time-box">
                     <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
@@ -59,7 +59,7 @@
                 </activity-item>
               </div>
             </div>
-            <div class="null-data"  v-if="loaded && dataArray1.length === 0">
+            <div class="null-data"  v-if="loaded && dataArray.length === 0">
               <exception errType="nodata"></exception>
             </div>
           </scroll>
@@ -99,17 +99,12 @@
     data () {
       return {
         tabList: TABS,
-        dataArray0: [],
-        dataArray1: [],
+        dataArray: [],
         selectTab: 0,
-        pullUpLoad0: true,
-        pullUpLoadThreshold0: 0,
-        showNoMore0: false,
-        page0: 1,
-        pullUpLoad1: true,
-        pullUpLoadThreshold1: 0,
-        showNoMore1: false,
-        page1: 1,
+        pullUpLoad: true,
+        pullUpLoadThreshold: 0,
+        showNoMore: false,
+        page: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         loaded: false,
@@ -136,13 +131,13 @@
         this.getActivityList()
       },
       _defaultData() {
-        this[`page${this.selectTab}`] = 1
-        this[`showNoMore${this.selectTab}`] = false
-        this[`dataArray${this.selectTab}`] = []
+        this.page = 1
+        this.showNoMore = false
+        this.dataArray = []
       },
       _defaultArray() {
         for (let i = 0; i < 2; i++) {
-          this['dataArray' + i] = this['dataArray' + i].map((item) => {
+          this.dataArray = this.dataArray.map((item) => {
             item.showEdit = false
             return item
           })
@@ -163,33 +158,33 @@
             }
             this.tabList[0].num = res.wait_online_count
             this.tabList[1].num = res.online_count
-            this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
-            if (this[`dataArray${this.selectTab}`].length === 0) { // 无数据时，上拉不现实文字
-              this[`pullUpLoad${this.selectTab}`] = false
+            this.dataArray = this.dataArray.concat(res.data)
+            if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
+              this.pullUpLoad = false
             } else {
-              this[`pullUpLoad${this.selectTab}`] = true
+              this.pullUpLoad = true
             }
             this._endTimePlay()
             if (res.data.length < LIMIT) {
-              this[`showNoMore${this.selectTab}`] = true
+              this.showNoMore = true
             }
             setTimeout(() => {
               if (page === 1) {
-                this.$refs[`scroll${this.selectTab}`].forceUpdate()
-                this.$refs[`scroll${this.selectTab}`].scrollTo(0, 0, 0, ease[this.scrollToEasing])
+                this.$refs.scroll.forceUpdate()
+                this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
               } else {
-                this.$refs[`scroll${this.selectTab}`].forceUpdate()
+                this.$refs.scroll.forceUpdate()
               }
             }, 20)
           })
       },
       onPullingUp() {
-        if (this[`showNoMore${this.selectTab}`]) {
-          this.$refs[`scroll${this.selectTab}`].forceUpdate()
+        if (this.showNoMore) {
+          this.$refs.scroll.forceUpdate()
           return
         }
-        this[`page${this.selectTab}`]++
-        this.getActivityList(this[`page${this.selectTab}`])
+        this.page++
+        this.getActivityList(this.page)
       },
       refresh() {
         this._defaultData()
@@ -197,7 +192,7 @@
         this.getActivityList()
       },
       showEditor(item) { // 点击右边小按钮
-        this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
+        this.dataArray = this.dataArray.map((data) => {
           if (+item.id === +data.id) {
             data.showEdit = !data.showEdit
           } else {
@@ -207,7 +202,7 @@
         })
       },
       itemDown(item) { // 点击下架按钮
-        this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
+        this.dataArray = this.dataArray.map((data) => {
           if (+item.id === +data.id) {
             data.showEdit = !data.showEdit
           } else {
@@ -229,27 +224,27 @@
                 return
               }
               this.$refs.toast.show('下架成功')
-              this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].filter((data) => {
+              this.dataArray = this.dataArray.filter((data) => {
                 return +this.downItem.id !== +data.id
               })
               this.tabList[this.selectTab].num--
-              if (this[`dataArray${this.selectTab}`].length === 0) { // 无数据时，上拉不现实文字
-                this[`pullUpLoad${this.selectTab}`] = false
+              if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
+                this.pullUpLoad = false
               }
               setTimeout(() => {
-                this.$refs[`scroll${this.selectTab}`].forceUpdate()
+                this.$refs.scroll.forceUpdate()
               }, 20)
             })
         }
       },
       _endTimePlay() {
         clearInterval(this.timer)
-        this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((item) => {
+        this.dataArray = this.dataArray.map((item) => {
           item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
           return item
         })
         this.timer = setInterval(() => {
-          this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((item, index) => {
+          this.dataArray = this.dataArray.map((item, index) => {
             item.current_timestamp++
             item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
             return item
@@ -290,21 +285,15 @@
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs[`scroll${this.selectTab}`].destroy()
-          this.$refs[`scroll${this.selectTab}`].initScroll()
+          this.$refs.scroll.destroy()
+          this.$refs.scroll.initScroll()
         })
       }
     },
     computed: {
-      pullUpLoadObj0: function () {
-        return this.pullUpLoad0 ? {
-          threshold: parseInt(this.pullUpLoadThreshold0),
-          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
-        } : false
-      },
-      pullUpLoadObj1: function () {
-        return this.pullUpLoad1 ? {
-          threshold: parseInt(this.pullUpLoadThreshold1),
+      pullUpLoadObj: function () {
+        return this.pullUpLoad ? {
+          threshold: parseInt(this.pullUpLoadThreshold),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
       }

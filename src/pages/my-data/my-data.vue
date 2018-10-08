@@ -602,7 +602,7 @@
         }
       },
       getAllDataObj(time) {
-        Echart.getAllData(time, this.userInfo.merchant_id, this.userInfo.id).then(res => {
+        Echart.getAllData(time).then(res => {
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {

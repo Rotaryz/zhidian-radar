@@ -5,7 +5,7 @@
       <div class="main-con" v-if="card">
         <img :src="card.avatar" alt="" class="avatar-img">
         <div class="title">{{card.name}}</div>
-        <img :src="card.qrcode" alt="" class="avatar-card">
+        <img src="./weixin.jpg" alt="" class="avatar-card">
         <!--<div class="qrcode-text">长按识别二维码进店逛逛</div>-->
       </div>
     </div>
