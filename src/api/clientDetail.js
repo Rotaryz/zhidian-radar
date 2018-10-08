@@ -7,7 +7,7 @@ export default {
    * @returns {*}
    */
   getClientDetail(id) {
-    let url = `api/employee/employee-customer-flow/${id}`
+    let url = `/api/employee/customers/${id}`
     return request.get(url)
   },
   /**
@@ -23,7 +23,7 @@ export default {
    * @returns {*}
    */
   getClientId(id) {
-    let url = `api/employee/employee-customer/${id}`
+    let url = `/api/employee/customers/${id}`
     return request.get(url)
   },
   /**

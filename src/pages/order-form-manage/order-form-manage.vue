@@ -322,7 +322,7 @@
         .clear
           width: 15px
           height: 15px
-          bg-image('./clear')
+          bg-image('./delete')
           background-size: cover
           background-position: center
       .short-box

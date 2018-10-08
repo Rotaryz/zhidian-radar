@@ -2,7 +2,7 @@ import request from '../common/js/request'
 
 export default {
   /**
-   * 更新个人微信二维码
+   * 保存个人信息
    * @param data
    * @returns {*}
    */
@@ -10,6 +10,16 @@ export default {
     let url = '/api/employee/profile'
     return request.post(url, data)
   },
+  /**
+   * 获取个人信息
+   * @param data
+   * @returns {*}
+   */
+  getMineData (data) {
+    let url = '/api/employee/dashboard'
+    return request.get(url)
+  },
+
   /**
    * 更新个人微信二维码
    * @param data

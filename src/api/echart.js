@@ -32,7 +32,7 @@ export default {
    * @returns {*}
    */
   getAddLine(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/ws-new-customer-sum-chart'
+    let url = '/api/employee/analysis/new-customer-sum-chart'
     let data = {
       customer_id,
       merchant_id,

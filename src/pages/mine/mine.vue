@@ -20,15 +20,15 @@
             <h4 class="title">店员数据概览</h4>
             <div class="main">
               <div class="item-box">
-                <div class="number">{{allDatas.customer_sum || 0}}</div>
+                <div class="number">{{allDatas.customer_total || 0}}</div>
                 <div class="text">客户总数</div>
               </div>
               <div class="item-box">
-                <div class="number">{{allDatas.order_sum || 0}}</div>
+                <div class="number">{{allDatas.order_total || 0}}</div>
                 <div class="text">订单总数</div>
               </div>
               <div class="item-box">
-                <div class="number">{{allDatas.order_finish_sum || 0}}</div>
+                <div class="number">{{allDatas.success_order_total || 0}}</div>
                 <div class="text">成交总数</div>
               </div>
             </div>
@@ -43,7 +43,7 @@
               <span class="text">{{item.title}}</span>
             </div>
             <span v-if="item.src" class="icon"></span>
-            <span v-else class="total-price">{{totalPrice}}</span>
+            <span v-else class="total-price">{{allDatas.income}}</span>
           </div>
         </li>
       </ul>
@@ -55,7 +55,7 @@
 
 <script>
   import Scroll from 'components/scroll/scroll'
-  import { Echart } from 'api'
+  import { Mine } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import storage from 'storage-controller'
   import {mapGetters} from 'vuex'
@@ -78,14 +78,13 @@
         mine: {},
         allDatas: {},
         show: true,
-        count: 0,
-        totalPrice: '200.00'
+        count: 0
       }
     },
     created () {
       this.$emit('tabChange', '我的')
       this.getMine()
-      this.getAllDataObj('all')
+      this.getMineData()
     },
     methods: {
       toShareCard() {
@@ -109,8 +108,8 @@
       getMine () {
         this.mine = storage.get('info')
       },
-      getAllDataObj(time) {
-        Echart.getAllData(time).then(res => {
+      getMineData(time) {
+        Mine.getMineData(time).then(res => {
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {
