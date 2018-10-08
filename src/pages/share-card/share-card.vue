@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  // import { Business } from 'api'
+  import { Business } from 'api'
   import { mapGetters } from 'vuex'
 
   export default {
@@ -25,11 +25,11 @@
       }
     },
     created() {
-      // Business.Myshop({is_hyaline: 1}).then((res) => {
-      //   if (res.data) {
-      //     this.card = res.data
-      //   }
-      // })
+      Business.Myshop({is_hyaline: 1}).then((res) => {
+        if (res.data) {
+          this.card = res.data
+        }
+      })
       if (this.ios) {
         setTimeout(() => {
           this.show = true
