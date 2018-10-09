@@ -11,7 +11,7 @@
           <p class="list"><span class="type">业务类型</span><span class="contxt">{{data.order_type}}</span></p>
           <p class="list"><span class="type">创建时间</span><span class="contxt">{{data.create_at}}</span></p>
           <p class="list"><span class="type">支付时间</span><span class="contxt">{{data.pay_at}}</span></p>
-          <p class="list"><span class="type">商户订单号</span><span class="contxt">{{data.transaction_id}}</span></p>
+          <p class="list"><span class="type">商户订单号</span><span class="contxt">{{data.order_sn}}</span></p>
         </section>
         <section class="content">
           <p class="list border"><span class="type">售卖方</span><span class="contxt">{{data.employee_name}}</span></p>
@@ -51,13 +51,13 @@
       return {
         loaded: false,
         loading: false,
-        shopId: '',
+        id: '',
         arr: [],
         data: []
       }
     },
     created() {
-      this.shopId = this.$route.query.id
+      this.id = this.$route.query.id
       this.orderFormDetail()
     },
     methods: {
@@ -65,7 +65,7 @@
         if (!this.loaded) {
           this.loading = true
         }
-        OrderForm.orderFormDetail(this.shopId)
+        OrderForm.orderFormDetail(this.id)
           .then((res) => {
             this.loaded = true
             this.loading = false

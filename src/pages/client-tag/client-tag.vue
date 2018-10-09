@@ -70,10 +70,10 @@
         })
       })
       const data = {
-        data: arr,
-        customer_id: this.currentId
+        data: arr
+        // customer_id: this.currentId
       }
-      Client.updateTag(data).then(res => {
+      Client.updateTag(data, this.currentId).then(res => {
         if (res.error === ERR_OK) {
           this.$emit('refresh')
         }

@@ -52,8 +52,8 @@ export default {
     return request.get(url, data, loading)
   },
   // 更新标签
-  updateTag(data, loading) {
-    const url = `/api/employee/label-relation`
+  updateTag(data, customerId, loading) {
+    const url = `/api/employee/customers/${customerId}/labels`
     return request.put(url, data, loading)
   }
 }

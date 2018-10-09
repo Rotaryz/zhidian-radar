@@ -45,7 +45,7 @@ export default {
    * @returns {*}
    */
   getSuccess(merchant_id = 0, employee_id = 0, customer_id = 0) {
-    let url = 'api/employee/ws-close-deal-rate-chart'
+    let url = '/api/employee/analysis/close-deal-rate-chart'
     let data = {
       customer_id,
       merchant_id,

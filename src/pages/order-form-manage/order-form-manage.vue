@@ -30,7 +30,7 @@
                 <div class="order-num">下单号码: {{item.customer_mobile}}</div>
                 <div class="bottom">
                   <div class="form-num">订单编号: {{item.order_sn}}</div>
-                  <div class="go-detail" @click="toOrderDetail(item.shop_id)">查看详情</div>
+                  <div class="go-detail" @click="toOrderDetail(item.id)">查看详情</div>
                 </div>
               </div>
             </div>
@@ -55,7 +55,7 @@
                 <div class="order-num">下单号码: {{item.customer_mobile}}</div>
                 <div class="bottom">
                   <div class="form-num">订单编号: {{item.order_sn}}</div>
-                  <div class="go-detail" @click="toOrderDetail(item.shop_id)">查看详情</div>
+                  <div class="go-detail" @click="toOrderDetail(item.id)">查看详情</div>
                 </div>
               </div>
             </div>
@@ -80,7 +80,7 @@
                 <div class="order-num">下单号码: {{item.customer_mobile}}</div>
                 <div class="bottom">
                   <div class="form-num">订单编号: {{item.order_sn}}</div>
-                  <div class="go-detail" @click="toOrderDetail(item.shop_id)">查看详情</div>
+                  <div class="go-detail" @click="toOrderDetail(item.id)">查看详情</div>
                 </div>
               </div>
             </div>
@@ -105,7 +105,7 @@
                 <div class="order-num">下单号码: {{item.customer_mobile}}</div>
                 <div class="bottom">
                   <div class="form-num">订单编号: {{item.order_sn}}</div>
-                  <div class="go-detail" @click="toOrderDetail(item.shop_id)">查看详情</div>
+                  <div class="go-detail" @click="toOrderDetail(item.id)">查看详情</div>
                 </div>
               </div>
             </div>
@@ -238,8 +238,8 @@
         this.page++
         this.orderFormList(this.page)
       },
-      toOrderDetail(shopId) {
-        this.$router.push({path: '/mine/order-form-manage/order-detail', query: {id: shopId}})
+      toOrderDetail(id) {
+        this.$router.push({path: '/mine/order-form-manage/order-detail', query: {id}})
       },
       rebuildScroll() {
         this.$nextTick(() => {

@@ -315,6 +315,7 @@
     created() {
       this.id = this.$route.query.id
       this.pageUrl = this.$route.query.pageUrl
+      console.log(this.pageUrl, this.$route.query)
       this.getClientId(this.id)
       this.getCusomerTagList()
       this.getActionLineData()
@@ -341,8 +342,8 @@
       getCusomerTagList() {
         Client.getCusomerTagList({customer_id: this.id}).then(res => {
           if (res.error === ERR_OK) {
-            let arr = res.data.slice(0, 3)
-            this.labelList = arr
+            // let arr = res.data.slice(0, 3)
+            // this.labelList = arr
           }
         })
       },

@@ -5,7 +5,7 @@
       <div class="main-con" v-if="card">
         <img :src="card.avatar" alt="" class="avatar-img">
         <div class="title">{{card.name}}</div>
-        <img src="./weixin.jpg" alt="" class="avatar-card">
+        <img :src="card.qrcode" alt="" class="avatar-card">
         <!--<div class="qrcode-text">长按识别二维码进店逛逛</div>-->
       </div>
     </div>
@@ -15,6 +15,7 @@
 <script>
   import { Business } from 'api'
   import { mapGetters } from 'vuex'
+  import storage from 'storage-controller'
 
   export default {
     name: 'share-card',
@@ -25,9 +26,11 @@
       }
     },
     created() {
-      Business.Myshop({is_hyaline: 1}).then((res) => {
+      this.card.avatar = storage.get('info').avatar
+      this.card.name = storage.get('info').name
+      Business.Myshop({is_hyaline: 1, path: 'pages/guide'}).then((res) => {
         if (res.data) {
-          this.card = res.data
+          this.card.qrcode = res.data.image_url
         }
       })
       if (this.ios) {
