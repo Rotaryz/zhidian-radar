@@ -201,7 +201,7 @@
         let data = {
           page,
           keyword: this.searchTxt,
-          trading_status: this.selectTab === 0 ? '' : this.selectTab - 1
+          trading_status: this.selectTab === 0 ? 'all' : this.selectTab - 1
         }
         OrderForm.orderFormList(data)
           .then((res) => {

@@ -28,7 +28,7 @@
     created() {
       this.card.avatar = storage.get('info').avatar
       this.card.name = storage.get('info').name
-      Business.Myshop({is_hyaline: 1, path: 'pages/guide'}).then((res) => {
+      Business.Myshop({is_hyaline: 1, path: '/pages/guide'}).then((res) => {
         if (res.data) {
           this.card.qrcode = res.data.image_url
         }

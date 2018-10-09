@@ -34,7 +34,7 @@
                   <div class="label-box">
                     <div class="label-content">
                       <div class="label active" v-for="(item, index) in labelList" v-bind:key="index"
-                           @click="toClientTag">{{item.label_name}}
+                           @click="toClientTag">{{item.name}}
                       </div>
                       <div class="label" v-if="labelList.length<3" @click="toClientTag">添加标签</div>
                     </div>
@@ -87,53 +87,53 @@
                   <img :src="item.image_url" class="msgs-left">
                   <div class="msgs-right">
                     <div class="msgs-container">
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10001">{{item.nickname}}通过扫描他人分享的小店海报<span class="green">访问</span>了<span class="green">你的小店</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10002">{{item.nickname}}通过点击他人分享的小店链接<span class="green">访问</span>了<span class="green">你的小店</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10003">{{item.nickname}}第{{item.count_sum | titleCut}}次<span class="green">查看</span>了<span class="green">你的小店</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10004">{{item.nickname}}<span class="green">转发</span>了你的<span class="green">小店</span>，你的人脉圈正在裂变</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10005">{{item.nickname}}<span class="green">保存</span>了你的<span class="green">小店海报</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10006">{{item.nickname}}给你<span class="green">点了</span><span class="green">赞</span>，看来认可你</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 10007">{{item.nickname}}<span class="green">取消</span>给你点的<span class="green">赞</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30001">{{item.nickname}}给拼团活动<span class="green">{{item.title | titleCut}}</span>点了<span class="green">赞</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30002">{{item.nickname}}正在转发你的拼团活动<span class="green">{{item.title | titleCut}}</span>，您的活动正在裂变</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30003">{{item.nickname}}<span class="green">保存</span>了你的拼团活动<span class="green">{{item.title | titleCut}}</span>海报</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30004">{{item.nickname}}通过扫描他人分享的拼团海报<span class="green">访问</span>了你的拼团活动<span class="green">{{item.title | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30005">{{item.nickname}}通过点击他人分享的拼团链接<span class="green">访问</span>了你的拼团活动<span class="green">{{item.title | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30006">{{item.nickname}}正在<span class="green">查看</span>拼团活动<span class="green">{{item.title  | titleCut}}</span>，可能对该活动感兴趣</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30007">{{item.nickname}}正在<span class="green">发起</span>拼团活动<span class="green">{{item.title  | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30008">{{item.nickname}}正在<span class="green">参加</span>拼团活动<span class="green">{{item.title  | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30009">{{item.nickname}}提交了拼团活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30010">{{item.nickname}}提交了拼团活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30011">{{item.nickname}}正在<span class="green">邀请</span>好友来参加拼团活动<span class="green">{{item.title  | titleCut}}</span>您的活动正在裂变</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30012">{{item.nickname}}通过他人分享的拼团链接，正在参加拼团活动<span class="green">{{item.title  | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30013">{{item.nickname}}通过扫描他人分享的砍价海报<span class="green">访问</span>了你的砍价活动<span class="green">{{item.title | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30014">{{item.nickname}}通过点击他人分享的砍价链接<span class="green">访问</span>了你的砍价活动<span class="green">{{item.title | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30015">{{item.nickname}}正在<span class="green">查看</span>砍价活动<span class="green">{{item.title  | titleCut}}</span>，可能对该活动感兴趣</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30016">{{item.nickname}}正在<span class="green">转发</span>你的砍价活动<span class="green">{{item.title  | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30017">{{item.nickname}}<span class="green">保存</span>你的砍价活动海报</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30018">{{item.nickname}}给砍价活动<span class="green">{{item.title  | titleCut}}</span>点了<span class="green">赞</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30019">{{item.nickname}}正在<span class="green">参与</span>砍价活动<span class="green">{{item.title  | titleCut}}</span>，成功砍掉<span class="green">{{item.total}}元</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30020">{{item.nickname}}<span class="green">邀请</span>好友来参加砍价活动<span class="green">{{item.title  | titleCut}}</span>您的活动正在裂变</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30021">{{item.nickname}}正在<span class="green">购买</span>砍价活动<span class="green">{{item.title  | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30022">{{item.nickname}}提交了砍价活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total | titleCut}}元</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 30023">{{item.nickname}}提交了砍价活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total | titleCut}}元</span>，并完成了支付</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 40001">{{item.nickname}}通过扫描他人分享的服务海报<span class="green">查看</span>了<span class="green">你的服务</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 40002">{{item.nickname}}通过点击他人分享的服务链接<span class="green">查看</span>了<span class="green">你的服务</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 40003">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了你的服务<span class="green">{{item.title  | titleCut}}</span>，请把握商机</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 40004">{{item.nickname}}<span class="green">转发</span>了你的服务<span class="green">{{item.title  | titleCut}}</span>，你的服务正在裂变</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 40005">{{item.nickname}}<span class="green">保存</span>了你的服务<span class="green">{{item.title  | titleCut}}</span>海报</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 40006">{{item.nickname}}提交了服务<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 40007">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了你的<span class="green">品牌故事</span>，请把握商机</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 50001">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了你的<span class="green">动态</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 50002">{{item.nickname}}通过扫描他人分享的动态海报<span class="green">访问</span>了你的动态<span class="green">{{item.title | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 50003">{{item.nickname}}通过点击他人分享的动态链接<span class="green">访问</span>了你的动态<span class="green">{{item.title | titleCut}}</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 50004">{{item.nickname}}<span class="green">评论</span>了你的<span class="green">动态</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 50005">{{item.nickname}}给你的动态<span class="green">{{item.title  | titleCut}}</span>点了<span class="green">赞</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60001">{{item.nickname}}<span class="green">拨打</span>了你的<span class="green">手机</span>，请记录跟进内容</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60002">{{item.nickname}}正在对砍价活动<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60003">{{item.nickname}}正在对拼团活动<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60004">{{item.nickname}}正在对服务<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
                     </div>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 10001">{{item.nickname}}通过扫描他人分享的小店海报<span class="green">访问</span>了<span class="green">你的小店</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 10002">{{item.nickname}}通过点击他人分享的小店链接<span class="green">访问</span>了<span class="green">你的小店</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 10003">{{item.nickname}}第{{item.count_sum | titleCut}}次<span class="green">查看</span>了<span class="green">你的小店</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 10004">{{item.nickname}}<span class="green">转发</span>了你的<span class="green">小店</span>，你的人脉圈正在裂变</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 10005">{{item.nickname}}<span class="green">保存</span>了你的<span class="green">小店海报</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 10006">{{item.nickname}}给你<span class="green">点了</span><span class="green">赞</span>，看来认可你</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 10007">{{item.nickname}}<span class="green">取消</span>给你点的<span class="green">赞</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30001">{{item.nickname}}给拼团活动<span class="green">{{item.title | titleCut}}</span>点了<span class="green">赞</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30002">{{item.nickname}}正在转发你的拼团活动<span class="green">{{item.title | titleCut}}</span>，您的活动正在裂变</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30003">{{item.nickname}}<span class="green">保存</span>了你的拼团活动<span class="green">{{item.title | titleCut}}</span>海报</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30004">{{item.nickname}}通过扫描他人分享的拼团海报<span class="green">访问</span>了你的拼团活动<span class="green">{{item.title | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30005">{{item.nickname}}通过点击他人分享的拼团链接<span class="green">访问</span>了你的拼团活动<span class="green">{{item.title | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30006">{{item.nickname}}正在<span class="green">查看</span>拼团活动<span class="green">{{item.title  | titleCut}}</span>，可能对该活动感兴趣</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30007">{{item.nickname}}正在<span class="green">发起</span>拼团活动<span class="green">{{item.title  | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30008">{{item.nickname}}正在<span class="green">参加</span>拼团活动<span class="green">{{item.title  | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30009">{{item.nickname}}提交了拼团活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30010">{{item.nickname}}提交了拼团活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30011">{{item.nickname}}正在<span class="green">邀请</span>好友来参加拼团活动<span class="green">{{item.title  | titleCut}}</span>您的活动正在裂变</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30012">{{item.nickname}}通过他人分享的拼团链接，正在参加拼团活动<span class="green">{{item.title  | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30013">{{item.nickname}}通过扫描他人分享的砍价海报<span class="green">访问</span>了你的砍价活动<span class="green">{{item.title | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30014">{{item.nickname}}通过点击他人分享的砍价链接<span class="green">访问</span>了你的砍价活动<span class="green">{{item.title | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30015">{{item.nickname}}正在<span class="green">查看</span>砍价活动<span class="green">{{item.title  | titleCut}}</span>，可能对该活动感兴趣</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30016">{{item.nickname}}正在<span class="green">转发</span>你的砍价活动<span class="green">{{item.title  | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30017">{{item.nickname}}<span class="green">保存</span>你的砍价活动海报</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30018">{{item.nickname}}给砍价活动<span class="green">{{item.title  | titleCut}}</span>点了<span class="green">赞</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30019">{{item.nickname}}正在<span class="green">参与</span>砍价活动<span class="green">{{item.title  | titleCut}}</span>，成功砍掉<span class="green">{{item.total}}元</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30020">{{item.nickname}}<span class="green">邀请</span>好友来参加砍价活动<span class="green">{{item.title  | titleCut}}</span>您的活动正在裂变</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30021">{{item.nickname}}正在<span class="green">购买</span>砍价活动<span class="green">{{item.title  | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30022">{{item.nickname}}提交了砍价活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total | titleCut}}元</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 30023">{{item.nickname}}提交了砍价活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total | titleCut}}元</span>，并完成了支付</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 40001">{{item.nickname}}通过扫描他人分享的服务海报<span class="green">查看</span>了<span class="green">你的服务</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 40002">{{item.nickname}}通过点击他人分享的服务链接<span class="green">查看</span>了<span class="green">你的服务</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 40003">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了你的服务<span class="green">{{item.title  | titleCut}}</span>，请把握商机</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 40004">{{item.nickname}}<span class="green">转发</span>了你的服务<span class="green">{{item.title  | titleCut}}</span>，你的服务正在裂变</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 40005">{{item.nickname}}<span class="green">保存</span>了你的服务<span class="green">{{item.title  | titleCut}}</span>海报</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 40006">{{item.nickname}}提交了服务<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 40007">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了你的<span class="green">品牌故事</span>，请把握商机</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 50001">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了你的<span class="green">动态</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 50002">{{item.nickname}}通过扫描他人分享的动态海报<span class="green">访问</span>了你的动态<span class="green">{{item.title | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 50003">{{item.nickname}}通过点击他人分享的动态链接<span class="green">访问</span>了你的动态<span class="green">{{item.title | titleCut}}</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 50004">{{item.nickname}}<span class="green">评论</span>了你的<span class="green">动态</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 50005">{{item.nickname}}给你的动态<span class="green">{{item.title  | titleCut}}</span>点了<span class="green">赞</span></p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 60001">{{item.nickname}}<span class="green">拨打</span>了你的<span class="green">手机</span>，请记录跟进内容</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 60002">{{item.nickname}}正在对砍价活动<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 60003">{{item.nickname}}正在对拼团活动<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
-                    <p class="msgs-p" v-show="item.event_no * 1 === 60004">{{item.nickname}}正在对服务<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
                     <!--<img src="./icon-pressed@2x.png" class="msgs-rt">-->
                   </div>
                 </div>
@@ -340,10 +340,10 @@
         }, 300)
       },
       getCusomerTagList() {
-        Client.getCusomerTagList({customer_id: this.id}).then(res => {
+        Client.getCusomerTagList(this.id).then(res => {
           if (res.error === ERR_OK) {
-            // let arr = res.data.slice(0, 3)
-            // this.labelList = arr
+            let arr = res.data.labels.slice(0, 3)
+            this.labelList = arr
           }
         })
       },
@@ -1371,7 +1371,7 @@
           font-size: $font-size-medium
           font-family: $font-family-medium
           .green
-            color: $color-text-56
+            color: $color-56BA15
       .msgs-rt
         width: 7.5px
         height: 11.5px
