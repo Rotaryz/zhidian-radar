@@ -19,6 +19,15 @@ export default {
     let url = '/api/employee/dashboard'
     return request.get(url)
   },
+  /**
+   * 获取我的信息
+   * @param data
+   * @returns {*}
+   */
+  getMyData () {
+    let url = '/api/employee/profile'
+    return request.get(url)
+  },
 
   /**
    * 更新个人微信二维码
