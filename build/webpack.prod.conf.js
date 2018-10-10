@@ -119,20 +119,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       },
       {
-        from: path.resolve(__dirname, '../static/WW_verify_cOtsA4ytEOrOYroq.txt'),
-        to: path.resolve(__dirname, '../dist')
-      }
-    ]),
-
-    // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
-      },
-      {
-        from: path.resolve(__dirname, '../static/MP_verify_0tgyoiM2bTCdNnMx.txt'),
+        from: path.resolve(__dirname, '../static/oauth'),
         to: path.resolve(__dirname, '../dist')
       }
     ])
