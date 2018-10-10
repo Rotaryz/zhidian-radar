@@ -207,7 +207,7 @@
             timestamp: res.timestamp, // 必填，生成签名的时间戳
             nonceStr: res.noncestr, // 必填，生成签名的随机串
             signature: res.signature, // 必填，签名，见附录1
-            jsApiList: ['previewImage', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            jsApiList: ['previewImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           })
         }
       })
