@@ -2,11 +2,11 @@ import request from '../common/js/request'
 
 export default {
   /**
-   * 商品列表（推荐/全部）
+   * 获取微信JSSDK配置
    * @returns {*}
    */
   jssdkConfig (data) {
-    let url = 'api/employee/global/jssdk-config'
+    let url = '/api/wechat/jssdk'
     return request.get(url, data)
   }
 }
