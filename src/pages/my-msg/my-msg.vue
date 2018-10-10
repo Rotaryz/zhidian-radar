@@ -25,6 +25,7 @@
       }
     },
     created() {
+      this._getMine()
     },
     methods: {
       saveMsg() {
@@ -55,6 +56,16 @@
               this.$router.back()
             }, 1000)
           })
+      },
+      _getMine () {
+        Mine.getMyData().then((res) => {
+          if (res.error === ERR_OK) {
+            this.mobile = res.data.mobile
+            this.weixin_no = res.data.weixin_no
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
       }
     },
     computed: {
