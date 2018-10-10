@@ -1,5 +1,5 @@
 <template>
-  <div class="service-item">
+  <div class="activity-item">
     <div class="item-content">
       <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
         <!--<div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>-->
@@ -12,9 +12,9 @@
             <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span><span v-if="tabIdx != 0">销量：{{item.sale_count}}</span></p>
           </div>
           <div class="down-right">
-            <div class="down-right-icon"  v-if="page === 'myService'" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
-            <div class="down-right-icon"  v-if="item[`${page === 'shelf' && 'status'}`] * 1 === 0" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
-            <div class="down-right-text" v-if="item[`${page === 'shelf' && 'status'}`] *1 === 1">已上架</div>
+            <div class="down-right-icon"  v-if="page === 'activity'" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
+            <div class="down-right-icon"  v-if="item[`${page === 'team' && 'status'}`] * 1 === 0" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
+            <div class="down-right-text" v-if="item[`${page === 'team' && 'status'}`] *1 === 1">已上架</div>
           </div>
         </div>
       </div>
@@ -25,11 +25,11 @@
               <!--<div class="item-icon edit"></div>-->
               <!--<div class="item-txt">编辑</div>-->
             <!--</div>-->
-            <div class="editor-item" v-if="page === 'myService'" @click.stop="itemDown(item)">
+            <div class="editor-item" v-if="page === 'activity'" @click.stop="itemDown(item)">
               <div class="item-icon down"></div>
               <div class="item-txt">下架</div>
             </div>
-            <div class="editor-item" v-if="page === 'shelf'" @click.stop="itemUp(item)">
+            <div class="editor-item" v-if="page === 'team'" @click.stop="itemUp(item)">
               <div class="item-icon up"></div>
               <div class="item-txt">上架</div>
             </div>
@@ -76,17 +76,11 @@
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
-  .service-item
+  .activity-item
     width: 100%
-    padding-top: 29%
-    height: 0
     background: $color-white
-    border-1px($color-col-line, 2px)
     position: relative
     .item-content
-      position: absolute
-      left: 0
-      top: 0
       width: 100%
       height: 100%
       box-sizing: border-box

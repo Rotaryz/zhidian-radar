@@ -3,8 +3,8 @@
     <header>
       <search @toNav="toSearch"></search>
       <dl class="tab-wrapper">
-        <dt class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></dt>
-        <dd class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.title}}({{item.number}})</dd>
+        <!--<dt class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></dt>-->
+        <dd class="tab" v-if="index === 0" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.title}}({{item.number}})</dd>
       </dl>
       <div class="f3"></div>
     </header>
@@ -25,9 +25,9 @@
                 :key="index"
                 @click="check(item)"
             >
-              <slide-view :useType="1" @grouping="groupingHandler" :item="item">
+              <!--<slide-view :useType="1" @grouping="groupingHandler" :item="item">-->
                 <user-card :userInfo="item" slot="content" :useType="checkedGroup.orderBy"></user-card>
-              </slide-view>
+              <!--</slide-view>-->
             </li>
           </ul>
         </scroll>
@@ -134,7 +134,7 @@
     },
     created() {
       this.$emit('tabChange', 3)
-      this.getGroupList()
+      // this.getGroupList()
       this.getCustomerList()
     },
     beforeDestroy() {
@@ -158,7 +158,7 @@
         this.isAll = false
         this.page = 1
         this.limit = LIMIT
-        this.getGroupList()
+        // this.getGroupList()
         this.getCustomerList()
       },
       toSearch() {
@@ -178,6 +178,7 @@
         })
       },
       getCustomerList() {
+        console.log('getCust')
         const data = {order_by: this.checkedGroup.orderBy, page: 1, limit: LIMIT}
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
@@ -227,7 +228,7 @@
         Client.delGroup(data).then(res => {
           if (res.error === ERR_OK) {
           } else {
-            this._getGroupList()
+            // this._getGroupList()
             this.$refs.toast.show(res.message)
           }
         })

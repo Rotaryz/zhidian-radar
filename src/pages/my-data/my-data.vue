@@ -12,27 +12,27 @@
               </div>
               <div class="data-list">
                 <div class="list-box">
-                  <div class="number">{{allDatas.customer_sum}}</div>
+                  <div class="number">{{allDatas.customer_total}}</div>
                   <div class="text">客户总数</div>
                 </div>
                 <div class="list-box">
-                  <div class="number">{{allDatas.order_sum}}</div>
+                  <div class="number">{{allDatas.order_total}}</div>
                   <div class="text">订单总数</div>
                 </div>
                 <div class="list-box">
-                  <div class="number">{{allDatas.order_finish_sum}}</div>
+                  <div class="number">{{allDatas.success_order_total}}</div>
                   <div class="text">成交总数</div>
                 </div>
                 <div class="list-box">
-                  <div class="number">{{allDatas.goods_visits_sum}}</div>
+                  <div class="number">{{allDatas.goods_visits_total}}</div>
                   <div class="text">产品访问数</div>
                 </div>
                 <div class="list-box">
-                  <div class="number">{{allDatas.activity_visits_sum}}</div>
+                  <div class="number">{{allDatas.activity_visits_total}}</div>
                   <div class="text">活动访问数</div>
                 </div>
                 <div class="list-box">
-                  <div class="number">{{allDatas.live_logs_sum}}</div>
+                  <div class="number">{{allDatas.live_logs_total}}</div>
                   <div class="text">动态访问数</div>
                 </div>
               </div>
@@ -602,7 +602,7 @@
         }
       },
       getAllDataObj(time) {
-        Echart.getAllData(time, this.userInfo.merchant_id, this.userInfo.id).then(res => {
+        Echart.getAllData(time).then(res => {
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {

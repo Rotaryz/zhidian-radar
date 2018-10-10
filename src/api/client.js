@@ -13,7 +13,7 @@ export default {
   },
   // 获取客户列表
   getCustomerList(data, loading) {
-    const url = `/api/employee/employee-customer`
+    const url = `/api/employee/customers`
     return request.get(url, data, loading)
   },
   // 获取设置分组的客户列表
@@ -43,17 +43,17 @@ export default {
   },
   // 标签列表
   getTagList(data, loading) {
-    const url = `/api/employee/label`
+    const url = `/api/employee/labels`
     return request.get(url, data, loading)
   },
   // 用户标签列表
-  getCusomerTagList(data, loading) {
-    const url = `/api/employee/label-relation`
-    return request.get(url, data, loading)
+  getCusomerTagList(customerId, loading) {
+    const url = `api/employee/customers/${customerId}/summary`
+    return request.get(url, loading)
   },
   // 更新标签
-  updateTag(data, loading) {
-    const url = `/api/employee/label-relation`
-    return request.put(url, data, loading)
+  updateTag(data, customerId, loading) {
+    const url = `/api/employee/customers/${customerId}/labels`
+    return request.post(url, data, loading)
   }
 }

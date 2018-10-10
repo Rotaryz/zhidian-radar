@@ -7,7 +7,7 @@ export default {
    * @returns {*}
    */
   upLoadImage (data) {
-    let url = 'api/employee/images'
+    let url = '/api/employee/images'
     return request.post(url, data)
   }
 }

@@ -194,6 +194,9 @@
         if (this.flow.mobile.length !== 11) {
           this.$refs.toast.show('请输入手机号码为11位数')
           return
+        } else if (!/(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}/.test(this.flow.mobile)) {
+          this.$refs.toast.show('请输入正确的手机号')
+          return
         }
         ClientDetail.saveClientDetail(this.id, this.flow).then((res) => {
           if (res.error === ERR_OK) {

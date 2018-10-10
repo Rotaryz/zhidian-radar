@@ -1,13 +1,12 @@
 import request from '../common/js/request'
-import storage from 'storage-controller'
 
 export default {
   /**
-   * 获得用户详情
+   * 获得客户资料
    * @returns {*}
    */
   getClientDetail(id) {
-    let url = `api/employee/employee-customer-flow/${id}`
+    let url = `/api/employee/customers/${id}`
     return request.get(url)
   },
   /**
@@ -15,25 +14,24 @@ export default {
    * @returns {*}
    */
   saveClientDetail(id, data) {
-    let url = `api/employee/employee-customer/${id}`
+    let url = `/api/employee/customers/${id}`
     return request.put(url, data)
   },
   /**
    * 获取客户ID
    * @returns {*}
    */
-  getClientId(id) {
-    let url = `api/employee/employee-customer/${id}`
+  getClientId(customerId) {
+    let url = `/api/employee/customers/${customerId}/summary`
     return request.get(url)
   },
   /**
    * 跟进记录列表
    * @returns {*}
    */
-  getFlowList(customer_id = 0, flow_id = 0, page = 1, limit = 10) {
-    let url = `api/employee/follow-record`
+  getFlowList(customerId = 0, flow_id = 0, page = 1, limit = 10) {
+    let url = `/api/employee/customers/${customerId}/follows`
     let data = {
-      customer_id,
       flow_id,
       page,
       limit
@@ -44,10 +42,9 @@ export default {
    * 添加跟进记录
    * @returns {*}
    */
-  addFlowList(customer_id = 0, flow_id = 0, record) {
-    let url = `api/employee/follow-record`
+  addFlowList(customerId = 0, flow_id = 0, record) {
+    let url = `/api/employee/customers/${customerId}/follows`
     let data = {
-      customer_id,
       flow_id,
       record
     }
@@ -57,17 +54,13 @@ export default {
    * 行为记录列表
    * @returns {*}
    */
-  getActionList(customer_id = 0, from = 0, limit = 30, page = 0) {
-    const info = storage.get('info', {})
-    const employeeId = info.id
-    let url = `api/employee/ws-action-logs`
+  getActionList(customerId = 0, from = 0, limit = 30, page = 0) {
+    let url = `api/employee/customers/${customerId}/visits`
     let data = {
-      employee_id: employeeId,
-      customer_id,
       page,
       from,
       limit
     }
-    return request.post(url, data)
+    return request.get(url, data)
   }
 }

@@ -6,7 +6,7 @@
           <section class="info-box" v-for="(item,index) in dataArray" :key="index" v-if="dataArray.length">
             <div class="title">{{item.name}}</div>
             <ul class="content">
-              <li class="item-box" v-for="(dataItem,dataIndex) in item.data" :key="dataIndex" v-if="item.data">
+              <li class="item-box" v-for="(dataItem,dataIndex) in item.labels" :key="dataIndex" v-if="item.labels">
                 <div :class="['item',dataItem.isCheck?'active':'']"
                      @click="check(dataItem)"
                 >
@@ -43,10 +43,10 @@
         if (res.data) {
           let dataArray = res.data
           // 获取员工标签列表
-          Client.getCusomerTagList({customer_id: this.currentId}).then(tags => {
+          Client.getCusomerTagList(this.currentId).then(tags => {
             this.dataArray = dataArray.map((item) => {
-              item.data.forEach(it => {
-                let flag = tags.data.some(val => val.label_id === it.label_id)
+              item.labels.forEach(it => {
+                let flag = tags.data.labels.some(val => val.id === it.id)
                 if (flag) {
                   it.isCheck = true
                 } else {
@@ -62,28 +62,28 @@
     beforeRouteLeave(to, from, next) {
       let arr = []
       this.dataArray.map(item => {
-        item.data.forEach(val => {
+        item.labels.forEach(val => {
           val.isCheck && arr.push({
-            label_id: val.label_id,
+            id: val.id,
             name: val.name
           })
         })
       })
       const data = {
-        data: arr,
-        customer_id: this.currentId
+        labels: arr
       }
-      Client.updateTag(data).then(res => {
+      Client.updateTag(data, this.currentId).then(res => {
         if (res.error === ERR_OK) {
           this.$emit('refresh')
+          next(true)
         }
-        next(true)
+        this.$refs.toast.show(res.message)
       })
     },
     methods: {
       check(it) {
         this.dataArray.map(item => {
-          let node = item.data.find(val => val.label_id === it.label_id)
+          let node = item.labels.find(val => val.id === it.id)
           node && (node.isCheck = !node.isCheck)
         })
       }

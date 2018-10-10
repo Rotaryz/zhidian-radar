@@ -6,7 +6,7 @@ export default {
    * @returns {*}
    */
   myBusinessCard () {
-    let url = 'api/employee/shop-detail'
+    let url = '/api/employee/profile'
     return request.get(url)
   },
   /**
@@ -38,7 +38,7 @@ export default {
    * @returns {*}
    */
   Myshop (data) {
-    let url = 'api/employee/shop-qrcode'
+    let url = '/api/employee/shop/qrcode'
     return request.get(url, data)
   }
 }

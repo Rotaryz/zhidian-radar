@@ -40,8 +40,11 @@ const PersonCode = () => import('pages/person-code/person-code')
 const RobotCode = () => import('pages/robot-code/robot-code')
 const MyService = () => import('pages/my-service/my-service')
 const MyActivity = () => import('pages/my-activity/my-activity')
-const MyOrderForm = () => import('pages/my-order-form/my-order-form')
+const TeamActivity = () => import('pages/team-activity/team-activity')
+const OrderFormManage = () => import('pages/order-form-manage/order-form-manage')
+const OrderDetail = () => import('pages/order-detail/order-detail')
 const ShelfService = () => import('pages/shelf-service/shelf-service')
+const MyMsg = () => import('pages/my-msg/my-msg')
 
 Vue.use(Router)
 
@@ -140,6 +143,20 @@ const route = new Router({
           component: MyActivity,
           meta: {
             title: '我的活动'
+          },
+          children: [{
+            path: 'team-activity',
+            component: TeamActivity,
+            meta: {
+              title: '团队活动'
+            }
+          }]
+        },
+        {
+          path: 'my-msg',
+          component: MyMsg,
+          meta: {
+            title: '个人信息'
           }
         },
         {
@@ -157,11 +174,18 @@ const route = new Router({
           }]
         },
         {
-          path: 'my-order-form',
-          component: MyOrderForm,
+          path: 'order-form-manage',
+          component: OrderFormManage,
           meta: {
-            title: '我的订单'
-          }
+            title: '订单管理'
+          },
+          children: [{
+            path: 'order-detail',
+            component: OrderDetail,
+            meta: {
+              title: '订单详情'
+            }
+          }]
         }]
       }, {
         path: '/chat/:id',

@@ -3,11 +3,10 @@
     <div class="card-con"></div>
     <div class="card-main">
       <div class="main-con" v-if="card">
-        <div class="title">{{card.name}}</div>
-        <div class="title-img"></div>
         <img :src="card.avatar" alt="" class="avatar-img">
+        <div class="title">{{card.name}}</div>
         <img :src="card.qrcode" alt="" class="avatar-card">
-        <div class="qrcode-text">长按识别二维码</div>
+        <!--<div class="qrcode-text">长按识别二维码进店逛逛</div>-->
       </div>
     </div>
   </div>
@@ -16,19 +15,22 @@
 <script>
   import { Business } from 'api'
   import { mapGetters } from 'vuex'
+  import storage from 'storage-controller'
 
   export default {
     name: 'share-card',
     data() {
       return {
-        card: null,
+        card: {name: '国颐堂', avatar: 'https://wx.qlogo.cn/mmopen/vi_32/lFql3XFM1IJGiadhiagJtG30DRxAyHteUvTSCYtTDJFaQFia3EVYHsH38lE3pMeLytxXAsDCZpBibibdciaR6PgO7u1g/132', qrcode: 'https://wx.qlogo.cn/mmopen/vi_32/lFql3XFM1IJGiadhiagJtG30DRxAyHteUvTSCYtTDJFaQFia3EVYHsH38lE3pMeLytxXAsDCZpBibibdciaR6PgO7u1g/132'},
         show: false
       }
     },
     created() {
-      Business.Myshop({is_hyaline: 1}).then((res) => {
+      this.card.avatar = storage.get('info').avatar
+      this.card.name = storage.get('info').name
+      Business.Myshop({is_hyaline: 1, path: '/pages/guide'}).then((res) => {
         if (res.data) {
-          this.card = res.data
+          this.card.qrcode = res.data.image_url
         }
       })
       if (this.ios) {
@@ -51,55 +53,52 @@
   @import '~common/stylus/mixin'
 
   .card-con
-    padding-top: 31px
+    padding-top: 30px
 
   .card-main
     box-sizing: border-box
     width: 317px
     padding: 20px 20px 25px
     margin: auto
-    background: url("./bg-shopcode@2x.png") no-repeat center center
+    background: url("./pic-code_shop@2x.png") no-repeat center center
+    background-size: 100% 100%
     .main-con
-      background: $color-white
-      padding-top: 29px
-      padding-bottom: 15px
-      width: 275px
+      padding-top: 40px
+      padding-bottom: 11px
+      width: 260px
       margin: 0 auto
       layout()
       align-items: center
-      .title
-        font-family: $font-family-medium
-        font-size: $font-size-18
-        color: $color-20202E
-      .title-img
-        display: block
-        width: 175px
-        height: 16px
-        margin-top: 13.5px
-        background-image: url("./pic-myshop@2x.png")
-        background-repeat: no-repeat
-        background-position: center center
-        background-size: cover
       .avatar-img
         display: block
-        width: 235px
-        height: 235px
-        margin-top: 21px
+        width: 50px
+        height: 50px
+      .title
+        font-family: $font-family-medium
+        font-size: 20px
+        color: $color-202020
+        margin-top: 20px
+        padding: 0 10px
+        text-align: center
+        line-height: 26px
       .avatar-card
         display: block
-        width: 80px
-        height: 80px
-        padding: 100px
-        margin-top: -80px
+        width: 120px
+        height: 120px
+        margin-top: 80px
+        margin-bottom: 45px
+        border-radius: 50%
+        padding: 6px
+        border: 6px solid #ecf6e5
         z-index: 50
       .qrcode-text
         font-family: $font-family-regular
         font-size: $font-size-12
-        color: #7C7C8F
-        margin-top: -90px
+        color: $color-9B9B9B
 
   .share-card
     height: 100vh
     box-sizing: border-box
     overflow: hidden
+    background: $color-20202E
 </style>

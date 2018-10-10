@@ -1,6 +1,7 @@
 <template>
   <div class="oauth">
-    <img class="loading" src="./loading.gif" alt="" width="20" height="20">
+    <img class="loading" src="./loading.gif" alt="" width="20" height="20" v-if="!errorMsg">
+    <div class="error" v-if="errorMsg">{{errorMsg}}</div>
   </div>
 </template>
 
@@ -68,7 +69,7 @@
             }
           })
         } else {
-          !storage.get('token') && window.location.replace(oauth)
+          !storage.get('token') && window.location.replace(oauth.oauthUri)
         }
       },
       _getCode() {

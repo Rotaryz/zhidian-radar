@@ -1,5 +1,5 @@
 <template>
-  <div class="my-activity">
+  <div class="team-activity">
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
       <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
@@ -7,14 +7,14 @@
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + selectTab*50 + '%,0)'">
         <div class="container-item">
-          <scroll ref="scroll"
-                  :data="dataArray"
-                  :pullUpLoad="pullUpLoadObj"
+          <scroll ref="scroll0"
+                  :data="dataArray0"
+                  :pullUpLoad="pullUpLoadObj0"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore"
+                  :showNoMore="showNoMore0"
                   v-if="selectTab === 0">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
+              <div class="list-item" v-for="(item, index) in dataArray0" :key="index">
                 <div class="time-down">
                   <div class="time-box">
                     <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
@@ -25,25 +25,25 @@
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
-                              @itemDown="itemDown"
+                              @itemUp="itemUp"
                               :page="pageType">
                 </activity-item>
               </div>
             </div>
-            <div class="null-data"  v-if="loaded && dataArray.length === 0">
+            <div class="null-data"  v-if="loaded && dataArray0.length === 0">
               <exception errType="nodata"></exception>
             </div>
           </scroll>
         </div>
         <div class="container-item">
-          <scroll ref="scroll"
-                  :data="dataArray"
-                  :pullUpLoad="pullUpLoadObj"
+          <scroll ref="scroll1"
+                  :data="dataArray1"
+                  :pullUpLoad="pullUpLoadObj1"
                   @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore"
+                  :showNoMore="showNoMore1"
                   v-if="selectTab === 1">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in dataArray" :key="index">
+              <div class="list-item" v-for="(item, index) in dataArray1" :key="index">
                 <div class="time-down">
                   <div class="time-box">
                     <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
@@ -54,34 +54,28 @@
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
-                              @itemDown="itemDown"
+                              @itemUp="itemUp"
                               :page="pageType">
                 </activity-item>
               </div>
             </div>
-            <div class="null-data"  v-if="loaded && dataArray.length === 0">
+            <div class="null-data"  v-if="loaded && dataArray1.length === 0">
               <exception errType="nodata"></exception>
             </div>
           </scroll>
         </div>
       </div>
     </div>
-    <div class="footer-box">
-      <div class="footer-btn" @click="toTeam">上架活动</div>
-    </div>
     <div class="loading" v-if="loading">
       <list-loading></list-loading>
     </div>
-    <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
-    <router-view @refresh="refresh"></router-view>
   </div>
 </template>
 
 <script>
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
-  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import ActivityItem from 'components/activity-item/activity-item'
   import { Activity } from 'api'
   import { ERR_OK } from '../../common/js/config'
@@ -95,60 +89,64 @@
     {txt: '进行中', num: 0}
   ]
   export default {
-    name: 'MyActivity',
+    name: 'ShelfService',
     data () {
       return {
         tabList: TABS,
-        dataArray: [],
+        dataArray0: [],
+        dataArray1: [],
         selectTab: 0,
-        pullUpLoad: true,
-        pullUpLoadThreshold: 0,
-        showNoMore: false,
-        page: 1,
+        pullUpLoad0: true,
+        pullUpLoadThreshold0: 0,
+        showNoMore0: false,
+        page0: 1,
+        pullUpLoad1: true,
+        pullUpLoadThreshold1: 0,
+        showNoMore1: false,
+        page1: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
+        popShow: true,
         loaded: false,
-        loading: false,
-        pageType: 'activity',
+        loading: true,
+        pageType: 'team',
         tabLoad: true,
         status: 0,
-        downItem: '',
-        clickConfirm: true,
         timeArr: ['start_at_timestamp', 'end_at_timestamp'],
         timestamp: 'start_at_timestamp'
       }
     },
     created () {
-      this.getActivityList()
+      this.getActivityAll()
     },
     methods: {
       changeTab(index) {
-        this.selectTab = index
         this.status = index
+        this.selectTab = index
         this.timestamp = this.timeArr[index]
         this._defaultData()
         this._defaultArray()
-        this.getActivityList()
+        this.getActivityAll()
       },
       _defaultData() {
-        this.page = 1
-        this.showNoMore = false
-        this.dataArray = []
+        this[`page${this.selectTab}`] = 1
+        this[`showNoMore${this.selectTab}`] = false
+        this[`dataArray${this.selectTab}`] = []
       },
       _defaultArray() {
         for (let i = 0; i < 2; i++) {
-          this.dataArray = this.dataArray.map((item) => {
+          this['dataArray' + i] = this['dataArray' + i].map((item) => {
             item.showEdit = false
             return item
           })
         }
       },
-      getActivityList(page = 1) { // 我的活动
+      getActivityAll(page = 1, loading = true) { // 活动库
         if (page === 1) {
           this.loaded = false
           this.loading = true
         }
-        Activity.getActivityList({page, status: this.status})
+        Activity.getActivityAll({page, status: this.status})
           .then((res) => {
             this.loaded = true
             this.loading = false
@@ -156,43 +154,42 @@
               this.$refs.toast.show(res.message)
               return
             }
+            this.$emit('refresh')
             this.tabList[0].num = res.wait_online_count
             this.tabList[1].num = res.online_count
-            this.dataArray = this.dataArray.concat(res.data)
-            if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
-              this.pullUpLoad = false
-            } else {
-              this.pullUpLoad = true
-            }
             this._endTimePlay()
+            this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].concat(res.data)
+            if (this[`dataArray${this.selectTab}`].length === 0) { // 无数据时，上拉不现实文字
+              this[`pullUpLoad${this.selectTab}`] = false
+            } else {
+              this[`pullUpLoad${this.selectTab}`] = true
+            }
             if (res.data.length < LIMIT) {
-              this.showNoMore = true
+              this[`showNoMore${this.selectTab}`] = true
             }
             setTimeout(() => {
               if (page === 1) {
-                this.$refs.scroll.forceUpdate()
-                this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+                this.$refs[`scroll${this.selectTab}`].forceUpdate()
+                this.$refs[`scroll${this.selectTab}`].scrollTo(0, 0, 0, ease[this.scrollToEasing])
               } else {
-                this.$refs.scroll.forceUpdate()
+                this.$refs[`scroll${this.selectTab}`].forceUpdate()
               }
             }, 20)
           })
       },
       onPullingUp() {
-        if (this.showNoMore) {
-          this.$refs.scroll.forceUpdate()
+        if (this[`showNoMore${this.selectTab}`]) {
+          this.$refs[`scroll${this.selectTab}`].forceUpdate()
           return
         }
-        this.page++
-        this.getActivityList(this.page)
+        this[`page${this.selectTab}`]++
+        this.getActivityAll(this[`page${this.selectTab}`])
       },
-      refresh() {
-        this._defaultData()
-        this._defaultArray()
-        this.getActivityList()
+      delClick() {
+        this.$refs.confirm.show('确定下架该活动')
       },
       showEditor(item) { // 点击右边小按钮
-        this.dataArray = this.dataArray.map((data) => {
+        this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
           if (+item.id === +data.id) {
             data.showEdit = !data.showEdit
           } else {
@@ -201,50 +198,37 @@
           return data
         })
       },
-      itemDown(item) { // 点击下架按钮
-        this.dataArray = this.dataArray.map((data) => {
-          if (+item.id === +data.id) {
-            data.showEdit = !data.showEdit
-          } else {
-            data.showEdit = false
-          }
-          return data
-        })
-        this.downItem = item
-        this.clickConfirm = true
-        this.$refs.confirm.show({msg: '确定下架该活动吗？'})
-      },
-      msgConfirm() {
-        if (this.clickConfirm) {
-          this.clickConfirm = false
-          Activity.activityHandle(this.downItem.activity_id, 0) // 下架活动
-            .then((res) => {
-              if (res.error !== ERR_OK) {
-                this.$refs.toast.show(res.message)
-                return
+      itemUp(item) { // 点击上架按钮
+        Activity.activityHandle(item.id, 1) // 上架活动
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+              return
+            }
+            this.$refs.toast.show('上架成功')
+            this.$emit('refresh')
+            this['dataArray' + this.selectTab] = this['dataArray' + this.selectTab].map((data) => {
+              if (+item.id === +data.id) {
+                data.showEdit = !data.showEdit
+                data.status = 1
+              } else {
+                data.showEdit = false
               }
-              this.$refs.toast.show('下架成功')
-              this.dataArray = this.dataArray.filter((data) => {
-                return +this.downItem.id !== +data.id
-              })
-              this.tabList[this.selectTab].num--
-              if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
-                this.pullUpLoad = false
-              }
-              setTimeout(() => {
-                this.$refs.scroll.forceUpdate()
-              }, 20)
+              return data
             })
-        }
+            setTimeout(() => {
+              this.$refs[`scroll${this.selectTab}`].forceUpdate()
+            }, 20)
+          })
       },
       _endTimePlay() {
         clearInterval(this.timer)
-        this.dataArray = this.dataArray.map((item) => {
+        this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((item) => {
           item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
           return item
         })
         this.timer = setInterval(() => {
-          this.dataArray = this.dataArray.map((item, index) => {
+          this[`dataArray${this.selectTab}`] = this[`dataArray${this.selectTab}`].map((item, index) => {
             item.current_timestamp++
             item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
             return item
@@ -280,20 +264,23 @@
         }
         return times
       },
-      toTeam() {
-        this.$router.push('/mine/my-activity/team-activity')
-      },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs[`scroll${this.selectTab}`].destroy()
+          this.$refs[`scroll${this.selectTab}`].initScroll()
         })
       }
     },
     computed: {
-      pullUpLoadObj: function () {
-        return this.pullUpLoad ? {
-          threshold: parseInt(this.pullUpLoadThreshold),
+      pullUpLoadObj0: function () {
+        return this.pullUpLoad0 ? {
+          threshold: parseInt(this.pullUpLoadThreshold0),
+          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
+        } : false
+      },
+      pullUpLoadObj1: function () {
+        return this.pullUpLoad1 ? {
+          threshold: parseInt(this.pullUpLoadThreshold1),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
       }
@@ -310,7 +297,6 @@
     components: {
       Scroll,
       Exception,
-      ConfirmMsg,
       ActivityItem,
       Toast,
       ListLoading
@@ -323,10 +309,10 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .my-activity
+  .team-activity
     position: fixed
     background: $color-background
-    z-index: 10
+    z-index: 60
     left: 0
     right: 0
     bottom: 0
@@ -382,41 +368,22 @@
             .list-item
               padding-top: 15px
               box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
-              .time-down
-                height: 46px
-                padding: 0 15px
-                background: $color-white
-              .time-box
-                height: 100%
-                display: flex
-                align-items: center
-                justify-content: space-between
-                border-bottom-1px($color-F3F3F3)
-              .title
-                font-size: 16px
-                color: $color-20202E
-              .time
-                font-size: 14px
-                color: $color-20202E
-    .footer-box
-      position: fixed
-      width: 100vw
-      height: 44.5px
-      z-index: 60
-      bottom: 0
-      left: 0
-      background: $color-white
-      box-sizing: border-box
-      .footer-btn
-        width: 100%
-        height: 100%
-        background: $color-20202E
-        line-height: 44.5px
-        text-align: center
-        font-family: $font-family-regular
-        color: $color-white
-        font-size: $font-size-16
-        letter-spacing: 0.8px
+            .time-down
+              height: 46px
+              padding: 0 15px
+              background: $color-white
+            .time-box
+              height: 100%
+              display: flex
+              align-items: center
+              justify-content: space-between
+              border-bottom-1px($color-F3F3F3)
+            .title
+              font-size: 16px
+              color: $color-20202E
+            .time
+              font-size: 14px
+              color: $color-20202E
     .loading
       position: fixed
       width: 100%
