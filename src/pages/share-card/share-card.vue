@@ -21,7 +21,7 @@
     name: 'share-card',
     data() {
       return {
-        card: {name: '国颐堂', avatar: 'https://wx.qlogo.cn/mmopen/vi_32/lFql3XFM1IJGiadhiagJtG30DRxAyHteUvTSCYtTDJFaQFia3EVYHsH38lE3pMeLytxXAsDCZpBibibdciaR6PgO7u1g/132', qrcode: 'https://wx.qlogo.cn/mmopen/vi_32/lFql3XFM1IJGiadhiagJtG30DRxAyHteUvTSCYtTDJFaQFia3EVYHsH38lE3pMeLytxXAsDCZpBibibdciaR6PgO7u1g/132'},
+        card: {name: '国颐堂', avatar: '', qrcode: ''},
         show: false
       }
     },
