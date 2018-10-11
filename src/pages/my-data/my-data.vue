@@ -80,7 +80,7 @@
               <div class="sub-title">(每小时更新)</div>
             </div>
           </div>
-          <div class="pie-box">
+          <div class="pie-box" v-if="false">
             <div id="myBar"></div>
             <div class="title-box">
               <div class="title">客户与我的互动</div>
@@ -159,7 +159,7 @@
       this.id = this.$route.query.id
       this.getActionLineData()
       this.getPieData()
-      this.getBarData()
+      // this.getBarData() // 太丑暂时去掉这个图表
       this.getAddActionLineData()
       this.getSuccessData()
       this.getAllDataObj('all')
