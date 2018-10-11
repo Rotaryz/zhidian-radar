@@ -164,7 +164,7 @@
   import {emotionsFaceArr} from 'common/js/constants'
   import wx from 'weixin-js-sdk'
 
-  const LIMIT = 10
+  const LIMIT = 40
   const MORELIST = [
     {txt: '图片', icon: 'im-image', type: 1}
     // {txt: '个人微信', icon: 'im-weixin', type: 4},
