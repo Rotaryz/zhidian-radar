@@ -164,6 +164,7 @@
   import {emotionsFaceArr} from 'common/js/constants'
   import wx from 'weixin-js-sdk'
 
+  const LIMIT = 10
   const MORELIST = [
     {txt: '图片', icon: 'im-image', type: 1}
     // {txt: '个人微信', icon: 'im-weixin', type: 4},
@@ -178,7 +179,7 @@
       this.id = this.$route.params.id
       let data = {
         'end_date': this.endDate,
-        limit: 40,
+        limit: LIMIT,
         customer_im_account: this.id
         // employee_im_account: this.imInfo.im_account // todo
       }
@@ -269,7 +270,7 @@
         let heightBegin = this.listDom.clientHeight
         let data = {
           'end_date': this.endDate,
-          limit: 40,
+          limit: LIMIT,
           customer_im_account: this.id
           // employee_im_account: this.imInfo.im_account // todo
         }
