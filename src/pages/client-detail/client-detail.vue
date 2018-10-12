@@ -1151,6 +1151,7 @@
         font-size: $font-size-medium
         color: $color-text
         min-height: 10px
+        word-break: break-all
       .icon-cri
         position: absolute
         border: 1px solid #ccc
