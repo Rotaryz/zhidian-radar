@@ -317,6 +317,10 @@
           line-height: 36px
           outline: none
           color: $color-20202E
+          margin-right: 10px
+          overflow: hidden
+          white-space: nowrap
+          text-overflow: ellipsis
           &::-webkit-input-placeholder
             color: $color-9B9B9B
         .clear
