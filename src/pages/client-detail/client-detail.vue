@@ -231,7 +231,7 @@
   import Exception from 'components/exception/exception'
   import {mapActions, mapGetters} from 'vuex'
   import utils from 'common/js/utils'
-  const PIEHINT = [{text: '动态', icon: 'one'}, {text: '商品', icon: 'two'}, {text: '拼团', icon: 'thr'}, {text: '砍价', icon: 'four'}]
+  const PIEHINT = [{text: '个人', icon: 'one'}, {text: '商品', icon: 'two'}, {text: '拼团', icon: 'thr'}, {text: '砍价', icon: 'four'}]
   export default {
     name: 'client-detail',
     data() {
