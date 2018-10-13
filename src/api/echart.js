@@ -5,12 +5,10 @@ export default {
    * 客户兴趣占比图
    * @returns {*}
    */
-  getPie(merchant_id = 0, employee_id = 0, customer_id = 0) {
+  getPie(customer_id = 0) {
     let url = '/api/employee/analysis/interest-rate-chart'
     let data = {
-      customer_id,
-      merchant_id,
-      employee_id
+      customer_id
     }
     return request.post(url, data)
   },
@@ -18,12 +16,10 @@ export default {
    * 近7日客户活跃度图
    * @returns {*}
    */
-  getActionLine(merchant_id = 0, employee_id = 0, customer_id = 0) {
+  getActionLine(customer_id = 0) {
     let url = '/api/employee/analysis/active-chart'
     let data = {
-      customer_id,
-      merchant_id,
-      employee_id
+      customer_id
     }
     return request.post(url, data)
   },
@@ -31,12 +27,10 @@ export default {
    *  近7日新增客户数
    * @returns {*}
    */
-  getAddLine(merchant_id = 0, employee_id = 0, customer_id = 0) {
+  getAddLine(customer_id = 0) {
     let url = '/api/employee/analysis/new-customer-sum-chart'
     let data = {
-      customer_id,
-      merchant_id,
-      employee_id
+      customer_id
     }
     return request.post(url, data)
   },
@@ -44,25 +38,18 @@ export default {
    *  成交率漏斗图
    * @returns {*}
    */
-  getSuccess(merchant_id = 0, employee_id = 0, customer_id = 0) {
+  getSuccess() {
     let url = '/api/employee/analysis/close-deal-rate-chart'
-    let data = {
-      customer_id,
-      merchant_id,
-      employee_id
-    }
-    return request.post(url, data)
+    return request.post(url)
   },
   /**
    * 客户与我互动图
    * @returns {*}
    */
-  getBar(merchant_id = 0, employee_id = 0, customer_id = 0) {
+  getBar(customer_id = 0) {
     let url = 'api/employee/analysis/interactive-chart'
     let data = {
-      customer_id,
-      merchant_id,
-      employee_id
+      customer_id
     }
     return request.post(url, data)
   },
@@ -70,12 +57,10 @@ export default {
    * 员工能力模型图
    * @returns {*}
    */
-  getEmployee(merchant_id = 0, employee_id = 0, customer_id = 0) {
+  getEmployee(customer_id = 0) {
     let url = 'api/employee/ws-interactive-chart'
     let data = {
-      customer_id,
-      merchant_id,
-      employee_id
+      customer_id
     }
     return request.post(url, data)
   },
