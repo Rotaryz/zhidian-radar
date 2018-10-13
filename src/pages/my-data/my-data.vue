@@ -547,7 +547,7 @@
         })
       },
       getPieData() {
-        Echart.getPie(this.userInfo.merchant_id, this.userInfo.id).then(res => {
+        Echart.getPie().then(res => {
           if (res.error === ERR_OK) {
             this.pieData = res.data
             this.drawPie()
@@ -557,7 +557,7 @@
         })
       },
       getActionLineData() {
-        Echart.getActionLine(this.userInfo.merchant_id, this.userInfo.id).then(res => {
+        Echart.getActionLine().then(res => {
           if (res.error === ERR_OK) {
             this.ationLine = res.data
             this.drawLine()
@@ -567,7 +567,7 @@
         })
       },
       getAddActionLineData() {
-        Echart.getAddLine(this.userInfo.merchant_id, this.userInfo.id).then(res => {
+        Echart.getAddLine().then(res => {
           if (res.error === ERR_OK) {
             this.addationLine = res.data
             this.drawAddLine()
@@ -577,7 +577,7 @@
         })
       },
       getBarData() {
-        Echart.getBar(this.userInfo.merchant_id, this.userInfo.id).then(res => {
+        Echart.getBar().then(res => {
           if (res.error === ERR_OK) {
             this.barData = res.data
             this.drawBar()
@@ -587,7 +587,7 @@
         })
       },
       getSuccessData() {
-        Echart.getSuccess(this.userInfo.merchant_id, this.userInfo.id).then(res => {
+        Echart.getSuccess().then(res => {
           if (res.error === ERR_OK) {
             this.successData = res.data
             this.fourdraw()

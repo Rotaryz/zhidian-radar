@@ -176,7 +176,7 @@
                 <div class="sub-title">(每小时更新)</div>
               </div>
             </div>
-            <div class="pie-box">
+            <div class="pie-box" v-if="false">
               <div id="myBar"></div>
               <div class="title-box">
                 <div class="title">客户与我的互动</div>
@@ -320,7 +320,7 @@
       this.getCusomerTagList()
       this.getActionLineData()
       this.getPieData()
-      this.getBarData()
+      // this.getBarData()
     },
     mounted() {
       this.highgt = this.$refs.eleven.offsetHeight
@@ -769,7 +769,7 @@
         })
       },
       getPieData() {
-        Echart.getPie(this.userInfo.merchant_id, this.userInfo.id, this.id).then(res => {
+        Echart.getPie(this.id).then(res => {
           if (res.error === ERR_OK) {
             this.pieData = res.data
           } else {
@@ -778,7 +778,7 @@
         })
       },
       getActionLineData() {
-        Echart.getActionLine(this.userInfo.merchant_id, this.userInfo.id, this.id).then(res => {
+        Echart.getActionLine(this.id).then(res => {
           if (res.error === ERR_OK) {
             this.ationLine = res.data
           } else {
@@ -787,7 +787,7 @@
         })
       },
       getBarData() {
-        Echart.getBar(this.userInfo.merchant_id, this.userInfo.id, this.id).then(res => {
+        Echart.getBar(this.id).then(res => {
           if (res.error === ERR_OK) {
             this.barData = res.data
           } else {
