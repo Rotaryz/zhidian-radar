@@ -8,7 +8,7 @@
         <div class="right-title">{{item.goods_title}}</div>
         <div class="right-down">
           <div class="down-left">
-            <p class="down-txt"><span class="first-txt">现价：¥{{item.platform_price}}</span><span v-if="item.earn_money" class="earn">(赚￥{{item.earn_money}})</span></p>
+            <p class="down-txt"><span class="first-txt">{{item.rule_id * 1 === 1 ? '团购价' : '底价'}}：¥{{item.platform_price}}</span><span v-if="item.earn_money" class="earn">(赚￥{{item.earn_money}})</span></p>
             <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span><span v-if="tabIdx != 0">销量：{{item.sale_count}}</span></p>
           </div>
           <div class="down-right">
