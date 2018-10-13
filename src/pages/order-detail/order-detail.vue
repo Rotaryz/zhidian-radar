@@ -1,38 +1,40 @@
 <template>
   <div class="order-detail">
     <scroll bcColor="#f0f2f5" :showNoMore="false">
-      <div class="msg">
-        <header class="top-msg">
-          <p class="title">{{data.title}}</p>
-          <h2 class="total-price">￥{{data.total}}</h2>
-          <p class="status">{{data.status_str}}</p>
-        </header>
-        <section class="content">
-          <p class="list"><span class="type">业务类型</span><span class="contxt">{{data.order_type}}</span></p>
-          <p class="list"><span class="type">创建时间</span><span class="contxt">{{data.create_at}}</span></p>
-          <p class="list"><span class="type">支付时间</span><span class="contxt">{{data.pay_at}}</span></p>
-          <p class="list"><span class="type">商户订单号</span><span class="contxt">{{data.order_sn}}</span></p>
-        </section>
-        <section class="content">
-          <p class="list border"><span class="type">售卖方</span><span class="contxt">{{data.employee_name}}</span></p>
-          <p class="list"><span class="type">客户姓名</span><span class="contxt">{{data.customer_name}}</span></p>
-          <p class="list"><span class="type">手机号码</span><span class="contxt">{{data.customer_mobile}}</span></p>
-        </section>
-        <footer class="content last-child">
-          <p class="list"><span class="type">服务单价</span><span class="contxt">{{data.price}}</span></p>
-          <p class="list"><span class="type">服务数量</span><span class="contxt">{{data.num}}</span></p>
-          <p class="list"><span class="type">服务总价</span><span class="contxt">{{data.total}}</span></p>
-          <p class="list"><span class="type">优惠金额</span><span class="contxt">{{data.discount_price}}</span></p>
-          <p class="list"><span class="type">实收金额</span><span class="contxt">{{data.total_price}}</span></p>
-        </footer>
+      <div class="order-main">
+        <div class="msg">
+          <header class="top-msg">
+            <p class="title">{{data.title}}</p>
+            <h2 class="total-price">￥{{data.total}}</h2>
+            <p class="status">{{data.status_str}}</p>
+          </header>
+          <section class="content">
+            <p class="list"><span class="type">业务类型</span><span class="contxt">{{data.order_type}}</span></p>
+            <p class="list"><span class="type">创建时间</span><span class="contxt">{{data.create_at}}</span></p>
+            <p class="list"><span class="type">支付时间</span><span class="contxt">{{data.pay_at}}</span></p>
+            <p class="list"><span class="type">商户订单号</span><span class="contxt">{{data.order_sn}}</span></p>
+          </section>
+          <section class="content">
+            <p class="list border"><span class="type">售卖方</span><span class="contxt">{{data.employee_name}}</span></p>
+            <p class="list"><span class="type">客户姓名</span><span class="contxt">{{data.customer_name}}</span></p>
+            <p class="list"><span class="type">手机号码</span><span class="contxt">{{data.customer_mobile}}</span></p>
+          </section>
+          <footer class="content last-child">
+            <p class="list"><span class="type">服务单价</span><span class="contxt">{{data.price}}</span></p>
+            <p class="list"><span class="type">服务数量</span><span class="contxt">{{data.num}}</span></p>
+            <p class="list"><span class="type">服务总价</span><span class="contxt">{{data.total}}</span></p>
+            <p class="list"><span class="type">优惠金额</span><span class="contxt">{{data.discount_price}}</span></p>
+            <p class="list"><span class="type">实收金额</span><span class="contxt">{{data.total_price}}</span></p>
+          </footer>
+        </div>
+        <div class="null-data" v-if="loaded && data.length === 0">
+          <exception errType="nodata"></exception>
+        </div>
+        <div class="loading" v-if="loading">
+          <list-loading></list-loading>
+        </div>
+        <toast ref="toast"></toast>
       </div>
-      <div class="null-data" v-if="loaded && data.length === 0">
-        <exception errType="nodata"></exception>
-      </div>
-      <div class="loading" v-if="loading">
-        <list-loading></list-loading>
-      </div>
-      <toast ref="toast"></toast>
     </scroll>
   </div>
 </template>
@@ -103,6 +105,8 @@
     bottom: 0
     top: 0
     font-family: $font-family-regular
+    .order-main
+      padding-bottom: 40px
     .msg
       padding: 0 15px
       background: $color-white
