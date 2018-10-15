@@ -315,7 +315,6 @@
     created() {
       this.id = this.$route.query.id
       this.pageUrl = this.$route.query.pageUrl
-      console.log(this.pageUrl, this.$route.query)
       this.getClientId(this.id)
       this.getCusomerTagList()
       this.getActionLineData()
@@ -335,6 +334,8 @@
       ]),
       refresh() {
         setTimeout(() => {
+          this.flowPage = 1
+          this.noMore = false
           this.getClientId(this.id)
           this.getCusomerTagList()
         }, 300)
