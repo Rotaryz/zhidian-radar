@@ -425,6 +425,14 @@ export default class webimHandler {
         case 10007:
           resTxt = nickName + '取消了给你点的赞'
           break
+        case 20005:
+          let desc = JSON.parse(msg.desc)
+          if (desc.log_type * 1 === 20) {
+            resTxt = `${nickName}给你发送了一条图片信息`
+          } else {
+            resTxt = `${nickName}给你发送了一条商品信息`
+          }
+          break
         case 30001:
           data = JSON.parse(msg.data)
           if (data.title.length > 8) {
