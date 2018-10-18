@@ -97,8 +97,8 @@
             </div>
             <div class="data-bottom">
               <div class="title">备注</div>
-              <div class="textarea-number">{{flow.note.length}}<span>/500</span></div>
-              <textarea class="data-area" v-model="flow.note" maxlength="500" @focus="focusText" @blur="blurText" @touchmove.stop name="" id="" cols="30" rows="10"
+              <div class="textarea-number">{{flow.note.length}}<span>/200</span></div>
+              <textarea class="data-area" v-model="flow.note" maxlength="200" @focus="focusText" @blur="blurText" @touchmove.stop name="" id="" cols="30" rows="10"
                         placeholder="请输入备注"></textarea>
             </div>
           </div>
@@ -198,6 +198,7 @@
           this.$refs.toast.show('请输入正确的手机号')
           return
         }
+        console.log(this.flow)
         ClientDetail.saveClientDetail(this.id, this.flow).then((res) => {
           if (res.error === ERR_OK) {
             this.$refs.toast.show('保存成功')
@@ -220,7 +221,6 @@
         console.log('无法复制文本！')
       },
       focusText() {
-        console.log('scroll', this.$refs.scroll, this.slide)
         if (this.slide === 'slide') {
           this.$refs.scroll && this.$refs.scroll.scrollTo(0, -480)
         }
