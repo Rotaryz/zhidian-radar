@@ -138,7 +138,8 @@
         imgAllSc: true,
         showPla: true,
         loginText: '登录',
-        wechatStatus: 0
+        wechatStatus: 0,
+        fileType: 'image/jpeg'
       }
     },
     created() {
@@ -168,10 +169,10 @@
       cropImage() {
         if (this.loading) return
         this.loading = true
-        let src = this.$refs.cropper.getCroppedCanvas().toDataURL()
-        let $Blob = this.getBlobBydataURI(src, 'image/png')
+        let src = this.$refs.cropper.getCroppedCanvas().toDataURL(this.fileType)
+        let $Blob = this.getBlobBydataURI(src, this.fileType)
         let formData = new FormData()
-        formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.png')
+        formData.append('file', $Blob, 'file_' + Date.now() + '.' + this.fileType.split('/')[1])
         UpLoad.upLoadImage(formData).then((res) => {
           if (res.error === ERR_OK) {
             if (this.chooseType === 'preson') {
@@ -224,9 +225,9 @@
         this.inputValue = ''
       },
       getBlobBydataURI(dataURI, type) {
-        var binary = atob(dataURI.split(',')[1])
-        var array = []
-        for (var i = 0; i < binary.length; i++) {
+        let binary = atob(dataURI.split(',')[1])
+        let array = []
+        for (let i = 0; i < binary.length; i++) {
           array.push(binary.charCodeAt(i))
         }
         return new Blob([new Uint8Array(array)], {type: type})
@@ -237,6 +238,7 @@
         if (e.target) {
           const file = e.target.files[0]
           const reader = new FileReader()
+          file.type && (this.fileType = file.type) // 设置文件类型
           reader.onload = async (event) => {
             this.imageBig = event.target.result
             this.$refs.cropper.replace(event.target.result)
