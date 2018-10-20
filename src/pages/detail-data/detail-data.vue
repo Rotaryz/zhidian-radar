@@ -97,7 +97,7 @@
             </div>
             <div class="data-bottom">
               <div class="title">备注</div>
-              <div class="textarea-number">{{flow.note.length}}<span>/200</span></div>
+              <div class="textarea-number">{{(flow.note && flow.note.length) || 0}}<span>/200</span></div>
               <textarea class="data-area" v-model="flow.note" maxlength="200" @focus="focusText" @blur="blurText" @touchmove.stop name="" id="" cols="30" rows="10"
                         placeholder="请输入备注"></textarea>
             </div>
@@ -172,7 +172,6 @@
       getClientData(id) {
         ClientDetail.getClientDetail(id).then((res) => {
           if (res.error === ERR_OK) {
-            console.log(res)
             this.imgUrl = res.data.image_url
             this.flow = res.data.flow
             if (res.data.flow.sex * 1 === 0) {
@@ -198,7 +197,6 @@
           this.$refs.toast.show('请输入正确的手机号')
           return
         }
-        console.log(this.flow)
         ClientDetail.saveClientDetail(this.id, this.flow).then((res) => {
           if (res.error === ERR_OK) {
             this.$refs.toast.show('保存成功')
