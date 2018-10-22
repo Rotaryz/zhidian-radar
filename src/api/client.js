@@ -3,18 +3,23 @@ import request from 'common/js/request'
 export default {
   // 获取客户分组列表
   getGroupList(data, loading) {
-    const url = `/api/employee/group`
+    const url = `/api/employee/groups`
     return request.get(url, data, loading)
   },
   // 新建分组
   createGroup(data, loading) {
-    const url = `api/employee/group`
+    const url = `api/employee/groups`
     return request.post(url, data, loading)
   },
   // 获取客户列表
   getCustomerList(data, loading) {
     const url = `/api/employee/customers`
     return request.get(url, data, loading)
+  },
+  // 获取分组内客户列表
+  getGroupCustomerList(groupId, loading) {
+    const url = `/api/employee/groups/${groupId}`
+    return request.get(url, loading)
   },
   // 获取设置分组的客户列表
   getSetGroupList(data, loading) {
@@ -32,14 +37,14 @@ export default {
     return request.delete(url, data, loading)
   },
   // 分组内添加用户
-  addGroupCustomer(data, loading) {
-    const url = `/api/employee/group-customer`
-    return request.post(url, data, loading)
+  addGroupCustomer(groupId, data, loading) {
+    const url = `/api/employee/groups/${groupId}`
+    return request.put(url, data, loading)
   },
   // 分组删除
   delGroup(data, loading) {
-    const url = `/api/employee/group/${data.groupId}`
-    return request.delete(url, data, loading)
+    const url = `/api/employee/groups/${data.groupId}`
+    return request.delete(url, loading)
   },
   // 标签列表
   getTagList(data, loading) {

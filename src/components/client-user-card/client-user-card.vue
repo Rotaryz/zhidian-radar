@@ -2,7 +2,8 @@
   <div class="client-user-card">
     <!--最后跟进-->
     <section class="container" v-if="useType==='follow'">
-      <img class="user-icon" :src="userInfo.image_url" alt=""/>
+      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :src="userInfo.image_url" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
           <div class="name">
@@ -19,7 +20,8 @@
     </section>
     <!--最近活跃-->
     <section class="container" v-else-if="useType==='active'">
-      <img class="user-icon" :src="userInfo.image_url" alt=""/>
+      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :src="userInfo.image_url" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
           <div class="name">
@@ -36,7 +38,8 @@
     </section>
     <!--最新加入-->
     <section class="container" v-else-if="useType==='join'">
-      <img class="user-icon" :src="userInfo.image_url" alt=""/>
+      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :src="userInfo.image_url" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
           <div class="name">
@@ -53,7 +56,8 @@
     </section>
     <!--通用-->
     <section class="container" v-else>
-      <img class="user-icon" :src="userInfo.image_url" alt=""/>
+      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :src="userInfo.image_url" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
           <div class="name">

@@ -118,16 +118,9 @@
       getCustomerList() {
         this.page = 1
         this.isAll = false
-        const data = {
-          get_group_detail: 1,
-          group_id: this.id,
-          page: 1,
-          limit: LIMIT,
-          order_by: this.selectText
-        }
-        Client.getCustomerList(data).then(res => {
+        Client.getGroupCustomerList(this.id).then(res => {
           if (res.error === ERR_OK) {
-            this.dataArray = res.data
+            this.dataArray = res.data.customers
             this.isEmpty = !this.dataArray.length
           } else {
             this.$refs.toast.show(res.message)
@@ -151,14 +144,14 @@
         this.$refs.confirm.show()
       },
       msgConfirm() {
-        const idx = this.dataArray.findIndex(val => val.id === this.checkedItem.id)
-        this.dataArray.splice(idx, 1)
         const data = {
           group_id: this.id, // 分组id
           customer_id: this.checkedItem.id
         }
         Client.delCustomer(data).then(res => {
           if (res.error === ERR_OK) {
+            const idx = this.dataArray.findIndex(val => val.id === this.checkedItem.id)
+            this.dataArray.splice(idx, 1)
           } else {
             this.$refs.toast.show(res.message)
           }

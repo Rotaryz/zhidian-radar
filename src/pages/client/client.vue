@@ -4,7 +4,7 @@
       <search @toNav="toSearch"></search>
       <dl class="tab-wrapper">
         <!--<dt class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></dt>-->
-        <dd class="tab" v-if="index === 0" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.title}}({{item.number}})</dd>
+        <dd class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.title}}({{item.number}})</dd>
       </dl>
       <div class="f3"></div>
     </header>
@@ -54,15 +54,15 @@
               <slide-view :useType="3" @del="delHandler" :item="item">
                 <div slot="content" class="user-list-item-wrapper">
                   <div class="users-avatar">
-                    <img v-if="item.icon && item.icon.length"
-                         v-for="(user,i) in item.icon"
+                    <img v-if="item.customers && item.customers.length"
+                         v-for="(user,i) in item.customers"
                          class="avatar"
                          :key="i"
-                         :src="user"
+                         :src="user.avatar"
                     />
                   </div>
                   <div class="name">{{item.name}}</div>
-                  <div class="number">{{item.number}}人</div>
+                  <div class="number">{{item.customers.length || 0}}人</div>
                 </div>
               </slide-view>
             </li>
@@ -134,7 +134,7 @@
     },
     created() {
       this.$emit('tabChange', 3)
-      // this.getGroupList()
+      this.getGroupList()
       this.getCustomerList()
     },
     beforeDestroy() {
@@ -158,7 +158,7 @@
         this.isAll = false
         this.page = 1
         this.limit = LIMIT
-        // this.getGroupList()
+        this.getGroupList()
         this.getCustomerList()
       },
       toSearch() {
@@ -178,7 +178,6 @@
         })
       },
       getCustomerList() {
-        console.log('getCust')
         const data = {order_by: this.checkedGroup.orderBy, page: 1, limit: LIMIT}
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
@@ -222,13 +221,13 @@
       },
       msgConfirm() {
         const data = {groupId: this.checkedItem.id}
-        const idx = this.userListArr.findIndex(val => val.id === this.checkedItem.id)
-        this.userListArr.splice(idx, 1)
-        this.tabList[1].number = this.userListArr.length
         Client.delGroup(data).then(res => {
           if (res.error === ERR_OK) {
+            const idx = this.userListArr.findIndex(val => val.id === this.checkedItem.id)
+            this.userListArr.splice(idx, 1)
+            this.tabList[1].number = this.userListArr.length
           } else {
-            // this._getGroupList()
+            this._getGroupList()
             this.$refs.toast.show(res.message)
           }
         })

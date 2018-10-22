@@ -93,13 +93,12 @@
       submit() {
         let arr = []
         this.dataArray.map(item => {
-          item.isCheck && arr.push({customer_id: item.id})
+          item.isCheck && arr.push(item.id)
         })
         const data = {
-          group_id: this.id,
-          data: arr
+          customer_ids: arr
         }
-        Client.addGroupCustomer(data).then(res => {
+        Client.addGroupCustomer(this.id, data).then(res => {
           if (res.error === ERR_OK) {
             this.$refs.toast.show('保存成功')
             setTimeout(() => {
@@ -169,7 +168,7 @@
         this.page = 1
         this.isAll = false
         const data = {
-          group_id: this.id,
+          // group_id: this.id,
           page: 1,
           limit: LIMIT,
           order_by: this.selectText

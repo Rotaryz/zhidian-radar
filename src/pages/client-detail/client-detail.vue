@@ -654,11 +654,15 @@
                 } else {
                   this.clientData.name = res.data.flow.nickname
                 }
+              } else {
+                this.$refs.toast.show(res.message)
               }
             })
             this.mobile = res.data.mobile
             this.getNewFlowList(this.id, this.flowId)
             this.getNewActionList(this.id)
+          } else {
+            this.$refs.toast.show(res.message)
           }
         })
       },
