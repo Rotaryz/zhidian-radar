@@ -1,6 +1,6 @@
 const env = process.env
 
-const version = ``
+const version = `/v1`
 
 const LOCAL_URL = {
   api: 'http://zantui-api.com'
