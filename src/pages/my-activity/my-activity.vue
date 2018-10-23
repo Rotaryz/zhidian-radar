@@ -2,7 +2,7 @@
   <div class="my-activity">
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
-      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
+      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item}}</div>
     </div>
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + selectTab*50 + '%,0)'">
@@ -26,7 +26,7 @@
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemDown="itemDown"
-                              :page="pageType">
+                              page="activity">
                 </activity-item>
               </div>
             </div>
@@ -54,8 +54,8 @@
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
-                              @itemDown="itemDown"
-                              :page="pageType">
+                              @itemUp="itemUp"
+                              page="team">
                 </activity-item>
               </div>
             </div>
@@ -66,15 +66,11 @@
         </div>
       </div>
     </div>
-    <div class="footer-box">
-      <div class="footer-btn" @click="toTeam">上架活动</div>
-    </div>
     <div class="loading" v-if="loading">
       <list-loading></list-loading>
     </div>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
-    <router-view @refresh="refresh"></router-view>
   </div>
 </template>
 
@@ -90,10 +86,7 @@
   import ListLoading from 'components/list-loading/list-loading'
 
   const LIMIT = 15
-  const TABS = [
-    {txt: '未开始', num: 0},
-    {txt: '进行中', num: 0}
-  ]
+  const TABS = ['上架', '下架']
   export default {
     name: 'MyActivity',
     data () {
@@ -127,7 +120,7 @@
         this.status = index
         this.timestamp = this.timeArr[index]
         this._defaultData()
-        this._defaultArray()
+        // this._defaultArray()
         this.getActivityList()
       },
       _defaultData() {
@@ -148,35 +141,63 @@
           this.loaded = false
           this.loading = true
         }
-        Activity.getActivityList({page, status: this.status})
-          .then((res) => {
-            this.loaded = true
-            this.loading = false
-            if (res.error !== ERR_OK) {
-              this.$refs.toast.show(res.message)
-              return
-            }
-            this.tabList[0].num = res.wait_online_count
-            this.tabList[1].num = res.online_count
-            this.dataArray = this.dataArray.concat(res.data)
-            if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
-              this.pullUpLoad = false
-            } else {
-              this.pullUpLoad = true
-            }
-            this._endTimePlay()
-            if (res.data.length < LIMIT) {
-              this.showNoMore = true
-            }
-            setTimeout(() => {
-              if (page === 1) {
-                this.$refs.scroll.forceUpdate()
-                this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
-              } else {
-                this.$refs.scroll.forceUpdate()
+        if (this.selectTab === 0) {
+          Activity.getActivityList({page, status: 1})
+            .then((res) => {
+              this.loaded = true
+              this.loading = false
+              if (res.error !== ERR_OK) {
+                this.$refs.toast.show(res.message)
+                return
               }
-            }, 20)
-          })
+              this.dataArray = this.dataArray.concat(res.data)
+              if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
+                this.pullUpLoad = false
+              } else {
+                this.pullUpLoad = true
+              }
+              this._endTimePlay()
+              if (res.data.length < LIMIT) {
+                this.showNoMore = true
+              }
+              setTimeout(() => {
+                if (page === 1) {
+                  this.$refs.scroll.forceUpdate()
+                  this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+                } else {
+                  this.$refs.scroll.forceUpdate()
+                }
+              }, 20)
+            })
+        } else {
+          Activity.getActivityAll({page, status: 1})
+            .then((res) => {
+              this.loaded = true
+              this.loading = false
+              if (res.error !== ERR_OK) {
+                this.$refs.toast.show(res.message)
+                return
+              }
+              this._endTimePlay()
+              this.dataArray = this.dataArray.concat(res.data)
+              if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
+                this.pullUpLoad = false
+              } else {
+                this.pullUpLoad = true
+              }
+              if (res.data.length < LIMIT) {
+                this.showNoMore = true
+              }
+              setTimeout(() => {
+                if (page === 1) {
+                  this.$refs.scroll.forceUpdate()
+                  this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+                } else {
+                  this.$refs.scroll.forceUpdate()
+                }
+              }, 20)
+            })
+        }
       },
       onPullingUp() {
         if (this.showNoMore) {
@@ -200,6 +221,28 @@
           }
           return data
         })
+      },
+      itemUp(item) { // 点击上架按钮
+        Activity.activityHandle(item.id, 1) // 上架活动
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+              return
+            }
+            this.$refs.toast.show('上架成功')
+            this.dataArray = this.dataArray.map((data) => {
+              if (+item.id === +data.id) {
+                data.showEdit = !data.showEdit
+                data.status = 1
+              } else {
+                data.showEdit = false
+              }
+              return data
+            })
+            setTimeout(() => {
+              this.$refs.scroll.forceUpdate()
+            }, 20)
+          })
       },
       itemDown(item) { // 点击下架按钮
         this.dataArray = this.dataArray.map((data) => {
@@ -227,7 +270,6 @@
               this.dataArray = this.dataArray.filter((data) => {
                 return +this.downItem.id !== +data.id
               })
-              this.tabList[this.selectTab].num--
               if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
                 this.pullUpLoad = false
               }
@@ -279,9 +321,6 @@
           }
         }
         return times
-      },
-      toTeam() {
-        this.$router.push('/mine/my-activity/team-activity')
       },
       rebuildScroll() {
         this.$nextTick(() => {

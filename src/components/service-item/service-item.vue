@@ -52,6 +52,8 @@
       return {
       }
     },
+    created() {
+    },
     methods: {
       showEditCover(item) {
         this.$emit('showEdit', item)

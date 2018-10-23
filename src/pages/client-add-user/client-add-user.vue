@@ -93,13 +93,13 @@
       submit() {
         let arr = []
         this.dataArray.map(item => {
-          item.isCheck && arr.push({customer_id: item.id})
+          item.is_member && arr.push(item.id)
+          item.isCheck && arr.push(item.id)
         })
         const data = {
-          group_id: this.id,
-          data: arr
+          customer_ids: arr
         }
-        Client.addGroupCustomer(data).then(res => {
+        Client.addGroupCustomer(this.id, data).then(res => {
           if (res.error === ERR_OK) {
             this.$refs.toast.show('保存成功')
             setTimeout(() => {
@@ -115,7 +115,6 @@
         if (!this.pullUpLoad) return
         if (this.isAll) return this.$refs.scroll.forceUpdate()
         // 更新数据
-        console.info('pulling up and load data')
 
         let page = ++this.page
         let limit = this.limit
