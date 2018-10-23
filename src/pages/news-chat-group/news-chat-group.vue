@@ -465,11 +465,11 @@
         await this._sendGroupMessage()
         this.inputMsg = ''
         this.hideInput()
-        // let msg = {
-        //   time: parseInt(Date.now() / 1000),
-        //   lastMsg: value
-        // }
-        // this.setGroupItem(msg)
+        let msg = {
+          time: parseInt(Date.now() / 1000),
+          lastMsg: value
+        }
+        this.setGroupItem(msg)
         this.setNewsGetType(true)
         this.inputMsg = ''
         this.hideInput()

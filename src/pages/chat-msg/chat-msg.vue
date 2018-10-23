@@ -43,7 +43,7 @@
                   </div>
                   <div class="new-goods-down border-top-1px">
                     <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
-                    <span>赞播微店</span>
+                    <span>赞播智店</span>
                   </div>
                 </div>
                 <div>
@@ -74,7 +74,7 @@
                   </div>
                   <div class="new-goods-down border-top-1px">
                     <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
-                    <span>赞播微店</span>
+                    <span>赞播智店</span>
                   </div>
                 </div>
                 <div>
@@ -124,7 +124,7 @@
             </div>
           </div>
           <div class="addimg-list" v-if="mortListShow">
-            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">
+            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)" :style="item.type === -1 ? 'opacity: 0' : ''">
               <div class="img-box">
                 <div class="item-icon" :class="item.icon"></div>
               </div>
@@ -134,17 +134,17 @@
           </div>
         </div>
       </div>
-      <transition name="fade">
-        <div class="cover-full" v-if="coverFullShow">
-          <div class="cover-container">
-            <div class="cover-top">
-              <span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>
-              <span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>
-            </div>
-            <div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>
-          </div>
-        </div>
-      </transition>
+      <!--<transition name="fade">-->
+        <!--<div class="cover-full" v-if="coverFullShow">-->
+          <!--<div class="cover-container">-->
+            <!--<div class="cover-top">-->
+              <!--<span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>-->
+              <!--<span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>-->
+            <!--</div>-->
+            <!--<div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</transition>-->
       <toast ref="toast"></toast>
       <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
     </div>
@@ -154,24 +154,25 @@
 <script>
   import Scroll from 'components/scroll/scroll'
   import Toast from 'components/toast/toast'
-  import {ease} from 'common/js/ease'
-  import {mapActions, mapGetters} from 'vuex'
+  import { ease } from 'common/js/ease'
+  import { mapActions, mapGetters } from 'vuex'
   import webimHandler from 'common/js/webim_handler'
   import storage from 'storage-controller'
-  import {Im, UpLoad, Global} from 'api'
-  import {ERR_OK, TIMELAG} from 'common/js/config'
+  import { Im, UpLoad, Global } from 'api'
+  import { ERR_OK, TIMELAG } from 'common/js/config'
   import utils from 'common/js/utils'
-  import {emotionsFaceArr} from 'common/js/constants'
+  import { emotionsFaceArr } from 'common/js/constants'
   import wx from 'weixin-js-sdk'
 
   const LIMIT = 40
   const MORELIST = [
-    {txt: '图片', icon: 'im-image', type: 1}
+    {txt: '图片', icon: 'im-image', type: 1},
     // {txt: '个人微信', icon: 'im-weixin', type: 4},
     // {txt: '微信群码', icon: 'im-group', type: 5},
-    // {txt: '常用语', icon: 'im-useful', type: 6},
-    // {txt: '发送商品', icon: 'im-goods', type: 2},
-    // {txt: '发送活动', icon: 'im-activity', type: 3}
+    {txt: '常用语', icon: 'im-useful', type: 6},
+    {txt: '发送商品', icon: 'im-goods', type: 2},
+    {txt: '发送活动', icon: 'im-activity', type: 3},
+    {txt: '', icon: '', type: -1}
   ]
   export default {
     name: 'Chat',
@@ -753,20 +754,20 @@
               height: 45px
               position: relative
               .gray-arrow
-                width:0
-                height:0
+                width: 0
+                height: 0
                 border-width: 5px 6px 5px 0
                 border-style: solid
-                border-color: transparent #D6DCE0 transparent transparent/*透明 灰 透明 透明 */
+                border-color: transparent #D6DCE0 transparent transparent /*透明 灰 透明 透明 */
                 position: absolute
                 right: 0
                 top: 17.5px
                 .white-arrow
-                  width:0
-                  height:0
+                  width: 0
+                  height: 0
                   border-width: 5px 6px 5px 0
                   border-style: solid
-                  border-color: transparent #FFF transparent transparent/*透明 灰 透明 透明 */
+                  border-color: transparent #FFF transparent transparent /*透明 灰 透明 透明 */
                   position: absolute
                   left: 1px
                   top: -5px
@@ -779,11 +780,11 @@
               height: 45px
               position: relative
               .green-arrow
-                width:0
-                height:0
+                width: 0
+                height: 0
                 border-width: 5px 0 5px 6px
                 border-style: solid
-                border-color: transparent transparent transparent $color-green/*透明 灰 透明 透明 */
+                border-color: transparent transparent transparent $color-green /*透明 灰 透明 透明 */
                 position: absolute
                 left: 0
                 top: 17.5px
@@ -797,7 +798,7 @@
             margin-right: 10px
           .chat-msg-new-goods
             width: 226px
-            border: 0.5px solid rgba(0,0,0,0.10)
+            border: 0.5px solid rgba(0, 0, 0, 0.10)
             border-radius: 4px
             background: $color-white
             overflow: hidden
@@ -816,7 +817,7 @@
                 .shop-icon
                   width: 18px
                   height: 18px
-                  border: 0.5px solid rgba(0,0,0,0.10)
+                  border: 0.5px solid rgba(0, 0, 0, 0.10)
                   border-radius: 50%
                   margin-right: 6px
                 .shop-name
@@ -863,7 +864,7 @@
             margin-right: 10px
           .chat-msg-goods
             width: 200px
-            border: 0.5px solid rgba(0,0,0,0.10)
+            border: 0.5px solid rgba(0, 0, 0, 0.10)
             border-radius: 4px
             background: $color-white
             margin-left: 10px
@@ -884,7 +885,7 @@
             .qrCode-content
               width: 230px
               padding: 10px 12px
-              border: 0.5px solid rgba(0,0,0,0.10)
+              border: 0.5px solid rgba(0, 0, 0, 0.10)
               border-radius: 4px
               background: $color-white
               overflow: hidden
@@ -948,7 +949,7 @@
           width: 43px
           height: 36px
           margin: 0 5px
-          border: 1px solid rgba(0,0,0,0.10)
+          border: 1px solid rgba(0, 0, 0, 0.10)
           border-radius: 2px
           background: $color-white
           text-align: center
@@ -960,7 +961,7 @@
           flex: 1
           overflow-x: hidden
           min-height: 28px
-          border: 1px solid rgba(0,0,0,0.10)
+          border: 1px solid rgba(0, 0, 0, 0.10)
           background: $color-white
           max-height: 100px
           overflow-y: auto
@@ -1046,12 +1047,12 @@
       z-index: 100
       layout()
       align-items: center
-      background: rgba(32,32,46,0.8)
+      background: rgba(32, 32, 46, 0.8)
       .cover-container
         width: 300px
         height: 160px
         background: $color-white
-        border: 1px solid rgba(32,32,46,0.10)
+        border: 1px solid rgba(32, 32, 46, 0.10)
         border-radius: 2px
         all-center()
         .cover-top
