@@ -2,18 +2,18 @@
   <div class="news">
     <scroll :data="latelyList" :bcColor="'#ffffff'" ref="scroll">
       <div class="news-list">
-        <!--<div class="news-item border-bottom-1px" @click="createGroup">-->
-          <!--<div class="news-left">-->
-            <!--<img src="./icon-Group@2x.png" class="left-img">-->
-          <!--</div>-->
-          <!--<div class="news-right">-->
-            <!--<div class="right-top">-->
-              <!--<span class="top-name">群发助手</span>-->
-              <!--<span class="top-time">{{groupItem.time}}</span>-->
-            <!--</div>-->
-            <!--<div class="right-down" v-html="groupItem.html"></div>-->
-          <!--</div>-->
-        <!--</div>-->
+        <div class="news-item border-bottom-1px" @click="createGroup">
+          <div class="news-left">
+            <img src="./icon-Group@2x.png" class="left-img">
+          </div>
+          <div class="news-right">
+            <div class="right-top">
+              <span class="top-name">群发助手</span>
+              <span class="top-time">{{groupItem.time}}</span>
+            </div>
+            <div class="right-down" v-html="groupItem.html"></div>
+          </div>
+        </div>
         <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)">
           <div class="news-left">
             <img :src="item.avatar" class="left-img">
@@ -33,27 +33,27 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters} from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
   import Scroll from 'components/scroll/scroll'
-  // import { Im } from 'api'
-  // import {ERR_OK} from '../../common/js/config'
+  import { Im } from 'api'
+  import { ERR_OK } from 'common/js/config'
+
   export default {
     name: 'News',
     created() {
       if (this.newsGetType) {
         this.setNewsGetType(false)
-        // return
+        return
       }
-      // todo
-      // Im.getLastGroupMsg().then(res => {
-      //   if (res.error === ERR_OK) {
-      //     let msg = {
-      //       time: res.data.created_at || '',
-      //       lastMsg: res.data.content || ''
-      //     }
-      //     this.setGroupItem(msg)
-      //   }
-      // })
+      Im.getLastGroupMsg().then(res => {
+        if (res.error === ERR_OK) {
+          let msg = {
+            time: res.data.created_at || '',
+            lastMsg: res.data.content || ''
+          }
+          this.setGroupItem(msg)
+        }
+      })
     },
     mounted() {
       setTimeout(() => {
@@ -61,8 +61,7 @@
       }, 20)
     },
     data() {
-      return {
-      }
+      return {}
     },
     methods: {
       ...mapActions([
@@ -93,7 +92,7 @@
       ])
     },
     watch: {
-      latelyList: function() {
+      latelyList: function () {
         setTimeout(() => {
           this.$refs.scroll.refresh()
         }, 20)
