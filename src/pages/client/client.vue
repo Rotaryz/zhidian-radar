@@ -3,7 +3,7 @@
     <header>
       <search @toNav="toSearch"></search>
       <dl class="tab-wrapper">
-        <!--<dt class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></dt>-->
+        <dt class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></dt>
         <dd class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.title}}({{item.number}})</dd>
       </dl>
       <div class="f3"></div>
@@ -25,9 +25,9 @@
                 :key="index"
                 @click="check(item)"
             >
-              <!--<slide-view :useType="1" @grouping="groupingHandler" :item="item">-->
+              <slide-view :useType="1" @grouping="groupingHandler" :item="item">
                 <user-card :userInfo="item" slot="content" :useType="checkedGroup.orderBy"></user-card>
-              <!--</slide-view>-->
+              </slide-view>
             </li>
           </ul>
         </scroll>

@@ -120,7 +120,7 @@
         this.isAll = false
         Client.getGroupCustomerList(this.id).then(res => {
           if (res.error === ERR_OK) {
-            this.dataArray = res.data.customers
+            this.dataArray = res.data
             this.isEmpty = !this.dataArray.length
           } else {
             this.$refs.toast.show(res.message)
@@ -164,17 +164,13 @@
         // 更新数据
         if (!this.pullUpLoad) return // 防止下拉报错
         if (this.isAll) return this.$refs.scroll.forceUpdate()
-        console.info('pulling up and load data')
         let page = ++this.page
         let limit = LIMIT
         const data = {
-          get_group_detail: 1,
-          group_id: this.id,
           page: page,
-          limit: limit,
-          order_by: this.selectText
+          limit: limit
         }
-        Client.getCustomerList(data).then(res => {
+        Client.getGroupCustomerList(this.id, data).then(res => {
           if (res.error === ERR_OK) {
             if (res.data && res.data.length) {
               let arr = this.dataArray.concat(res.data)

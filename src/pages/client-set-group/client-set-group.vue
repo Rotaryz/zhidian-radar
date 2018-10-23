@@ -5,7 +5,7 @@
         <div class="title">设置分组</div>
         <section class="content">
           <div v-if="dataArray.length"
-               :class="['item',item.is_selecte?'active':'']"
+               :class="['item',item.selected?'active':'']"
                v-for="(item,index) in dataArray"
                :key="index"
                @click="check(item)">
@@ -37,8 +37,7 @@
     },
     created() {
       this.id = this.$route.query.id // 分组id
-      const data = {customer_id: this.id}
-      Client.getSetGroupList(data).then(res => {
+      Client.getSetGroupList(this.id).then(res => {
         if (res.data) {
           this.dataArray = res.data
           this.isEmpty = !this.dataArray.length
@@ -64,15 +63,11 @@
     //   })
     // },
     beforeRouteLeave(to, from, next) {
-      let arr = []
-      this.dataArray.filter(item => {
-        item.is_selecte && arr.push({group_id: item.id})
+      let groupIds = []
+      this.dataArray.map(item => {
+        item.selected && groupIds.push(item.id)
       })
-      const data = {
-        customer_id: this.id, // 分组id
-        data: arr
-      }
-      Client.setGroup(data).then(res => {
+      Client.setGroup({group_ids: groupIds}, this.id).then(res => {
         if (res.error === ERR_OK) {
           this.$emit('refresh')
         }
@@ -81,7 +76,7 @@
     },
     methods: {
       check(item) {
-        item.is_selecte = !item.is_selecte
+        item.selected = !item.selected
       }
     },
     computed: {

@@ -17,18 +17,18 @@ export default {
     return request.get(url, data, loading)
   },
   // 获取分组内客户列表
-  getGroupCustomerList(groupId, loading) {
-    const url = `/api/employee/groups/${groupId}`
-    return request.get(url, loading)
-  },
-  // 获取设置分组的客户列表
-  getSetGroupList(data, loading) {
-    const url = `/api/employee/set-group`
+  getGroupCustomerList(groupId, data, loading) {
+    const url = `/api/employee/groups/${groupId}/customers`
     return request.get(url, data, loading)
   },
+  // 获取设置分组的客户列表
+  getSetGroupList(customerId, loading) {
+    const url = `/api/employee/customers/${customerId}/groups`
+    return request.get(url, loading)
+  },
   // 在设置分组里面为用户更改组
-  setGroup(data, loading) {
-    const url = `/api/employee/set-group`
+  setGroup(data, customerId, loading) {
+    const url = `/api/employee/customers/${customerId}/groups`
     return request.post(url, data, loading)
   },
   // 分组内删除用户
