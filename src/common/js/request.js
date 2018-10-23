@@ -69,7 +69,6 @@ function requestException(res) {
   return error
 }
 
-const todo = '12345678'
 export default {
   post(url, data) {
     return http({
