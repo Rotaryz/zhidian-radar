@@ -125,65 +125,34 @@
           this.loaded = false
           this.loading = true
         }
-        if (this.selectTab === 0) {
-          Service.getServiceList({page, status: 1})
-            .then((res) => {
-              this.loaded = true
-              this.loading = false
-              if (res.error !== ERR_OK) {
-                this.$refs.toast.show(res.message)
-                return
-              }
-              this.tabList[0].num = res.online_count
-              this.tabList[1].num = res.wait_online_count
-              this.dataArray = this.dataArray.concat(res.data)
-              if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
-                this.pullUpLoad = false
+        Service.getServiceList({page, status: Math.abs(this.selectTab - 1)})
+          .then((res) => {
+            this.loaded = true
+            this.loading = false
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+              return
+            }
+            this.tabList[0].num = res.online_count
+            this.tabList[1].num = res.offline_count
+            this.dataArray = this.dataArray.concat(res.data)
+            if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
+              this.pullUpLoad = false
+            } else {
+              this.pullUpLoad = true
+            }
+            if (res.data.length < LIMIT) {
+              this.showNoMore = true
+            }
+            setTimeout(() => {
+              if (page === 1) {
+                this.$refs.scroll.forceUpdate()
+                this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
               } else {
-                this.pullUpLoad = true
+                this.$refs.scroll.forceUpdate()
               }
-              if (res.data.length < LIMIT) {
-                this.showNoMore = true
-              }
-              setTimeout(() => {
-                if (page === 1) {
-                  this.$refs.scroll.forceUpdate()
-                  this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
-                } else {
-                  this.$refs.scroll.forceUpdate()
-                }
-              }, 20)
-            })
-        } else {
-          Service.getServiceAll({page, status: 1})
-            .then((res) => {
-              this.loaded = true
-              this.loading = false
-              if (res.error !== ERR_OK) {
-                this.$refs.toast.show(res.message)
-                return
-              }
-              this.tabList[0].num = res.online_count
-              this.tabList[1].num = res.wait_online_count
-              this.dataArray = this.dataArray.concat(res.data)
-              if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
-                this.pullUpLoad = false
-              } else {
-                this.pullUpLoad = true
-              }
-              if (res.data.length < LIMIT) {
-                this.showNoMore = true
-              }
-              setTimeout(() => {
-                if (page === 1) {
-                  this.$refs.scroll.forceUpdate()
-                  this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
-                } else {
-                  this.$refs.scroll.forceUpdate()
-                }
-              }, 20)
-            })
-        }
+            }, 20)
+          })
       },
       onPullingUp() {
         if (this.showNoMore) {
@@ -213,14 +182,8 @@
             this.$refs.toast.show('上架成功')
             this.tabList[0].num++
             this.tabList[1].num--
-            this.dataArray = this.dataArray.map((data) => {
-              if (+item.id === +data.id) {
-                data.showEdit = !data.showEdit
-                data.status = 1
-              } else {
-                data.showEdit = false
-              }
-              return data
+            this.dataArray = this.dataArray.filter((data) => {
+              return +this.downItem.id !== +data.id
             })
             setTimeout(() => {
               this.$refs.scroll.forceUpdate()

@@ -23,7 +23,7 @@
                               page="activity">
                 </activity-item>
                 <p class="title" :class="{'group' : item.rule_id * 1 === 1}"></p>
-                <div class="time-down">
+                <div class="time-down" v-if="item[timestamp]">
                   <div class="time-box">
                     <p class="time">距开始
                       <span v-if="item.endTime && item.endTime.day" class="date">{{item.endTime.day}}</span>:
@@ -56,7 +56,7 @@
                               page="team">
                 </activity-item>
                 <p class="title" :class="{'group' : item.rule_id * 1 === 1}"></p>
-                <div class="time-down">
+                <div class="time-down" v-if="item[timestamp]">
                   <div class="time-box">
                     <p class="time">距开始
                       <span v-if="item.endTime && item.endTime.day" class="date">{{item.endTime.day}}</span>:
@@ -130,7 +130,7 @@
       changeTab(index) {
         this.selectTab = index
         this.status = index
-        this.timestamp = this.timeArr[index]
+        // this.timestamp = this.timeArr[index]
         this._defaultData()
         // this._defaultArray()
         this.getActivityList()
@@ -153,67 +153,35 @@
           this.loaded = false
           this.loading = true
         }
-        if (this.selectTab === 0) {
-          Activity.getActivityList({page, status: 1})
-            .then((res) => {
-              this.loaded = true
-              this.loading = false
-              if (res.error !== ERR_OK) {
-                this.$refs.toast.show(res.message)
-                return
-              }
-              this.tabList[0].num = res.online_count
-              this.tabList[1].num = res.wait_online_count
-              this.dataArray = this.dataArray.concat(res.data)
-              if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
-                this.pullUpLoad = false
+        Activity.getActivityList({page, status: Math.abs(this.selectTab - 1)})
+          .then((res) => {
+            this.loaded = true
+            this.loading = false
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+              return
+            }
+            this.tabList[0].num = res.online_count
+            this.tabList[1].num = res.offline_count
+            this.dataArray = this.dataArray.concat(res.data)
+            if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
+              this.pullUpLoad = false
+            } else {
+              this.pullUpLoad = true
+            }
+            this._endTimePlay()
+            if (res.data.length < LIMIT) {
+              this.showNoMore = true
+            }
+            setTimeout(() => {
+              if (page === 1) {
+                this.$refs.scroll.forceUpdate()
+                this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
               } else {
-                this.pullUpLoad = true
+                this.$refs.scroll.forceUpdate()
               }
-              this._endTimePlay()
-              if (res.data.length < LIMIT) {
-                this.showNoMore = true
-              }
-              setTimeout(() => {
-                if (page === 1) {
-                  this.$refs.scroll.forceUpdate()
-                  this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
-                } else {
-                  this.$refs.scroll.forceUpdate()
-                }
-              }, 20)
-            })
-        } else {
-          Activity.getActivityAll({page, status: 1})
-            .then((res) => {
-              this.loaded = true
-              this.loading = false
-              if (res.error !== ERR_OK) {
-                this.$refs.toast.show(res.message)
-                return
-              }
-              this.tabList[0].num = res.online_count
-              this.tabList[1].num = res.wait_online_count
-              this._endTimePlay()
-              this.dataArray = this.dataArray.concat(res.data)
-              if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
-                this.pullUpLoad = false
-              } else {
-                this.pullUpLoad = true
-              }
-              if (res.data.length < LIMIT) {
-                this.showNoMore = true
-              }
-              setTimeout(() => {
-                if (page === 1) {
-                  this.$refs.scroll.forceUpdate()
-                  this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
-                } else {
-                  this.$refs.scroll.forceUpdate()
-                }
-              }, 20)
-            })
-        }
+            }, 20)
+          })
       },
       onPullingUp() {
         if (this.showNoMore) {
@@ -239,7 +207,7 @@
         })
       },
       itemUp(item) { // 点击上架按钮
-        Activity.activityHandle(item.id, 1) // 上架活动
+        Activity.activityHandle(item.activity_id, 1) // 上架活动
           .then((res) => {
             if (res.error !== ERR_OK) {
               this.$refs.toast.show(res.message)
@@ -247,15 +215,11 @@
             }
             this.$refs.toast.show('上架成功')
             this.tabList[0].num++
-            this.dataArray = this.dataArray.map((data) => {
-              if (+item.id === +data.id) {
-                data.showEdit = !data.showEdit
-                data.status = 1
-              } else {
-                data.showEdit = false
-              }
-              return data
+            this.tabList[1].num--
+            this.dataArray = this.dataArray.filter((data) => {
+              return +this.downItem.id !== +data.id
             })
+            console.log(this.dataArray)
             setTimeout(() => {
               this.$refs.scroll.forceUpdate()
             }, 20)
@@ -284,7 +248,8 @@
                 return
               }
               this.$refs.toast.show('下架成功')
-              this.tabList[1].num--
+              this.tabList[0].num--
+              this.tabList[1].num++
               this.dataArray = this.dataArray.filter((data) => {
                 return +this.downItem.id !== +data.id
               })
