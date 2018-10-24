@@ -2,7 +2,7 @@
   <div class="my-activity">
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
-      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item}}</div>
+      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
     </div>
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + selectTab*50 + '%,0)'">
@@ -15,12 +15,6 @@
                   v-if="selectTab === 0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray" :key="index">
-                <div class="time-down">
-                  <div class="time-box">
-                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
-                    <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
-                  </div>
-                </div>
                 <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
@@ -28,6 +22,16 @@
                               @itemDown="itemDown"
                               page="activity">
                 </activity-item>
+                <p class="title" :class="{'group' : item.rule_id * 1 === 1}"></p>
+                <div class="time-down">
+                  <div class="time-box">
+                    <p class="time">距开始
+                      <span v-if="item.endTime && item.endTime.day" class="date">{{item.endTime.day}}</span>:
+                      <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
+                      <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
+                      <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span></p>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray.length === 0">
@@ -44,12 +48,6 @@
                   v-if="selectTab === 1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray" :key="index">
-                <div class="time-down">
-                  <div class="time-box">
-                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
-                    <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
-                  </div>
-                </div>
                 <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
@@ -57,6 +55,17 @@
                               @itemUp="itemUp"
                               page="team">
                 </activity-item>
+                <p class="title" :class="{'group' : item.rule_id * 1 === 1}"></p>
+                <div class="time-down">
+                  <div class="time-box">
+                    <p class="time">距开始
+                      <span v-if="item.endTime && item.endTime.day" class="date">{{item.endTime.day}}</span>:
+                      <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
+                      <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
+                      <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray.length === 0">
@@ -86,7 +95,10 @@
   import ListLoading from 'components/list-loading/list-loading'
 
   const LIMIT = 15
-  const TABS = ['上架', '下架']
+  const TABS = [
+    {txt: '已上架', num: 0},
+    {txt: '已下架', num: 0}
+  ]
   export default {
     name: 'MyActivity',
     data () {
@@ -150,6 +162,8 @@
                 this.$refs.toast.show(res.message)
                 return
               }
+              this.tabList[0].num = res.online_count
+              this.tabList[1].num = res.wait_online_count
               this.dataArray = this.dataArray.concat(res.data)
               if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
                 this.pullUpLoad = false
@@ -178,6 +192,8 @@
                 this.$refs.toast.show(res.message)
                 return
               }
+              this.tabList[0].num = res.online_count
+              this.tabList[1].num = res.wait_online_count
               this._endTimePlay()
               this.dataArray = this.dataArray.concat(res.data)
               if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
@@ -230,6 +246,7 @@
               return
             }
             this.$refs.toast.show('上架成功')
+            this.tabList[0].num++
             this.dataArray = this.dataArray.map((data) => {
               if (+item.id === +data.id) {
                 data.showEdit = !data.showEdit
@@ -267,6 +284,7 @@
                 return
               }
               this.$refs.toast.show('下架成功')
+              this.tabList[1].num--
               this.dataArray = this.dataArray.filter((data) => {
                 return +this.downItem.id !== +data.id
               })
@@ -419,24 +437,47 @@
           .list-container
             padding: 0 15px
             .list-item
+              position: relative
               padding-top: 15px
               box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
               .time-down
                 height: 46px
                 padding: 0 15px
                 background: $color-white
+              .title
+                bg-image(pic-label_kj)
+                width: 10vw
+                height: 10vw
+                background-size: 100% 100%
+                position: absolute
+                left: -3px
+                top: 13px
+              .group
+                bg-image(pic-label_pt)
+                background-size: 100% 100%
               .time-box
                 height: 100%
                 display: flex
                 align-items: center
                 justify-content: space-between
-                border-bottom-1px($color-F3F3F3)
-              .title
-                font-size: 16px
-                color: $color-20202E
+                border-top-1px($color-F3F3F3)
               .time
                 font-size: 14px
+                display: flex
+                align-items: center
                 color: $color-20202E
+                .date
+                  width: 18px
+                  height: 18px
+                  line-height: 18px
+                  text-align: center
+                  background: $color-20202E
+                  border-radius: 2px
+                  margin: 0 2px
+                  font-size: $font-size-10
+                  color: $color-white
+                  &:first-child
+                    margin-left: 4px
     .footer-box
       position: fixed
       width: 100vw

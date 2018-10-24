@@ -2,7 +2,7 @@
   <div class="my-service">
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
-      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item}}</div>
+      <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
     </div>
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + selectTab*50 + '%,0)'">
@@ -74,7 +74,10 @@
   import ListLoading from 'components/list-loading/list-loading'
 
   const LIMIT = 15
-  const TABS = ['上架', '下架']
+  const TABS = [
+    {txt: '已上架', num: 0},
+    {txt: '已下架', num: 0}
+  ]
   export default {
     name: 'MyService',
     data () {
@@ -131,6 +134,8 @@
                 this.$refs.toast.show(res.message)
                 return
               }
+              this.tabList[0].num = res.online_count
+              this.tabList[1].num = res.wait_online_count
               this.dataArray = this.dataArray.concat(res.data)
               if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
                 this.pullUpLoad = false
@@ -158,6 +163,8 @@
                 this.$refs.toast.show(res.message)
                 return
               }
+              this.tabList[0].num = res.online_count
+              this.tabList[1].num = res.wait_online_count
               this.dataArray = this.dataArray.concat(res.data)
               if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
                 this.pullUpLoad = false
@@ -204,6 +211,8 @@
               return
             }
             this.$refs.toast.show('上架成功')
+            this.tabList[0].num++
+            this.tabList[1].num--
             this.dataArray = this.dataArray.map((data) => {
               if (+item.id === +data.id) {
                 data.showEdit = !data.showEdit
@@ -252,6 +261,8 @@
             this.dataArray = this.dataArray.filter((data) => {
               return +this.downItem.id !== +data.id
             })
+            this.tabList[0].num--
+            this.tabList[1].num++
             if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
               this.pullUpLoad = false
             }

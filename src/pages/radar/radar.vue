@@ -723,13 +723,13 @@
           font-family: $font-family-medium
         .msg-item-content
           width: 100%
-          height: 70px
           background: $color-white
           border: 0.5px solid rgba(32, 32, 46, 0.10)
           box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.04)
           border-radius: 5px
           display: flex
           justify-content: space-between
+          padding: 15px 0
           align-items: center
         .msgs-left
           margin: 0 10px 0 15px
