@@ -398,10 +398,10 @@
             this.peopleDataList = res.data
             this.firstGet = false
             this.page = 0
-            this.peopleMore = false
-            if (res.data.length < 30) {
-              this.peopleMore = true
-            }
+            // this.peopleMore = false
+            // if (res.data.length < 30) {
+            this.peopleMore = true
+            // }
             setTimeout(() => {
               this.$refs.scrollPeople.forceUpdate()
             }, 20)
