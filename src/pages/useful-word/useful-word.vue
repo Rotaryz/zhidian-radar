@@ -47,7 +47,6 @@
         this.setNewsGetType(false)
         return
       }
-      console.log('created')
       this.getMsg(true)
     },
     methods: {
