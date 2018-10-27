@@ -5,32 +5,32 @@
         <div class="group-wrapper">群发组：<span v-for="(item1, index1) in currentGroupMsg" :key="index1">{{index1 == (currentGroupMsg.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
       </section>
       <!--<section class="chat-input border-top-1px">-->
-        <!--<div class="chat-input-box">-->
-          <!--<div class="face-box" @click.stop="showEmoji">-->
-            <!--<img src="../../../static/img/icon-emoji@2x.png" class="face-icon">-->
-          <!--</div>-->
-          <!--<div class="input-container" ref="textBox">-->
-            <!--<textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>-->
-          <!--</div>-->
-          <!--<div class="addimg-box" v-if="!inputMsg" @click.stop="showMoreList">-->
-            <!--<img src="../../../static/img/icon-add_im@2x.png" class="addimg-icon">-->
-          <!--</div>-->
-          <!--<div class="submit-btn" @click="sendMsg" v-if="inputMsg">发送</div>-->
-        <!--</div>-->
-        <!--<div class="more-box">-->
-          <!--<div class="emoji-list" v-if="emojiShow">-->
-            <!--<div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">-->
-              <!--<img :src="item.url" class="emoji-icon">-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="addimg-list" v-if="mortListShow">-->
-            <!--<label class="addimg-item" :for="item.type == 1?'choose-pic':''" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">-->
-              <!--<img :src="item.icon" class="item-icon">-->
-              <!--<p class="item-txt">{{item.txt}}</p>-->
-              <!--<input type="file" id="choose-pic" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">-->
-            <!--</label>-->
-          <!--</div>-->
-        <!--</div>-->
+      <!--<div class="chat-input-box">-->
+      <!--<div class="face-box" @click.stop="showEmoji">-->
+      <!--<img src="../../../static/img/icon-emoji@2x.png" class="face-icon">-->
+      <!--</div>-->
+      <!--<div class="input-container" ref="textBox">-->
+      <!--<textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>-->
+      <!--</div>-->
+      <!--<div class="addimg-box" v-if="!inputMsg" @click.stop="showMoreList">-->
+      <!--<img src="../../../static/img/icon-add_im@2x.png" class="addimg-icon">-->
+      <!--</div>-->
+      <!--<div class="submit-btn" @click="sendMsg" v-if="inputMsg">发送</div>-->
+      <!--</div>-->
+      <!--<div class="more-box">-->
+      <!--<div class="emoji-list" v-if="emojiShow">-->
+      <!--<div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">-->
+      <!--<img :src="item.url" class="emoji-icon">-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="addimg-list" v-if="mortListShow">-->
+      <!--<label class="addimg-item" :for="item.type == 1?'choose-pic':''" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">-->
+      <!--<img :src="item.icon" class="item-icon">-->
+      <!--<p class="item-txt">{{item.txt}}</p>-->
+      <!--<input type="file" id="choose-pic" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">-->
+      <!--</label>-->
+      <!--</div>-->
+      <!--</div>-->
       <!--</section>-->
       <div class="chat-input border-top-1px">
         <div class="chat-input-box">
@@ -52,7 +52,7 @@
             </div>
           </div>
           <div class="addimg-list" v-if="mortListShow">
-            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">
+            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)" :style="item.type === -1 ?'opacity: 0':''">
               <div class="img-box">
                 <div class="item-icon" :class="item.icon"></div>
               </div>
@@ -84,18 +84,19 @@
   import { mapActions, mapGetters } from 'vuex'
   import webimHandler from 'common/js/webim_handler'
   import storage from 'storage-controller'
-  import { Im, UpLoad } from 'api'
+  import { Im, UpLoad, News } from 'api'
   import { ERR_OK } from 'common/js/config'
   import utils from 'common/js/utils'
   import { emotionsFaceArr } from 'common/js/constants'
 
   const MORELIST = [
     {txt: '图片', icon: 'im-image', type: 1},
-    {txt: '个人微信', icon: 'im-weixin', type: 4},
-    {txt: '微信群码', icon: 'im-group', type: 5},
+    // {txt: '个人微信', icon: 'im-weixin', type: 4},
+    // {txt: '微信群码', icon: 'im-group', type: 5},
     {txt: '常用语', icon: 'im-useful', type: 6},
     {txt: '发送商品', icon: 'im-goods', type: 2},
-    {txt: '发送活动', icon: 'im-activity', type: 3}
+    {txt: '发送活动', icon: 'im-activity', type: 3},
+    {txt: '', icon: '', type: -1}
   ]
 
   export default {
@@ -119,7 +120,7 @@
       }
     },
     created() {
-      this.getQrCodeStatus()
+      // this.getQrCodeStatus()
     },
     mounted() {
       this.textareaDom = this.$refs.inputTxt
@@ -451,7 +452,7 @@
             break
         }
       },
-      sendMsg() {
+      async sendMsg() {
         if (this.groupMsgIng) {
           this.$refs.toast.show('群发消息发送中，请稍后再发')
           return
@@ -461,6 +462,7 @@
           this.$refs.toast.show('发送消息不能为空')
           return
         }
+        await this._sendGroupMessage()
         this.inputMsg = ''
         this.hideInput()
         let msg = {
@@ -471,39 +473,45 @@
         this.setNewsGetType(true)
         this.inputMsg = ''
         this.hideInput()
-        this.$router.go(-2)
-        let groupIds = this.currentGroupMsg.map((item) => {
-          return item.id
-        })
-        let reqData = {
-          type: 1,
-          content: value,
-          group_ids: groupIds
+        // this.$router.go(-2)
+        // let groupIds = this.currentGroupMsg.map((item) => {
+        //   return item.id
+        // })
+        // let reqData = {
+        //   type: 1,
+        //   content: value,
+        //   group_ids: groupIds
+        // }
+        // Im.setGroupList(reqData).then((res) => {
+        // })
+        // let reqArr = this._splitArr(this.currentGroupMsg)
+        // this._splitSendGroupMsg(reqArr, 'chat', value)
+      },
+      _sendGroupMessage(data) {
+        data = {
+          'group_ids': [
+            2,
+            4
+          ],
+          'type': 1,
+          'message': {
+            'text': '123123',
+            'title': '',
+            'goods_id': 0,
+            'goods_price': 0,
+            'original_price': 0,
+            'url': '',
+            'image_id': 0,
+            'activity_id': 0
+          }
         }
-        Im.setGroupList(reqData).then((res) => {
+        News.sendGroupMessage(data).then(res => {
+          if (ERR_OK !== res.error) {
+            this.$refs.toast.show(res.message)
+            return
+          }
+          console.log(res)
         })
-        let reqArr = this._splitArr(this.currentGroupMsg)
-        this._splitSendGroupMsg(reqArr, 'chat', value)
-        /** this.currentGroupMsg.map((item) => {
-          item.customers.map((item1) => {
-            webimHandler.onSendMsg(value, item1.account).then(res => {
-              let timeStamp = parseInt(Date.now() / 1000)
-              let addMsg = {
-                text: value,
-                time: timeStamp,
-                msgTimeStamp: timeStamp,
-                fromAccount: item1.account,
-                sessionId: item1.account,
-                unreadMsgCount: 0,
-                avatar: item1.avatar,
-                nickName: item1.nickName
-              }
-              this.addListMsg({msg: addMsg, type: 'mineAdd'})
-            }, () => {
-              // this.$refs.toast.show('网络异常, 请稍后重试')
-            })
-          })
-        }) **/
       }
     },
     components: {
@@ -611,7 +619,7 @@
           width: 43px
           height: 36px
           margin: 0 5px
-          border: 1px solid rgba(0,0,0,0.10)
+          border: 1px solid rgba(0, 0, 0, 0.10)
           border-radius: 2px
           background: $color-white
           text-align: center
@@ -623,7 +631,7 @@
           flex: 1
           overflow-x: hidden
           min-height: 28px
-          border: 1px solid rgba(0,0,0,0.10)
+          border: 1px solid rgba(0, 0, 0, 0.10)
           background: $color-white
           max-height: 100px
           overflow-y: auto
@@ -709,12 +717,12 @@
       z-index: 100
       layout()
       align-items: center
-      background: rgba(32,32,46,0.8)
+      background: rgba(32, 32, 46, 0.8)
       .cover-container
         width: 300px
         height: 160px
         background: $color-white
-        border: 1px solid rgba(32,32,46,0.10)
+        border: 1px solid rgba(32, 32, 46, 0.10)
         border-radius: 2px
         all-center()
         .cover-top
