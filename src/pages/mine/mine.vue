@@ -4,7 +4,8 @@
       <div class="mine-top">
         <div class="top-box">
           <div class="top-box-left">
-            <img class="mine-header" :src="mine.avatar">
+            <img v-if="mine.avatar&&mine.avatar.length" class="mine-header" :src="mine.avatar">
+            <img v-else class="mine-header" src="./pic-default_people@2x.png">
             <p class="peo-name">
               {{mine.name}}<br />
               <span class="tag">角色:{{tag}}</span>

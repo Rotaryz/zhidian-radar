@@ -1,7 +1,7 @@
 <template>
   <transition :name="slide">
     <div class="add-word">
-      <scroll :data="wordList" :bcColor="'#ffffff'" ref="scroll">
+      <scroll :bcColor="'#ffffff'" ref="scroll">
         <div class="word-list">
           <div class="word-item border-bottom-1px" v-for="(item, index) in wordList" :key="index">
             <div class="item-left">
@@ -88,10 +88,7 @@
       submitDelete() {
         if (!this.allowConfirm) return
         this.allowConfirm = false
-        let data = {
-          id: this.deleteAny.id
-        }
-        Im.delWord(data).then(res => {
+        Im.delWord(this.deleteAny.id).then(res => {
           if (res.error === ERR_OK) {
             this.wordList = this.wordList.filter((item) => {
               return item.id !== this.deleteAny.id
@@ -135,10 +132,9 @@
         let data
         if (this.editorItem.id) {
           data = {
-            id: this.editorItem.id,
             message: this.editorMsg
           }
-          Im.editWord(data).then(res => {
+          Im.editWord(data, this.editorItem.id).then(res => {
             if (res.error === ERR_OK) {
               this.wordList.map((item) => {
                 if (item.id * 1 === this.editorItem.id) {

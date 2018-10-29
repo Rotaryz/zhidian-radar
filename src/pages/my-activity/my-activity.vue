@@ -15,19 +15,23 @@
                   v-if="selectTab === 0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray" :key="index">
-                <div class="time-down">
-                  <div class="time-box">
-                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
-                    <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
-                  </div>
-                </div>
                 <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemDown="itemDown"
-                              :page="pageType">
+                              page="activity">
                 </activity-item>
+                <p class="title" :class="{'group' : item.rule_id * 1 === 1}"></p>
+                <div class="time-down" v-if="item[timestamp]">
+                  <div class="time-box">
+                    <p class="time">距开始
+                      <span v-if="item.endTime && item.endTime.day" class="date">{{item.endTime.day}}</span>:
+                      <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
+                      <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
+                      <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span></p>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray.length === 0">
@@ -44,19 +48,24 @@
                   v-if="selectTab === 1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in dataArray" :key="index">
-                <div class="time-down">
-                  <div class="time-box">
-                    <p class="title">{{item.rule_id * 1 === 1 ? '火爆拼团' : '砍价抢购'}}</p>
-                    <p class="time">{{selectTab === 0 ? '距离本场开始' : '距离本场结束'}}:{{item.endTime ? item.endTime.day ? item.endTime.day + '天' : '' : ''}}{{item.endTime ? item.endTime.hour ? item.endTime.hour : '' : ''}}:{{item.endTime ? item.endTime.minute ? item.endTime.minute : '' : ''}}:{{item.endTime ? item.endTime.second ? item.endTime.second : '' : ''}}</p>
-                  </div>
-                </div>
                 <activity-item :tabIdx="selectTab"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
-                              @itemDown="itemDown"
-                              :page="pageType">
+                              @itemUp="itemUp"
+                              page="team">
                 </activity-item>
+                <p class="title" :class="{'group' : item.rule_id * 1 === 1}"></p>
+                <div class="time-down" v-if="item[timestamp]">
+                  <div class="time-box">
+                    <p class="time">距开始
+                      <span v-if="item.endTime && item.endTime.day" class="date">{{item.endTime.day}}</span>:
+                      <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
+                      <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
+                      <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray.length === 0">
@@ -66,15 +75,11 @@
         </div>
       </div>
     </div>
-    <div class="footer-box">
-      <div class="footer-btn" @click="toTeam">上架活动</div>
-    </div>
     <div class="loading" v-if="loading">
       <list-loading></list-loading>
     </div>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
-    <router-view @refresh="refresh"></router-view>
   </div>
 </template>
 
@@ -91,8 +96,8 @@
 
   const LIMIT = 15
   const TABS = [
-    {txt: '未开始', num: 0},
-    {txt: '进行中', num: 0}
+    {txt: '已上架', num: 0},
+    {txt: '已下架', num: 0}
   ]
   export default {
     name: 'MyActivity',
@@ -125,9 +130,9 @@
       changeTab(index) {
         this.selectTab = index
         this.status = index
-        this.timestamp = this.timeArr[index]
+        // this.timestamp = this.timeArr[index]
         this._defaultData()
-        this._defaultArray()
+        // this._defaultArray()
         this.getActivityList()
       },
       _defaultData() {
@@ -148,7 +153,7 @@
           this.loaded = false
           this.loading = true
         }
-        Activity.getActivityList({page, status: this.status})
+        Activity.getActivityList({page, status: Math.abs(this.selectTab - 1)})
           .then((res) => {
             this.loaded = true
             this.loading = false
@@ -156,8 +161,8 @@
               this.$refs.toast.show(res.message)
               return
             }
-            this.tabList[0].num = res.wait_online_count
-            this.tabList[1].num = res.online_count
+            this.tabList[0].num = res.online_count
+            this.tabList[1].num = res.offline_count
             this.dataArray = this.dataArray.concat(res.data)
             if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
               this.pullUpLoad = false
@@ -201,6 +206,25 @@
           return data
         })
       },
+      itemUp(item) { // 点击上架按钮
+        Activity.activityHandle(item.activity_id, 1) // 上架活动
+          .then((res) => {
+            if (res.error !== ERR_OK) {
+              this.$refs.toast.show(res.message)
+              return
+            }
+            this.$refs.toast.show('上架成功')
+            this.tabList[0].num++
+            this.tabList[1].num--
+            this.dataArray = this.dataArray.filter((data) => {
+              return +this.downItem.id !== +data.id
+            })
+            console.log(this.dataArray)
+            setTimeout(() => {
+              this.$refs.scroll.forceUpdate()
+            }, 20)
+          })
+      },
       itemDown(item) { // 点击下架按钮
         this.dataArray = this.dataArray.map((data) => {
           if (+item.id === +data.id) {
@@ -224,10 +248,11 @@
                 return
               }
               this.$refs.toast.show('下架成功')
+              this.tabList[0].num--
+              this.tabList[1].num++
               this.dataArray = this.dataArray.filter((data) => {
                 return +this.downItem.id !== +data.id
               })
-              this.tabList[this.selectTab].num--
               if (this.dataArray.length === 0) { // 无数据时，上拉不现实文字
                 this.pullUpLoad = false
               }
@@ -279,9 +304,6 @@
           }
         }
         return times
-      },
-      toTeam() {
-        this.$router.push('/mine/my-activity/team-activity')
       },
       rebuildScroll() {
         this.$nextTick(() => {
@@ -380,24 +402,47 @@
           .list-container
             padding: 0 15px
             .list-item
+              position: relative
               padding-top: 15px
               box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
               .time-down
                 height: 46px
                 padding: 0 15px
                 background: $color-white
+              .title
+                bg-image(pic-label_kj)
+                width: 10vw
+                height: 10vw
+                background-size: 100% 100%
+                position: absolute
+                left: -3px
+                top: 13px
+              .group
+                bg-image(pic-label_pt)
+                background-size: 100% 100%
               .time-box
                 height: 100%
                 display: flex
                 align-items: center
                 justify-content: space-between
-                border-bottom-1px($color-F3F3F3)
-              .title
-                font-size: 16px
-                color: $color-20202E
+                border-top-1px($color-F3F3F3)
               .time
                 font-size: 14px
+                display: flex
+                align-items: center
                 color: $color-20202E
+                .date
+                  width: 18px
+                  height: 18px
+                  line-height: 18px
+                  text-align: center
+                  background: $color-20202E
+                  border-radius: 2px
+                  margin: 0 2px
+                  font-size: $font-size-10
+                  color: $color-white
+                  &:first-child
+                    margin-left: 4px
     .footer-box
       position: fixed
       width: 100vw

@@ -6,7 +6,7 @@ export default {
    * @returns {*}
    */
   getActivityList (data, loading) {
-    let url = '/api/employee/recommend-activity'
+    let url = '/api/employee/activity-lists'
     return request.get(url, data, loading)
   },
   /**

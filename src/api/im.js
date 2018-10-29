@@ -87,25 +87,25 @@ export default {
 
   // 获取话术库
   getMyWordList(loading = true) {
-    const url = `/api/employee/message-hub`
+    const url = `/api/employee/quickreplies`
     return request.get(url, {}, loading)
   },
 
   // 编辑话术
-  editWord(data, loading = true) {
-    const url = `/api/employee/message-hub`
+  editWord(data, id, loading = true) {
+    const url = `/api/employee/quickreplies/${id}`
     return request.put(url, data, loading)
   },
 
-  // 编辑话术
-  delWord(data, loading = true) {
-    const url = `/api/employee/message-hub`
-    return request.delete(url, data, loading)
+  // 删除话术
+  delWord(id, loading = true) {
+    const url = `/api/employee/quickreplies/${id}`
+    return request.delete(url, loading)
   },
 
-  // 编辑话术
+  // 添加话术
   addWordAny(data, loading = true) {
-    const url = `/api/employee/message-hub`
+    const url = `/api/employee/quickreplies`
     return request.post(url, data, loading)
   },
 

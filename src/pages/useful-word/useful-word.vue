@@ -1,7 +1,7 @@
 <template>
   <transition :name="slide">
     <div class="useful-word">
-      <scroll :data="wordList" :bcColor="'#ffffff'" ref="scroll">
+      <scroll :bcColor="'#ffffff'" ref="scroll">
         <div class="word-list">
           <div class="word-item border-bottom-1px" v-for="(item, index) in wordList" :key="index" @click="choice(item)">
             <div class="item-left">{{item.message}}</div>
@@ -35,20 +35,19 @@
 
   export default {
     name: 'News',
-    created() {
-      if (this.newsGetType) {
-        this.setNewsGetType(false)
-        return
-      }
-      this.getMsg(true)
-      console.log(this.$route.query.type)
-    },
     data() {
       return {
         itemChecked: {},
         wordList: [],
         slide: 'slide'
       }
+    },
+    created() {
+      if (this.newsGetType) {
+        this.setNewsGetType(false)
+        return
+      }
+      this.getMsg(true)
     },
     methods: {
       ...mapActions([
