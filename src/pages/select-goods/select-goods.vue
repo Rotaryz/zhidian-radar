@@ -2,6 +2,7 @@
   <transition :name="slide">
     <div class="select-box">
       <scroll ref="scroll"
+              v-if="goodsList.length"
               :data="goodsList"
               :bcColor="'#f1f2f5'"
               :pullUpLoad="pullUpLoadObj"
@@ -78,36 +79,56 @@
       this.type = this.$route.query.type * 1
       document.title = this.type === 1 ? '选择商品' : '选择活动'
       let data = {
-        is_self: 1,
+        status: 1,
         limit: 10,
         page: 1
       }
       if (this.type === 1) {
         Im.getGoodsList(data).then((res) => {
           if (res.error === ERR_OK) {
-            this.goodsList = res.data
-            setTimeout(() => {
-              this.$refs.scroll.forceUpdate()
-              this.$refs.scroll.scrollTo(0, 0, 300, ease[this.scrollToEasing])
-            }, 20)
+            this.goodsList = res.data.map(item => {
+              let obj = {
+                image_url: item.image_url,
+                title: item.goods_title,
+                goods_price: item.platform_price,
+                sale_count: item.sale_count,
+                id: item.id,
+                original_price: item.original_price,
+                goods_id: item.goods_id,
+                goods_type: 0 // 前端类型
+              }
+              return obj
+            })
+            this._resetScroll()
           }
         })
       } else if (this.type === 2) {
         Im.getActivityList(data).then((res) => {
           if (res.error === ERR_OK) {
-            this.goodsList = res.data
-            // this._timeRun()
-            setTimeout(() => {
-              this.$refs.scroll.forceUpdate()
-              this.$refs.scroll.scrollTo(0, 0, 300, ease[this.scrollToEasing])
-            }, 20)
+            this.goodsList = res.data.map(item => {
+              let obj = {
+                image_url: item.image_url,
+                title: item.goods_title,
+                goods_price: item.platform_price,
+                sale_count: item.sale_count,
+                id: item.id,
+                original_price: item.original_price,
+                goods_id: item.activity_id,
+                activity_id: item.activity_id,
+                goods_image_url: item.image_url,
+                activity_stock: item.stock,
+                end_at: item.end_at
+              }
+              return obj
+            })
+            this._resetScroll()
           }
         })
       }
     },
     mounted() {
       setTimeout(() => {
-        this.$refs.scroll.refresh()
+        this.$refs.scroll && this.$refs.scroll.refresh()
       }, 20)
     },
     beforeDestroy() {
@@ -127,7 +148,7 @@
         scrollToEasing: 'bounce',
         scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
         selectGoods: '',
-        userInfo: storage.get('info'),
+        // userInfo: storage.get('info'),
         logType: 3
       }
     },
@@ -139,8 +160,17 @@
         'setNewsGetType',
         'setGroupMsgIng'
       ]),
+      _resetScroll() {
+        if (this.$refs.scroll) {
+          setTimeout(() => {
+            this.$refs.scroll.forceUpdate()
+            this.$refs.scroll.scrollTo(0, 0, 300, ease[this.scrollToEasing])
+          }, 20)
+        }
+      },
       selectItem(item) {
         this.selectGoods = item
+        console.log(this.selectGoods)
       },
       sendGoods() {
         if (!this.selectGoods) {
@@ -211,7 +241,7 @@
           this._splitSendGroupMsg(reqArr, 'shop', option)
         } else {
           // 单发
-          let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+          let timeStamp = parseInt(Date.now() / 1000)
           let msg = {
             from_account_id: this.imInfo.im_account,
             avatar: this.userInfo.avatar,
@@ -245,7 +275,7 @@
             sessionId: this.currentMsg.account,
             unreadMsgCount: 0,
             avatar: this.currentMsg.avatar,
-            nickName: this.currentMsg.nickName
+            nickName: this.currentMsg.nickName // todo
           }
           this.addListMsg({msg: addMsg, type: 'mineAdd'})
           this.$router.back()
@@ -409,6 +439,11 @@
           threshold: parseInt(this.pullUpLoadThreshold),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
+      },
+      userInfo() {
+        let info = storage.get('info')
+        let nickName = info.name || info.nickname
+        return {...info, nickName}
       }
     },
     watch: {

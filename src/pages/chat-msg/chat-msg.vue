@@ -32,7 +32,7 @@
                   <div class="new-goods-top">
                     <div class="shop-title">
                       <div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
-                      <div class="shop-name">{{item.shop_name}}的小店</div>
+                      <div class="shop-name">{{item.nickName}}的小店</div>
                     </div>
                     <div class="goods-title">
                       <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
@@ -63,7 +63,7 @@
                   <div class="new-goods-top">
                     <div class="shop-title">
                       <div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
-                      <div class="shop-name">{{item.shop_name}}的小店</div>
+                      <div class="shop-name">{{item.nickName}}的小店</div>
                     </div>
                     <div class="goods-title">
                       <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
@@ -135,15 +135,15 @@
         </div>
       </div>
       <!--<transition name="fade">-->
-        <!--<div class="cover-full" v-if="coverFullShow">-->
-          <!--<div class="cover-container">-->
-            <!--<div class="cover-top">-->
-              <!--<span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>-->
-              <!--<span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>-->
-            <!--</div>-->
-            <!--<div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>-->
-          <!--</div>-->
-        <!--</div>-->
+      <!--<div class="cover-full" v-if="coverFullShow">-->
+      <!--<div class="cover-container">-->
+      <!--<div class="cover-top">-->
+      <!--<span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>-->
+      <!--<span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>-->
+      <!--</div>-->
+      <!--<div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>-->
+      <!--</div>-->
+      <!--</div>-->
       <!--</transition>-->
       <toast ref="toast"></toast>
       <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
@@ -652,7 +652,9 @@
         } : false
       },
       userInfo() {
-        return storage.get('info')
+        let info = storage.get('info')
+        let nickName = info.name || info.nickname
+        return {...info, nickName}
       },
       slide() {
         return this.ios ? '' : 'slide'

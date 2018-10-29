@@ -57,13 +57,13 @@ export default {
 
   // 推荐商品
   getGoodsList(data, loading = true) {
-    const url = `/api/employee/goods`
+    const url = `/api/employee/goods-lists`
     return request.get(url, data, loading)
   },
 
   // 推荐活动
   getActivityList(data, loading = true) {
-    const url = `/api/employee/presell-activity`
+    const url = `/api/employee/activity-lists`
     return request.get(url, data, loading)
   },
 
