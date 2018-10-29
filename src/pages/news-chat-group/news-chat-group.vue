@@ -62,17 +62,17 @@
           </div>
         </div>
       </div>
-      <transition name="fade">
-        <div class="cover-full" v-if="coverFullShow">
-          <div class="cover-container">
-            <div class="cover-top">
-              <span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>
-              <span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>
-            </div>
-            <div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>
-          </div>
-        </div>
-      </transition>
+      <!--<transition name="fade">-->
+        <!--<div class="cover-full" v-if="coverFullShow">-->
+          <!--<div class="cover-container">-->
+            <!--<div class="cover-top">-->
+              <!--<span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>-->
+              <!--<span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>-->
+            <!--</div>-->
+            <!--<div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</transition>-->
       <toast ref="toast"></toast>
       <router-view @getQrCode="getQrCodeStatus"/>
     </div>
@@ -84,10 +84,11 @@
   import { mapActions, mapGetters } from 'vuex'
   import webimHandler from 'common/js/webim_handler'
   import storage from 'storage-controller'
-  import { Im, UpLoad, News } from 'api'
+  import { Im, News } from 'api'
   import { ERR_OK } from 'common/js/config'
   import utils from 'common/js/utils'
   import { emotionsFaceArr } from 'common/js/constants'
+  import * as COS from '@/utils/cos/cos'
 
   const MORELIST = [
     {txt: '图片', icon: 'im-image', type: 1},
@@ -293,11 +294,10 @@
           this.$refs.toast.show('群发消息发送中，请稍后再发')
           return
         }
-        let file = e.target.files[0]
-        let params = new FormData()
-        params.append('file', file, file.name)
+        let files = e.target.files
         this.hideInput()
-        UpLoad.upLoadImage(params).then((res) => {
+        COS.uploadFiles(0, [files[0]]).then((resp) => {
+          let res = resp[0]
           if (res.error === ERR_OK) {
             let data = {
               image_id: res.data.id,

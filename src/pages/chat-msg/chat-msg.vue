@@ -158,11 +158,12 @@
   import { mapActions, mapGetters } from 'vuex'
   import webimHandler from 'common/js/webim_handler'
   import storage from 'storage-controller'
-  import { Im, UpLoad, Global } from 'api'
+  import { Im, Global } from 'api'
   import { ERR_OK, TIMELAG } from 'common/js/config'
   import utils from 'common/js/utils'
   import { emotionsFaceArr } from 'common/js/constants'
   import wx from 'weixin-js-sdk'
+  import * as COS from '@/utils/cos/cos'
 
   const LIMIT = 40
   const MORELIST = [
@@ -526,10 +527,9 @@
         this.emojiShow = false
       },
       _fileImage(e) {
-        let file = e.target.files[0]
-        let params = new FormData()
-        params.append('file', file, file.name)
-        UpLoad.upLoadImage(params).then((res) => {
+        let files = e.target.files
+        COS.uploadFiles(0, [files[0]]).then((resp) => {
+          let res = resp[0]
           if (res.error === ERR_OK) {
             let data = {
               image_id: res.data.id,
