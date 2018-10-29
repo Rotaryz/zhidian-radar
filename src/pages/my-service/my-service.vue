@@ -183,7 +183,7 @@
             this.tabList[0].num++
             this.tabList[1].num--
             this.dataArray = this.dataArray.filter((data) => {
-              return +this.downItem.id !== +data.id
+              return +item.id !== +data.id
             })
             setTimeout(() => {
               this.$refs.scroll.forceUpdate()
