@@ -75,7 +75,7 @@ export default {
 
   // 群发助手消息列表
   getGroupMsgList(data, loading = true) {
-    const url = `/api/employee/group-message-logs`
+    const url = `/api/employee/groups/messages` // todo
     return request.get(url, data, loading)
   },
 
