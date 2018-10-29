@@ -8,7 +8,7 @@ export default {
   },
   // 获取分组列表
   sendGroupMessage(data, loading) {
-    const url = `/api/employee/groups/message`
+    const url = `/api/employee/groups/messages`
     return request.post(url, data, loading)
   }
 }

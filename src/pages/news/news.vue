@@ -54,6 +54,7 @@
           this.setGroupItem(msg)
         }
       })
+      console.log(21231231)
     },
     mounted() {
       setTimeout(() => {

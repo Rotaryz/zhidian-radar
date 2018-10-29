@@ -2,7 +2,7 @@
   <transition :name="slide">
     <div class="chat">
       <section class="chat-container" @click.stop="hideInput">
-        <div class="group-wrapper">群发组：<span v-for="(item1, index1) in currentGroupMsg" :key="index1">{{index1 == (currentGroupMsg.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
+        <div class="group-wrapper">群发组：<span v-for="(item1, index1) in currentGroupMsg" :key="index1">{{index1 == (currentGroupMsg.length - 1) ? item1.name + '(' + item1.total + ')' : item1.name + '(' + item1.total + ')，'}}</span></div>
       </section>
       <!--<section class="chat-input border-top-1px">-->
       <!--<div class="chat-input-box">-->
@@ -117,7 +117,8 @@
         mortListShow: false,
         codeStatus: {},
         coverFullShow: false,
-        coverShowType: ''
+        coverShowType: '',
+        isSending: false
       }
     },
     created() {
@@ -134,25 +135,25 @@
         'setNewsGetType',
         'setGroupMsgIng'
       ]),
-      toMineCode() {
-        let url
-        switch (this.coverShowType) {
-          case 'person':
-            url = this.$route.fullPath + '/person-code'
-            break
-          case 'group':
-            url = this.$route.fullPath + '/group-code'
-            break
-        }
-        this.coverFullShow = false
-        this.$router.push({path: url})
-      },
+      // toMineCode() {
+      //   let url
+      //   switch (this.coverShowType) {
+      //     case 'person':
+      //       url = this.$route.fullPath + '/person-code'
+      //       break
+      //     case 'group':
+      //       url = this.$route.fullPath + '/group-code'
+      //       break
+      //   }
+      //   this.coverFullShow = false
+      //   this.$router.push({path: url})
+      // },
       getQrCodeStatus() {
-        Im.getCodeStatus().then(res => {
-          if (res.error === ERR_OK) {
-            this.codeStatus = res.data
-          }
-        })
+        // Im.getCodeStatus().then(res => {
+        //   if (res.error === ERR_OK) {
+        //     this.codeStatus = res.data
+        //   }
+        // })
       },
       exceptionHandle(flag) {
         if (flag) {
@@ -161,27 +162,27 @@
           return true
         }
       },
-      _splitArr(arr) {
-        let res = arr.map((item) => {
-          return item.customers || []
-        })
-        let res1 = [].concat.apply([], res)
-        let res2 = utils.breakArr(res1, 2)
-        return res2
-      },
-      _splitSendGroupMsg(arr, type, content) {
-        this.setGroupMsgIng(true)
-        Promise.all(arr.map((item, index) => {
-          return new Promise((resolve, reject) => {
-            setTimeout(async () => {
-              await this._sendGroupMsg(item, type, content)
-              resolve()
-            }, index * 1000)
-          })
-        })).then(res => {
-          this.setGroupMsgIng(false)
-        })
-      },
+      // _splitArr(arr) {
+      //   let res = arr.map((item) => {
+      //     return item.customers || []
+      //   })
+      //   let res1 = [].concat.apply([], res)
+      //   let res2 = utils.breakArr(res1, 2)
+      //   return res2
+      // },
+      // _splitSendGroupMsg(arr, type, content) {
+      //   this.setGroupMsgIng(true)
+      //   Promise.all(arr.map((item, index) => {
+      //     return new Promise((resolve, reject) => {
+      //       setTimeout(async () => {
+      //         await this._sendGroupMsg(item, type, content)
+      //         resolve()
+      //       }, index * 1000)
+      //     })
+      //   })).then(res => {
+      //     this.setGroupMsgIng(false)
+      //   })
+      // },
       async _sendGroupMsg(arr, type, content) {
         await Promise.all(arr.map((item1) => {
           return new Promise((resolve, reject) => {
@@ -318,40 +319,20 @@
             }
             this.setGroupItem(msg)
             this.setNewsGetType(true)
-            let groupIds = this.currentGroupMsg.map((item) => {
-              return item.id
-            })
-            let reqData = {
-              type: 20,
-              url: res.data.url,
-              group_ids: groupIds
-            }
-            this.$router.go(-2)
-            Im.setGroupList(reqData).then((res) => {
-            })
+            // let groupIds = this.currentGroupMsg.map((item) => {
+            //   return item.id
+            // })
+            // let reqData = {
+            //   type: 20,
+            //   url: res.data.url,
+            //   group_ids: groupIds
+            // }
+            // this.$router.go(-2)
+            // Im.setGroupList(reqData).then((res) => {
+            // })
             this.mortListShow = false
             let reqArr = this._splitArr(this.currentGroupMsg)
             this._splitSendGroupMsg(reqArr, 'custom', opt)
-            /** this.currentGroupMsg.map((item) => {
-              item.customers.map((item1) => {
-                webimHandler.onSendCustomMsg(opt, item1.account).then(res => {
-                  let timeStamp = parseInt(Date.now() / 1000)
-                  let addMsg = {
-                    text: '[图片信息]',
-                    time: timeStamp,
-                    msgTimeStamp: timeStamp,
-                    fromAccount: item1.account,
-                    sessionId: item1.account,
-                    unreadMsgCount: 0,
-                    avatar: item1.avatar,
-                    nickName: item1.nickName
-                  }
-                  this.addListMsg({msg: addMsg, type: 'mineAdd'})
-                }, () => {
-                  // this.$refs.toast.show('网络异常, 请稍后重试')
-                })
-              })
-            }) **/
           } else {
             this.$refs.toast.show('图片发送失败，请重新发送')
           }
@@ -452,7 +433,7 @@
             break
         }
       },
-      async sendMsg() {
+      sendMsg() {
         if (this.groupMsgIng) {
           this.$refs.toast.show('群发消息发送中，请稍后再发')
           return
@@ -462,18 +443,20 @@
           this.$refs.toast.show('发送消息不能为空')
           return
         }
-        await this._sendGroupMessage()
-        this.inputMsg = ''
-        this.hideInput()
-        let msg = {
-          time: parseInt(Date.now() / 1000),
-          lastMsg: value
-        }
-        this.setGroupItem(msg)
-        this.setNewsGetType(true)
-        this.inputMsg = ''
-        this.hideInput()
-        // this.$router.go(-2)
+        this._sendGroupMessage(1, {text: value}, () => {
+          this.inputMsg = ''
+          this.hideInput()
+          let msg = {
+            time: parseInt(Date.now() / 1000),
+            lastMsg: value
+          }
+          this.setGroupItem(msg)
+          this.setNewsGetType(true)
+          this.inputMsg = ''
+          this.hideInput()
+        })
+        this.$router.go(-2)
+        // todo
         // let groupIds = this.currentGroupMsg.map((item) => {
         //   return item.id
         // })
@@ -484,33 +467,29 @@
         // }
         // Im.setGroupList(reqData).then((res) => {
         // })
-        // let reqArr = this._splitArr(this.currentGroupMsg)
-        // this._splitSendGroupMsg(reqArr, 'chat', value)
+        let reqArr = this._splitArr(this.currentGroupMsg)
+        this._splitSendGroupMsg(reqArr, 'chat', value)
       },
-      _sendGroupMessage(data) {
+      _sendGroupMessage(type, message, callback) {
+        if (this.isSending) return
+        this.$refs.toast.showing('消息发送中...')
+        let data = {}
+        let groupIds = this.currentGroupMsg.map(item => {
+          return item.id
+        })
         data = {
-          'group_ids': [
-            2,
-            4
-          ],
-          'type': 1,
-          'message': {
-            'text': '123123',
-            'title': '',
-            'goods_id': 0,
-            'goods_price': 0,
-            'original_price': 0,
-            'url': '',
-            'image_id': 0,
-            'activity_id': 0
-          }
+          group_ids: groupIds,
+          type,
+          message
         }
+        console.log(data)
         News.sendGroupMessage(data).then(res => {
+          this.isSending = false
           if (ERR_OK !== res.error) {
             this.$refs.toast.show(res.message)
             return
           }
-          console.log(res)
+          callback && callback()
         })
       }
     },

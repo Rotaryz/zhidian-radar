@@ -44,7 +44,6 @@
     name: 'NewGroupMsg',
     created() {
       Im.getGroupMsgList({page: 1, limit: 30}).then(res => {
-        console.log(res)
         if (res.error === ERR_OK) {
           this.list = res.data.map((item) => {
             if (item.type * 1 === 1) {

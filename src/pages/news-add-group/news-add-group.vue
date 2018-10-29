@@ -10,18 +10,18 @@
         >
           <ul class="group-list">
             <li class="group-box border-bottom-1px" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
-              <div v-if="!item.number" class="select un-check"></div>
+              <div v-if="!item.total" class="select un-check"></div>
               <div v-else class="select" :class="item.isCheck?'is-check':'no-check'"></div>
               <article class="group-logo">
-                <img v-if="item.icon && item.icon.length"
-                     v-for="(user,i) in item.icon"
+                <img v-if="item.customers && item.customers.length"
+                     v-for="(user,i) in item.customers"
                      class="avatar"
                      :key="i"
-                     :src="user"
+                     :src="user.avatar"
                 />
               </article>
               <div class="name">{{item.name}}</div>
-              <div class="number">{{item.number}}人</div>
+              <div class="number">{{item.total}}人</div>
             </li>
           </ul>
         </scroll>
@@ -72,7 +72,7 @@
         'setCurrentGroupMsg'
       ]),
       check(item) {
-        if (!item.number) return
+        if (!item.total) return
         item.isCheck = !item.isCheck
         this.checkArr = this.dataArray.filter((item) => {
           return item.isCheck
