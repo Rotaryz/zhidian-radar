@@ -133,7 +133,9 @@
         'setGroupItem',
         'addListMsg',
         'setNewsGetType',
-        'setGroupMsgIng'
+        'setGroupMsgIng',
+        'updateNewsPage',
+        'saveList'
       ]),
       // toMineCode() {
       //   let url
@@ -162,27 +164,27 @@
           return true
         }
       },
-      // _splitArr(arr) {
-      //   let res = arr.map((item) => {
-      //     return item.customers || []
-      //   })
-      //   let res1 = [].concat.apply([], res)
-      //   let res2 = utils.breakArr(res1, 2)
-      //   return res2
-      // },
-      // _splitSendGroupMsg(arr, type, content) {
-      //   this.setGroupMsgIng(true)
-      //   Promise.all(arr.map((item, index) => {
-      //     return new Promise((resolve, reject) => {
-      //       setTimeout(async () => {
-      //         await this._sendGroupMsg(item, type, content)
-      //         resolve()
-      //       }, index * 1000)
-      //     })
-      //   })).then(res => {
-      //     this.setGroupMsgIng(false)
-      //   })
-      // },
+      _splitArr(arr) {
+        let res = arr.map((item) => {
+          return item.customers || []
+        })
+        let res1 = [].concat.apply([], res)
+        let res2 = utils.breakArr(res1, 2)
+        return res2
+      },
+      _splitSendGroupMsg(arr, type, content) {
+        this.setGroupMsgIng(true)
+        Promise.all(arr.map((item, index) => {
+          return new Promise((resolve, reject) => {
+            setTimeout(async () => {
+              await this._sendGroupMsg(item, type, content)
+              resolve()
+            }, index * 1000)
+          })
+        })).then(res => {
+          this.setGroupMsgIng(false)
+        })
+      },
       async _sendGroupMsg(arr, type, content) {
         await Promise.all(arr.map((item1) => {
           return new Promise((resolve, reject) => {
@@ -304,6 +306,7 @@
               image_id: res.data.id,
               url: res.data.url
             }
+            let message = data
             let desc = {log_type: 20}
             let ext = '20005'
             data = JSON.stringify(data)
@@ -319,20 +322,12 @@
             }
             this.setGroupItem(msg)
             this.setNewsGetType(true)
-            // let groupIds = this.currentGroupMsg.map((item) => {
-            //   return item.id
-            // })
-            // let reqData = {
-            //   type: 20,
-            //   url: res.data.url,
-            //   group_ids: groupIds
-            // }
-            // this.$router.go(-2)
-            // Im.setGroupList(reqData).then((res) => {
-            // })
-            this.mortListShow = false
-            let reqArr = this._splitArr(this.currentGroupMsg)
-            this._splitSendGroupMsg(reqArr, 'custom', opt)
+            this._sendGroupMessage(20, message, () => {
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, 'custom', opt)
+              this.mortListShow = false
+              this.$router.go(-2)
+            })
           } else {
             this.$refs.toast.show('图片发送失败，请重新发送')
           }
@@ -444,6 +439,8 @@
           return
         }
         this._sendGroupMessage(1, {text: value}, () => {
+          let reqArr = this._splitArr(this.currentGroupMsg)
+          this._splitSendGroupMsg(reqArr, 'chat', value)
           this.inputMsg = ''
           this.hideInput()
           let msg = {
@@ -454,9 +451,8 @@
           this.setNewsGetType(true)
           this.inputMsg = ''
           this.hideInput()
+          this.$router.go(-2)
         })
-        this.$router.go(-2)
-        // todo
         // let groupIds = this.currentGroupMsg.map((item) => {
         //   return item.id
         // })
@@ -467,8 +463,6 @@
         // }
         // Im.setGroupList(reqData).then((res) => {
         // })
-        let reqArr = this._splitArr(this.currentGroupMsg)
-        this._splitSendGroupMsg(reqArr, 'chat', value)
       },
       _sendGroupMessage(type, message, callback) {
         if (this.isSending) return

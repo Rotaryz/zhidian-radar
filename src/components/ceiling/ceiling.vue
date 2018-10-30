@@ -14,6 +14,7 @@
   </div>
 </template>
 
+
 <script type="text/ecmascript-6">
   import {mapActions, mapGetters} from 'vuex'
   import {Im} from 'api'
@@ -146,14 +147,14 @@
           }
         })
         /** let res = await webimHandler.getRecentContact(50)
-        let msgList = await webimHandler.initUnread(res)
-        let noMsgList = msgList.filter((item) => {
+         let msgList = await webimHandler.initUnread(res)
+         let noMsgList = msgList.filter((item) => {
           return item.lastMsg === '[其他]'
         })
-        let requireArr = noMsgList.map((item) => {
+         let requireArr = noMsgList.map((item) => {
           return item.sessionId
         })
-        if (requireArr.length) {
+         if (requireArr.length) {
           let reqdata = {
             customer_ims: requireArr,
             employee_id: this.userInfo.id
@@ -229,7 +230,6 @@
     }
   }
 </script>
-
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'

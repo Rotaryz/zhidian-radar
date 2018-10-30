@@ -29,6 +29,7 @@
         </div>
       </div>
     </scroll>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
@@ -37,6 +38,8 @@
   import Scroll from 'components/scroll/scroll'
   import { Im } from 'api'
   import { ERR_OK } from 'common/js/config'
+  import storage from 'storage-controller'
+  import Toast from 'components/toast/toast'
 
   export default {
     name: 'News',
@@ -54,7 +57,6 @@
           this.setGroupItem(msg)
         }
       })
-      console.log(21231231)
     },
     mounted() {
       setTimeout(() => {
@@ -68,7 +70,8 @@
       ...mapActions([
         'setCurrent',
         'setGroupItem',
-        'setNewsGetType'
+        'setNewsGetType',
+        'saveList'
       ]),
       chatMsg(item) {
         let currentMsg = {
@@ -90,7 +93,10 @@
         'latelyList',
         'groupItem',
         'newsGetType'
-      ])
+      ]),
+      userInfo() {
+        return storage.get('info')
+      }
     },
     watch: {
       latelyList: function () {
@@ -100,7 +106,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Toast
     }
   }
 </script>

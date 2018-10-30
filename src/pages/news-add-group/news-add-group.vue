@@ -13,7 +13,7 @@
               <div v-if="!item.total" class="select un-check"></div>
               <div v-else class="select" :class="item.isCheck?'is-check':'no-check'"></div>
               <article class="group-logo">
-                <img v-if="item.customers && item.customers.length"
+                <img v-if="item.customers && item.customers.length && i<9"
                      v-for="(user,i) in item.customers"
                      class="avatar"
                      :key="i"
