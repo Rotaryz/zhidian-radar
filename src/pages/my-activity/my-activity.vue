@@ -276,8 +276,8 @@
         }, 1000)
       },
       _groupTimeCheckout(time, nowTime) {
-        let nowSecond = new Date(nowTime)
-        let differ = new Date(time) - nowSecond
+        // let nowSecond = new Date(nowTime)
+        let differ = time - nowTime
         let day = Math.floor(differ / (60 * 60 * 24))
         day = day >= 10 ? day : '0' + day
         let hour = Math.floor(differ / (60 * 60)) - (day * 24)

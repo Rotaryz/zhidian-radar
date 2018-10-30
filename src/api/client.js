@@ -32,9 +32,9 @@ export default {
     return request.post(url, data, loading)
   },
   // 分组内删除用户
-  delCustomer(data, loading) {
-    const url = `/api/employee/group-customer`
-    return request.delete(url, data, loading)
+  delCustomer(data, groupId, loading) {
+    const url = `/api/employee/groups/${groupId}/detach`
+    return request.post(url, data, loading)
   },
   // 分组内添加用户
   addGroupCustomer(groupId, data, loading) {

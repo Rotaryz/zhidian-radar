@@ -145,10 +145,10 @@
       },
       msgConfirm() {
         const data = {
-          group_id: this.id, // 分组id
+          // group_id: this.id, // 分组id
           customer_id: this.checkedItem.id
         }
-        Client.delCustomer(data).then(res => {
+        Client.delCustomer(data, this.id).then(res => {
           if (res.error === ERR_OK) {
             const idx = this.dataArray.findIndex(val => val.id === this.checkedItem.id)
             this.dataArray.splice(idx, 1)

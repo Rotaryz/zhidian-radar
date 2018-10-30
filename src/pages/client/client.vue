@@ -54,7 +54,7 @@
               <slide-view :useType="3" @del="delHandler" :item="item">
                 <div slot="content" class="user-list-item-wrapper">
                   <div class="users-avatar">
-                    <img v-if="item.customers && item.customers.length"
+                    <img v-if="item.customers && item.customers.length && i < 9"
                          v-for="(user,i) in item.customers"
                          class="avatar"
                          :key="i"
