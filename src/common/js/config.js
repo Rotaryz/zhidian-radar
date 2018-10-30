@@ -12,17 +12,20 @@ const LOCAL_URL = {
 // }
 const DEV_URL = {
   api: 'https://ws-api.jkweixin.net' + version,
-  image: 'https://img.jkweixin.net/defaults'
+  image: 'https://img.jkweixin.net/defaults',
+  upload: 'https://zhidian-api.jkweixin.net' + version
 }
 
 const TEST_URL = {
   api: 'https://zhidian-api.jkweixin.net' + version,
-  image: 'https://img.jkweixin.net/defaults'
+  image: 'https://img.jkweixin.net/defaults',
+  upload: 'https://zhidian-api.jkweixin.net' + version
 }
 
 const PROD_URL = {
   api: 'https://zhidian-api.jkweixin.com' + version,
-  image: 'https://img.jkweixin.com/defaults'
+  image: 'https://img.jkweixin.com/defaults',
+  upload: 'https://zhidian-api.jkweixin.net' + version
 }
 
 export const BASE_URL = env.NODE_ENV === 'production' ? PROD_URL : env.NODE_ENV === 'test' ? TEST_URL : env.NODE_ENV === 'dev' ? DEV_URL : LOCAL_URL

@@ -22,6 +22,13 @@ export default {
       setTimeout(() => {
         this.showToast = false
       }, showTime)
+    },
+    showing(content) {
+      this.content = content
+      this.showToast = true
+    },
+    hide() {
+      this.showToast = false
     }
   }
 }
