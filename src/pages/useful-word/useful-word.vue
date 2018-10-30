@@ -43,6 +43,10 @@
       }
     },
     created() {
+      if (this.currentGroupMsg.length < 1 && this.$route.query.chatType === 'group') {
+        this.$router.replace('/new-group-msg')
+        return
+      }
       if (this.newsGetType) {
         this.setNewsGetType(false)
         return
@@ -160,7 +164,6 @@
           type,
           message
         }
-        console.log(data)
         News.sendGroupMessage(data).then(res => {
           this.isSending = false
           if (ERR_OK !== res.error) {

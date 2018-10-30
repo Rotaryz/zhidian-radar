@@ -30,15 +30,15 @@
           <div class="activity-item" v-for="(item, index) in goodsList" :key="index" @click="selectItem(item)">
             <div class="activity-left">
               <div class="left-top border-bottom-1px">
-                <p class="activity-type">{{item.goods_type * 1 === 3 ? '砍价活动' : '拼团优惠'}}</p>
+                <p class="activity-type">{{item.goods_type * 1 === 5 ? '砍价活动' : '拼团优惠'}}</p>
                 <p class="activity-time">距离本场结束：{{item.end_at}}</p>
               </div>
               <div class="left-down">
                 <div class="left-img" :style="{backgroundImage: 'url(' + item.goods_image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                 <div class="left-down-content">
-                  <div class="goods-title">{{item.activity_name}}</div>
+                  <div class="goods-title">{{item.title}}</div>
                   <div>
-                    <div class="goods-txt">{{item.goods_type * 1 === 3 ? '底 价' : '团购价' }}：¥{{item.goods_price}}</div>
+                    <div class="goods-txt">{{item.goods_type * 1 === 4 ? '底 价' : '团购价' }}：¥{{item.goods_price}}</div>
                     <div class="goods-down">
                       <div class="goods-txt">销 量：{{item.sale_count}}</div>
                       <div class="goods-txt">库存：{{item.activity_stock}}</div>
@@ -76,6 +76,10 @@
   export default {
     name: 'SelectGoods',
     created() {
+      if (this.currentGroupMsg.length < 1 && this.$route.query.chatType === 'group') {
+        this.$router.replace('/new-group-msg')
+        return
+      }
       this.type = this.$route.query.type * 1
       document.title = this.type === 1 ? '选择商品' : '选择活动'
       let data = {
@@ -94,8 +98,8 @@
                 sale_count: item.sale_count,
                 id: item.id,
                 original_price: item.original_price,
-                goods_id: item.goods_id,
-                goods_type: 0 // 前端类型
+                goods_id: item.recommend_goods_id,
+                goods_type: 3 // 前端类型
               }
               return obj
             })
@@ -113,13 +117,14 @@
                 sale_count: item.sale_count,
                 id: item.id,
                 original_price: item.original_price,
-                goods_id: item.activity_id,
-                activity_id: item.activity_id,
+                goods_id: item.recommend_goods_id,
+                activity_id: item.recommend_goods_id,
                 goods_image_url: item.image_url,
                 activity_stock: item.stock,
                 end_at: item.end_at,
                 group_number: item.group_number,
-                stock: item.stock
+                stock: item.stock,
+                goods_type: +item.rule_id === 1 ? 4 : 5
               }
               return obj
             })
@@ -174,7 +179,6 @@
           type,
           message
         }
-        console.log(data)
         News.sendGroupMessage(data).then(res => {
           this.isSending = false
           if (ERR_OK !== res.error) {
@@ -194,7 +198,6 @@
       },
       selectItem(item) {
         this.selectGoods = item
-        console.log(this.selectGoods)
       },
       sendGoods() {
         if (!this.selectGoods) {
@@ -202,10 +205,10 @@
           return
         }
         let data
-        if (this.selectGoods.goods_type * 1 === 0) {
+        if (this.selectGoods.goods_type * 1 === 3) {
           data = {
             url: this.selectGoods.image_url,
-            goods_id: this.selectGoods.id,
+            goods_id: this.selectGoods.goods_id,
             title: this.selectGoods.title,
             goods_price: this.selectGoods.goods_price,
             original_price: this.selectGoods.original_price,
@@ -215,7 +218,7 @@
         } else {
           data = {
             url: this.selectGoods.goods_image_url,
-            goods_id: this.selectGoods.activity_id,
+            goods_id: this.selectGoods.goods_id,
             title: this.selectGoods.title,
             goods_price: this.selectGoods.goods_price,
             original_price: this.selectGoods.original_price,
@@ -225,7 +228,7 @@
         }
         let msgUrl = data.url
         let msgTitle = data.title
-        let logType = this.selectGoods.goods_type * 1 === 0 ? 3 : this.selectGoods.goods_type * 1 === 1 ? 4 : 5
+        let logType = this.selectGoods.goods_type
         let descMsg = {log_type: logType}
         data = JSON.stringify(data)
         let desc = JSON.stringify(descMsg)
@@ -236,19 +239,16 @@
           ext
         }
         this.logType = logType
-        if (this.$route.query.chatType === 'active') {
-          let aType = this.$route.query.aType
-          let ext = aType === 'cut' ? this.selectGoods.stock : this.selectGoods.group_number
+        if (this.$route.query.chatType === 'group') {
           let message = {
-            url: this.selectGoods.goods_image_url,
+            url: this.selectGoods.image_url,
             goods_id: this.selectGoods.goods_id,
             activity_id: this.selectGoods.activity_id,
             title: this.selectGoods.title,
             goods_price: this.selectGoods.goods_price,
             original_price: this.selectGoods.original_price,
             avatar: this.userInfo.avatar,
-            shop_name: this.selectGoods.shop_name,
-            ext
+            shop_name: this.selectGoods.shop_name
           }
           // 群发
           if (this.groupMsgIng) {
@@ -264,21 +264,8 @@
           this._sendGroupMessage(logType, message, () => {
             let reqArr = this._splitArr(this.currentGroupMsg)
             this._splitSendGroupMsg(reqArr, 'shop', option)
-            this.$router.go(-3)
+            this.$router.replace('/news')
           })
-          // let groupIds = this.currentGroupMsg.map((item) => {
-          //   return item.id
-          // })
-          // let reqData = {
-          //   type: logType,
-          //   goods_id: groupData.goods_id,
-          //   title: groupData.title,
-          //   group_ids: groupIds
-          // }
-          // Im.setGroupList(reqData).then((res) => {
-          // })
-          // let reqArr = this._splitArr(this.currentGroupMsg)
-          // this._splitSendGroupMsg(reqArr, 'shop', option)
         } else {
           // 单发
           let timeStamp = parseInt(Date.now() / 1000)

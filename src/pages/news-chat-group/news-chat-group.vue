@@ -122,6 +122,9 @@
     },
     created() {
       // this.getQrCodeStatus()
+      if (this.currentGroupMsg.length < 1) {
+        this.$router.replace('/new-group-msg')
+      }
     },
     mounted() {
       this.textareaDom = this.$refs.inputTxt
@@ -384,12 +387,12 @@
           case 1:
             break
           case 2:
-            url = this.$route.fullPath + '/select-goods?type=1&chatType=active&aType=group'
+            url = this.$route.fullPath + '/select-goods?type=1&chatType=group'
             this.mortListShow = false
             this.$router.push(url)
             break
           case 3:
-            url = this.$route.fullPath + '/select-goods?type=2&chatType=active&aType=cut'
+            url = this.$route.fullPath + '/select-goods?type=2&chatType=group'
             this.mortListShow = false
             this.$router.push(url)
             break
