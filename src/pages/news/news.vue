@@ -170,6 +170,9 @@
               font-family: $font-family-regular
               font-size: $font-size-medium-x
               letter-spacing: 0.6px
+              width :88%
+              overflow :hidden
+              line-height :1.2
             .top-time
               font-family: $font-family-regular
               font-size: $font-size-small
@@ -182,5 +185,6 @@
             font-family: $font-family-regular
             font-size: $font-size-small
             color: $color-text-88
+            line-height :1.2
 
 </style>
