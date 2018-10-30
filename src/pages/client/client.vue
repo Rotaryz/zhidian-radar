@@ -62,7 +62,7 @@
                     />
                   </div>
                   <div class="name">{{item.name}}</div>
-                  <div class="number">{{item.customers.length || 0}}人</div>
+                  <div class="number">{{item.total || 0}}人</div>
                 </div>
               </slide-view>
             </li>
