@@ -136,6 +136,7 @@
         Im.getContactList(reqData).then((res) => {
           if (res.error === ERR_OK) {
             let data = res.data
+            console.log(res, '-----------=----------------------')
             webimHandler.initUnread(data).then((resp) => {
               let msgList = resp.map((item) => {
                 item.time = Utils.formatDate(item.msgTimeStamp).date

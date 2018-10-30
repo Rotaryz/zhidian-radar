@@ -9,5 +9,9 @@ export default {
   employeeLogin(data) {
     const url = '/api/employee/profile'
     return request.post(url, data)
+  },
+  getemployeeInfo(data) {
+    const url = '/api/employee/profile'
+    return request.get(url, data)
   }
 }

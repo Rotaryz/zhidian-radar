@@ -28,14 +28,14 @@
                 <div class="goods_img-box">
                   <img :src="item.url" class="goods_img">
                 </div>
-                <p class="goods_title"><span class="tip">{{item.title.split(',')[1]}}人团</span>{{item.title.split(',')[0]}}</p>
+                <p class="goods_title"><span class="tip">{{item.ext}}人团</span>{{item.title}}</p>
               </div>
               <div class="item-text item-text3" v-if="item.type == 5">
                 <!--[砍价活动信息]-->
                 <div class="goods_img-box">
                   <img :src="item.url" class="goods_img">
                 </div>
-                <p class="goods_title"><span class="tip">仅剩{{item.title.split(',')[1]}}件</span>{{item.title.split(',')[0]}}</p>
+                <p class="goods_title"><span class="tip">仅剩{{item.ext}}件</span>{{item.title}}</p>
               </div>
               <div class="item-text item-text6" v-if="item.type == 6">
                 <!--[个人微信二维码]-->
@@ -307,7 +307,7 @@
                 font-family: $font-family-regular
                 color: $color-20202E
                 .tip
-                  transform: translate3d(0, -3px, 0)
+                  transform: translate3d(0, 0px, 0)
                   line-height: 1
                   font-size: 11px
                   margin-right: 9.5px

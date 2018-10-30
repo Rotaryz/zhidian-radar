@@ -243,11 +243,12 @@
             url: this.selectGoods.goods_image_url,
             goods_id: this.selectGoods.goods_id,
             activity_id: this.selectGoods.activity_id,
-            title: this.selectGoods.title + ',' + ext,
+            title: this.selectGoods.title,
             goods_price: this.selectGoods.goods_price,
             original_price: this.selectGoods.original_price,
             avatar: this.userInfo.avatar,
-            shop_name: this.selectGoods.shop_name
+            shop_name: this.selectGoods.shop_name,
+            ext
           }
           // 群发
           if (this.groupMsgIng) {
@@ -518,7 +519,7 @@
       },
       userInfo() {
         let info = storage.get('info')
-        let nickName = info.name || info.nickname
+        let nickName = info.shop_name
         return {...info, nickName}
       }
     },

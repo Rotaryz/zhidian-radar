@@ -215,7 +215,7 @@
           })
         }
       })
-      this.getQrCodeStatus()
+      // this.getQrCodeStatus()
     },
     mounted() {
       this.textareaDom = this.$refs.inputTxt
@@ -653,7 +653,7 @@
       },
       userInfo() {
         let info = storage.get('info')
-        let nickName = info.name || info.nickname
+        let nickName = info.shop_name
         return {...info, nickName}
       },
       slide() {
