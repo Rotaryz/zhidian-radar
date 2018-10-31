@@ -116,6 +116,7 @@
       font-family: $font-family-regular
       height: 185px
       outline:none
+      resize: none
     .textarea-number
       position: absolute
       bottom: 25px
