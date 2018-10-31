@@ -82,7 +82,6 @@
 <script>
   import Toast from 'components/toast/toast'
   import { mapActions, mapGetters } from 'vuex'
-  import webimHandler from 'common/js/webim_handler'
   import storage from 'storage-controller'
   import { Im, News } from 'api'
   import { ERR_OK } from 'common/js/config'
@@ -123,6 +122,9 @@
     },
     created() {
       // this.getQrCodeStatus()
+      if (this.currentGroupMsg.length < 1) {
+        this.$router.replace('/new-group-msg')
+      }
     },
     mounted() {
       this.textareaDom = this.$refs.inputTxt
@@ -174,101 +176,146 @@
       },
       _splitSendGroupMsg(arr, type, content) {
         this.setGroupMsgIng(true)
-        Promise.all(arr.map((item, index) => {
-          return new Promise((resolve, reject) => {
-            setTimeout(async () => {
-              await this._sendGroupMsg(item, type, content)
-              resolve()
-            }, index * 1000)
-          })
-        })).then(res => {
-          this.setGroupMsgIng(false)
+        arr.forEach(item => {
+          this._sendGroupMsg(item, type, content)
         })
+        this.setGroupMsgIng(false)
       },
       async _sendGroupMsg(arr, type, content) {
-        await Promise.all(arr.map((item1) => {
-          return new Promise((resolve, reject) => {
-            if (type === 'custom') {
-              webimHandler.onSendCustomMsg(content, item1.account).then(res => {
-                let timeStamp = parseInt(Date.now() / 1000)
-                let addMsg = {
-                  text: '[图片信息]',
-                  time: timeStamp,
-                  msgTimeStamp: timeStamp,
-                  fromAccount: item1.account,
-                  sessionId: item1.account,
-                  unreadMsgCount: 0,
-                  avatar: item1.avatar,
-                  nickName: item1.nickname
-                }
-                this.addListMsg({msg: addMsg, type: 'mineAdd'})
-                resolve()
-              }, () => {
-                resolve()
-                // this.$refs.toast.show('网络异常, 请稍后重试')
-              })
-            } else if (type === 'chat') {
-              webimHandler.onSendMsg(content, item1.account).then(res => {
-                let timeStamp = parseInt(Date.now() / 1000)
-                let addMsg = {
-                  text: content,
-                  time: timeStamp,
-                  msgTimeStamp: timeStamp,
-                  fromAccount: item1.account,
-                  sessionId: item1.account,
-                  unreadMsgCount: 0,
-                  avatar: item1.avatar,
-                  nickName: item1.nickname
-                }
-                this.addListMsg({msg: addMsg, type: 'mineAdd'})
-                resolve()
-              }, () => {
-                resolve()
-                // this.$refs.toast.show('网络异常, 请稍后重试')
-              })
-            } else if (type === 'person-qr-code') {
-              webimHandler.onSendCustomMsg(content, item1.account).then(res => {
-                let timeStamp = parseInt(Date.now() / 1000)
-                let addMsg = {
-                  text: '[个人微信二维码]',
-                  time: timeStamp,
-                  msgTimeStamp: timeStamp,
-                  fromAccount: item1.account,
-                  sessionId: item1.account,
-                  unreadMsgCount: 0,
-                  avatar: item1.avatar,
-                  nickName: item1.nickName
-                }
-                this.addListMsg({msg: addMsg, type: 'mineAdd'})
-                resolve()
-              }, () => {
-                resolve()
-                // this.$refs.toast.show('网络异常, 请稍后重试')
-              })
-            } else if (type === 'group-qr-code') {
-              webimHandler.onSendCustomMsg(content, item1.account).then(res => {
-                let timeStamp = parseInt(Date.now() / 1000)
-                let addMsg = {
-                  text: '[群微信二维码]',
-                  time: timeStamp,
-                  msgTimeStamp: timeStamp,
-                  fromAccount: item1.account,
-                  sessionId: item1.account,
-                  unreadMsgCount: 0,
-                  avatar: item1.avatar,
-                  nickName: item1.nickName
-                }
-                this.addListMsg({msg: addMsg, type: 'mineAdd'})
-                resolve()
-              }, () => {
-                resolve()
-                // this.$refs.toast.show('网络异常, 请稍后重试')
-              })
-            }
-          })
-        }))
-        return true
+        switch (type) {
+          case 'custom' :
+            arr.forEach(item1 => {
+              let timeStamp = parseInt(Date.now() / 1000)
+              let addMsg = {
+                text: '[图片信息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: item1.account,
+                sessionId: item1.account,
+                unreadMsgCount: 0,
+                avatar: item1.avatar,
+                nickName: item1.nickname
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            })
+            break
+          case 'chat' :
+            arr.forEach(item1 => {
+              let timeStamp = parseInt(Date.now() / 1000)
+              let addMsg = {
+                text: content,
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: item1.account,
+                sessionId: item1.account,
+                unreadMsgCount: 0,
+                avatar: item1.avatar,
+                nickName: item1.nickname
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            })
+            break
+          default:
+            break
+        }
       },
+      // _splitSendGroupMsg(arr, type, content) {
+      //   this.setGroupMsgIng(true)
+      //   Promise.all(arr.map((item, index) => {
+      //     return new Promise((resolve, reject) => {
+      //       setTimeout(async () => {
+      //         await this._sendGroupMsg(item, type, content)
+      //         resolve()
+      //       }, index * 1000)
+      //     })
+      //   })).then(res => {
+      //     this.setGroupMsgIng(false)
+      //   })
+      // },
+      // async _sendGroupMsg(arr, type, content) {
+      //   await Promise.all(arr.map((item1) => {
+      //     return new Promise((resolve, reject) => {
+      //       if (type === 'custom') {
+      //         webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: '[图片信息]',
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickname
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       } else if (type === 'chat') {
+      //         webimHandler.onSendMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: content,
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickname
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       } else if (type === 'person-qr-code') {
+      //         webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: '[个人微信二维码]',
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickName
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       } else if (type === 'group-qr-code') {
+      //         webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: '[群微信二维码]',
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickName
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       }
+      //     })
+      //   }))
+      //   return true
+      // },
       hideInput() {
         this.mortListShow = false
         this.emojiShow = false
@@ -340,14 +387,14 @@
           case 1:
             break
           case 2:
-            url = this.$route.fullPath + '/select-goods?type=1'
+            url = this.$route.fullPath + '/select-goods?type=1&chatType=group'
             this.mortListShow = false
-            this.$router.push({path: url, query: {chatType: 'group'}})
+            this.$router.push(url)
             break
           case 3:
-            url = this.$route.fullPath + '/select-goods?type=2'
+            url = this.$route.fullPath + '/select-goods?type=2&chatType=group'
             this.mortListShow = false
-            this.$router.push({path: url, query: {chatType: 'group'}})
+            this.$router.push(url)
             break
           case 4:
             if (!this.codeStatus.have_personal_qrcode) {

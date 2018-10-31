@@ -62,7 +62,7 @@
         const accessToken = this.$route.query.access_token
         if (accessToken) {
           storage.set('token', accessToken)
-          Jwt.employeeLogin().then((res) => {
+          Jwt.getEmployeeInfo().then((res) => {
             if (res.error === ERR_OK) {
               storage.set('info', res.data)
               this.$router.replace(NORMAL_ROUTE)

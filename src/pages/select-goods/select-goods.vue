@@ -30,15 +30,15 @@
           <div class="activity-item" v-for="(item, index) in goodsList" :key="index" @click="selectItem(item)">
             <div class="activity-left">
               <div class="left-top border-bottom-1px">
-                <p class="activity-type">{{item.goods_type * 1 === 3 ? '砍价活动' : '拼团优惠'}}</p>
+                <p class="activity-type">{{item.goods_type * 1 === 5 ? '砍价活动' : '拼团优惠'}}</p>
                 <p class="activity-time">距离本场结束：{{item.end_at}}</p>
               </div>
               <div class="left-down">
                 <div class="left-img" :style="{backgroundImage: 'url(' + item.goods_image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                 <div class="left-down-content">
-                  <div class="goods-title">{{item.activity_name}}</div>
+                  <div class="goods-title">{{item.title}}</div>
                   <div>
-                    <div class="goods-txt">{{item.goods_type * 1 === 3 ? '底 价' : '团购价' }}：¥{{item.goods_price}}</div>
+                    <div class="goods-txt">{{item.goods_type * 1 === 4 ? '底 价' : '团购价' }}：¥{{item.goods_price}}</div>
                     <div class="goods-down">
                       <div class="goods-txt">销 量：{{item.sale_count}}</div>
                       <div class="goods-txt">库存：{{item.activity_stock}}</div>
@@ -64,7 +64,7 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
-  import { Im } from 'api'
+  import { Im, News } from 'api'
   import Scroll from 'components/scroll/scroll'
   import { ERR_OK, TIMELAG } from 'common/js/config'
   import storage from 'storage-controller'
@@ -76,6 +76,10 @@
   export default {
     name: 'SelectGoods',
     created() {
+      if (this.currentGroupMsg.length < 1 && this.$route.query.chatType === 'group') {
+        this.$router.replace('/new-group-msg')
+        return
+      }
       this.type = this.$route.query.type * 1
       document.title = this.type === 1 ? '选择商品' : '选择活动'
       let data = {
@@ -94,8 +98,8 @@
                 sale_count: item.sale_count,
                 id: item.id,
                 original_price: item.original_price,
-                goods_id: item.goods_id,
-                goods_type: 0 // 前端类型
+                goods_id: item.recommend_goods_id,
+                goods_type: 3 // 前端类型
               }
               return obj
             })
@@ -113,11 +117,14 @@
                 sale_count: item.sale_count,
                 id: item.id,
                 original_price: item.original_price,
-                goods_id: item.activity_id,
-                activity_id: item.activity_id,
+                goods_id: item.recommend_goods_id,
+                activity_id: item.recommend_goods_id,
                 goods_image_url: item.image_url,
                 activity_stock: item.stock,
-                end_at: item.end_at
+                end_at: item.end_at,
+                group_number: item.group_number,
+                stock: item.stock,
+                goods_type: +item.rule_id === 1 ? 4 : 5
               }
               return obj
             })
@@ -160,6 +167,27 @@
         'setNewsGetType',
         'setGroupMsgIng'
       ]),
+      _sendGroupMessage(type, message, callback) {
+        if (this.isSending) return
+        this.$refs.toast.showing('消息发送中...')
+        let data = {}
+        let groupIds = this.currentGroupMsg.map(item => {
+          return item.id
+        })
+        data = {
+          group_ids: groupIds,
+          type,
+          message
+        }
+        News.sendGroupMessage(data).then(res => {
+          this.isSending = false
+          if (ERR_OK !== res.error) {
+            this.$refs.toast.show(res.message)
+            return
+          }
+          callback && callback()
+        })
+      },
       _resetScroll() {
         if (this.$refs.scroll) {
           setTimeout(() => {
@@ -170,7 +198,6 @@
       },
       selectItem(item) {
         this.selectGoods = item
-        console.log(this.selectGoods)
       },
       sendGoods() {
         if (!this.selectGoods) {
@@ -178,10 +205,10 @@
           return
         }
         let data
-        if (this.selectGoods.goods_type * 1 === 0) {
+        if (this.selectGoods.goods_type * 1 === 3) {
           data = {
             url: this.selectGoods.image_url,
-            goods_id: this.selectGoods.id,
+            goods_id: this.selectGoods.goods_id,
             title: this.selectGoods.title,
             goods_price: this.selectGoods.goods_price,
             original_price: this.selectGoods.original_price,
@@ -191,8 +218,8 @@
         } else {
           data = {
             url: this.selectGoods.goods_image_url,
-            goods_id: this.selectGoods.activity_id,
-            title: this.selectGoods.activity_name,
+            goods_id: this.selectGoods.goods_id,
+            title: this.selectGoods.title,
             goods_price: this.selectGoods.goods_price,
             original_price: this.selectGoods.original_price,
             avatar: this.userInfo.avatar,
@@ -201,9 +228,8 @@
         }
         let msgUrl = data.url
         let msgTitle = data.title
-        let logType = this.selectGoods.goods_type * 1 === 0 ? 3 : this.selectGoods.goods_type * 1 === 1 ? 4 : 5
+        let logType = this.selectGoods.goods_type
         let descMsg = {log_type: logType}
-        let groupData = data
         data = JSON.stringify(data)
         let desc = JSON.stringify(descMsg)
         let ext = '20005'
@@ -214,6 +240,16 @@
         }
         this.logType = logType
         if (this.$route.query.chatType === 'group') {
+          let message = {
+            url: this.selectGoods.image_url,
+            goods_id: this.selectGoods.goods_id,
+            activity_id: this.selectGoods.activity_id,
+            title: this.selectGoods.title,
+            goods_price: this.selectGoods.goods_price,
+            original_price: this.selectGoods.original_price,
+            avatar: this.userInfo.avatar,
+            shop_name: this.selectGoods.shop_name
+          }
           // 群发
           if (this.groupMsgIng) {
             this.$refs.toast.show('群发消息发送中，请稍后再发')
@@ -225,20 +261,11 @@
           }
           this.setGroupItem(msg)
           this.setNewsGetType(true)
-          this.$router.go(-3)
-          let groupIds = this.currentGroupMsg.map((item) => {
-            return item.id
+          this._sendGroupMessage(logType, message, () => {
+            let reqArr = this._splitArr(this.currentGroupMsg)
+            this._splitSendGroupMsg(reqArr, 'shop', option)
+            this.$router.replace('/news')
           })
-          let reqData = {
-            type: logType,
-            goods_id: groupData.goods_id,
-            title: groupData.title,
-            group_ids: groupIds
-          }
-          Im.setGroupList(reqData).then((res) => {
-          })
-          let reqArr = this._splitArr(this.currentGroupMsg)
-          this._splitSendGroupMsg(reqArr, 'shop', option)
         } else {
           // 单发
           let timeStamp = parseInt(Date.now() / 1000)
@@ -324,63 +351,100 @@
       },
       _splitSendGroupMsg(arr, type, content) {
         this.setGroupMsgIng(true)
-        Promise.all(arr.map((item, index) => {
-          return new Promise((resolve, reject) => {
-            setTimeout(async () => {
-              await this._sendGroupMsg(item, type, content)
-              resolve()
-            }, index * 1000)
-          })
-        })).then(res => {
-          this.setGroupMsgIng(false)
+        arr.forEach(item => {
+          this._sendGroupMsg(item, type, content)
         })
+        this.setGroupMsgIng(false)
       },
       async _sendGroupMsg(arr, type, content) {
-        await Promise.all(arr.map((item1) => {
-          return new Promise((resolve, reject) => {
-            if (type === 'shop') {
-              webimHandler.onSendCustomMsg(content, item1.account).then(res => {
-                let timeStamp = parseInt(Date.now() / 1000)
-                let addMsg = {
-                  text: this.logType === 3 ? '[商品信息]' : '[活动信息]',
-                  time: timeStamp,
-                  msgTimeStamp: timeStamp,
-                  fromAccount: item1.account,
-                  sessionId: item1.account,
-                  unreadMsgCount: 0,
-                  avatar: item1.avatar,
-                  nickName: item1.nickname
-                }
-                this.addListMsg({msg: addMsg, type: 'mineAdd'})
-                resolve()
-              }, () => {
-                resolve()
-                // this.$refs.toast.show('网络异常, 请稍后重试')
-              })
-            } else if (type === 'chat') {
-              webimHandler.onSendMsg(content, item1.account).then(res => {
-                let timeStamp = parseInt(Date.now() / 1000)
-                let addMsg = {
-                  text: content,
-                  time: timeStamp,
-                  msgTimeStamp: timeStamp,
-                  fromAccount: item1.account,
-                  sessionId: item1.account,
-                  unreadMsgCount: 0,
-                  avatar: item1.avatar,
-                  nickName: item1.nickname
-                }
-                this.addListMsg({msg: addMsg, type: 'mineAdd'})
-                resolve()
-              }, () => {
-                resolve()
-                // this.$refs.toast.show('网络异常, 请稍后重试')
-              })
-            }
-          })
-        }))
-        return true
+        switch (type) {
+          case 'shop' :
+            arr.forEach(item1 => {
+              let timeStamp = parseInt(Date.now() / 1000)
+              let addMsg = {
+                text: this.logType === 3 ? '[商品信息]' : '[活动信息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: item1.account,
+                sessionId: item1.account,
+                unreadMsgCount: 0,
+                avatar: item1.avatar,
+                nickName: item1.nickname
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            })
+            break
+          default:
+            break
+        }
       },
+      // _splitArr(arr) {
+      //   let res = arr.map((item) => {
+      //     return item.customers || []
+      //   })
+      //   let res1 = [].concat.apply([], res)
+      //   let res2 = utils.breakArr(res1, 2)
+      //   return res2
+      // },
+      // _splitSendGroupMsg(arr, type, content) {
+      //   this.setGroupMsgIng(true)
+      //   Promise.all(arr.map((item, index) => {
+      //     return new Promise((resolve, reject) => {
+      //       setTimeout(async () => {
+      //         await this._sendGroupMsg(item, type, content)
+      //         resolve()
+      //       }, index * 1000)
+      //     })
+      //   })).then(res => {
+      //     this.setGroupMsgIng(false)
+      //   })
+      // },
+      // async _sendGroupMsg(arr, type, content) {
+      //   await Promise.all(arr.map((item1) => {
+      //     return new Promise((resolve, reject) => {
+      //       if (type === 'shop') {
+      //         webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: this.logType === 3 ? '[商品信息]' : '[活动信息]',
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickname
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       } else if (type === 'chat') {
+      //         webimHandler.onSendMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: content,
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickname
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       }
+      //     })
+      //   }))
+      //   return true
+      // },
       _timeRun() {
         clearInterval(this.timer)
         this.goodsList = this.goodsList.map((item) => {
@@ -442,7 +506,7 @@
       },
       userInfo() {
         let info = storage.get('info')
-        let nickName = info.name || info.nickname
+        let nickName = info.shop_name
         return {...info, nickName}
       }
     },
