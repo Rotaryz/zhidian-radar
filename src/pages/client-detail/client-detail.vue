@@ -314,7 +314,7 @@
     },
     created() {
       this.id = this.$route.query.id
-      this.pageUrl = this.$route.query.pageUrl
+      this.pageUrl = this.$route.path
       this.getClientId(this.id)
       this.getCusomerTagList()
       this.getActionLineData()
