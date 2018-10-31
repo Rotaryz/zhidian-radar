@@ -176,7 +176,7 @@
 <script>
   import Scroll from 'components/scroll/scroll'
   import {mapActions, mapGetters} from 'vuex'
-  import {Im} from 'api'
+  import {Im, Jwt} from 'api'
   import {ERR_OK} from 'common/js/config'
   import storage from 'storage-controller'
   import {ease} from 'common/js/ease'
@@ -274,6 +274,7 @@
       this.setCustomCount('clear')
       this.getRadarList()
       this.getAllData()
+      this._refreshInfo()
     },
     methods: {
       ...mapActions([
@@ -281,6 +282,13 @@
         'setImIng',
         'setImInfo'
       ]),
+      _refreshInfo() {
+        Jwt.getEmployeeInfo().then((res) => {
+          if (res.error === ERR_OK) {
+            storage.set('info', res.data)
+          }
+        })
+      },
       changeTab(index) {
         if (index * 1 === this.tabIndex * 1) {
           this.$refs[this.tabContent[index]].scrollTo(0, 0)

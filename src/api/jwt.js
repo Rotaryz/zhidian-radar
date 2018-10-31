@@ -10,7 +10,7 @@ export default {
     const url = '/api/employee/profile'
     return request.post(url, data)
   },
-  getemployeeInfo(data) {
+  getEmployeeInfo(data) {
     const url = '/api/employee/profile'
     return request.get(url, data)
   }
