@@ -59,7 +59,7 @@
                 <div class="time-down" v-if="item[timestamp]">
                   <div class="time-box">
                     <p class="time">距开始
-                      <span v-if="item.endTime && item.endTime.day" class="date">{{item.endTime.day}}</span>:
+                      <span v-if="item.endTime && item.endTime.day && item.endTime.day>0" class="date">{{item.endTime.day}}</span><span v-if="item.endTime && item.endTime.day>0">:</span>
                       <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
                       <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
                       <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span>
