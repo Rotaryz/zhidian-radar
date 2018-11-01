@@ -707,7 +707,7 @@
       position: fixed
       top: 55px
       right: 0
-      z-index: 9
+      z-index: 20
       transition: all .3s
       .msg-arrow
         width: 7px
