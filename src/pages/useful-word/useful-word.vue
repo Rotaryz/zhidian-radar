@@ -39,7 +39,8 @@
       return {
         itemChecked: {},
         wordList: [],
-        slide: 'slide'
+        slide: 'slide',
+        isSending: false
       }
     },
     created() {
@@ -154,6 +155,7 @@
       },
       _sendGroupMessage(type, message, callback) {
         if (this.isSending) return
+        this.isSending = true
         this.$refs.toast.showing('消息发送中...')
         let data = {}
         let groupIds = this.currentGroupMsg.map(item => {

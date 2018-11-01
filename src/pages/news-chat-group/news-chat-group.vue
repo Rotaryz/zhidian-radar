@@ -346,6 +346,7 @@
         }
         let files = e.target.files
         this.hideInput()
+        this.$refs.toast.showing('图片发送中...')
         COS.uploadFiles(0, [files[0]]).then((resp) => {
           let res = resp[0]
           if (res.error === ERR_OK) {
@@ -513,6 +514,7 @@
       },
       _sendGroupMessage(type, message, callback) {
         if (this.isSending) return
+        this.isSending = true
         this.$refs.toast.showing('消息发送中...')
         let data = {}
         let groupIds = this.currentGroupMsg.map(item => {

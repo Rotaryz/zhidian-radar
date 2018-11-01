@@ -528,7 +528,9 @@
       },
       _fileImage(e) {
         let files = e.target.files
+        this.$refs.toast.showing('图片发送中...')
         COS.uploadFiles(0, [files[0]]).then((resp) => {
+          this.$refs.toast.hide()
           let res = resp[0]
           if (res.error === ERR_OK) {
             let data = {

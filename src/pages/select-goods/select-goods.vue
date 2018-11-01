@@ -158,7 +158,8 @@
         scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
         selectGoods: '',
         // userInfo: storage.get('info'),
-        logType: 3
+        logType: 3,
+        isSending: false
       }
     },
     methods: {
@@ -171,6 +172,7 @@
       ]),
       _sendGroupMessage(type, message, callback) {
         if (this.isSending) return
+        this.isSending = true
         this.$refs.toast.showing('消息发送中...')
         let data = {}
         let groupIds = this.currentGroupMsg.map(item => {
