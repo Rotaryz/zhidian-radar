@@ -530,7 +530,6 @@
         let files = e.target.files
         this.$refs.toast.showing('图片发送中...')
         COS.uploadFiles(0, [files[0]]).then((resp) => {
-          this.$refs.toast.hide()
           let res = resp[0]
           if (res.error === ERR_OK) {
             let data = {
@@ -546,7 +545,7 @@
               desc,
               ext
             }
-            let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+            let timeStamp = parseInt(Date.now() / 1000)
             let msg = {
               from_account_id: this.imInfo.im_account,
               avatar: this.userInfo.avatar,
@@ -567,6 +566,7 @@
               msg.is_showtime = true
             }
             let list = [...this.nowChat, msg]
+            this.$refs.toast.hide()
             this.setNowChat(list)
             let addMsg = {
               text: '[图片信息]',
