@@ -31,8 +31,8 @@
                 <div class="chat-msg-new-goods other" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">
                   <div class="new-goods-top">
                     <div class="shop-title">
-                      <div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
-                      <div class="shop-name">{{item.nickName}}</div>
+                      <div :style="{backgroundImage: 'url(' + item.avatar || userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
+                      <div class="shop-name">{{item.nickName || item.shop_name}}</div>
                     </div>
                     <div class="goods-title">
                       <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
@@ -62,8 +62,8 @@
                 <div class="chat-msg-new-goods mine" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">
                   <div class="new-goods-top">
                     <div class="shop-title">
-                      <div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
-                      <div class="shop-name">{{item.nickName}}</div>
+                      <div :style="{backgroundImage: 'url(' + item.avatar || userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
+                      <div class="shop-name">{{item.nickName || item.shop_name}}</div>
                     </div>
                     <div class="goods-title">
                       <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
