@@ -92,6 +92,7 @@
           if (res.error === ERR_OK) {
             this.goodsList = res.data.map(item => {
               let obj = {
+                shop_name: item.shop_name,
                 image_url: item.image_url,
                 title: item.goods_title,
                 goods_price: item.platform_price,
@@ -111,6 +112,7 @@
           if (res.error === ERR_OK) {
             this.goodsList = res.data.map(item => {
               let obj = {
+                shop_name: item.shop_name,
                 image_url: item.image_url,
                 title: item.goods_title,
                 goods_price: item.platform_price,
@@ -365,8 +367,8 @@
                 text: this.logType === 3 ? '[商品信息]' : '[活动信息]',
                 time: timeStamp,
                 msgTimeStamp: timeStamp,
-                fromAccount: item1.account,
-                sessionId: item1.account,
+                fromAccount: item1.account || item1.im_account,
+                sessionId: item1.account || item1.im_account,
                 unreadMsgCount: 0,
                 avatar: item1.avatar,
                 nickName: item1.nickname

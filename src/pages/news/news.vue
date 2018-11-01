@@ -48,11 +48,12 @@
         this.setNewsGetType(false)
         return
       }
-      Im.getLastGroupMsg().then(res => {
+      Im.getGroupMsgList({page: 1, limit: 1}).then(res => {
         if (res.error === ERR_OK) {
+          let data = res.data[0]
           let msg = {
-            time: res.data.created_at || '',
-            lastMsg: res.data.content || ''
+            time: data.created_at || '',
+            lastMsg: data.content || ''
           }
           this.setGroupItem(msg)
         }
@@ -170,9 +171,9 @@
               font-family: $font-family-regular
               font-size: $font-size-medium-x
               letter-spacing: 0.6px
-              width :88%
-              overflow :hidden
-              line-height :1.2
+              width: 88%
+              overflow: hidden
+              line-height: 1.2
             .top-time
               font-family: $font-family-regular
               font-size: $font-size-small
@@ -185,6 +186,6 @@
             font-family: $font-family-regular
             font-size: $font-size-small
             color: $color-text-88
-            line-height :1.2
+            line-height: 1.2
 
 </style>

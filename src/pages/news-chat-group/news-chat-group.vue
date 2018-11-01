@@ -190,8 +190,8 @@
                 text: '[图片信息]',
                 time: timeStamp,
                 msgTimeStamp: timeStamp,
-                fromAccount: item1.account,
-                sessionId: item1.account,
+                fromAccount: item1.account || item1.im_account,
+                sessionId: item1.account || item1.im_account,
                 unreadMsgCount: 0,
                 avatar: item1.avatar,
                 nickName: item1.nickname
@@ -206,8 +206,8 @@
                 text: content,
                 time: timeStamp,
                 msgTimeStamp: timeStamp,
-                fromAccount: item1.account,
-                sessionId: item1.account,
+                fromAccount: item1.account || item1.im_account,
+                sessionId: item1.account || item1.im_account,
                 unreadMsgCount: 0,
                 avatar: item1.avatar,
                 nickName: item1.nickname
@@ -523,7 +523,6 @@
           type,
           message
         }
-        console.log(data)
         News.sendGroupMessage(data).then(res => {
           this.isSending = false
           if (ERR_OK !== res.error) {
