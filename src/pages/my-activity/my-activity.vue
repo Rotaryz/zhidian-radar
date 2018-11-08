@@ -22,16 +22,6 @@
                               @itemDown="itemDown"
                               page="activity">
                 </activity-item>
-                <p class="title" :class="{'group' : item.rule_id * 1 === 1}"></p>
-                <div class="time-down" v-if="item[timestamp]">
-                  <div class="time-box">
-                    <p class="time">距开始
-                      <span v-if="item.endTime && item.endTime.day && item.endTime.day>0" class="date">{{item.endTime.day}}</span><span v-if="item.endTime && item.endTime.day>0">:</span>
-                      <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
-                      <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
-                      <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span></p>
-                  </div>
-                </div>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray.length === 0">
@@ -55,17 +45,6 @@
                               @itemUp="itemUp"
                               page="team">
                 </activity-item>
-                <p class="title" :class="{'group' : item.rule_id * 1 === 1}"></p>
-                <div class="time-down" v-if="item[timestamp]">
-                  <div class="time-box">
-                    <p class="time">距开始
-                      <span v-if="item.endTime && item.endTime.day && item.endTime.day>0" class="date">{{item.endTime.day}}</span><span v-if="item.endTime && item.endTime.day>0">:</span>
-                      <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
-                      <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
-                      <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span>
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
             <div class="null-data"  v-if="loaded && dataArray.length === 0">
@@ -169,7 +148,6 @@
             } else {
               this.pullUpLoad = true
             }
-            this._endTimePlay()
             if (res.data.length < LIMIT) {
               this.showNoMore = true
             }
@@ -260,49 +238,6 @@
               }, 20)
             })
         }
-      },
-      _endTimePlay() {
-        clearInterval(this.timer)
-        this.dataArray = this.dataArray.map((item) => {
-          item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
-          return item
-        })
-        this.timer = setInterval(() => {
-          this.dataArray = this.dataArray.map((item, index) => {
-            item.current_timestamp++
-            item.endTime = this._groupTimeCheckout(item[this.timestamp], item.current_timestamp)
-            return item
-          })
-        }, 1000)
-      },
-      _groupTimeCheckout(time, nowTime) {
-        // let nowSecond = new Date(nowTime)
-        let differ = time - nowTime
-        let day = Math.floor(differ / (60 * 60 * 24))
-        day = day >= 10 ? day : '0' + day
-        let hour = Math.floor(differ / (60 * 60)) - (day * 24)
-        hour = hour >= 10 ? hour : '0' + hour
-        let minute = Math.floor(differ / 60) - (day * 24 * 60) - (hour * 60)
-        minute = minute >= 10 ? minute : '0' + minute
-        let second = Math.floor(differ) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60)
-        second = second >= 10 ? second : '0' + second
-        let times
-        if (differ > 0) {
-          times = {
-            day,
-            hour,
-            minute,
-            second
-          }
-        } else {
-          times = {
-            day: '00',
-            hour: '00',
-            minute: '00',
-            second: '00'
-          }
-        }
-        return times
       },
       rebuildScroll() {
         this.$nextTick(() => {
@@ -404,44 +339,6 @@
               position: relative
               padding-top: 15px
               box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
-              .time-down
-                height: 46px
-                padding: 0 15px
-                background: $color-white
-              .title
-                bg-image(pic-label_kj)
-                width: 10vw
-                height: 10vw
-                background-size: 100% 100%
-                position: absolute
-                left: -3px
-                top: 13px
-              .group
-                bg-image(pic-label_pt)
-                background-size: 100% 100%
-              .time-box
-                height: 100%
-                display: flex
-                align-items: center
-                justify-content: space-between
-                border-top-1px($color-F3F3F3)
-              .time
-                font-size: 14px
-                display: flex
-                align-items: center
-                color: $color-20202E
-                .date
-                  width: 18px
-                  height: 18px
-                  line-height: 18px
-                  text-align: center
-                  background: $color-20202E
-                  border-radius: 2px
-                  margin: 0 2px
-                  font-size: $font-size-10
-                  color: $color-white
-                  &:first-child
-                    margin-left: 4px
     .footer-box
       position: fixed
       width: 100vw

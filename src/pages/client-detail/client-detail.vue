@@ -630,7 +630,7 @@
           setTimeout(() => {
             this.drawPie()
             this.drawLine()
-            this.drawBar()
+            // this.drawBar()
           }, 200)
         } else if (index * 1 === 0) {
           this.list = this.flowList
