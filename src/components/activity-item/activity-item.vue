@@ -18,6 +18,16 @@
         </div>
       </div>
     </div>
+    <p class="title" :class="{'group' : item.rule_id * 1 === 1}"></p>
+    <div class="time-down" v-if="item.start_at_timestamp">
+      <div class="time-box">
+        <p class="time">距开始
+          <span v-if="endTime && endTime.day && endTime.day>0" class="date">{{endTime.day}}</span><span v-if="endTime && endTime.day>0">:</span>
+          <span v-if="endTime && endTime.hour" class="date">{{endTime.hour}}</span>:
+          <span v-if="endTime && endTime.minute" class="date">{{endTime.minute}}</span>:
+          <span v-if="endTime && endTime.second" class="date">{{endTime.second}}</span></p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -26,7 +36,11 @@
     props: ['tabIdx', 'item', 'showEdit', 'page'],
     data() {
       return {
+        endTime: {}
       }
+    },
+    created() {
+      this._endTimePlay()
     },
     methods: {
       showEditCover(item) {
@@ -43,7 +57,47 @@
       },
       itemUp(item) {
         this.$emit('itemUp', item)
+      },
+      _endTimePlay() {
+        clearInterval(this.timer)
+        this.item.current_timestamp++
+        this.endTime = this._groupTimeCheckout(this.item.start_at_timestamp, this.item.current_timestamp)
+        this.timer = setInterval(() => {
+          this.item.current_timestamp++
+          this.endTime = this._groupTimeCheckout(this.item.start_at_timestamp, this.item.current_timestamp)
+        }, 1000)
+      },
+      _groupTimeCheckout(time, nowTime) {
+        let differ = time - nowTime
+        let day = Math.floor(differ / (60 * 60 * 24))
+        day = day >= 10 ? day : '0' + day
+        let hour = Math.floor(differ / (60 * 60)) - (day * 24)
+        hour = hour >= 10 ? hour : '0' + hour
+        let minute = Math.floor(differ / 60) - (day * 24 * 60) - (hour * 60)
+        minute = minute >= 10 ? minute : '0' + minute
+        let second = Math.floor(differ) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60)
+        second = second >= 10 ? second : '0' + second
+        let times
+        if (differ > 0) {
+          times = {
+            day,
+            hour,
+            minute,
+            second
+          }
+        } else {
+          times = {
+            day: '00',
+            hour: '00',
+            minute: '00',
+            second: '00'
+          }
+        }
+        return times
       }
+    },
+    beforeDestroy() {
+      clearInterval(this.timer)
     }
   }
 </script>
@@ -63,6 +117,7 @@
       padding: 15px 10px
       display: flex
       align-items: center
+      position: relative
       .item-left
         width: 18.666vw
         height: @width
@@ -142,4 +197,42 @@
               color: $color-888888
               font-size: $font-size-12
               margin-top: 5px
+    .time-down
+      height: 46px
+      padding: 0 15px
+      background: $color-white
+    .title
+      bg-image(pic-label_kj)
+      width: 10vw
+      height: 10vw
+      background-size: 100% 100%
+      position: absolute
+      left: -3px
+      top: 13px
+    .group
+      bg-image(pic-label_pt)
+      background-size: 100% 100%
+    .time-box
+      height: 100%
+      display: flex
+      align-items: center
+      justify-content: space-between
+      border-top-1px($color-F3F3F3)
+      .time
+        font-size: 14px
+        display: flex
+        align-items: center
+        color: $color-20202E
+        .date
+          width: 18px
+          height: 18px
+          line-height: 18px
+          text-align: center
+          background: $color-20202E
+          border-radius: 2px
+          margin: 0 2px
+          font-size: $font-size-10
+          color: $color-white
+          &:first-child
+            margin-left: 4px
 </style>
