@@ -52,8 +52,8 @@
         if (res.error === ERR_OK) {
           let data = res.data[0]
           let msg = {
-            time: data.created_at || '',
-            lastMsg: data.content || ''
+            time: (data && data.created_at) || '',
+            lastMsg: (data && data.content) || ''
           }
           this.setGroupItem(msg)
         }
