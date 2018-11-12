@@ -39,8 +39,6 @@
     created () {
       this.id = this.$route.query.id
       this.flowId = this.$route.query.id
-      console.log(this.id)
-      console.log(this.flowId)
     },
     methods: {
       addFlow() {
@@ -54,7 +52,6 @@
           if (res.error === ERR_OK) {
             this.$refs.toast.show(res.message)
             setTimeout(() => {
-              console.log('refresh')
               this.$emit('refresh')
               this.$router.back()
             }, 500)
