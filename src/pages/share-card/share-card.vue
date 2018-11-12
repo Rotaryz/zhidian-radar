@@ -14,7 +14,6 @@
 
 <script>
   import { Business } from 'api'
-  import { mapGetters } from 'vuex'
   import storage from 'storage-controller'
 
   export default {
@@ -28,7 +27,7 @@
     created() {
       this.card.avatar = storage.get('info').avatar
       this.card.name = storage.get('info').name
-      Business.Myshop({is_hyaline: 1, path: '/pages/guide'}).then((res) => {
+      Business.Myshop({is_hyaline: 0, path: '/pages/guide'}).then((res) => {
         if (res.data) {
           this.card.qrcode = res.data.image_url
         }
@@ -40,11 +39,6 @@
       } else {
         this.show = true
       }
-    },
-    computed: {
-      ...mapGetters([
-        'ios'
-      ])
     }
   }
 </script>

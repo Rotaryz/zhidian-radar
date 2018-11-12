@@ -496,27 +496,20 @@ const route = new Router({
           }
         ]
       },
-      {
-        path: '/client-tag',
-        component: ClientTag,
-        meta: {
-          title: '标签'
-        }
-      },
-      {
-        path: '/client-search',
-        component: ClientSearch,
-        meta: {
-          title: '搜索'
-        }
-      },
-      {
-        path: '/client-detail',
-        component: Cdetail,
-        meta: {
-          title: '客户详情'
-        }
-      },
+      // {
+      //   path: '/client-tag',
+      //   component: ClientTag,
+      //   meta: {
+      //     title: '标签'
+      //   }
+      // },
+      // {
+      //   path: '/client-detail',
+      //   component: Cdetail,
+      //   meta: {
+      //     title: '客户详情'
+      //   }
+      // },
       {
         path: '/client-set-group',
         component: ClientSetGroup,
@@ -531,6 +524,13 @@ const route = new Router({
           title: '添加分组'
         }
       }]
+    },
+    {
+      path: '/client-search',
+      component: ClientSearch,
+      meta: {
+        title: '搜索'
+      }
     },
     {
       path: '/client-detail',
