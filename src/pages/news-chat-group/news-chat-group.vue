@@ -1,0 +1,766 @@
+<template>
+  <transition name="slide">
+    <div class="chat">
+      <section class="chat-container" @click.stop="hideInput">
+        <div class="group-wrapper">群发组：<span v-for="(item1, index1) in currentGroupMsg" :key="index1">{{index1 == (currentGroupMsg.length - 1) ? item1.name + '(' + item1.total + ')' : item1.name + '(' + item1.total + ')，'}}</span></div>
+      </section>
+      <!--<section class="chat-input border-top-1px">-->
+      <!--<div class="chat-input-box">-->
+      <!--<div class="face-box" @click.stop="showEmoji">-->
+      <!--<img src="../../../static/img/icon-emoji@2x.png" class="face-icon">-->
+      <!--</div>-->
+      <!--<div class="input-container" ref="textBox">-->
+      <!--<textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>-->
+      <!--</div>-->
+      <!--<div class="addimg-box" v-if="!inputMsg" @click.stop="showMoreList">-->
+      <!--<img src="../../../static/img/icon-add_im@2x.png" class="addimg-icon">-->
+      <!--</div>-->
+      <!--<div class="submit-btn" @click="sendMsg" v-if="inputMsg">发送</div>-->
+      <!--</div>-->
+      <!--<div class="more-box">-->
+      <!--<div class="emoji-list" v-if="emojiShow">-->
+      <!--<div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">-->
+      <!--<img :src="item.url" class="emoji-icon">-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="addimg-list" v-if="mortListShow">-->
+      <!--<label class="addimg-item" :for="item.type == 1?'choose-pic':''" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">-->
+      <!--<img :src="item.icon" class="item-icon">-->
+      <!--<p class="item-txt">{{item.txt}}</p>-->
+      <!--<input type="file" id="choose-pic" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">-->
+      <!--</label>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</section>-->
+      <div class="chat-input border-top-1px">
+        <div class="chat-input-box">
+          <div class="face-box" @click.stop="showEmoji">
+            <img src="../../../static/img/icon-emoji@2x.png" class="face-icon">
+          </div>
+          <div class="input-container" ref="textBox">
+            <textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>
+          </div>
+          <div class="addimg-box" v-if="!inputMsg" @click.stop="showMoreList">
+            <img src="../../../static/img/icon-add_im@2x.png" class="addimg-icon">
+          </div>
+          <div class="submit-btn" @click="sendMsg" v-if="inputMsg">发送</div>
+        </div>
+        <div class="more-box">
+          <div class="emoji-list" v-if="emojiShow">
+            <div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">
+              <img :src="item.url" class="emoji-icon">
+            </div>
+          </div>
+          <div class="addimg-list" v-if="mortListShow">
+            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)" :style="item.type === -1 ?'opacity: 0':''">
+              <div class="img-box">
+                <div class="item-icon" :class="item.icon"></div>
+              </div>
+              <p class="item-txt">{{item.txt}}</p>
+              <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<transition name="fade">-->
+        <!--<div class="cover-full" v-if="coverFullShow">-->
+          <!--<div class="cover-container">-->
+            <!--<div class="cover-top">-->
+              <!--<span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>-->
+              <!--<span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>-->
+            <!--</div>-->
+            <!--<div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</transition>-->
+      <toast ref="toast"></toast>
+      <router-view @getQrCode="getQrCodeStatus"/>
+    </div>
+  </transition>
+</template>
+
+<script>
+  import Toast from 'components/toast/toast'
+  import { mapActions, mapGetters } from 'vuex'
+  import storage from 'storage-controller'
+  import { Im, News } from 'api'
+  import { ERR_OK } from 'common/js/config'
+  import utils from 'common/js/utils'
+  import { emotionsFaceArr } from 'common/js/constants'
+  import * as COS from '@/utils/cos/cos'
+
+  const MORELIST = [
+    {txt: '图片', icon: 'im-image', type: 1},
+    // {txt: '个人微信', icon: 'im-weixin', type: 4},
+    // {txt: '微信群码', icon: 'im-group', type: 5},
+    {txt: '常用语', icon: 'im-useful', type: 6},
+    {txt: '发送商品', icon: 'im-goods', type: 2},
+    {txt: '发送活动', icon: 'im-activity', type: 3},
+    {txt: '', icon: '', type: -1}
+  ]
+
+  export default {
+    name: 'Chat',
+    data() {
+      return {
+        textareaDom: '',
+        heightBoxDom: '',
+        txtHeight: '36px',
+        inputMsg: '',
+        id: '',
+        page: 1,
+        noMore: false,
+        moreLists: MORELIST,
+        emojiList: emotionsFaceArr,
+        emojiShow: false,
+        mortListShow: false,
+        codeStatus: {},
+        coverFullShow: false,
+        coverShowType: '',
+        isSending: false
+      }
+    },
+    created() {
+      // this.getQrCodeStatus()
+      if (this.currentGroupMsg.length < 1) {
+        this.$router.replace('/new-group-msg')
+      }
+    },
+    mounted() {
+      this.textareaDom = this.$refs.inputTxt
+      this.textBoxDom = this.$refs.textBox
+    },
+    methods: {
+      ...mapActions([
+        'setGroupItem',
+        'addListMsg',
+        'setNewsGetType',
+        'setGroupMsgIng',
+        'updateNewsPage',
+        'saveList'
+      ]),
+      // toMineCode() {
+      //   let url
+      //   switch (this.coverShowType) {
+      //     case 'person':
+      //       url = this.$route.fullPath + '/person-code'
+      //       break
+      //     case 'group':
+      //       url = this.$route.fullPath + '/group-code'
+      //       break
+      //   }
+      //   this.coverFullShow = false
+      //   this.$router.push({path: url})
+      // },
+      getQrCodeStatus() {
+        // Im.getCodeStatus().then(res => {
+        //   if (res.error === ERR_OK) {
+        //     this.codeStatus = res.data
+        //   }
+        // })
+      },
+      exceptionHandle(flag) {
+        if (flag) {
+          this.$refs.toast.show('网络异常, 请稍后重试')
+          this.$router.go(-1)
+          return true
+        }
+      },
+      _splitArr(arr) {
+        let res = arr.map((item) => {
+          return item.customers || []
+        })
+        let res1 = [].concat.apply([], res)
+        let res2 = utils.breakArr(res1, 2)
+        return res2
+      },
+      _splitSendGroupMsg(arr, type, content) {
+        this.setGroupMsgIng(true)
+        arr.forEach(item => {
+          this._sendGroupMsg(item, type, content)
+        })
+        this.setGroupMsgIng(false)
+      },
+      async _sendGroupMsg(arr, type, content) {
+        switch (type) {
+          case 'custom' :
+            arr.forEach(item1 => {
+              let timeStamp = parseInt(Date.now() / 1000)
+              let addMsg = {
+                text: '[图片信息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: item1.account || item1.im_account,
+                sessionId: item1.account || item1.im_account,
+                unreadMsgCount: 0,
+                avatar: item1.avatar,
+                nickName: item1.nickname
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            })
+            break
+          case 'chat' :
+            arr.forEach(item1 => {
+              let timeStamp = parseInt(Date.now() / 1000)
+              let addMsg = {
+                text: content,
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: item1.account || item1.im_account,
+                sessionId: item1.account || item1.im_account,
+                unreadMsgCount: 0,
+                avatar: item1.avatar,
+                nickName: item1.nickname
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            })
+            break
+          default:
+            break
+        }
+      },
+      // _splitSendGroupMsg(arr, type, content) {
+      //   this.setGroupMsgIng(true)
+      //   Promise.all(arr.map((item, index) => {
+      //     return new Promise((resolve, reject) => {
+      //       setTimeout(async () => {
+      //         await this._sendGroupMsg(item, type, content)
+      //         resolve()
+      //       }, index * 1000)
+      //     })
+      //   })).then(res => {
+      //     this.setGroupMsgIng(false)
+      //   })
+      // },
+      // async _sendGroupMsg(arr, type, content) {
+      //   await Promise.all(arr.map((item1) => {
+      //     return new Promise((resolve, reject) => {
+      //       if (type === 'custom') {
+      //         webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: '[图片信息]',
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickname
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       } else if (type === 'chat') {
+      //         webimHandler.onSendMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: content,
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickname
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       } else if (type === 'person-qr-code') {
+      //         webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: '[个人微信二维码]',
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickName
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       } else if (type === 'group-qr-code') {
+      //         webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+      //           let timeStamp = parseInt(Date.now() / 1000)
+      //           let addMsg = {
+      //             text: '[群微信二维码]',
+      //             time: timeStamp,
+      //             msgTimeStamp: timeStamp,
+      //             fromAccount: item1.account,
+      //             sessionId: item1.account,
+      //             unreadMsgCount: 0,
+      //             avatar: item1.avatar,
+      //             nickName: item1.nickName
+      //           }
+      //           this.addListMsg({msg: addMsg, type: 'mineAdd'})
+      //           resolve()
+      //         }, () => {
+      //           resolve()
+      //           // this.$refs.toast.show('网络异常, 请稍后重试')
+      //         })
+      //       }
+      //     })
+      //   }))
+      //   return true
+      // },
+      hideInput() {
+        this.mortListShow = false
+        this.emojiShow = false
+      },
+      chioceEmoji(item) {
+        this.inputMsg = this.inputMsg + item.txt
+      },
+      showEmoji() {
+        this.emojiShow = !this.emojiShow
+        this.mortListShow = false
+      },
+      showMoreList() {
+        this.mortListShow = !this.mortListShow
+        this.emojiShow = false
+      },
+      textHeight() {
+        let timer = setTimeout(() => {
+          this.textareaDom.style.height = 'auto'
+          this.textareaDom.style.height = this.textareaDom.scrollHeight + 'px'
+          this.textBoxDom.scrollTop = this.textareaDom.scrollHeight
+          clearTimeout(timer)
+        }, 20)
+      },
+      _fileImage(e) {
+        if (this.groupMsgIng) {
+          this.$refs.toast.show('群发消息发送中，请稍后再发')
+          return
+        }
+        let files = e.target.files
+        this.hideInput()
+        this.$refs.toast.showing('图片发送中...')
+        COS.uploadFiles(0, [files[0]]).then((resp) => {
+          let res = resp[0]
+          if (res.error === ERR_OK) {
+            let data = {
+              image_id: res.data.id,
+              url: res.data.url
+            }
+            let message = data
+            let desc = {log_type: 20}
+            let ext = '20005'
+            data = JSON.stringify(data)
+            desc = JSON.stringify(desc)
+            let opt = {
+              data,
+              desc,
+              ext
+            }
+            let msg = {
+              time: parseInt(Date.now() / 1000),
+              lastMsg: '[图片信息]'
+            }
+            this.setGroupItem(msg)
+            this.setNewsGetType(true)
+            this._sendGroupMessage(20, message, () => {
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, 'custom', opt)
+              this.mortListShow = false
+              this.$router.go(-2)
+            })
+          } else {
+            this.$refs.toast.show('图片发送失败，请重新发送')
+          }
+        })
+      },
+      nextWork(item) {
+        let type = item.type * 1
+        let url
+        switch (type) {
+          case 1:
+            break
+          case 2:
+            url = this.$route.fullPath + '/select-goods?type=1&chatType=group'
+            this.mortListShow = false
+            this.$router.push(url)
+            break
+          case 3:
+            url = this.$route.fullPath + '/select-goods?type=2&chatType=group'
+            this.mortListShow = false
+            this.$router.push(url)
+            break
+          case 4:
+            if (!this.codeStatus.have_personal_qrcode) {
+              this.coverFullShow = true
+              this.coverShowType = 'person'
+            } else {
+              let data = {}
+              let desc = {log_type: 6}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let msg = {
+                time: parseInt(Date.now() / 1000),
+                lastMsg: '[个人微信二维码]'
+              }
+              this.setGroupItem(msg)
+              this.setNewsGetType(true)
+              let groupIds = this.currentGroupMsg.map((item) => {
+                return item.id
+              })
+              let reqData = {
+                type: 6,
+                group_ids: groupIds
+              }
+              this.$router.go(-2)
+              Im.setGroupList(reqData).then((res) => {
+              })
+              this.mortListShow = false
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, 'person-qr-code', opt)
+            }
+            break
+          case 5:
+            if (!this.codeStatus.have_wxgroup_qrcode) {
+              this.coverFullShow = true
+              this.coverShowType = 'group'
+            } else {
+              let data = {}
+              let desc = {log_type: 7}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let msg = {
+                time: parseInt(Date.now() / 1000),
+                lastMsg: '[群微信二维码]'
+              }
+              this.setGroupItem(msg)
+              this.setNewsGetType(true)
+              let groupIds = this.currentGroupMsg.map((item) => {
+                return item.id
+              })
+              let reqData = {
+                type: 7,
+                group_ids: groupIds
+              }
+              this.$router.go(-2)
+              Im.setGroupList(reqData).then((res) => {
+              })
+              this.mortListShow = false
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, 'group-qr-code', opt)
+            }
+            break
+          case 6:
+            url = this.$route.fullPath + '/useful-word'
+            this.mortListShow = false
+            this.$router.push({path: url, query: {chatType: 'group'}})
+            break
+        }
+      },
+      sendMsg() {
+        if (this.groupMsgIng) {
+          this.$refs.toast.show('群发消息发送中，请稍后再发')
+          return
+        }
+        let value = this.inputMsg.trim()
+        if (!value) {
+          this.$refs.toast.show('发送消息不能为空')
+          return
+        }
+        this._sendGroupMessage(1, {text: value}, () => {
+          let reqArr = this._splitArr(this.currentGroupMsg)
+          this._splitSendGroupMsg(reqArr, 'chat', value)
+          this.inputMsg = ''
+          this.hideInput()
+          let msg = {
+            time: parseInt(Date.now() / 1000),
+            lastMsg: value
+          }
+          this.setGroupItem(msg)
+          this.setNewsGetType(true)
+          this.inputMsg = ''
+          this.hideInput()
+          this.$router.go(-2)
+        })
+        // let groupIds = this.currentGroupMsg.map((item) => {
+        //   return item.id
+        // })
+        // let reqData = {
+        //   type: 1,
+        //   content: value,
+        //   group_ids: groupIds
+        // }
+        // Im.setGroupList(reqData).then((res) => {
+        // })
+      },
+      _sendGroupMessage(type, message, callback) {
+        if (this.isSending) return
+        this.isSending = true
+        this.$refs.toast.showing('消息发送中...')
+        let data = {}
+        let groupIds = this.currentGroupMsg.map(item => {
+          return item.id
+        })
+        data = {
+          group_ids: groupIds,
+          type,
+          message
+        }
+        News.sendGroupMessage(data).then(res => {
+          this.isSending = false
+          if (ERR_OK !== res.error) {
+            this.$refs.toast.show(res.message)
+            return
+          }
+          callback && callback()
+        })
+      }
+    },
+    components: {
+      Toast
+    },
+    watch: {
+      inputMsg() {
+        this.textHeight()
+      }
+    },
+    filters: {
+      timeFormat(val) {
+        if (val) {
+          let res = utils.radarTimeFormat(val)
+          return res.time
+        }
+        return ''
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'currentGroupMsg',
+        'imInfo',
+        'groupMsgIng'
+      ]),
+      userInfo() {
+        return storage.get('info')
+      }
+    }
+  }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+  @import '~common/stylus/mixin'
+  @import '~common/stylus/base'
+  .chat
+    width: 100vw
+    height: 100vh
+    position: fixed
+    left: 0
+    top: 0
+    background: $color-background
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    z-index: 200
+    .chat-container
+      position: absolute
+      top: 0
+      bottom: 50px
+      left: 0
+      right: 0
+      width: 100%
+      overflow: hidden
+      .group-wrapper
+        background: $color-white-fff
+        word-break: break-all
+        font-family: $font-family-light
+        font-size: $font-size-14
+        color: $color-20202E
+        letter-spacing: 0.3px
+        line-height: 1.6
+        padding: 15px
+
+    .chat-input
+      width: 100%
+      box-sizing: border-box
+      min-height: 38px
+      background: $color-background-f9
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
+      z-index: 10
+      .chat-input-box
+        display: flex
+        align-items: flex-end
+        min-height: 38px
+        padding: 6px 0
+        .face-box
+          width: 53px
+          display: flex
+          align-items: center
+          .face-icon
+            margin-left: 10px
+            width: 28px
+            height: 28px
+            padding: 5px
+        .addimg-box
+          width: 53px
+          display: flex
+          align-items: center
+          .addimg-icon
+            margin-left: 5px
+            width: 28px
+            height: 28px
+            padding: 5px
+        .submit-btn
+          width: 43px
+          height: 36px
+          margin: 0 5px
+          border: 1px solid rgba(0, 0, 0, 0.10)
+          border-radius: 2px
+          background: $color-white
+          text-align: center
+          line-height: 36px
+          font-size: $font-size-medium
+          font-family: $font-family-regular
+          box-sizing: border-box
+        .input-container
+          flex: 1
+          overflow-x: hidden
+          min-height: 28px
+          border: 1px solid rgba(0, 0, 0, 0.10)
+          background: $color-white
+          max-height: 100px
+          overflow-y: auto
+          padding: 8px 10px 0
+          .textarea
+            width: 100%
+            height: auto
+            padding: 0
+            margin: 0
+            resize: none
+            border: 0 none
+            outline: none
+            overflow-y: visible
+            display: block
+            font-size: $font-size-medium
+      .more-box
+        width: 100%
+        .emoji-list
+          display: flex
+          flex-wrap: wrap
+          padding: 6.666666vw 8vw 0
+          .emoji-item
+            width: 6.666666vw
+            height: 6.666666vw
+            margin-bottom: 6.666666vw
+            &:not(:nth-child(7n))
+              margin-right: 6.2vw
+            .emoji-icon
+              width: 6.666666vw
+              height: 6.666666vw
+        .addimg-list
+          padding: 25px 0 0 8vw
+          display: flex
+          flex-wrap: wrap
+          .addimg-item
+            width: 16vw
+            display: flex
+            flex-direction: column
+            justify-content: space-between
+            font-size: 0
+            margin-right: 6.6666vw
+            margin-bottom: 15px
+            position: relative
+            .img-box
+              width: 16vw
+              height: 16vw
+              border-1px(#ccc, 12px)
+              display: flex
+              justify-content: center
+              align-items: center
+              .item-icon
+                width: 33px
+                height: 33px
+              .im-image
+                icon-image('./icon-picture')
+              .im-weixin
+                icon-image('./icon-wechat')
+              .im-group
+                icon-image('./icon-groupcode')
+              .im-useful
+                icon-image('./icon-Comlanguage')
+              .im-goods
+                icon-image('./icon-sendgoods')
+              .im-activity
+                icon-image('./icon-activity')
+            .item-txt
+              margin-top: 5px
+              font-size: $font-size-12
+              font-family: $font-family-regular
+              color: #828AA2
+              text-align: center
+            .image-file
+              position: absolute
+              left: 0
+              top: 0
+              opacity: 0
+              width: 100%
+              height: 100%
+              z-index: 10
+
+    .cover-full
+      fill-box()
+      z-index: 100
+      layout()
+      align-items: center
+      background: rgba(32, 32, 46, 0.8)
+      .cover-container
+        width: 300px
+        height: 160px
+        background: $color-white
+        border: 1px solid rgba(32, 32, 46, 0.10)
+        border-radius: 2px
+        all-center()
+        .cover-top
+          width: 100%
+          height: 115px
+          display: flex
+          align-items: center
+          justify-content: center
+          .top-txt
+            font-size: $font-size-16
+            font-family: $font-family-regular
+            color: $color-20202E
+            letter-spacing: 0.8px
+            line-height: 18px
+        .cover-down
+          width: 100%
+          height: 45px
+          line-height: 44px
+          text-align: center
+          font-family: $font-family-medium
+          font-size: $font-size-14
+          color: $color-56BA15
+          letter-spacing: 0.6px
+</style>
