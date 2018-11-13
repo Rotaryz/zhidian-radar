@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
 
     <div class="edit-dynamic">
       <scroll>
@@ -37,7 +37,6 @@
   import {UpLoad, Live} from 'api'
   import {ERR_OK} from '../../common/js/config'
   import Toast from 'components/toast/toast'
-  import {mapGetters} from 'vuex'
 
   export default {
     name: 'edit-dynamic',
@@ -107,12 +106,6 @@
       },
       _back() {
         this.$router.back()
-      }
-    },
-    computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     },
     components: {

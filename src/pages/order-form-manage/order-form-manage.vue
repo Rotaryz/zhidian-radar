@@ -1,5 +1,6 @@
 <template>
-  <div class="order-form">
+  <transition name="slide">
+    <div class="order-form">
     <section class="search-box">
       <div class="input-box" :class="{'short-box' : input}">
         <img class="icon" src="./icon-search@3x.png" alt=""/>
@@ -122,6 +123,7 @@
     <toast ref="toast"></toast>
     <router-view></router-view>
   </div>
+  </transition>
 </template>
 
 <script>

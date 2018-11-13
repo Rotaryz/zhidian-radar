@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <article class="client-tag">
       <scroll bcColor="#fff">
         <div class="box">
@@ -27,7 +27,6 @@
   import Scroll from 'components/scroll/scroll'
   import Toast from 'components/toast/toast'
   import {ERR_OK} from '../../common/js/config'
-  import {mapGetters} from 'vuex'
 
   export default {
     name: 'ClientTag',
@@ -86,12 +85,6 @@
           let node = item.labels.find(val => val.id === it.id)
           node && (node.isCheck = !node.isCheck)
         })
-      }
-    },
-    computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     },
     components: {

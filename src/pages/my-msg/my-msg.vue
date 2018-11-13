@@ -1,20 +1,23 @@
 <template>
-  <div class="my-msg">
-    <div class="container">
-      <div class="list"><span class="type">微信号</span><input class="txt" type="text" v-model="weixin_no" placeholder="请输入微信号"></div>
-      <div class="list"><span class="type">联系电话</span><input class="txt" type="text" v-model="mobile" placeholder="请输入手机号"></div>
+  <transition name="slide">
+    <div class="my-msg">
+      <div class="container">
+        <div class="list"><span class="type">微信号</span><input class="txt" type="text" v-model="weixin_no" placeholder="请输入微信号"></div>
+        <div class="list"><span class="type">联系电话</span><input class="txt" type="text" v-model="mobile" placeholder="请输入手机号"></div>
+      </div>
+      <div class="footer-box">
+        <div class="footer-btn" @click="saveMsg">保存</div>
+      </div>
+      <toast ref="toast"></toast>
     </div>
-    <div class="footer-box">
-      <div class="footer-btn" @click="saveMsg">保存</div>
-    </div>
-    <toast ref="toast"></toast>
-  </div>
+  </transition>
 </template>
 
 <script>
   import { Mine } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
+  import utils from 'common/js/utils'
 
   export default {
     name: 'OrderDetail',
@@ -29,7 +32,6 @@
     },
     methods: {
       saveMsg() {
-        const REGPHONE = /(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}/
         // if (!this.weixin_no || this.weixin_no.replace(/^\s+|\s+$/g, '') === '') {
         //   this.$refs.toast.show('请输入微信号')
         //   return
@@ -37,7 +39,7 @@
         if (!this.mobile) {
           // this.$refs.toast.show('请输入手机号')
           // return
-        } else if (!REGPHONE.test(this.mobile)) {
+        } else if (!utils.testPhoneNumber(this.mobile)) {
           this.$refs.toast.show('输入的手机号格式不正确')
           return
         }

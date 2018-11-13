@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="useful-word">
       <scroll :bcColor="'#ffffff'" ref="scroll">
         <div class="word-list">
@@ -39,7 +39,6 @@
       return {
         itemChecked: {},
         wordList: [],
-        slide: 'slide',
         isSending: false
       }
     },

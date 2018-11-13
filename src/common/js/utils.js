@@ -6,6 +6,7 @@ const LOSE_EFFICACY = 10000
 const DISABLE = 11001 // 11001 AI雷达没有权限, 11002 BOSS雷达没有权限
 const DELETE = 1 // TODO
 const NET_404 = 404
+const REGPHONE = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/ // 手机号正则
 
 export default class utils {
   static formatDate (time) {
@@ -179,6 +180,11 @@ export default class utils {
     let res = msg.replace(/</g, '&lt;')
     res = res.replace(/>/g, '&gt;')
     return res
+  }
+
+  // 验证手机号
+  static testPhoneNumber(phoneNumber) {
+    return REGPHONE.test(phoneNumber)
   }
 }
 

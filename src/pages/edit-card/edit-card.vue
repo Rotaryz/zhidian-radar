@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="edit-card">
       <scroll ref="scroll">
         <!--require('./Snip20180707_35.png')-->
@@ -65,7 +65,7 @@
   import Scroll from 'components/scroll/scroll'
   import { Business, UpLoad } from 'api'
   import Toast from 'components/toast/toast'
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapActions } from 'vuex'
   import storage from 'storage-controller'
 
   export default {
@@ -135,12 +135,6 @@
             this.$refs.toast.show(res.message)
           })
         }
-      }
-    },
-    computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     },
     components: {

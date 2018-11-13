@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <article class="client-set-group">
       <div v-if="dataArray.length">
         <div class="title">设置分组</div>
@@ -24,7 +24,6 @@
   import {Client} from 'api'
   import {ERR_OK} from '../../common/js/config'
   import Exception from 'components/exception/exception'
-  import {mapGetters} from 'vuex'
 
   export default {
     name: 'ClientSetGroup',
@@ -77,12 +76,6 @@
     methods: {
       check(item) {
         item.selected = !item.selected
-      }
-    },
-    computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     },
     components: {

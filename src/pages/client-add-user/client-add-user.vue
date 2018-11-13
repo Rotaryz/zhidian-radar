@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <article class="client-add-user">
       <ul class="tablist-box" v-if="dataArray.length">
         <li class="tablist-item" v-for="(item, index) in tabList" v-bind:key="index" :class="tabListIndex===index?'active':''" @click="tabSelect(index)">{{item}}</li>
@@ -53,7 +53,6 @@
   import Toast from 'components/toast/toast'
   import Scroll from 'components/scroll/scroll'
   import {ERR_OK} from '../../common/js/config'
-  import {mapGetters} from 'vuex'
   import Exception from 'components/exception/exception'
 
   const LIMIT = 10
@@ -189,10 +188,6 @@
       }
     },
     computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
-      },
       pullUpLoadObj: function () {
         return this.pullUpLoad ? {
           threshold: parseInt(this.pullUpLoadThreshold),

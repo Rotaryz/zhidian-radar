@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <article class="news-add-group">
       <section class="content" v-if="dataArray.length">
         <scroll bcColor="#fff"
@@ -36,7 +36,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapActions } from 'vuex'
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
   import Toast from 'components/toast/toast'
@@ -134,10 +134,6 @@
       }
     },
     computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
-      },
       pullUpLoadObj: function () {
         return this.pullUpLoad ? {
           threshold: parseInt(this.pullUpLoadThreshold),
