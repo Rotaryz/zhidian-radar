@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="simple-scroll-demo">
       <div class="scroll-list-wrap">
         <scroll ref="scroll"

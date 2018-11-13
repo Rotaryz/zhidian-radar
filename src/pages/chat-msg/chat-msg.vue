@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="chat">
       <div class="chat-container" ref="chat">
         <scroll ref="scroll"
@@ -643,8 +643,7 @@
       ...mapGetters([
         'currentMsg',
         'imInfo',
-        'nowChat',
-        'ios'
+        'nowChat'
       ]),
       pullDownRefreshObj: function () {
         return this.pullDownRefresh && !this.noMore ? {
@@ -657,9 +656,6 @@
         let info = storage.get('info')
         let nickName = info.shop_name
         return {...info, nickName}
-      },
-      slide() {
-        return this.ios ? '' : 'slide'
       },
       endDate() {
         if (this.nowChat.length) {

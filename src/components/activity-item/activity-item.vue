@@ -36,7 +36,8 @@
     props: ['tabIdx', 'item', 'showEdit', 'page'],
     data() {
       return {
-        endTime: {}
+        endTime: {},
+        current_timestamp: 0
       }
     },
     created() {
@@ -60,11 +61,12 @@
       },
       _endTimePlay() {
         clearInterval(this.timer)
-        this.item.current_timestamp++
-        this.endTime = this._groupTimeCheckout(this.item.start_at_timestamp, this.item.current_timestamp)
+        this.current_timestamp = this.item.current_timestamp
+        this.current_timestamp++
+        this.endTime = this._groupTimeCheckout(this.item.start_at_timestamp, this.current_timestamp)
         this.timer = setInterval(() => {
-          this.item.current_timestamp++
-          this.endTime = this._groupTimeCheckout(this.item.start_at_timestamp, this.item.current_timestamp)
+          this.current_timestamp++
+          this.endTime = this._groupTimeCheckout(this.item.start_at_timestamp, this.current_timestamp)
         }, 1000)
       },
       _groupTimeCheckout(time, nowTime) {

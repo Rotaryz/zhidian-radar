@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="group-main-box">
     <Scroll bcColor="#fff">
       <div class="f0f2f5"></div>
@@ -107,7 +107,6 @@
   import Toast from 'components/toast/toast'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import wx from 'weixin-js-sdk'
-  import { mapGetters } from 'vuex'
 
   export default {
     name: 'group-code',
@@ -259,10 +258,6 @@
     computed: {
       userInfo() {
         return storage.get('info')
-      },
-      ...mapGetters(['ios']),
-      slide () {
-        return this.ios ? '' : 'slide'
       }
     },
     components: {

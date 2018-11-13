@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="robot-main-box">
       <Scroll bcColor="#fff">
         <div class="wechat-top">
@@ -46,7 +46,6 @@
   import {ERR_OK} from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import storage from 'storage-controller'
-  import {mapGetters} from 'vuex'
 
   export default {
     name: 'robot-code',
@@ -126,10 +125,6 @@
     computed: {
       userInfo() {
         return storage.get('info')
-      },
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     },
     components: {

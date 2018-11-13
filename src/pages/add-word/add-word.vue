@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="add-word">
       <scroll :bcColor="'#ffffff'" ref="scroll">
         <div class="word-list">
@@ -46,7 +46,6 @@
   import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  import { mapGetters } from 'vuex'
 
   export default {
     name: 'News',
@@ -65,7 +64,6 @@
         editorShow: false,
         editorMsg: '',
         editorItem: {},
-        slide: 'slide',
         allowSend: true,
         allowConfirm: true
       }
@@ -184,11 +182,6 @@
       Scroll,
       Toast,
       ConfirmMsg
-    },
-    computed: {
-      ...mapGetters([
-        'ios'
-      ])
     }
   }
 </script>

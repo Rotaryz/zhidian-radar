@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <article class="data-all">
       <scroll ref="scroll">
         <div class="data-box">
@@ -119,6 +119,7 @@
   import Toast from 'components/toast/toast'
   import VueClipboard from 'vue-clipboard2'
   import {mapGetters} from 'vuex'
+  import utils from 'common/js/utils'
   Vue.use(VueClipboard)
 
   export default {
@@ -193,7 +194,7 @@
         if (this.flow.mobile.length !== 11) {
           this.$refs.toast.show('请输入手机号码为11位数')
           return
-        } else if (!/(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}/.test(this.flow.mobile)) {
+        } else if (!utils.testPhoneNumber(this.flow.mobile)) {
           this.$refs.toast.show('请输入正确的手机号')
           return
         }

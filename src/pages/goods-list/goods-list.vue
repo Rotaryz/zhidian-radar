@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
 
     <div class="goods-list">
       <div class="tab">
@@ -75,7 +75,6 @@
   import {Goods} from 'api'
   import {ERR_OK} from '../../common/js/config'
   import Toast from 'components/toast/toast'
-  import {mapGetters} from 'vuex'
 
   export default {
     name: 'goods-list',
@@ -187,10 +186,6 @@
           threshold: parseInt(this.pullUpLoadThreshold),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
-      },
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     },
     watch: {

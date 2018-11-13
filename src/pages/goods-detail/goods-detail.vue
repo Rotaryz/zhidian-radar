@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="goods-detail">
       <scroll ref="scroll">
         <div class="cover-box">
@@ -25,7 +25,6 @@
   import Scroll from 'components/scroll/scroll'
   import { Goods } from 'api'
   import { ERR_OK } from '../../common/js/config'
-  import {mapGetters} from 'vuex'
 
   export default {
     name: 'goods-detail',
@@ -56,12 +55,6 @@
             this.$refs.scroll.refresh()
           }, 20)
         }
-      }
-    },
-    computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     },
     components: {

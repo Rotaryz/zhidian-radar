@@ -1,5 +1,6 @@
 <template>
-  <div class="my-service">
+  <transition name="slide">
+    <div class="my-service">
     <div class="tab-wrapper">
       <div class="line-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></div>
       <div class="tab" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.txt}}({{item.num}})</div>
@@ -60,6 +61,7 @@
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
   </div>
+  </transition>
 </template>
 
 <script>

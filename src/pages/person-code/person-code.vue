@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="group-box">
       <scroll bcColor="#fff"
               ref="scroll">

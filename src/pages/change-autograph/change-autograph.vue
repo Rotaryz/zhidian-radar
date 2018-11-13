@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="change-autograph">
       <scroll ref="scroll">
         <textarea name="autograph" v-model="title" maxlength="50"  @touchmove.stop placeholder="请输入签名内容" id="autograph"></textarea>
@@ -22,7 +22,7 @@
   import { Business } from 'api'
   import { ERR_OK } from 'common/js/config'
   import Toast from 'components/toast/toast'
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapActions } from 'vuex'
 
   export default {
     name: 'change-autograph',
@@ -50,12 +50,6 @@
       },
       _back () {
         this.$router.back()
-      }
-    },
-    computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     },
     components: {

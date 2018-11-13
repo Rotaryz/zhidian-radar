@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <article class="client-search">
       <section class="search-box border-bottom-1px">
         <div class="input-box">
@@ -36,7 +36,6 @@
   import Toast from 'components/toast/toast'
   import {ERR_OK} from 'common/js/config'
   import Exception from 'components/exception/exception'
-  import {mapGetters} from 'vuex'
   import Scroll from 'components/scroll/scroll'
   import utils from 'common/js/utils'
 
@@ -142,10 +141,6 @@
       }
     },
     computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
-      },
       pullUpLoadObj: function () {
         return this.pullUpLoad ? {
           threshold: parseInt(this.pullUpLoadThreshold),

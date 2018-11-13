@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="chat">
       <section class="chat-container" @click.stop="hideInput">
         <div class="group-wrapper">群发组：<span v-for="(item1, index1) in currentGroupMsg" :key="index1">{{index1 == (currentGroupMsg.length - 1) ? item1.name + '(' + item1.total + ')' : item1.name + '(' + item1.total + ')，'}}</span></div>
@@ -555,15 +555,11 @@
     computed: {
       ...mapGetters([
         'currentGroupMsg',
-        'ios',
         'imInfo',
         'groupMsgIng'
       ]),
       userInfo() {
         return storage.get('info')
-      },
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     }
   }
