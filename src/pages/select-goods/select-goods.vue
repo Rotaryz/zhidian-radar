@@ -253,7 +253,7 @@
             original_price: this.selectGoods.original_price,
             avatar: this.userInfo.avatar,
             shop_name: this.selectGoods.shop_name,
-            group_number: this.selectGoods.group_number,
+            groupon_users: this.selectGoods.group_number,
             stock: this.selectGoods.stock
           }
           // 群发

@@ -28,7 +28,7 @@
                 <div class="goods_img-box">
                   <img :src="item.url" class="goods_img">
                 </div>
-                <p class="goods_title"><span class="tip">{{~~item.group_number}}人团</span>{{item.title}}</p>
+                <p class="goods_title"><span class="tip">{{~~item.groupon_users}}人团</span>{{item.title}}</p>
               </div>
               <div class="item-text item-text3" v-if="item.type == 5">
                 <!--[砍价活动信息]-->
