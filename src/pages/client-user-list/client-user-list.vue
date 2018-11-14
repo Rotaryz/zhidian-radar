@@ -117,7 +117,12 @@
       getCustomerList() {
         this.page = 1
         this.isAll = false
-        Client.getGroupCustomerList(this.id).then(res => {
+        let data = {
+          page: this.page,
+          limit: this.limit,
+          order_by: this.selectText
+        }
+        Client.getGroupCustomerList(this.id, data).then(res => {
           if (res.error === ERR_OK) {
             this.dataArray = res.data
             this.isEmpty = !this.dataArray.length
@@ -164,10 +169,11 @@
         if (!this.pullUpLoad) return // 防止下拉报错
         if (this.isAll) return this.$refs.scroll.forceUpdate()
         let page = ++this.page
-        let limit = LIMIT
+        let limit = this.limit
         const data = {
           page: page,
-          limit: limit
+          limit: limit,
+          order_by: this.selectText
         }
         Client.getGroupCustomerList(this.id, data).then(res => {
           if (res.error === ERR_OK) {
