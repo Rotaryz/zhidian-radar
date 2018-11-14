@@ -92,7 +92,8 @@
           if (res.error === ERR_OK) {
             this.goodsList = res.data.map(item => {
               let obj = {
-                shop_name: item.shop_name,
+                // shop_name: item.shop_name,
+                shop_name: this.userInfo.nickName,
                 image_url: item.image_url,
                 title: item.goods_title,
                 goods_price: item.platform_price,
@@ -112,7 +113,7 @@
           if (res.error === ERR_OK) {
             this.goodsList = res.data.map(item => {
               let obj = {
-                shop_name: item.shop_name,
+                shop_name: this.userInfo.nickName,
                 image_url: item.image_url,
                 title: item.goods_title,
                 goods_price: item.platform_price,
@@ -253,7 +254,7 @@
             original_price: this.selectGoods.original_price,
             avatar: this.userInfo.avatar,
             shop_name: this.selectGoods.shop_name,
-            group_number: this.selectGoods.group_number,
+            groupon_users: this.selectGoods.group_number,
             stock: this.selectGoods.stock
           }
           // 群发
