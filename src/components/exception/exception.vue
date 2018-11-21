@@ -2,7 +2,9 @@
   <article class="exception">
     <section class="e-content">
       <div :class="['err-img',imgStyle] "></div>
-      <div class="err-msg">{{errMsg[errType][1]}}</div>
+      <div class="err-msg" v-if="errType !== 'closed'">{{errMsg[errType][1]}}</div>
+      <div class="err-txt-black" v-if="errType === 'closed'">你的店铺已暂停使用，无法访问</div>
+      <div class="err-txt-gray" v-if="errType === 'closed'">如需续费，请联系管理员</div>
     </section>
   </article>
 </template>
@@ -14,6 +16,7 @@
     'orderfrom': ['pic-customer', '暂无订单'],
     'delcard': ['pic-delcard', '名片被删除，请联系公司管理员'],
     'disablecard': ['pic-disablecard', '名片被禁用，请联系公司管理员'],
+    'closed': ['pic-closed', '你的店铺已暂停使用，无法访问'],
     'nodata': ['pic-nodata', '暂无数据'],
     'nogroup': ['pic-nogroup', '暂无分组'],
     'noservice': ['pic-nogroup', '暂无服务'],
@@ -68,8 +71,20 @@
           icon-image("pic-noresult")
         &.pic-nocode
           icon-image("pic-nocode")
+        &.pic-closed
+          icon-image("pic-shopsuspend")
       .err-msg
         font-family: $font-family-regular
         font-size: $font-size-14
         color: $color-888888
+      .err-txt-black
+        font-family: $font-family-regular
+        font-size: $font-size-16
+        color: $color-20202E
+        padding-top: 5px
+      .err-txt-gray
+        font-family: $font-family-regular
+        font-size: $font-size-14
+        color: $color-888888
+        padding-top: 15px
 </style>
