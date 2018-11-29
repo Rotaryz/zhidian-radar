@@ -66,19 +66,19 @@
         if (this.show) {
           differ = this.endX - this.startX
           if (differ > 0) {
-            this.styles = 'width: 0px; transition: all .3s ease'
+            this.styles = 'width: 0px; transition: all .3s ease-out'
             this.show = false
           } else {
-            this.styles = 'width: 80px; transition: all .3s ease'
+            this.styles = 'width: 80px; transition: all .3s ease-out'
             this.show = true
           }
         } else {
           differ = (this.startX - this.endX) / 2
           if (differ <= 80) {
-            this.styles = 'width: 0px; transition: all .3s ease'
+            this.styles = 'width: 0px; transition: all .3s ease-out'
             this.show = false
           } else {
-            this.styles = 'width: 80px; transition: all .3s ease'
+            this.styles = 'width: 80px; transition: all .3s ease-out'
             this.show = true
           }
         }
@@ -102,7 +102,7 @@
           width = 80 - differ
           this.styles = `width: ${width > 0 ? width : 0}px`
         } else if (this.show && moveEnd < this.moveStart) {
-          differ = (this.moveStart - moveEnd) / 2
+          differ = (this.moveStart - moveEnd) / 3
           width = differ + 80
           this.styles = `width: ${width}px`
         } else {
@@ -114,16 +114,16 @@
       },
       del(item) {
         this.$emit('del', this.index, item)
-        this.styles = 'width: 0px; transition: all .3s ease'
+        this.styles = 'width: 0px; transition: all .3s ease-out'
         this.show = false
       },
       grouping(item) {
         this.$emit('grouping', this.index, item)
-        this.styles = 'width: 0px; transition: all .3s ease'
+        this.styles = 'width: 0px; transition: all .3s ease-out'
         this.show = false
       },
       _itemInit() {
-        this.styles = 'width: 0px; transition: all .3s ease'
+        this.styles = 'width: 0px; transition: all .3s ease-out'
         this.show = false
       }
     }
