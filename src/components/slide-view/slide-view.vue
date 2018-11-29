@@ -96,26 +96,21 @@
         //   return
         // }
         if (moveEnd === this.moveStart) return
-        let differ, width, endWidth, beginWidth
-        if (this.show) {
+        let differ, width
+        if (this.show && moveEnd > this.moveStart) {
           differ = (moveEnd - this.moveStart) * 2
           width = 80 - differ
-          endWidth = 0
-          beginWidth = 80
+          this.styles = `width: ${width > 0 ? width : 0}px`
+        } else if (this.show && moveEnd < this.moveStart) {
+          differ = (this.moveStart - moveEnd) / 2
+          width = differ + 80
+          this.styles = `width: ${width}px`
         } else {
           differ = (this.moveStart - moveEnd) / 2
           width = differ
-          endWidth = 80
-          beginWidth = 0
-        }
-        if (differ < 0) {
-          this.styles = `width: ${beginWidth}px`
-          this.moveStart = moveEnd
-        } else if (differ > 80) {
-          this.styles = `width: ${endWidth}px`
-        } else {
           this.styles = `width: ${width}px`
         }
+        // this.moveStart = moveEnd
       },
       del(item) {
         this.$emit('del', this.index, item)
