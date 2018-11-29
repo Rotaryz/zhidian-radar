@@ -66,19 +66,19 @@
         if (this.show) {
           differ = this.endX - this.startX
           if (differ > 0) {
-            this.styles = 'width: 0px; transition: all .3s'
+            this.styles = 'width: 0px; transition: all .3s ease'
             this.show = false
           } else {
-            this.styles = 'width: 80px; transition: all .3s'
+            this.styles = 'width: 80px; transition: all .3s ease'
             this.show = true
           }
         } else {
           differ = (this.startX - this.endX) / 2
           if (differ <= 80) {
-            this.styles = 'width: 0px; transition: all .3s'
+            this.styles = 'width: 0px; transition: all .3s ease'
             this.show = false
           } else {
-            this.styles = 'width: 80px; transition: all .3s'
+            this.styles = 'width: 80px; transition: all .3s ease'
             this.show = true
           }
         }
@@ -114,16 +114,16 @@
       },
       del(item) {
         this.$emit('del', this.index, item)
-        this.styles = 'width: 0px; transition: all .3s'
+        this.styles = 'width: 0px; transition: all .3s ease'
         this.show = false
       },
       grouping(item) {
         this.$emit('grouping', this.index, item)
-        this.styles = 'width: 0px; transition: all .3s'
+        this.styles = 'width: 0px; transition: all .3s ease'
         this.show = false
       },
       _itemInit() {
-        this.styles = 'width: 0px; transition: all .3s'
+        this.styles = 'width: 0px; transition: all .3s ease'
         this.show = false
       }
     }
