@@ -302,7 +302,7 @@
       getRadarList() {
         this.loading = true
         this.loaded = false
-        Im.getRadarList(0, 30, this.userInfo.id).then((res) => {
+        Im.getRadarList(0, 30, this.userInfo ? this.userInfo.id : '').then((res) => {
           this.loading = false
           this.loaded = true
           if (res.error === ERR_OK) {

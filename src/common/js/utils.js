@@ -5,6 +5,7 @@ import {emotionsFace} from 'common/js/constants'
 const LOSE_EFFICACY = 10000
 const DISABLE = 11001 // 11001 AI雷达没有权限, 11002 BOSS雷达没有权限
 const DELETE = 1 // TODO
+const CLOSED = 12002 // AI雷达被关闭
 const NET_404 = 404
 const REGPHONE = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/ // 手机号正则
 
@@ -99,6 +100,10 @@ export default class utils {
       }
       case DISABLE: {
         _toErrorPage(`disablecard`) // 名片被禁用，请联系公司管理员
+        break
+      }
+      case CLOSED: {
+        _toErrorPage(`closed`) // AI雷达被关闭
         break
       }
       case LOSE_EFFICACY: {
