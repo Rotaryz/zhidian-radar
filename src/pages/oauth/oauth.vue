@@ -1,7 +1,12 @@
 <template>
   <div class="oauth">
-    <img class="loading" src="./loading.gif" alt="" width="20" height="20" v-if="!errorMsg">
-    <div class="error" v-if="errorMsg">{{errorMsg}}</div>
+    <!--<img class="loading" src="./loading.gif" alt="" width="20" height="20" v-if="!errorMsg">-->
+    <!--<div class="error" v-if="errorMsg">{{errorMsg}}</div>-->
+    <img v-if="!errorMsg" width="20" height="20" class="loading" src="./loading.gif" alt="" >
+    <section v-if="errorMsg" class="error">
+      <div class="icon"></div>
+      <p>员工不存在</p>
+    </section>
   </div>
 </template>
 
@@ -123,4 +128,20 @@
         line-height: 20px
         font-size: $font-size-medium
         color: $color-white
+
+  .error
+    margin-bottom :50%
+    layout()
+    justify-content :center
+    align-items :center
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #888888;
+    text-align: center;
+    .icon
+      width :162px
+      height :117px
+      icon-image(pic-staff)
+      margin-bottom :20px
+
 </style>
