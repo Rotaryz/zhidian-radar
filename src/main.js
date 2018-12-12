@@ -8,6 +8,7 @@ import 'common/stylus/index.styl'
 import store from './store'
 import echarts from 'echarts'
 import './utils/env-clear'
+import './utils/compatible'
 Vue.prototype.$echarts = echarts
 
 // fastclick.attach(document.body)
