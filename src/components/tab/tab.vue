@@ -14,8 +14,7 @@
   const TABS = [
     {text: '雷达', path: '/radar', id: 1, iconClass: 'icon-radar'},
     {text: '消息', path: '/news', id: 2, iconClass: 'icon-news'},
-    {text: '客户', path: '/client', id: 3, iconClass: 'icon-client'},
-    {text: '我的', path: '/mine', id: 4, iconClass: 'icon-mine'}
+    {text: '客户', path: '/client', id: 3, iconClass: 'icon-client'}
   ]
   export default {
     name: COMPONENT_NAME,
