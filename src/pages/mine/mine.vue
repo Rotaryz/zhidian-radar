@@ -64,8 +64,8 @@
 
   const CONTENTLIST = [
     {title: '个人信息', src: 'mine/my-msg', icon: 'perinfor'},
-    {title: '我的服务', src: 'mine/my-service', icon: 'goods'},
-    {title: '我的活动', src: 'mine/my-activity', icon: 'activity'},
+    // {title: '我的服务', src: 'mine/my-service', icon: 'goods'},
+    // {title: '我的活动', src: 'mine/my-activity', icon: 'activity'},
     {title: '我的订单', src: 'mine/order-form-manage', icon: 'myorder'},
     {title: '我的收入', src: '', icon: 'income'},
     {title: '我的报表', src: 'mine/my-data', icon: 'myform'}
