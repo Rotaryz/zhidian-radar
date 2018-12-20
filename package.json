@@ -14,13 +14,18 @@
     "test-e2e": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
-    "init": "node _config/index.js"
+    "init": "node _config/index.js",
+    "check:appconfig": "node _config/check.js"
   },
+  "pre-commit": [
+    "check:appconfig"
+  ],
   "dependencies": {
     "axios": "^0.18.0",
     "better-scroll": "^1.12.4",
     "echarts": "^4.1.0",
     "fastclick": "^1.0.6",
+    "pre-commit": "^1.2.2",
     "vue": "^2.5.2",
     "vue-clipboard2": "^0.2.0",
     "vue-cropperjs": "^2.2.1",
