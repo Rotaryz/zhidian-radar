@@ -1,6 +1,7 @@
 import request from 'common/js/request'
 import { BASE_URL } from 'common/js/config'
 import storage from 'storage-controller'
+import {createFileName, checkFileSize} from 'utils/cos/handle'
 
 /**
  * 数据入库
@@ -62,7 +63,13 @@ export function uploadFiles(fileType, files, showProcess, processCallBack) {
   showProcess && showProcess()
   return new Promise((resolve, reject) => {
     let requests = files.map(file => {
-      let Key = Date.now() + '-' + file.name
+      // 检查文件大小
+      let dataObj = checkFileSize(file.size)
+      if (dataObj) {
+        return dataObj
+      }
+      // 拼装文件名称
+      let Key = createFileName(file.type)
       return new Promise((resolve, reject) => {
         _getAuthorization({Method: 'PUT', Key: Key}, (err, info) => {
           if (err) {
@@ -75,7 +82,8 @@ export function uploadFiles(fileType, files, showProcess, processCallBack) {
           const Region = info['region']
           const protocol = location.protocol === 'https:' ? 'https:' : 'http:'
           const prefix = protocol + '//' + Bucket + '.cos.' + Region + '.myqcloud.com/'
-          const url = prefix + info.pathname
+          const pathName = encodeURIComponent(info.pathname)
+          const url = prefix + pathName
           const xhr = new XMLHttpRequest()
           xhr.open('PUT', url, true)
           xhr.setRequestHeader('Authorization', auth)
@@ -86,7 +94,7 @@ export function uploadFiles(fileType, files, showProcess, processCallBack) {
           }
           xhr.onload = function () {
             if (xhr.status === 200 || xhr.status === 206) {
-              _saveFile({path: '/' + info.pathname}).then(resp => {
+              _saveFile({path: '/' + pathName}).then(resp => {
                 resolve(resp)
               })
             } else {
