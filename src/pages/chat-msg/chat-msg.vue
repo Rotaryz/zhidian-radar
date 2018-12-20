@@ -196,7 +196,7 @@
             } else {
               startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
             }
-            this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
+            this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
             clearTimeout(timer)
           }, 20)
         }
@@ -223,6 +223,10 @@
       this.chatDom = this.$refs.chat
       this.listDom = this.$refs.list
       document.title = this.currentMsg.nickName
+      if (document.title === 'undefined') {
+        let step = this.$route.path.match(/\//g).length
+        this.$router.go(-step + 1)
+      }
       webimHandler.getC2CMsgList(this.currentMsg.account) // 消息已读处理
       this.setUnreadCount(this.currentMsg.account) // vuex
     },
@@ -264,7 +268,7 @@
             startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
           }
           this.$refs.scroll.refresh()
-          this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
+          this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
           clearTimeout(timer)
         }, 20)
       },
@@ -285,7 +289,7 @@
               this.$refs.scroll.forceUpdate()
               let timer = setTimeout(() => {
                 let heightEnd = this.listDom.clientHeight
-                this.$refs.scroll.scrollTo(0, heightBegin - heightEnd, 10, ease[this.scrollToEasing])
+                this.$refs.scroll && this.$refs.scroll.scrollTo(0, heightBegin - heightEnd, 10, ease[this.scrollToEasing])
                 clearTimeout(timer)
               }, 30)
             } else {
@@ -346,7 +350,7 @@
         if (this.listDom.clientHeight > this.chatDom.clientHeight) {
           let timer = setTimeout(() => {
             let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
-            this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+            this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
             clearTimeout(timer)
           }, 20)
         }
@@ -423,7 +427,7 @@
               if (this.listDom.clientHeight > this.chatDom.clientHeight) {
                 let timer = setTimeout(() => {
                   let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
-                  this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+                  this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
                   clearTimeout(timer)
                 }, 20)
               }
@@ -485,7 +489,7 @@
               if (this.listDom.clientHeight > this.chatDom.clientHeight) {
                 let timer = setTimeout(() => {
                   let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
-                  this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+                  this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
                   clearTimeout(timer)
                 }, 20)
               }

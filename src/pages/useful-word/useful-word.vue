@@ -53,6 +53,8 @@
       }
       this.getMsg(true)
     },
+    mounted() {
+    },
     methods: {
       ...mapActions([
         'addListMsg',
