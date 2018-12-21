@@ -217,7 +217,7 @@
       },
       _getList () {
         if (!this.loadMore) {
-          this.$refs.scroll.forceUpdate()
+          this.$refs.scroll && this.$refs.scroll.forceUpdate()
           return
         }
         Live.liveLogsList({page: this.page}).then((res) => {
@@ -227,7 +227,7 @@
               return
             }
             if (res.data.length === 0) {
-              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
               this.loadMore = false
               return
             }
@@ -260,8 +260,8 @@
       },
       rebuildScroll () {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs.scroll && this.$refs.scroll.destroy()
+          this.$refs.scroll && this.$refs.scroll.initScroll()
         })
       }
     },

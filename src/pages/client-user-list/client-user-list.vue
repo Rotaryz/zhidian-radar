@@ -167,7 +167,7 @@
       onPullingUp() {
         // 更新数据
         if (!this.pullUpLoad) return // 防止下拉报错
-        if (this.isAll) return this.$refs.scroll.forceUpdate()
+        if (this.isAll) return this.$refs.scroll && this.$refs.scroll.forceUpdate()
         let page = ++this.page
         let limit = this.limit
         const data = {
@@ -181,7 +181,7 @@
               let arr = this.dataArray.concat(res.data)
               this.dataArray = arr
             } else {
-              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
               this.isAll = true
               this.pullUpLoad = false
             }
@@ -192,12 +192,12 @@
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs.scroll && this.$refs.scroll.destroy()
+          this.$refs.scroll && this.$refs.scroll.initScroll()
         })
       },
       tabSelect(index) {
-        this.$refs.scroll.scrollTo(0, 0)
+        this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0)
         this.tabListIndex = index
         this.isAll = false
         this.pullUpLoad = true
