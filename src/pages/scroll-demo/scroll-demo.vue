@@ -101,7 +101,7 @@
         console.log(item)
       },
       scrollTo() {
-        this.$refs.scroll.scrollTo(this.scrollToX, this.scrollToY, this.scrollToTime, ease[this.scrollToEasing])
+        this.$refs.scroll && this.$refs.scroll.scrollTo(this.scrollToX, this.scrollToY, this.scrollToTime, ease[this.scrollToEasing])
       },
       onPullingDown() {
         // 模拟更新数据
@@ -111,7 +111,7 @@
             this.items.unshift(1)
           } else {
             // 如果没有新数据
-            this.$refs.scroll.forceUpdate()
+            this.$refs.scroll && this.$refs.scroll.forceUpdate()
           }
         }, 2000)
       },
@@ -128,14 +128,14 @@
             this.items = this.items.concat(newPage)
           } else {
             // 如果没有新数据
-            this.$refs.scroll.forceUpdate()
+            this.$refs.scroll && this.$refs.scroll.forceUpdate()
           }
         }, 1500)
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs.scroll && this.$refs.scroll.destroy()
+          this.$refs.scroll && this.$refs.scroll.initScroll()
         })
       }
     }
