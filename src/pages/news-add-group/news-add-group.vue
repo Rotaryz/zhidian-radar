@@ -112,15 +112,15 @@
       onPullingUp() {
         // 更新数据
         if (!this.pullUpLoad) return // 防止下拉报错
-        if (!this.hasMore) return this.$refs.scroll.forceUpdate()
+        if (!this.hasMore) return this.$refs.scroll && this.$refs.scroll.forceUpdate()
         let page = ++this.page
         this._getGroupList({page})
         console.info('pulling up and load data')
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs.scroll && this.$refs.scroll.destroy()
+          this.$refs.scroll && this.$refs.scroll.initScroll()
         })
       }
     },

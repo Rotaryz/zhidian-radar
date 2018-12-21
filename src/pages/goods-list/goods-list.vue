@@ -157,8 +157,8 @@
               return
             }
             if (res.data.length === 0) {
-              this.$refs.scroll.forceUpdate()
-              this.$refs.scrolls.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scrolls.forceUpdate()
               this.loadMore = false
               return
             }

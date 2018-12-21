@@ -155,17 +155,17 @@
             }
             setTimeout(() => {
               if (page === 1) {
-                this.$refs.scroll.forceUpdate()
-                this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+                this.$refs.scroll && this.$refs.scroll.forceUpdate()
+                this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
               } else {
-                this.$refs.scroll.forceUpdate()
+                this.$refs.scroll && this.$refs.scroll.forceUpdate()
               }
             }, 20)
           })
       },
       onPullingUp() {
         if (this.showNoMore) {
-          this.$refs.scroll.forceUpdate()
+          this.$refs.scroll && this.$refs.scroll.forceUpdate()
           return
         }
         this.page++
@@ -200,7 +200,7 @@
               return +item.id !== +data.id
             })
             setTimeout(() => {
-              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
             }, 20)
           })
       },
@@ -236,15 +236,15 @@
                 this.pullUpLoad = false
               }
               setTimeout(() => {
-                this.$refs.scroll.forceUpdate()
+                this.$refs.scroll && this.$refs.scroll.forceUpdate()
               }, 20)
             })
         }
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs.scroll && this.$refs.scroll.destroy()
+          this.$refs.scroll && this.$refs.scroll.initScroll()
         })
       }
     },

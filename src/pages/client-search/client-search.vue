@@ -99,7 +99,7 @@
         // 更新数据
         console.info('pulling up and load data')
         if (!this.pullUpLoad) return // 防止下拉报错
-        if (this.isAll) return this.$refs.scroll.forceUpdate()
+        if (this.isAll) return this.$refs.scroll && this.$refs.scroll.forceUpdate()
         let page = ++this.page
         let limit = this.limit
         const data = {name: this.userName, page, limit}
@@ -109,7 +109,7 @@
               let newArr = this.dataArray.concat(res.data)
               this.dataArray = newArr
             } else {
-              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
               this.isAll = true
             }
           } else {
@@ -119,8 +119,8 @@
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs.scroll && this.$refs.scroll.destroy()
+          this.$refs.scroll && this.$refs.scroll.initScroll()
         })
       }
     },

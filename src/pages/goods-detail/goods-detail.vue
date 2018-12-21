@@ -52,7 +52,7 @@
           this.imageLength += 1
           console.log(this.imageLength)
           setTimeout(() => {
-            this.$refs.scroll.refresh()
+            this.$refs.scroll && this.$refs.scroll.refresh()
           }, 20)
         }
       }
