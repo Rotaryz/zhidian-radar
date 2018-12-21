@@ -273,7 +273,7 @@
           } else {
             startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
           }
-          this.$refs.scroll.refresh()
+          this.$refs.scroll && this.$refs.scroll.refresh()
           this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
           clearTimeout(timer)
         }, 20)
@@ -292,7 +292,7 @@
               let resData = res.data.reverse()
               let list = [...resData, ...this.nowChat]
               this.setNowChat(list)
-              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
               let timer = setTimeout(() => {
                 let heightEnd = this.listDom.clientHeight
                 this.$refs.scroll && this.$refs.scroll.scrollTo(0, heightBegin - heightEnd, 10, ease[this.scrollToEasing])
@@ -302,14 +302,14 @@
               this.noMore = true
               this.page--
             }
-            this.$refs.scroll.forceUpdate()
+            this.$refs.scroll && this.$refs.scroll.forceUpdate()
           }
         })
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs.scroll && this.$refs.scroll.destroy()
+          this.$refs.scroll && this.$refs.scroll.initScroll()
         })
       },
       sendMsg() {
@@ -352,7 +352,7 @@
         this.addListMsg({msg: addMsg, type: 'mineAdd'})
         this.inputMsg = ''
         this.emojiShow = false
-        this.$refs.scroll.forceUpdate()
+        this.$refs.scroll && this.$refs.scroll.forceUpdate()
         if (this.listDom.clientHeight > this.chatDom.clientHeight) {
           let timer = setTimeout(() => {
             let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
@@ -429,7 +429,7 @@
               }
               this.addListMsg({msg: addMsg, type: 'mineAdd'})
               this.mortListShow = false
-              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
               if (this.listDom.clientHeight > this.chatDom.clientHeight) {
                 let timer = setTimeout(() => {
                   let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
@@ -491,7 +491,7 @@
               }
               this.addListMsg({msg: addMsg, type: 'mineAdd'})
               this.mortListShow = false
-              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
               if (this.listDom.clientHeight > this.chatDom.clientHeight) {
                 let timer = setTimeout(() => {
                   let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20

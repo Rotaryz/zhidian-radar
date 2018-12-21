@@ -61,7 +61,7 @@
     },
     mounted() {
       setTimeout(() => {
-        this.$refs.scroll.refresh()
+        this.$refs.scroll && this.$refs.scroll.refresh()
       }, 20)
     },
     data() {
@@ -102,7 +102,7 @@
     watch: {
       latelyList: function () {
         setTimeout(() => {
-          this.$refs.scroll.refresh()
+          this.$refs.scroll && this.$refs.scroll.refresh()
         }, 20)
       }
     },

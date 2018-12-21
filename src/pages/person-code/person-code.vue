@@ -148,19 +148,19 @@
     },
     methods: {
       disableScroll() {
-        this.$refs.scroll.disable()
+        this.$refs.scroll && this.$refs.scroll.disable()
       },
       enableScroll() {
-        this.$refs.scroll.enable()
+        this.$refs.scroll && this.$refs.scroll.enable()
       },
       showPlaSuc() {
         if (this.slide === 'slide') {
-          this.$refs.scroll.scrollTo(0, -230)
+          this.$refs.scroll && this.$refs.scroll.scrollTo(0, -230)
         }
       },
       showPlaFai() {
         if (this.slide === 'slide') {
-          this.$refs.scroll.scrollTo(0, 0)
+          this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0)
         }
       },
       refReshStatus() {

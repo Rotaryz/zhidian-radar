@@ -308,18 +308,18 @@
           if (res.error === ERR_OK) {
             this.list = res.data
             setTimeout(() => {
-              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
             }, 20)
           }
         })
       },
       peopleTab(index) {
-        this.$refs.scrollPeople.scrollTo(0, 0)
+        this.$refs.scroll && this.$refs.scrollPeople.scrollTo(0, 0)
         this.tabPeopleIndex = index
         this.getPeopleList(this.tabTime[index * 1])
       },
       actionTab(index) {
-        this.$refs.scrollAction.scrollTo(0, 0)
+        this.$refs.scroll && this.$refs.scrollAction.scrollTo(0, 0)
         this.actionIndex = index
         this.getAllData(this.tabTime[index * 1])
       },
@@ -333,15 +333,15 @@
             this.list = res.data
             this.setCustomCount('clear')
             setTimeout(() => {
-              this.$refs.scroll.forceUpdate()
-              this.$refs.scroll.scrollTo(0, 0, 300, ease[this.scrollToEasing])
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 300, ease[this.scrollToEasing])
             }, 20)
           }
         })
       },
       onPullingUp() {
         if (this.showNoMore) {
-          this.$refs.scroll.forceUpdate()
+          this.$refs.scroll && this.$refs.scroll.forceUpdate()
           return
         }
         const num = this.list.length * 1 + this.customCount * 1
@@ -354,7 +354,7 @@
               this.list = [...this.list, ...list]
             }
             setTimeout(() => {
-              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
             }, 20)
           }
         })
@@ -367,14 +367,14 @@
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs.scroll && this.$refs.scroll.destroy()
+          this.$refs.scroll && this.$refs.scroll.initScroll()
         })
       },
       rebuildPeopleScroll() {
         this.$nextTick(() => {
-          this.$refs.scrollPeople.destroy()
-          this.$refs.scrollPeople.initScroll()
+          this.$refs.scrollPeople && this.$refs.scrollPeople.destroy()
+          this.$refs.scrollPeople && this.$refs.scrollPeople.initScroll()
         })
       },
       getAllData(time) {
@@ -411,14 +411,14 @@
             this.peopleMore = true
             // }
             setTimeout(() => {
-              this.$refs.scrollPeople.forceUpdate()
+              this.$refs.scrollPeople && this.$refs.scrollPeople.forceUpdate()
             }, 20)
           }
         })
       },
       getMorePeopleList(time) {
         if (this.peopleMore) {
-          this.$refs.scrollPeople.forceUpdate()
+          this.$refs.scrollPeople && this.$refs.scrollPeople.forceUpdate()
           return
         }
         this.page++
@@ -431,7 +431,7 @@
             }
             this.peopleDataList = [...this.peopleDataList, ...list]
             setTimeout(() => {
-              this.$refs.scrollPeople.forceUpdate()
+              this.$refs.scrollPeople && this.$refs.scrollPeople.forceUpdate()
             }, 20)
           }
         })
