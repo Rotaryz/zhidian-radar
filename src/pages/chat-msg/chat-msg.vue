@@ -62,7 +62,8 @@
                 <div class="chat-msg-new-goods mine" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">
                   <div class="new-goods-top">
                     <div class="shop-title">
-                      <div :style="{backgroundImage: 'url(' + userInfo.avatar || item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
+                      <!--<div :style="{backgroundImage: 'url(' + userInfo.avatar || item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>-->
+                      <img :src="userInfo.avatar || item.avatar" class="shop-icon">
                       <div class="shop-name">{{userInfo.nickName || item.shop_name}}</div>
                     </div>
                     <div class="goods-title">
@@ -824,6 +825,7 @@
                   border: 0.5px solid rgba(0, 0, 0, 0.10)
                   border-radius: 50%
                   margin-right: 6px
+                  object-fit: cover
                 .shop-name
                   flex: 1
                   overflow: hidden
