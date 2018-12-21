@@ -11,7 +11,8 @@
         <div class="goods-list" v-if="type === 1">
           <div class="goods-item" v-for="(item, index) in goodsList" :key="index" @click="selectItem(item)">
             <div class="goods-left">
-              <div class="left-img" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+              <!--<div class="left-img" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>-->
+              <img class="left-img" :src="item.image_url" alt="">
               <div class="goods-content">
                 <p class="goods-title">{{item.title}}</p>
                 <div>
@@ -34,7 +35,8 @@
                 <p class="activity-time">距离本场结束：{{item.end_at}}</p>
               </div>
               <div class="left-down">
-                <div class="left-img" :style="{backgroundImage: 'url(' + item.goods_image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <!--<div class="left-img" :style="{backgroundImage: 'url(' + item.goods_image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>-->
+                <img class="left-img" :src="item.goods_image_url" alt="">
                 <div class="left-down-content">
                   <div class="goods-title">{{item.title}}</div>
                   <div>
@@ -630,6 +632,7 @@
               width: 70px
               height: 70px
               margin-right: 10px
+              object-fit :cover
             .left-down-content
               flex: 1
               overflow: hidden

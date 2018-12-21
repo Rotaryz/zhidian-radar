@@ -1,7 +1,8 @@
 <template>
   <div class="service-item">
     <div class="item-content">
-      <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
+      <!--<div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">-->
+        <img class="item-left" :src="item.image_url" alt="">
         <!--<div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>-->
       </div>
       <div class="item-right">
@@ -77,6 +78,7 @@
         height: @width
         margin-right: 10px
         position: relative
+        object-fit :cover
         .left-cover
           position: absolute
           width: 100%
