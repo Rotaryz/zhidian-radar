@@ -1,9 +1,10 @@
 <template>
   <div class="activity-item">
     <div class="item-content">
-      <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
-        <!--<div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>-->
-      </div>
+      <!--<div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">-->
+        <!--&lt;!&ndash;<div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>&ndash;&gt;-->
+      <!--</div>-->
+      <img class="item-left" :src="item.image_url" alt="">
       <div class="item-right">
         <div class="right-title">{{item.goods_title}}</div>
         <div class="right-down">
@@ -125,6 +126,7 @@
         height: @width
         margin-right: 10px
         position: relative
+        object-fit :cover
         .left-cover
           position: absolute
           width: 100%

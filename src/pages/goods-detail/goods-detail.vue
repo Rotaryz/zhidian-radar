@@ -121,4 +121,5 @@
   .goods-img
     width: 100vw
     display: block
+    object-fit: cover
 </style>
