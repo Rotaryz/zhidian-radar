@@ -426,6 +426,7 @@
                 height: 15px
                 box-sizing: border-box
                 border: 1px solid $color-white-fff
+                object-fit :cover
             .name
               flex: 1
               margin: 0 10px

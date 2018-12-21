@@ -207,6 +207,7 @@
               height: 15px
               box-sizing: border-box
               border: 1px solid $color-white-fff
+              object-fit :cover
           .name
             flex: 1
             font-size: $font-size-16

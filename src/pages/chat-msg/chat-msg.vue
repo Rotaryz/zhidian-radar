@@ -13,7 +13,8 @@
                 <span class="time-box">{{item.created_at ? item.created_at : item.msgTimeStamp | timeFormat}}</span>
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
-                <div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>
+                <!--<div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>-->
+                <img class="avatar" :src="currentMsg.avatar" alt="">
                 <div class="chat-msg-box other" v-if="item.type * 1 === 1">
                   <div class="arrow-box">
                     <div class="gray-arrow">
@@ -31,7 +32,8 @@
                 <div class="chat-msg-new-goods other" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">
                   <div class="new-goods-top">
                     <div class="shop-title">
-                      <div :style="{backgroundImage: 'url(' + userInfo.avatar || item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
+                      <!--<div :style="{backgroundImage: 'url(' + userInfo.avatar || item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>-->
+                      <img class="shop-icon" :src="userInfo.avatar || item.avatar" alt="">
                       <div class="shop-name">{{userInfo.nickName || item.shop_name}}</div>
                     </div>
                     <div class="goods-title">
@@ -39,7 +41,8 @@
                       <img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">
                       <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '现价'}}只要{{item.goods_price}}元！</span>
                     </div>
-                    <div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>
+                    <!--<div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>-->
+                    <img class="goods-img" :src="item.url" alt="">
                   </div>
                   <div class="new-goods-down border-top-1px">
                     <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
@@ -71,7 +74,8 @@
                       <img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">
                       <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '现价'}}只要{{item.goods_price}}元！</span>
                     </div>
-                    <div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>
+                    <!--<div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>-->
+                    <img class="goods-img" :src="item.url" alt="">
                   </div>
                   <div class="new-goods-down border-top-1px">
                     <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
@@ -99,7 +103,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <!--<div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>-->
+                <img class="avatar" :src="userInfo.avatar" alt="">
               </div>
             </div>
           </div>
@@ -730,6 +735,7 @@
             width: 45px
             height: 45px
             border-radius: 2px
+            object-fit :cover
           .chat-msg-box
             flex: 1
             overflow: hidden
@@ -851,6 +857,7 @@
               .goods-img
                 width: 200px
                 height: 200px
+                object-fit :cover
             .new-goods-down
               height: 25px
               display: flex
