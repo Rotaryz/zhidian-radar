@@ -160,7 +160,7 @@
               <div id="myPie"></div>
               <div class="title-box">
                 <div class="title">客户兴趣占比</div>
-                <div class="sub-title">(每小时更新)</div>
+                <!--<div class="sub-title">(每小时更新)</div>-->
               </div>
               <div class="pie-list">
                 <div class="list" v-for="(item, index) in pieHint" v-bind:key="index">
@@ -173,7 +173,7 @@
               <div id="myLine"></div>
               <div class="title-box">
                 <div class="title">近7日客户活跃度</div>
-                <div class="sub-title">(每小时更新)</div>
+                <!--<div class="sub-title">(每小时更新)</div>-->
               </div>
             </div>
             <div class="pie-box" v-if="false">
