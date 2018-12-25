@@ -1,5 +1,6 @@
 <template>
-  <input type="button" class="base-wx-input" @click="clickHandle">
+  <input v-if="android" type="file" @change="_change" accept="image/*" :multiple="multiple>1">
+  <input v-else type="button" @click="clickHandle">
 </template>
 
 <script type="text/ecmascript-6">
@@ -8,6 +9,17 @@
   import {mapActions, mapGetters} from 'vuex'
   import {createFileName} from 'utils/cos/handle'
 
+  // 判断是否为模拟器或者安卓
+  function isToolsOrAndroid() {
+    // window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+    let ua = '' + window.navigator.userAgent.toLowerCase()
+    // 通过正则表达式匹配ua中是否含有MicroMessenger字符串且是IOS系统
+    let isWeChatTools = /wechatdevtools/i.test(ua) // 是在微信浏览器
+    let isIos = /\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(ua) // 是IOS系统
+    return isWeChatTools || !isIos
+  }
+
+  const android = isToolsOrAndroid()
   const COMPONENT_NAME = 'BASE_WX_INPUT'
 
   export default {
@@ -30,6 +42,11 @@
         default: true
       }
     },
+    data() {
+      return {
+        android: android
+      }
+    },
     computed: {
       ...mapGetters('wxApiRegister', ['register'])
     },
@@ -38,6 +55,9 @@
     },
     methods: {
       ...mapActions('wxApiRegister', ['updateRegister']),
+      _change(e) {
+        this.$emit('change', e)
+      },
       _showLoading() {
         this.loading && this.$loading.show()
       },
