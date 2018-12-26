@@ -8,7 +8,7 @@
               :pullUpLoad="pullUpLoadObj"
               @pullingUp="onPullingUp"
               :showNoMore="showNoMore">
-        <div class="goods-list" v-if="type === 1">
+        <div class="goods-list" v-if="type === 1 || type === 20">
           <div class="goods-item" v-for="(item, index) in goodsList" :key="index" @click="selectItem(item)">
             <div class="goods-left">
               <!--<div class="left-img" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>-->
@@ -83,32 +83,20 @@
         return
       }
       this.type = this.$route.query.type * 1
-      document.title = this.type === 1 ? '选择商品' : '选择活动'
+      this._initTitle()
       let data = {
         status: 1,
         limit: 10,
         page: 1
       }
+      if (this.type === 20) {
+        Im.getProductList(data).then((res) => {
+          this._formatListData(res)
+        })
+      }
       if (this.type === 1) {
         Im.getGoodsList(data).then((res) => {
-          if (res.error === ERR_OK) {
-            this.goodsList = res.data.map(item => {
-              let obj = {
-                // shop_name: item.shop_name,
-                shop_name: this.userInfo.nickName,
-                image_url: item.image_url,
-                title: item.goods_title,
-                goods_price: item.platform_price,
-                sale_count: item.sale_count,
-                id: item.id,
-                original_price: item.original_price,
-                goods_id: item.recommend_goods_id,
-                goods_type: 3 // 前端类型
-              }
-              return obj
-            })
-            this._resetScroll()
-          }
+          this._formatListData(res)
         })
       } else if (this.type === 2) {
         Im.getActivityList(data).then((res) => {
@@ -173,6 +161,45 @@
         'setNewsGetType',
         'setGroupMsgIng'
       ]),
+      // 初始化标题
+      _initTitle() {
+        let title = ''
+        switch (this.type) {
+          case 1:
+            title = '选择服务'
+            break
+          case 20:
+            title = '选择商品'
+            break
+          case 2:
+            title = '选择活动'
+            break
+          default:
+            break
+        }
+        document.title = title
+      },
+      // 商品和服务的数据整理
+      _formatListData(res) {
+        if (res.error === ERR_OK) {
+          this.goodsList = res.data.map(item => {
+            let obj = {
+              // shop_name: item.shop_name,
+              shop_name: this.userInfo.nickName,
+              image_url: item.image_url,
+              title: item.goods_title,
+              goods_price: item.platform_price,
+              sale_count: item.sale_count,
+              id: item.id,
+              original_price: item.original_price,
+              goods_id: item.recommend_goods_id,
+              goods_type: 3 // 前端类型
+            }
+            return obj
+          })
+          this._resetScroll()
+        }
+      },
       _sendGroupMessage(type, message, callback) {
         if (this.isSending) return
         this.isSending = true

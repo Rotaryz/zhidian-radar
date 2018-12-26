@@ -60,7 +60,11 @@ export default {
     const url = `/api/employee/goods-lists`
     return request.get(url, data, loading)
   },
-
+  // 推荐商品
+  getProductList(data, loading = true) {
+    const url = `/api/employee/product-lists`
+    return request.get(url, data, loading)
+  },
   // 推荐活动
   getActivityList(data, loading = true) {
     const url = `/api/employee/activity-lists`
