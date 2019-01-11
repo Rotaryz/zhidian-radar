@@ -94,7 +94,8 @@
     // {txt: '个人微信', icon: 'im-weixin', type: 4},
     // {txt: '微信群码', icon: 'im-group', type: 5},
     {txt: '常用语', icon: 'im-useful', type: 6},
-    {txt: '发送商品', icon: 'im-goods', type: 2},
+    {txt: '发送服务', icon: 'im-server', type: 2},
+    {txt: '发送商品', icon: 'im-goods', type: 20},
     {txt: '发送活动', icon: 'im-activity', type: 3},
     {txt: '', icon: '', type: -1}
   ]
@@ -391,6 +392,11 @@
             url = this.$route.fullPath + '/select-goods?type=1&chatType=group'
             this.mortListShow = false
             this.$router.push(url)
+            break
+          case 20:
+            url = this.$route.fullPath + '/select-goods?type=20&chatType=group'
+            this.mortListShow = false
+            this.$router.push({path: url})
             break
           case 3:
             url = this.$route.fullPath + '/select-goods?type=2&chatType=group'
@@ -714,6 +720,8 @@
                 icon-image('./icon-sendgoods')
               .im-activity
                 icon-image('./icon-activity')
+              .im-server
+                icon-image('./icon-sendfw')
             .item-txt
               margin-top: 5px
               font-size: $font-size-12
