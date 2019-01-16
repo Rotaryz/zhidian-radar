@@ -4,6 +4,6 @@ export default class Oauth {
   constructor() {
     const uri = location.origin + '/oauth'
     const redirectUri = encodeURIComponent(uri)
-    this.oauthUri = `${BASE_URL.api}/wechat/employee/oauth?type=ai&redirect=${redirectUri}`
+    this.oauthUri = `${BASE_URL.oauthURI}/wechat/employee/oauth?type=ai&redirect=${redirectUri}`
   }
 }
