@@ -168,7 +168,6 @@
     },
     created () {
       let url = location.href
-      console.log(location.href)
       Global.jssdkConfig({weixin: 'ai_radar', url}).then((res) => {
         if (res.error === ERR_OK) {
           res = res.data

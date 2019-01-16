@@ -85,7 +85,6 @@
     methods: {
       getSign() {
         this.mine.signature = this.$store.state.signature
-        console.log(this.mine.department)
       },
       ...mapActions(['setSignature']),
       _getMine () {
@@ -93,7 +92,6 @@
           if (res.error === ERR_OK) {
             this.mine = res.data
             this.setSignature(this.mine.signature)
-            console.log(this.mine)
           }
         })
       },

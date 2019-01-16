@@ -61,7 +61,6 @@
         this.preId = this.dataArray.some((item, index) => {
           return item.isCheck ? index : -1
         })
-        console.log(this.preId)
       }
     }
   }

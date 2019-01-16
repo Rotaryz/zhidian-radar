@@ -119,7 +119,7 @@
         this.$refs.toast.show('复制成功')
       },
       onError(e) {
-        console.log('无法复制文本！')
+        console.error('无法复制文本！')
       }
     },
     computed: {

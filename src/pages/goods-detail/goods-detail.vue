@@ -40,7 +40,6 @@
     methods: {
       _goods () {
         let id = this.$route.query.id
-        console.log(id)
         Goods.doogsDetail(id).then((res) => {
           if (res.error === ERR_OK) {
             this.goods = res.data
@@ -50,7 +49,6 @@
       loadImage() {
         if (this.imageLength < this.goods.goods_images.length) {
           this.imageLength += 1
-          console.log(this.imageLength)
           setTimeout(() => {
             this.$refs.scroll && this.$refs.scroll.refresh()
           }, 20)
