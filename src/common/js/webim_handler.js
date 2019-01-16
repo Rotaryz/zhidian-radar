@@ -641,13 +641,13 @@ export default class webimHandler {
           resTxt = `${nickName}提交了砍价活动${productName}的订单,金额为${data.total}元，并支付成功`
           break
         case 40001:
-          resTxt = `${nickName}通过扫描他人分享的服务海报查看了你的服务`
+          resTxt = `${nickName}通过扫描他人分享的项目海报查看了你的项目`
           break
         case 40002:
-          resTxt = `${nickName}通过点击他人分享的服务链接查看了你的服务`
+          resTxt = `${nickName}通过点击他人分享的项目链接查看了你的项目`
           break
         case 40003:
-          resTxt = `${nickName}查看了你的服务，请把握商机`
+          resTxt = `${nickName}查看了你的项目，请把握商机`
           break
         case 40004:
           data = JSON.parse(msg.data)
@@ -656,7 +656,7 @@ export default class webimHandler {
           } else {
             productName = data.title
           }
-          resTxt = `${nickName}转发了你的服务${productName}, 你的服务正在裂变`
+          resTxt = `${nickName}转发了你的${productName}, 你的项目正在裂变`
           break
         case 40005:
           data = JSON.parse(msg.data)
@@ -665,7 +665,7 @@ export default class webimHandler {
           } else {
             productName = data.title
           }
-          resTxt = `${nickName}保存了你的服务${productName}海报`
+          resTxt = `${nickName}保存了你的${productName}海报`
           break
         case 40006:
           data = JSON.parse(msg.data)
@@ -674,7 +674,7 @@ export default class webimHandler {
           } else {
             productName = data.title
           }
-          resTxt = `${nickName}提交了服务${productName}的订单,金额为${data.total}元，并完成支付`
+          resTxt = `${nickName}提交了${productName}的订单,金额为${data.total}元，并完成支付`
           break
         case 40007:
           resTxt = `${nickName}查看了你的品牌故事，请把握商机`
