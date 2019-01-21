@@ -6,6 +6,6 @@ export default {
   api: 'https://zhidian-me-era-api.jkweixin.com' + version,
   upload: 'https://zhidian-me-era-api.jkweixin.com' + version,
   // mall: 'https://exchange-mall-api.jkweixin.com' + version,
-  oauthURI: 'https://zhidian-me-api.jkweixin.com',
+  oauthURI: 'https://zhidian-api.jkweixin.com',
   imRecord: 'https://data-analysis-api.jkweixin.com' + versionIm
 }
