@@ -18,7 +18,6 @@
       return {}
     },
     created() {
-      console.log(process.env)
     },
     methods: {
       login() {

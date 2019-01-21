@@ -95,10 +95,8 @@
     },
     methods: {
       scroll(e) {
-        console.log(e)
       },
       clickItem(item) {
-        console.log(item)
       },
       scrollTo() {
         this.$refs.scroll && this.$refs.scroll.scrollTo(this.scrollToX, this.scrollToY, this.scrollToTime, ease[this.scrollToEasing])
@@ -117,7 +115,6 @@
       },
       onPullingUp() {
         // 更新数据
-        console.log('pulling up and load data')
         setTimeout(() => {
           if (Math.random() > 0.5) {
             // 如果有新数据

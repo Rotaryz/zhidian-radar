@@ -19,7 +19,6 @@
     methods: {
       draw() {
         let myChart = this.$echarts.init(document.getElementById('myChart'))
-        console.log(myChart, 111)
         // 绘制图表
         myChart.setOption({
           title: {

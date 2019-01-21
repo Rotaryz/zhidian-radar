@@ -33,7 +33,6 @@
     },
     created () {
       this.title = this.$store.state.signature
-      console.log(this.title)
     },
     methods: {
       ...mapActions(['setSignature']),

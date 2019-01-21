@@ -172,7 +172,6 @@
         this.input = false
       },
       inputChange() {
-        console.log(this.searchTxt)
       },
       changeTab(index) {
         this.selectTab = index
