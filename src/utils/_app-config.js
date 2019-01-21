@@ -5,11 +5,7 @@ export default {
   env: 'release',
   api: 'https://zhidian-me-era-api.jkweixin.net' + version,
   upload: 'https://zhidian-me-era-api.jkweixin.net' + version,
-  // mall: 'https://exchange-mall-api.jkweixin.net' + version,
-<<<<<<< HEAD
-  oauthURI: 'https://zhidian-api.jkweixin.net',
-=======
+  mall: 'https://exchange-mall-api.jkweixin.net' + version,
   oauthURI: 'https://zhidian-me-era-api.jkweixin.net',
->>>>>>> fix-branch-me
   imRecord: 'https://data-analysis-api.jkweixin.net' + versionIm
 }
