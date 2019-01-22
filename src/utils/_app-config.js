@@ -1,4 +1,4 @@
-const version = ``
+const version = '/v1'
 const versionIm = ``
 export default {
   app: '赞播平台',
