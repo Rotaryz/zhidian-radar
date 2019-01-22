@@ -10,10 +10,11 @@ function _createAudio() {
 _createAudio()
 
 window.$playAudio = function () {
+  alert(window.$audio)
   if (!this.$audio) return
   // let duration = this.$audio.duration * 1000
   // if (!duration) return
   // if (Date.now() - this.$nowTime < duration) return
   // this.$nowTime = Date.now
-  this.$audio.play()
+  window.$audio && window.$audio.play()
 }
