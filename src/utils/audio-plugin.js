@@ -50,10 +50,10 @@ function _createAudio() {
     // alert(window.$audio.duration)
     console.log(window.$audio.duration)
   })
-  alert(window.$audio.src)
+  // alert(window.$audio.src)
 }
 _createAudio()
-
+/* eslint-disable */
 window.$playAudio = function () {
   // let duration = this.$audio.duration * 1000
   // if (!duration) return
@@ -65,6 +65,25 @@ window.$playAudio = function () {
   //   media.src = '/static/qq.mp3'
   //   media.play()
   // }, false)
-  alert(window.$audio.src)
-  window.$audio.play()
+  // alert(window.$audio.src)
+  // window.$audio.play()
+  let voice = window.$audio
+  // 判斷 WeixinJSBridge 是否存在
+  if (WeixinJSBridge && typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
+    voice.play()
+  } else {
+    //監聽客户端抛出事件"WeixinJSBridgeReady"
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", function(){
+        voice.play();
+      }, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", function(){
+        voice.play();
+      });
+      document.attachEvent("onWeixinJSBridgeReady", function(){
+        voice.play();
+      });
+    }
+  }
 }
