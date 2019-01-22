@@ -11,6 +11,9 @@
       </div>
       <div class="time">刚刚</div>
     </div>
+    <audio ref="musicAudio">
+      <source src="./qq.mp3" type="audio/mpeg">
+    </audio>
   </div>
 </template>
 
@@ -24,18 +27,23 @@
   import Utils from 'common/js/utils'
 
   const COMPONENT_NAME = 'Ceiling'
+  window.$nowTime = 0 // 记录播放的开始时刻
   export default {
     name: COMPONENT_NAME,
     data() {
       return {
         glideShow: false,
         newMsgIn: false,
-        timer: ''
+        timer: '',
+        duration: 0 // 音频文件长度
       }
     },
     created() {
       this.touch = {}
       this.login()
+    },
+    mounted() {
+      this.getDuration()
     },
     methods: {
       ...mapActions([
@@ -48,6 +56,29 @@
         'addNowChat',
         'setImIng'
       ]),
+      // 获取音频文件长度
+      getDuration() {
+        if (!this.$refs.musicAudio) {
+          return
+        }
+        let duration = this.$refs.musicAudio.duration
+        if (isNaN(duration)) {
+          setTimeout(() => {
+            this.getDuration()
+          }, 100)
+        }
+        this.duration = duration * 1000
+        console.log(this.duration)
+        console.log(window.$nowTime)
+      },
+      // 播放音频文件
+      playAudio() {
+        console.log(this.duration)
+        if (!this.duration) return
+        if (Date.now() - window.$nowTime < this.duration) return
+        window.$nowTime = Date.now
+        this.$refs.musicAudio && this.$refs.musicAudio.play()
+      },
       async login() {
         let token = storage.get('token')
         if (!token) {
@@ -111,6 +142,7 @@
             let content = webimHandler.transitionMsg(res)
             let html = ''
             if (res.type === 'chat') {
+              this.playAudio()
               html = Utils.msgFaceToHtml(content)
             }
             this.setNewMsg({avatar: res.avatar, content, html, type: res.type})
