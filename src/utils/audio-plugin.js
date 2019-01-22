@@ -6,11 +6,11 @@ function _createAudio() {
     // alert(window.$audio.duration)
     // console.log(this)
   })
-  alert(window.$audio.play)
 }
 _createAudio()
 
 window.$playAudio = function () {
+  alert(window.$audio.play)
   if (!this.$audio) return
   // let duration = this.$audio.duration * 1000
   // if (!duration) return
