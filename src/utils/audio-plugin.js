@@ -3,16 +3,17 @@ function _createAudio() {
   window.$audio = new Audio()
   window.$audio.src = '/static/qq.mp3'
   window.$audio.addEventListener('loadedmetadata', () => {
-    alert(window.$audio.duration)
+    // alert(window.$audio.duration)
+    // console.log(this)
   })
 }
 _createAudio()
 
 window.$playAudio = function () {
   if (!this.$audio) return
-  let duration = this.$audio.duration * 1000
-  if (!duration) return
-  if (Date.now() - this.$nowTime < duration) return
-  this.$nowTime = Date.now
+  // let duration = this.$audio.duration * 1000
+  // if (!duration) return
+  // if (Date.now() - this.$nowTime < duration) return
+  // this.$nowTime = Date.now
   this.$audio.play()
 }
