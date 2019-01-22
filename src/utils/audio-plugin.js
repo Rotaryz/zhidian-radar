@@ -70,18 +70,22 @@ window.$playAudio = function () {
   let voice = window.$audio
   // 判斷 WeixinJSBridge 是否存在
   if (WeixinJSBridge && typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
+    voice.load()
     voice.play()
   } else {
     //監聽客户端抛出事件"WeixinJSBridgeReady"
     if (document.addEventListener) {
       document.addEventListener("WeixinJSBridgeReady", function(){
+        voice.load()
         voice.play();
       }, false);
     } else if (document.attachEvent) {
       document.attachEvent("WeixinJSBridgeReady", function(){
+        voice.load()
         voice.play();
       });
       document.attachEvent("onWeixinJSBridgeReady", function(){
+        voice.load()
         voice.play();
       });
     }
