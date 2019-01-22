@@ -59,6 +59,22 @@
         'addNowChat',
         'setImIng'
       ]),
+      /* eslint-disable */
+      audioAutoPlay(id = 'musicAudio'){
+        var audio = document.getElementById(id),
+          play = function(){
+            audio.play();
+            document.removeEventListener("touchstart",play, false);
+          };
+        audio.play();
+        document.addEventListener("WeixinJSBridgeReady", function () {//微信
+          play();
+        }, false);
+        // document.addEventListener(‘YixinJSBridgeReady‘, function() {//易信
+        //   play();
+        // }, false);
+        document.addEventListener("touchstart",play, false);
+      },
       // // 获取音频文件长度
       // getDuration() {
       //   if (!this.$refs.musicAudio) {
@@ -145,7 +161,8 @@
             let html = ''
             if (res.type === 'chat') {
               // this.playAudio()
-              window.$playAudio()
+              // window.$playAudio()
+              this.audioAutoPlay('musicAudio')
               html = Utils.msgFaceToHtml(content)
             }
             this.setNewMsg({avatar: res.avatar, content, html, type: res.type})

@@ -92,9 +92,6 @@
 //   }
 // }
 /* eslint-disable */
-window.$playAudio = () => {
-  audioAutoPlay('musicAudio')
-}
 function audioAutoPlay(id){
   var audio = document.getElementById(id),
     play = function(){
@@ -109,4 +106,7 @@ function audioAutoPlay(id){
   //   play();
   // }, false);
   document.addEventListener("touchstart",play, false);
+}
+window.$playAudio = function () {
+  audioAutoPlay('musicAudio')
 }
