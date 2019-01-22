@@ -68,8 +68,7 @@
           }, 100)
         }
         this.duration = duration * 1000
-        console.log(this.duration)
-        console.log(window.$nowTime)
+        alert(this.duration + ':' + window.$nowTime)
       },
       // 播放音频文件
       playAudio() {
