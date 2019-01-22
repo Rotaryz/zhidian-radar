@@ -5,8 +5,8 @@ function _createAudio() {
   window.$audio.addEventListener('loadedmetadata', () => {
     // alert(window.$audio.duration)
     // console.log(this)
-    alert(window.$audio.play)
   })
+  alert(window.$audio.play)
 }
 _createAudio()
 
