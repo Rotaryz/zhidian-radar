@@ -1,5 +1,8 @@
+import music from './music'
+
 import world from './world'
 
 export default {
-  world
+  world,
+  music
 }

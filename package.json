@@ -16,7 +16,8 @@
     "build": "node build/build.js",
     "init": "node _config/index.js",
     "check:appconfig": "node _config/check.js",
-    "look": "node _config/look.js"
+    "look": "node _config/look.js",
+    "new": "hygen new"
   },
   "pre-commit": [
     "check:appconfig"
@@ -70,6 +71,7 @@
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
+    "hygen": "^2.1.1",
     "jest": "^22.0.4",
     "jest-serializer-vue": "^0.3.0",
     "nightwatch": "^0.9.12",

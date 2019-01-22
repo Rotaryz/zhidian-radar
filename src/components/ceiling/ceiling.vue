@@ -11,15 +11,16 @@
       </div>
       <div class="time">刚刚</div>
     </div>
-    <audio ref="musicAudio">
-      <source src="./qq.mp3" type="audio/mpeg">
-    </audio>
+    <!--<audio ref="musicAudio">-->
+      <!--<source src="./qq.mp3" type="audio/mpeg">-->
+    <!--</audio>-->
   </div>
 </template>
 
 
 <script type="text/ecmascript-6">
   import {mapActions, mapGetters} from 'vuex'
+  import * as Helpers from '@/store/helpers'
   import {Im} from 'api'
   import webimHandler from 'common/js/webim_handler'
   import {ERR_OK} from '../../common/js/config'
@@ -47,6 +48,7 @@
       // this._createAudio()
     },
     methods: {
+      ...Helpers.musicMethods,
       ...mapActions([
         'saveList',
         'setNewMsg',
@@ -72,13 +74,13 @@
       //   alert(this.duration + ':' + window.$nowTime)
       // },
       // 播放音频文件
-      playAudio() {
-        // console.log(this.duration)
-        // if (!this.duration) return
-        // if (Date.now() - window.$nowTime < this.duration) return
-        // window.$nowTime = Date.now
-        this.$refs.musicAudio && this.$refs.musicAudio.play()
-      },
+      // playAudio() {
+      //   // console.log(this.duration)
+      //   // if (!this.duration) return
+      //   // if (Date.now() - window.$nowTime < this.duration) return
+      //   // window.$nowTime = Date.now
+      //   this.$refs.musicAudio.play()
+      // },
       async login() {
         let token = storage.get('token')
         if (!token) {
