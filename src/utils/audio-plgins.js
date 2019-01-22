@@ -3,7 +3,7 @@ function _createAudio() {
   window.$audio = new Audio()
   window.$audio.src = '/static/qq.mp3'
   window.$audio.addEventListener('loadedmetadata', () => {
-    console.log(window.$audio.duration)
+    alert(window.$audio.duration)
   })
 }
 _createAudio()
