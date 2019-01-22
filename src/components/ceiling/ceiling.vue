@@ -11,16 +11,12 @@
       </div>
       <div class="time">刚刚</div>
     </div>
-    <!--<audio ref="musicAudio">-->
-      <!--<source src="./qq.mp3" type="audio/mpeg">-->
-    <!--</audio>-->
   </div>
 </template>
 
 
 <script type="text/ecmascript-6">
   import {mapActions, mapGetters} from 'vuex'
-  import * as Helpers from '@/store/helpers'
   import {Im} from 'api'
   import webimHandler from 'common/js/webim_handler'
   import {ERR_OK} from '../../common/js/config'
@@ -28,7 +24,7 @@
   import Utils from 'common/js/utils'
 
   const COMPONENT_NAME = 'Ceiling'
-  // window.$nowTime = 0 // 记录播放的开始时刻
+
   export default {
     name: COMPONENT_NAME,
     data() {
@@ -36,19 +32,13 @@
         glideShow: false,
         newMsgIn: false,
         timer: ''
-        // duration: 0 // 音频文件长度
       }
     },
     created() {
       this.touch = {}
       this.login()
     },
-    mounted() {
-      // this.getDuration()
-      // this._createAudio()
-    },
     methods: {
-      ...Helpers.musicMethods,
       ...mapActions([
         'saveList',
         'setNewMsg',
@@ -59,44 +49,6 @@
         'addNowChat',
         'setImIng'
       ]),
-      /* eslint-disable */
-      audioAutoPlay(id = 'musicAudio'){
-        var audio = document.getElementById(id),
-          play = function(){
-            audio.play();
-            document.removeEventListener("touchstart",play, false);
-          };
-        audio.play();
-        document.addEventListener("WeixinJSBridgeReady", function () {//微信
-          play();
-        }, false);
-        // document.addEventListener(‘YixinJSBridgeReady‘, function() {//易信
-        //   play();
-        // }, false);
-        document.addEventListener("touchstart",play, false);
-      },
-      // // 获取音频文件长度
-      // getDuration() {
-      //   if (!this.$refs.musicAudio) {
-      //     return
-      //   }
-      //   let duration = this.$refs.musicAudio.duration
-      //   if (isNaN(duration)) {
-      //     setTimeout(() => {
-      //       this.getDuration()
-      //     }, 100)
-      //   }
-      //   this.duration = duration * 1000
-      //   alert(this.duration + ':' + window.$nowTime)
-      // },
-      // 播放音频文件
-      // playAudio() {
-      //   // console.log(this.duration)
-      //   // if (!this.duration) return
-      //   // if (Date.now() - window.$nowTime < this.duration) return
-      //   // window.$nowTime = Date.now
-      //   this.$refs.musicAudio.play()
-      // },
       async login() {
         let token = storage.get('token')
         if (!token) {
@@ -160,9 +112,7 @@
             let content = webimHandler.transitionMsg(res)
             let html = ''
             if (res.type === 'chat') {
-              // this.playAudio()
               window.$playAudio()
-              // this.audioAutoPlay('musicAudio')
               html = Utils.msgFaceToHtml(content)
             }
             this.setNewMsg({avatar: res.avatar, content, html, type: res.type})

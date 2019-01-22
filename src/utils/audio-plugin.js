@@ -73,84 +73,65 @@
 //     voice.load()
 //     voice.play()
 //   } else {
-//     //監聽客户端抛出事件"WeixinJSBridgeReady"
+//     //監聽客户端抛出事件'WeixinJSBridgeReady'
 //     if (document.addEventListener) {
-//       document.addEventListener("WeixinJSBridgeReady", function(){
+//       document.addEventListener('WeixinJSBridgeReady', function(){
 //         voice.load()
-//         voice.play();
-//       }, false);
+//         voice.play()
+//       }, false)
 //     } else if (document.attachEvent) {
-//       document.attachEvent("WeixinJSBridgeReady", function(){
+//       document.attachEvent('WeixinJSBridgeReady', function(){
 //         voice.load()
-//         voice.play();
-//       });
-//       document.attachEvent("onWeixinJSBridgeReady", function(){
+//         voice.play()
+//       })
+//       document.attachEvent('onWeixinJSBridgeReady', function(){
 //         voice.load()
-//         voice.play();
-//       });
+//         voice.play()
+//       })
 //     }
 //   }
 // }
-/* eslint-disable */
-function audioAutoPlay(id){
-  var audio = document.getElementById(id),
-    play = function(){
-      audio.play();
-      document.removeEventListener("touchstart",play, false);
-    };
-  audio.play();
-  document.addEventListener("WeixinJSBridgeReady", function () {//微信
-    play();
-  }, false);
-  // document.addEventListener(‘YixinJSBridgeReady‘, function() {//易信
-  //   play();
-  // }, false);
-  document.addEventListener("touchstart",play, false);
+function audioAutoPlay(id = 'musicAudio') {
+  let audio = document.getElementById(id)
+  let play = function() {
+    audio.play()
+    document.removeEventListener('touchstart', play, false)
+  }
+  audio.play()
+  document.addEventListener('WeixinJSBridgeReady', function () { // 微信
+    play()
+  }, false)
+  document.addEventListener('YixinJSBridgeReady', function() { // 易信
+    play()
+  }, false)
+  document.addEventListener('touchstart', play, false)
 }
-// window.$playAudio = function () {
-//   audioAutoPlay('musicAudio')
-// }
-// window.$playAudio = function(id = 'musicAudio'){
-//   var audio = document.getElementById(id),
-//     play = function(){
-//       audio.play();
-//       document.removeEventListener("touchstart",play, false);
-//     };
-//   audio.play();
-//   document.addEventListener("WeixinJSBridgeReady", function () {//微信
-//     play();
-//   }, false);
-//   // document.addEventListener(‘YixinJSBridgeReady‘, function() {//易信
-//   //   play();
-//   // }, false);
-//   document.addEventListener("touchstart",play, false);
-// }
-window.$playAudio = autoPlayMusic
+window.$playAudio = audioAutoPlay
 // 音乐播放
-function autoPlayMusic() {
-  // 自动播放音乐效果，解决浏览器或者APP自动播放问题
-  function musicInBrowserHandler() {
-    musicPlay(true);
-    document.body.removeEventListener('touchstart', musicInBrowserHandler);
-  }
-  document.body.addEventListener('touchstart', musicInBrowserHandler);
-
-  // 自动播放音乐效果，解决微信自动播放问题
-  function musicInWeixinHandler() {
-    musicPlay(true);
-    document.addEventListener("WeixinJSBridgeReady", function () {
-      musicPlay(true);
-    }, false);
-    document.removeEventListener('DOMContentLoaded', musicInWeixinHandler);
-  }
-  document.addEventListener('DOMContentLoaded', musicInWeixinHandler);
-}
-function musicPlay(isPlay) {
-  var media = document.querySelector('#musicAudio');
-  if (isPlay && media.paused) {
-    media.play();
-  }
-  if (!isPlay && !media.paused) {
-    media.pause();
-  }
-}
+// function autoPlayMusic() {
+//   // 自动播放音乐效果，解决浏览器或者APP自动播放问题
+//   function musicInBrowserHandler() {
+//     musicPlay(true)
+//     document.body.removeEventListener('touchstart', musicInBrowserHandler)
+//   }
+//   document.body.addEventListener('touchstart', musicInBrowserHandler)
+//
+//   // 自动播放音乐效果，解决微信自动播放问题
+//   function musicInWeixinHandler() {
+//     musicPlay(true)
+//     document.addEventListener('WeixinJSBridgeReady', function () {
+//       musicPlay(true)
+//     }, false)
+//     document.removeEventListener('DOMContentLoaded', musicInWeixinHandler)
+//   }
+//   document.addEventListener('DOMContentLoaded', musicInWeixinHandler)
+// }
+// function musicPlay(isPlay) {
+//   var media = document.querySelector('#musicAudio')
+//   if (isPlay && media.paused) {
+//     media.play()
+//   }
+//   if (!isPlay && !media.paused) {
+//     media.pause()
+//   }
+// }
