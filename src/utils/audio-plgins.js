@@ -1,0 +1,18 @@
+window.$nowTime = 0 // 记录播放的开始时刻
+function _createAudio() {
+  window.$audio = new Audio()
+  window.$audio.src = '/static/qq.mp3'
+  window.$audio.addEventListener('loadedmetadata', () => {
+    console.log(window.$audio.duration)
+  })
+}
+_createAudio()
+
+window.$playAudio = function () {
+  if (!this.$audio) return
+  let duration = this.$audio.duration * 1000
+  if (!duration) return
+  if (Date.now() - this.$nowTime < duration) return
+  this.$nowTime = Date.now
+  this.$audio.play()
+}
