@@ -21,7 +21,25 @@ const mutations = {
     console.log(state.musicAudio)
   },
   PLAY_AUDIO(state, obj) {
-    state.musicAudio.play()
+    document.addEventListener('WeixinJSBridgeReady', function () {
+      state.musicAudio.play()
+    }, false)
+    if (WeixinJSBridge && typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') { // eslint-disable-line
+      state.musicAudio.play()
+    } else {
+      // 監聽客户端抛出事件"WeixinJSBridgeReady"
+      if (document.addEventListener) {
+        document.addEventListener('WeixinJSBridgeReady', function () {
+        }, false)
+      } else if (document.attachEvent) {
+        document.attachEvent('WeixinJSBridgeReady', function () {
+          state.musicAudio.play()
+        })
+        document.attachEvent('onWeixinJSBridgeReady', function () {
+          state.musicAudio.play()
+        })
+      }
+    }
   }
 }
 
