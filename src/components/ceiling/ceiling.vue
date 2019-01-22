@@ -11,9 +11,9 @@
       </div>
       <div class="time">刚刚</div>
     </div>
-    <!--<audio ref="musicAudio">-->
-      <!--<source src="./qq.mp3" type="audio/mpeg">-->
-    <!--</audio>-->
+    <audio ref="musicAudio">
+      <source src="./qq.mp3" type="audio/mpeg">
+    </audio>
   </div>
 </template>
 
@@ -71,14 +71,14 @@
       //   this.duration = duration * 1000
       //   alert(this.duration + ':' + window.$nowTime)
       // },
-      // // 播放音频文件
-      // playAudio() {
-      //   console.log(this.duration)
-      //   if (!this.duration) return
-      //   if (Date.now() - window.$nowTime < this.duration) return
-      //   window.$nowTime = Date.now
-      //   this.$refs.musicAudio && this.$refs.musicAudio.play()
-      // },
+      // 播放音频文件
+      playAudio() {
+        // console.log(this.duration)
+        // if (!this.duration) return
+        // if (Date.now() - window.$nowTime < this.duration) return
+        // window.$nowTime = Date.now
+        this.$refs.musicAudio && this.$refs.musicAudio.play()
+      },
       async login() {
         let token = storage.get('token')
         if (!token) {
@@ -142,8 +142,8 @@
             let content = webimHandler.transitionMsg(res)
             let html = ''
             if (res.type === 'chat') {
-              // this.playAudio()
-              window.$playAudio()
+              this.playAudio()
+              // window.$playAudio()
               html = Utils.msgFaceToHtml(content)
             }
             this.setNewMsg({avatar: res.avatar, content, html, type: res.type})
