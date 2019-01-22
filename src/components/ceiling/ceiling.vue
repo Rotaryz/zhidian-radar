@@ -112,7 +112,7 @@
             let content = webimHandler.transitionMsg(res)
             let html = ''
             if (res.type === 'chat') {
-              window.$playAudio()
+              window.$playAudio() // todo
               html = Utils.msgFaceToHtml(content)
             }
             this.setNewMsg({avatar: res.avatar, content, html, type: res.type})
