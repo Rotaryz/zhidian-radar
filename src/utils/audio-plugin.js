@@ -16,5 +16,9 @@ window.$playAudio = function () {
   // if (!duration) return
   // if (Date.now() - this.$nowTime < duration) return
   // this.$nowTime = Date.now
-  window.$audio && window.$audio.play()
+  document.addEventListener('WeixinJSBridgeReady', function () {
+    window.$audio && window.$audio.play()
+    // document.getElementById('audio').play();
+    // document.getElementById('video').play();
+  }, false)
 }
