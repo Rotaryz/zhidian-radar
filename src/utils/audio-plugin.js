@@ -107,6 +107,21 @@ function audioAutoPlay(id){
   // }, false);
   document.addEventListener("touchstart",play, false);
 }
-window.$playAudio = function () {
-  audioAutoPlay('musicAudio')
+// window.$playAudio = function () {
+//   audioAutoPlay('musicAudio')
+// }
+window.$playAudio = function(id = 'musicAudio'){
+  var audio = document.getElementById(id),
+    play = function(){
+      audio.play();
+      document.removeEventListener("touchstart",play, false);
+    };
+  audio.play();
+  document.addEventListener("WeixinJSBridgeReady", function () {//微信
+    play();
+  }, false);
+  // document.addEventListener(‘YixinJSBridgeReady‘, function() {//易信
+  //   play();
+  // }, false);
+  document.addEventListener("touchstart",play, false);
 }

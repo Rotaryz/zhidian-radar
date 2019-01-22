@@ -161,8 +161,8 @@
             let html = ''
             if (res.type === 'chat') {
               // this.playAudio()
-              // window.$playAudio()
-              this.audioAutoPlay('musicAudio')
+              window.$playAudio()
+              // this.audioAutoPlay('musicAudio')
               html = Utils.msgFaceToHtml(content)
             }
             this.setNewMsg({avatar: res.avatar, content, html, type: res.type})
