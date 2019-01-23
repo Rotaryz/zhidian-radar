@@ -1,3 +1,4 @@
+
 import Vue from 'vue'
 import Router from 'vue-router'
 import storage from 'storage-controller'
@@ -45,6 +46,7 @@ const OrderFormManage = () => import('pages/order-form-manage/order-form-manage'
 const OrderDetail = () => import('pages/order-detail/order-detail')
 const ShelfService = () => import('pages/shelf-service/shelf-service')
 const MyMsg = () => import('pages/my-msg/my-msg')
+const zTestEcharts = () => import('pages/z-test-echarts/z-test-echarts')
 
 Vue.use(Router)
 
@@ -55,6 +57,10 @@ const route = new Router({
     //   path: '/',
     //   redirect: '/shareCard'
     // },
+    {
+      path: '/z-test-charts',
+      component: zTestEcharts
+    },
     {
       path: '/oauth',
       component: Oauth
