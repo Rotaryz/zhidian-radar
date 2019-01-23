@@ -56,7 +56,7 @@ export function createPNES(args = {}) {
     },
     {
       name: '唤醒率',
-      color: '#FDC33F '
+      color: '#FDC33F'
     }
   ]
   const legendData = colorObj.map((item) => {

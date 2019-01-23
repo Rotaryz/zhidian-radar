@@ -1,5 +1,5 @@
 <template>
-  <div class="charts-line">
+  <div class="ai-charts" :style="chartsHeight">
     <section class="chart-item-wrapper">
       <div ref="chartItem" class="chart-item"></div>
     </section>
@@ -7,7 +7,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {CHARTS_TYPE, CHARTS_CONFIG} from 'utils/constants-charts'
+  import {CHARTS_TYPE, CHARTS_CONFIG, BASE_CHARTS_HEIGHT} from 'utils/constants-charts'
   const COMPONENT_NAME = 'CHARTS_LINE'
   export default {
     name: COMPONENT_NAME,
@@ -25,6 +25,9 @@
     computed: {
       CHARTS_CONFIG() {
         return CHARTS_CONFIG[this.CHARTS_TYPE]
+      },
+      chartsHeight() {
+        return `padding-top:${CHARTS_CONFIG[this.CHARTS_TYPE].height || BASE_CHARTS_HEIGHT}%`
       }
     },
     mounted() {
@@ -43,7 +46,7 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .charts-line
+  .ai-charts
     width: 100%
     height :0
     padding-top :64.67236467236467%

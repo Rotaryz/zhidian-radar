@@ -1,6 +1,7 @@
 <template>
   <div class="z-test-echarts">
     <scroll>
+      <div style="height: 12px"></div>
       <article class="panel">
         <h1 class="title border-bottom-1px">PNES动力模型</h1>
         <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.PNES"></ai-charts>
@@ -9,6 +10,19 @@
         <h1 class="title border-bottom-1px">近15天活跃度</h1>
         <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
       </article>
+      <article class="panel">
+        <h1 class="title border-bottom-1px">兴趣的商品占比</h1>
+        <ai-charts ref="c3" :CHARTS_TYPE="CHARTS_TYPE.SHOP"></ai-charts>
+      </article>
+      <article class="panel">
+        <h1 class="title border-bottom-1px">客户性别占比</h1>
+        <ai-charts ref="c4" :CHARTS_TYPE="CHARTS_TYPE.GENDER"></ai-charts>
+      </article>
+      <article class="panel">
+        <h1 class="title border-bottom-1px">用户分组</h1>
+        <ai-charts ref="c5" :CHARTS_TYPE="CHARTS_TYPE.USER"></ai-charts>
+      </article>
+      <div style="height: 12px"></div>
     </scroll>
   </div>
 </template>
@@ -34,6 +48,9 @@
     mounted() {
       this.$refs.c1.action()
       this.$refs.c2.action()
+      this.$refs.c3.action()
+      this.$refs.c4.action()
+      this.$refs.c5.action()
     }
   }
 </script>
