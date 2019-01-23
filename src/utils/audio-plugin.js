@@ -1,3 +1,4 @@
+export const clearTimeSeconds = 5000 // 定时清除语音播放的间隔
 function audioAutoPlay(id = 'musicAudio') {
   let audio = document.getElementById(id)
   let play = function() {
@@ -12,5 +13,9 @@ function audioAutoPlay(id = 'musicAudio') {
     play()
   }, false)
   document.addEventListener('touchstart', play, false)
+  // 未触发语音提示
+  setTimeout(() => {
+    document.removeEventListener('touchstart', play, false)
+  }, clearTimeSeconds)
 }
 window.$playAudio = audioAutoPlay
