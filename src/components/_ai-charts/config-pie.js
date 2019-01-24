@@ -118,8 +118,8 @@ export function createGender(args = {}) {
   })
   return {
     legend: {
-      itemWidth: 8,
-      itemHeight: 8,
+      itemWidth: 14,
+      itemHeight: 14,
       borderRadius: 0,
       orient: 'vertical',
       x: '60%',
@@ -198,8 +198,8 @@ export function createUser(args = {}) {
   })
   return {
     legend: {
-      itemWidth: 8,
-      itemHeight: 8,
+      itemWidth: 14,
+      itemHeight: 14,
       borderRadius: 0,
       orient: 'vertical',
       x: '60%',
