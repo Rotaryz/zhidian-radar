@@ -324,6 +324,9 @@ const jjj = {
     }
   })
 }
+// console.log(jjj.nodes)
+// console.log(jjj.links)
+// console.log(jjj.categories)
 export function createUserTop6() {
   return {
     animationDurationUpdate: 1500,
