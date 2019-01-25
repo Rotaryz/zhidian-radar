@@ -89,6 +89,7 @@ export function createSEM(args = {}) {
         normal: {
           color: colorObj[index].color,
           borderWidth: 1,
+          opacity: 0,
           lineStyle: {
             color: colorObj[index].color,
             width: 3
@@ -110,19 +111,19 @@ export function createSEM(args = {}) {
       boundaryGap: false,
       data: xAxisData
     },
-    tooltip: {
-      trigger: 'axis',
-      textStyle: {
-        align: 'left'
-      },
-      axisPointer: {
-        lineStyle: {
-          color: '#ccc',
-          width: 0.5
-        }
-      },
-      padding: 5
-    },
+    // tooltip: {
+    //   trigger: 'axis',
+    //   textStyle: {
+    //     align: 'left'
+    //   },
+    //   axisPointer: {
+    //     lineStyle: {
+    //       color: '#ccc',
+    //       width: 0.5
+    //     }
+    //   },
+    //   padding: 5
+    // },
     yAxis: {
       minInterval: 1,
       type: 'value',
