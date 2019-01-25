@@ -34,6 +34,24 @@
         <h1 class="title border-bottom-1px">订单和金额</h1>
         <ai-charts ref="c8" :CHARTS_TYPE="CHARTS_TYPE.ORDER_AMOUNT"></ai-charts>
       </article>
+      <section class="panel-card" v-for="(item, index) in dataArray" :key="index">
+        <article class="top-wrapper border-bottom-1px" @click="closeHandle(index)">
+          <p class="title">活跃新客</p>
+        </article>
+        <article class="bottom-wrapper">
+          <section class="left item">
+            <p class="number">182</p>
+            <p class="text">触达数</p>
+          </section>
+          <section class="middle item">
+            <p class="number">123</p>
+            <p class="text">进店数</p>
+          </section>
+          <section class="right">
+            <ai-charts :ref="'c9' + index" :CHARTS_TYPE="CHARTS_TYPE.SEM_LIST"></ai-charts>
+          </section>
+        </article>
+      </section>
       <div style="height: 12px"></div>
     </scroll>
   </div>
@@ -54,7 +72,9 @@
     },
     data() {
       return {
-        CHARTS_TYPE: CHARTS_TYPE
+        CHARTS_TYPE: CHARTS_TYPE,
+        isClosed: false,
+        dataArray: new Array(9).fill(false)
       }
     },
     mounted() {
@@ -66,6 +86,16 @@
       this.$refs.c6.action()
       this.$refs.c7.action()
       this.$refs.c8.action()
+      this.dataArray.map((item, index) => {
+        this.$refs[`c9${index}`][0].action()
+      })
+    },
+    methods: {
+      closeHandle(index) {
+        this.dataArray[index] = !this.dataArray[index]
+        let isClosed = this.dataArray[index]
+        this.$refs[`c9${index}`][0].action({isClosed})
+      }
     }
   }
 </script>
@@ -77,6 +107,38 @@
   .z-test-echarts
     fill-box(fixed)
     z-index :999
+    .panel-card
+      margin :15px
+      background: #FFFFFF;
+      box-shadow: 0 0 20px 0 rgba(141,151,158,0.20);
+      border-radius: 8px;
+      padding :0 15px
+      .top-wrapper
+        .title
+          padding :14px 0
+      .bottom-wrapper
+        display :flex
+        align-items :center
+        justify-content :space-between
+        .left
+          margin-left :11.5px
+        .item
+          layout(column,block,nowrap)
+          justify-content :center
+          align-items :center
+          .number
+            font-family: $font-family-light
+            font-size: 20px;
+            color: #333333;
+          .text
+            margin-top :10px
+            font-family: $font-family-regular
+            font-size: 12px;
+            color: #949494;
+        .right
+          width :100px
+          height :61.5px
+          padding :12px 0
     .panel
       margin :12px
       background: #FFFFFF;

@@ -70,7 +70,6 @@ export function createOrderAmount(args = {}) {
   }
   if (!seriesData || !seriesData.length) {
     seriesData = DEFAULT_SERIES_DATA_FN(2, [1000, 100])
-    console.log(seriesData)
   }
   let series = []
   let yAxis = []

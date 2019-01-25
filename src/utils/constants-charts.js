@@ -2,6 +2,7 @@ import {createPNES, createVitality, createOrderAmount} from 'components/_ai-char
 import {createGender, createShop, createUser} from 'components/_ai-charts/config-pie'
 import {createCityTop} from 'components/_ai-charts/config-bar'
 import {createUserTop6} from 'components/_ai-charts/config-graph'
+import {createSEM} from 'components/_ai-charts/config-line-sem'
 
 export const BASE_CHARTS_HEIGHT = 64.67236467236467 // 折线图高度百分比
 export const CHARTS_TYPE = {
@@ -12,7 +13,8 @@ export const CHARTS_TYPE = {
   USER: 'USER', // 用户分组
   CITY_TOP: 'CITY_TOP', // 城市TOP6
   USER_TOP6: 'USER_TOP6', // kol 用户TOP6
-  ORDER_AMOUNT: 'ORDER_AMOUNT' // 金额和订单
+  ORDER_AMOUNT: 'ORDER_AMOUNT', // 金额和订单
+  SEM_LIST: 'SEM_LIST' // 营销列表缩略图
 }
 export const CHARTS_CONFIG = {
   [CHARTS_TYPE.PNES]: {
@@ -40,5 +42,9 @@ export const CHARTS_CONFIG = {
   },
   [CHARTS_TYPE.ORDER_AMOUNT]: {
     createOption: createOrderAmount
+  },
+  [CHARTS_TYPE.SEM_LIST]: {
+    createOption: createSEM,
+    height: 61
   }
 }
