@@ -85,6 +85,7 @@ export function createOrderAmount(args = {}) {
           name: colorObj[index].name,
           color: colorObj[index].color,
           borderWidth: 1,
+          opacity: 0,
           lineStyle: {
             color: colorObj[index].color,
             width: 3
@@ -188,7 +189,7 @@ export function createOrderAmount(args = {}) {
           width: 0.5
         }
       },
-      padding: [10, 50, 10, 20]
+      padding: 5
     },
     yAxis,
     series
@@ -242,6 +243,7 @@ export function createPNES(args = {}) {
         normal: {
           color: colorObj[index].color,
           borderWidth: 1,
+          opacity: 0,
           lineStyle: {
             color: colorObj[index].color,
             width: 3
@@ -310,7 +312,7 @@ export function createPNES(args = {}) {
           width: 0.5
         }
       },
-      padding: [10, 50, 10, 20]
+      padding: 5
     },
     yAxis: {
       minInterval: 1,
@@ -399,6 +401,7 @@ export function createVitality(args = {}) {
         normal: {
           color: colorObj[index].color,
           borderWidth: 1,
+          opacity: 0,
           lineStyle: {
             color: colorObj[index].color,
             width: 3
@@ -458,7 +461,7 @@ export function createVitality(args = {}) {
           width: 0.5
         }
       },
-      padding: [10, 50, 10, 20]
+      padding: 5
     },
     yAxis: {
       minInterval: 1,

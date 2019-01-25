@@ -80,6 +80,19 @@ export function createShop(args = {}) {
           normal: {
             show: false
           }
+        },
+        itemStyle: {
+          normal: {
+            borderWidth: 3,
+            borderColor: '#ffffff'
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '15',
+              fontWeight: 'normal'
+            }
+          }
         }
       }
     ]
@@ -156,6 +169,19 @@ export function createGender(args = {}) {
         labelLine: {
           normal: {
             show: false
+          }
+        },
+        itemStyle: {
+          normal: {
+            borderWidth: 3,
+            borderColor: '#ffffff'
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '15',
+              fontWeight: 'normal'
+            }
           }
         }
       }
@@ -236,6 +262,19 @@ export function createUser(args = {}) {
         labelLine: {
           normal: {
             show: false
+          }
+        },
+        itemStyle: {
+          normal: {
+            borderWidth: 3,
+            borderColor: '#ffffff'
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '15',
+              fontWeight: 'normal'
+            }
           }
         }
       }
