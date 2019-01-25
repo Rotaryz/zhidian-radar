@@ -98,7 +98,7 @@ export function createCityTop(args = {}) {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
-        type: 'none'
+        type: 'shadow'
       },
       formatter(prams) {
         return `${prams[1].name}：${prams[1].value}`
