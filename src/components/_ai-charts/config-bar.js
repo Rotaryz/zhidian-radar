@@ -98,27 +98,36 @@ export function createCityTop(args = {}) {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
-        type: 'shadow'
+        type: 'line'
+      },
+      formatter(prams) {
+        return `${prams[1].name}：${prams[1].value}`
       }
     },
     series: [
       { // For shadow
         type: 'bar',
         itemStyle: {
-          barBorderRadius: 12,
-          normal: {color: '#F5F6F9'}
+          normal: {
+            barBorderRadius: 30,
+            color: '#F5F6F9'
+          }
         },
         barGap: '-100%',
-        barCategoryGap: '80%',
+        // barCategoryGap: '80%',
+        barWidth: '20%',
         data: dataShadow,
-        animation: false
+        animation: false,
+        zlevel: 9
       },
       {
         type: 'bar',
         data: seriesData,
+        barWidth: '20%',
+        zlevel: 11,
         itemStyle: {
-          barBorderRadius: 12,
           normal: {
+            barBorderRadius: 30,
             color: new echarts.graphic.LinearGradient(
               0, 0, 0, 1,
               [
