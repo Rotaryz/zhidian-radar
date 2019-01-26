@@ -47,7 +47,7 @@ export function createUserTop6() {
         links: jjj.links,
         categories: jjj.categories,
         focusNodeAdjacency: true,
-        roam: false,
+        roam: true,
         label: {
           normal: {
             show: true

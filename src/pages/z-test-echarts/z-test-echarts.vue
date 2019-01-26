@@ -26,10 +26,10 @@
         <h1 class="title border-bottom-1px">客户城市占比 TOP6</h1>
         <ai-charts ref="c6" :CHARTS_TYPE="CHARTS_TYPE.CITY_TOP"></ai-charts>
       </article>
-      <article class="panel">
+      <router-link tag="div" to="" class="panel">
         <h1 class="title border-bottom-1px">用户分享占比 TOP6</h1>
         <ai-charts ref="c7" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
-      </article>
+      </router-link>
       <article class="panel">
         <h1 class="title border-bottom-1px">订单和金额</h1>
         <ai-charts ref="c8" :CHARTS_TYPE="CHARTS_TYPE.ORDER_AMOUNT"></ai-charts>

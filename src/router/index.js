@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import Router from 'vue-router'
 import storage from 'storage-controller'
@@ -47,6 +46,7 @@ const OrderDetail = () => import('pages/order-detail/order-detail')
 const ShelfService = () => import('pages/shelf-service/shelf-service')
 const MyMsg = () => import('pages/my-msg/my-msg')
 const zTestEcharts = () => import('pages/z-test-echarts/z-test-echarts')
+const zTest = () => import('pages/z-test-z/z-test-z')
 
 Vue.use(Router)
 
@@ -60,6 +60,10 @@ const route = new Router({
     {
       path: '/z-test-charts',
       component: zTestEcharts
+    },
+    {
+      path: '/z-test',
+      component: zTest
     },
     {
       path: '/oauth',

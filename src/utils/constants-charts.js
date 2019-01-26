@@ -38,7 +38,8 @@ export const CHARTS_CONFIG = {
     createOption: createCityTop
   },
   [CHARTS_TYPE.USER_TOP6]: {
-    createOption: createUserTop6
+    createOption: createUserTop6,
+    height: BASE_CHARTS_HEIGHT
   },
   [CHARTS_TYPE.ORDER_AMOUNT]: {
     createOption: createOrderAmount
