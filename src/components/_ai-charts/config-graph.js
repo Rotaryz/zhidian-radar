@@ -80,7 +80,7 @@ const json = {
       name: `元素${index + 1}`
     }
   }),
-  links: new Array(number2 * 2).fill(1).map((item, index) => {
+  links: new Array(number2 * 1).fill(1).map((item, index) => {
     // new Array(number2).fill(1).map((child, idx) => {
     //
     // })
