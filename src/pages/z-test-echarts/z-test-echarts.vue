@@ -77,7 +77,14 @@
         dataArray: new Array(9).fill(false)
       }
     },
+    created() {
+    },
     mounted() {
+      setTimeout(() => {
+        this.$loading.hide()
+        this.$toast.show('test')
+      }, 1000)
+      this.$loading.show()
       this.$refs.c1.action()
       this.$refs.c2.action()
       this.$refs.c3.action()

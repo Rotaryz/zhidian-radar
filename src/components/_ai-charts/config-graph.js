@@ -67,7 +67,7 @@ export function createUserTop6() {
   }
 }
 
-const number2 = 100
+const number2 = 48
 const json = {
   nodes: new Array(number2).fill(1).map((item, index) => {
     return {
