@@ -1,6 +1,6 @@
 <template>
   <div class="z-test-z">
-    <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+    <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6_DETAIL"></ai-charts>
   </div>
 </template>
 
