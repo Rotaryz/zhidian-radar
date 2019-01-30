@@ -115,7 +115,7 @@ export function createUserTop6Detail() {
         type: 'graph',
         layout: 'force',
         force: {
-          repulsion: Math.max(json.links.length * 5, json.nodes.length * 5, 6 * 12)
+          repulsion: Math.max(json.links.length, json.nodes.length)
         },
         symbolSize: 30,
         data: json.nodes,

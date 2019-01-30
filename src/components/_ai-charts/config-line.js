@@ -4,7 +4,7 @@ import APP_CONFIG from 'utils/_app-config'
  * @type {string[]}
  */
 const DEFAULT_X_DATA = new Array(12).fill(1).map((item, index) => {
-  return `${(index + 1) * 2}:00`
+  return `10/${(index + 1) * 2}`
 })
 /**
  * 默认y轴的值=>seriesData
@@ -65,7 +65,7 @@ export function createOrderAmount(args = {}) {
     xAxisData = DEFAULT_X_DATA
   }
   if (!seriesData || !seriesData.length) {
-    seriesData = DEFAULT_SERIES_DATA_FN(2, [1000, 100])
+    seriesData = DEFAULT_SERIES_DATA_FN(2, [100, 9999])
   }
   let series = []
   let yAxis = []
@@ -156,9 +156,9 @@ export function createOrderAmount(args = {}) {
       data: legendData
     },
     grid: {
-      top: '18.149779735682818%',
+      top: '8.149779735682818%',
       left: '4.415954415954416%',
-      right: '8%',
+      right: '4%',
       bottom: '18.828193832599119%',
       containLabel: true
     },
@@ -308,10 +308,10 @@ export function createPNES(args = {}) {
       data: legendData
     },
     grid: {
-      // top: '4.149779735682818%',
-      top: '0',
+      top: '8.149779735682818%',
+      // top: '0',
       left: '4.415954415954416%',
-      right: '0',
+      right: '4%',
       bottom: '18.828193832599119%',
       containLabel: true
     },

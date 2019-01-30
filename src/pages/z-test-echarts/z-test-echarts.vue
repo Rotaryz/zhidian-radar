@@ -3,35 +3,35 @@
     <scroll>
       <div style="height: 12px"></div>
       <article class="panel">
-        <h1 class="title border-bottom-1px">PNES动力模型</h1>
+        <h1 class="title ">PNES动力模型</h1>
         <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.PNES"></ai-charts>
       </article>
       <article class="panel">
-        <h1 class="title border-bottom-1px">近15天活跃度</h1>
+        <h1 class="title ">近15天活跃度</h1>
         <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
       </article>
       <article class="panel">
-        <h1 class="title border-bottom-1px">兴趣的商品占比</h1>
+        <h1 class="title ">兴趣的商品占比</h1>
         <ai-charts ref="c3" :CHARTS_TYPE="CHARTS_TYPE.SHOP"></ai-charts>
       </article>
       <article class="panel">
-        <h1 class="title border-bottom-1px">客户性别占比</h1>
+        <h1 class="title ">客户性别占比</h1>
         <ai-charts ref="c4" :CHARTS_TYPE="CHARTS_TYPE.GENDER"></ai-charts>
       </article>
       <article class="panel">
-        <h1 class="title border-bottom-1px">用户分组</h1>
+        <h1 class="title ">用户分组</h1>
         <ai-charts ref="c5" :CHARTS_TYPE="CHARTS_TYPE.USER"></ai-charts>
       </article>
       <article class="panel">
-        <h1 class="title border-bottom-1px">客户城市占比 TOP6</h1>
+        <h1 class="title ">客户城市占比 TOP6</h1>
         <ai-charts ref="c6" :CHARTS_TYPE="CHARTS_TYPE.CITY_TOP"></ai-charts>
       </article>
       <router-link tag="div" to="" class="panel">
-        <router-link tag="div" to="z-test" class="title border-bottom-1px">用户分享占比 TOP6</router-link>
+        <router-link tag="div" to="z-test" class="title ">用户分享占比 TOP6</router-link>
         <ai-charts ref="c7" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
       </router-link>
       <article class="panel">
-        <h1 class="title border-bottom-1px">订单和金额</h1>
+        <h1 class="title">订单和金额</h1>
         <ai-charts ref="c8" :CHARTS_TYPE="CHARTS_TYPE.ORDER_AMOUNT"></ai-charts>
       </article>
       <section class="panel-card" v-for="(item, index) in dataArray" :key="index">
