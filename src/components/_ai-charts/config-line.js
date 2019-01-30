@@ -42,21 +42,17 @@ export function createOrderAmount(args = {}) {
   let {xAxisData, seriesData} = args
   const smooth = 0.5
   const colorObj = [
-    // {
-    //   name: '新增率',
-    //   color: '#AA41E0'
-    // },
-    {
-      name: '金额',
-      color: '#FD3F3F'
-    },
-    // {
-    //   name: '订单',
-    //   color: '#4050EF'
-    // },
     {
       name: '订单',
-      color: '#4050EF'
+      color: '#59DF78',
+      colorStops0: 'rgba(89,223,120,0.55)',
+      colorStops1: 'rgba(89,223,120,0.05)'
+    },
+    {
+      name: '金额',
+      color: '#7495FF',
+      colorStops0: 'rgba(116,149,255,0.55)',
+      colorStops1: 'rgba(116,149,255,0.05)'
     }
   ]
   const legendData = colorObj.map((item) => {
@@ -80,6 +76,26 @@ export function createOrderAmount(args = {}) {
       type: 'line',
       smooth,
       yAxisIndex: index,
+      areaStyle: {
+        color: {
+          type: 'linear',
+          x: 0,
+          x2: 0,
+          y: 0,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: colorObj[index].colorStops0
+            },
+            {
+              offset: 1,
+              color: colorObj[index].colorStops1
+            }
+          ],
+          globalCoord: false
+        }
+      },
       itemStyle: {
         normal: {
           name: colorObj[index].name,
@@ -96,7 +112,7 @@ export function createOrderAmount(args = {}) {
     yAxis.push({
       minInterval: 1,
       type: 'value',
-      name: colorObj[index].name,
+      name: '',
       splitLine: {
         show: true,
         lineStyle: {
@@ -114,8 +130,8 @@ export function createOrderAmount(args = {}) {
       },
       axisLabel: {
         formatter: '{value}',
-        color: '#666'
-        // show: true,
+        color: '#666',
+        show: true
         // showMinLabel: true,
         // showMaxLabel: true,
         // formatter: function (value) { return value }
@@ -179,6 +195,7 @@ export function createOrderAmount(args = {}) {
       }
     },
     tooltip: {
+      show: true,
       trigger: 'axis',
       textStyle: {
         align: 'left'
@@ -206,19 +223,27 @@ export function createPNES(args = {}) {
   const colorObj = [
     {
       name: '新增率',
-      color: '#AA41E0'
+      color: '#59DF78',
+      colorStops0: 'rgba(89,223,120,0.55)',
+      colorStops1: 'rgba(89,223,120,0.05)'
     },
     {
       name: '转化率',
-      color: '#FD3F3F'
+      color: '#73D4FF',
+      colorStops0: 'rgba(115,212,255,0.55)',
+      colorStops1: 'rgba(115,212,255,0.05)'
     },
     {
       name: '流失率',
-      color: '#4050EF'
+      color: '#7495FF',
+      colorStops0: 'rgba(116,149,255,0.55)',
+      colorStops1: 'rgba(116,149,255,0.05)'
     },
     {
       name: '唤醒率',
-      color: '#FDC33F'
+      color: '#BA86FC',
+      colorStops0: 'rgba(186,134,252,0.55)',
+      colorStops1: 'rgba(186,134,252,0.05)'
     }
   ]
   const legendData = colorObj.map((item) => {
@@ -239,6 +264,26 @@ export function createPNES(args = {}) {
       data: item.data,
       type: 'line',
       smooth,
+      areaStyle: {
+        color: {
+          type: 'linear',
+          x: 0,
+          x2: 0,
+          y: 0,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: colorObj[index].colorStops0
+            },
+            {
+              offset: 1,
+              color: colorObj[index].colorStops1
+            }
+          ],
+          globalCoord: false
+        }
+      },
       itemStyle: {
         normal: {
           color: colorObj[index].color,
@@ -263,9 +308,10 @@ export function createPNES(args = {}) {
       data: legendData
     },
     grid: {
-      top: '8.149779735682818%',
+      // top: '4.149779735682818%',
+      top: '0',
       left: '4.415954415954416%',
-      right: '4%',
+      right: '0',
       bottom: '18.828193832599119%',
       containLabel: true
     },
@@ -273,7 +319,7 @@ export function createPNES(args = {}) {
       type: 'category',
       boundaryGap: false,
       data: xAxisData,
-      offset: 5.5,
+      offset: 4.5,
       splitLine: {
         show: false,
         lineStyle: {
@@ -360,9 +406,9 @@ export function createVitality(args = {}) {
   const colorObj = [
     {
       name: '活跃度',
-      color: '#AA41E0',
-      colorStops0: 'rgba(170,65,224, 0.55)',
-      colorStops1: 'rgba(170,65,224, 0.05)'
+      color: '#8867F2',
+      colorStops0: 'rgba(136,103,242,0.55)',
+      colorStops1: 'rgba(136,103,242,0.05)'
     }
   ]
   if (!xAxisData || !xAxisData.length) {

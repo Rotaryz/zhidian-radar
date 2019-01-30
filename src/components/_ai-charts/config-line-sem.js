@@ -38,9 +38,9 @@ export function createSEM(args = {}) {
   let colorObj = [
     {
       name: '活跃度',
-      color: '#AA41E0',
-      colorStops0: 'rgba(170,65,224, 0.55)',
-      colorStops1: 'rgba(170,65,224, 0.05)'
+      color: '#8867F2',
+      colorStops0: 'rgba(136,103,242,0.55)',
+      colorStops1: 'rgba(136,103,242,0.05)'
     }
   ]
   if (isClosed) {

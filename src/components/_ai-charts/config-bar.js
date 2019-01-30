@@ -131,8 +131,8 @@ export function createCityTop(args = {}) {
             color: new echarts.graphic.LinearGradient(
               0, 0, 0, 1,
               [
-                {offset: 1, color: '#6534F9'},
-                {offset: 0, color: '#AA41E0'}
+                {offset: 1, color: '#BE85FD'},
+                {offset: 0, color: '#A08FF6'}
               ]
             )
           }

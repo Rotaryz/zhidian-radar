@@ -26,8 +26,8 @@
         <h1 class="title border-bottom-1px">客户城市占比 TOP6</h1>
         <ai-charts ref="c6" :CHARTS_TYPE="CHARTS_TYPE.CITY_TOP"></ai-charts>
       </article>
-      <router-link tag="div" to="/z-test" class="panel">
-        <h1 class="title border-bottom-1px">用户分享占比 TOP6</h1>
+      <router-link tag="div" to="" class="panel">
+        <router-link tag="div" to="z-test" class="title border-bottom-1px">用户分享占比 TOP6</router-link>
         <ai-charts ref="c7" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
       </router-link>
       <article class="panel">

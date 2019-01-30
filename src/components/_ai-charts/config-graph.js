@@ -1,19 +1,31 @@
 // import json2 from './bbb'
 // console.log(json2)
-const number = 12
+const hostUrl = `${window.location.protocol}//${window.location.host}/static/chart-icon`
+const number = 20
 const jjj = {
   nodes: new Array(number).fill(1).map((item, index) => {
     return {
       name: `元素${index + 1}`,
-      category: index
+      symbol: `image://${hostUrl}/${'pic-default@1x.png'}`,
+      symbolSize: 30,
+      itemStyle: {
+        borderColor: '#8867F2',
+        borderWidth: 1,
+        shadowBlur: 10,
+        shadowColor: '#8867F2'
+      },
+      label: {
+        show: false
+      }
+      // category: index
     }
   }),
-  categories: new Array(number).fill(1).map((item, index) => {
-    return {
-      name: `元素${index + 1}`
-    }
-  }),
-  links: new Array(number * 2).fill(1).map((item, index) => {
+  // categories: new Array(number).fill(1).map((item, index) => {
+  //   return {
+  //     name: `元素${index + 1}`
+  //   }
+  // }),
+  links: new Array(number * 1).fill(1).map((item, index) => {
     // new Array(number).fill(1).map((child, idx) => {
     //
     // })
@@ -42,23 +54,22 @@ export function createUserTop6() {
         force: {
           repulsion: Math.max(jjj.links.length * 9, jjj.nodes.length * 6, 6 * 12)
         },
-        symbolSize: 30,
         data: jjj.nodes,
         links: jjj.links,
-        categories: jjj.categories,
+        // categories: jjj.categories,
         focusNodeAdjacency: true,
         roam: true,
         label: {
           normal: {
             show: true
             // position: 'inside'
-
           }
         },
         lineStyle: {
           normal: {
-            opacity: 0.7,
-            width: 3,
+            opacity: 1,
+            color: '#8867F2',
+            width: 2,
             curveness: 0.1
           }
         }
