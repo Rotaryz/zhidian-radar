@@ -264,6 +264,9 @@ export function createPNES(args = {}) {
       data: item.data,
       type: 'line',
       smooth,
+      symbol: 'circle',
+      symbolSize: 3,
+      showSymbol: false,
       areaStyle: {
         color: {
           type: 'linear',
@@ -286,9 +289,17 @@ export function createPNES(args = {}) {
       },
       itemStyle: {
         normal: {
-          color: colorObj[index].color,
+          // color: colorObj[index].color,
+          // borderWidth: 1,
+          // opacity: 0,
+          // lineStyle: {
+          //   color: colorObj[index].color,
+          //   width: 3
+          // }
+          color: '#fff',
           borderWidth: 1,
-          opacity: 0,
+          borderColor: colorObj[index].color,
+          opacity: 1,
           lineStyle: {
             color: colorObj[index].color,
             width: 3
@@ -353,6 +364,7 @@ export function createPNES(args = {}) {
         align: 'left'
       },
       axisPointer: {
+        type: 'none',
         lineStyle: {
           color: '#ccc',
           width: 0.5
@@ -503,9 +515,6 @@ export function createVitality(args = {}) {
     },
     tooltip: {
       trigger: 'axis',
-      // position: function (point) {
-      //   return [point[0], point[1]]
-      // },
       textStyle: {
         align: 'left'
       },
