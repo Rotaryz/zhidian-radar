@@ -53,7 +53,10 @@ export function createUserTop6() {
         type: 'graph',
         layout: 'force',
         force: {
-          repulsion: Math.max(jjj.links.length * 9, jjj.nodes.length * 6, 6 * 12)
+          // repulsion: Math.max(jjj.links.length * 9, jjj.nodes.length * 6, 6 * 12),
+          repulsion: Math.max(jjj.links.length * 2, jjj.nodes.length * 2, 2 * 12),
+          gravity: 0.1,
+          edgeLength: 30
         },
         data: jjj.nodes,
         links: jjj.links,
@@ -84,7 +87,19 @@ const json = {
   nodes: new Array(number2).fill(1).map((item, index) => {
     return {
       name: `元素${index + 1}`,
-      category: index
+      symbol: `image://${hostUrl}/${'pic-default@1x.png'}`,
+      symbolSize: Math.random() * 2 >= 1 ? 30 : 20,
+      symbolKeepAspect: true,
+      itemStyle: {
+        borderColor: '#8867F2',
+        borderWidth: 1,
+        shadowBlur: 1,
+        shadowColor: '#8867F2'
+      },
+      label: {
+        show: false
+      }
+      // category: index
     }
   }),
   categories: new Array(number2).fill(1).map((item, index) => {
@@ -116,10 +131,10 @@ export function createUserTop6Detail() {
         type: 'graph',
         layout: 'force',
         force: {
-          // repulsion: Math.min(json.links.length, json.nodes.length, 30)
-          // repulsion: 2000
-          // gravity: 300,
-          // edgeLength: 0
+          repulsion: Math.min(json.links.length, json.nodes.length, 30),
+          // repulsion: 2000,
+          gravity: 0.1,
+          edgeLength: 30
         },
         // symbolSize: 30,
         data: json.nodes,
@@ -136,8 +151,9 @@ export function createUserTop6Detail() {
         },
         lineStyle: {
           normal: {
-            opacity: 0.7,
-            width: 3,
+            opacity: 1,
+            color: '#8867F2',
+            width: 2,
             curveness: 0.1
           }
         }
