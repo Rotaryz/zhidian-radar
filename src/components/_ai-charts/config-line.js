@@ -503,9 +503,9 @@ export function createVitality(args = {}) {
     },
     tooltip: {
       trigger: 'axis',
-      position: function (point) {
-        return [point[0], point[1]]
-      },
+      // position: function (point) {
+      //   return [point[0], point[1]]
+      // },
       textStyle: {
         align: 'left'
       },
