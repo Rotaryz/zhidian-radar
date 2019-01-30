@@ -35,13 +35,13 @@
     position: fixed
     bottom: 0
     width: 100vw
-    height: 45px
+    height: 50px
     background: $color-white
     display: flex
     .tab-item
       flex: 1
       overflow: hidden
-      height: 45px
+      height: 50px
       .item-container
         overflow: hidden
         width: 100%
@@ -53,9 +53,9 @@
         font-size: 0
         .icon
           display: block
-          width: 20px
-          height: 20px
-          margin-bottom: 3px
+          width: 21px
+          height: 21px
+          margin-bottom: 5px
           background-size: 20px 20px
           &.icon-radar
             bg-image('./icon-radar')
@@ -68,8 +68,9 @@
           &.icon-mine
             bg-image('./icon-mine')
         .icon-text
-          font-family: $font-family-light
-          font-size: $font-size-small-s
+          font-family: $font-family-regular
+          color: #15182D
+          font-size: $font-size-10
       &.router-link-active .item-container
         .icon-radar
           bg-image('./icon-radar_pressed')
