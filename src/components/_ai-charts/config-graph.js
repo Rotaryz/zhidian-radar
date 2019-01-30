@@ -7,11 +7,12 @@ const jjj = {
     return {
       name: `元素${index + 1}`,
       symbol: `image://${hostUrl}/${'pic-default@1x.png'}`,
-      symbolSize: 30,
+      symbolSize: Math.random() * 2 >= 1 ? 30 : 20,
+      symbolKeepAspect: true,
       itemStyle: {
         borderColor: '#8867F2',
         borderWidth: 1,
-        shadowBlur: 10,
+        shadowBlur: 1,
         shadowColor: '#8867F2'
       },
       label: {
@@ -115,9 +116,12 @@ export function createUserTop6Detail() {
         type: 'graph',
         layout: 'force',
         force: {
-          repulsion: Math.max(json.links.length, json.nodes.length)
+          // repulsion: Math.min(json.links.length, json.nodes.length, 30)
+          // repulsion: 2000
+          // gravity: 300,
+          // edgeLength: 0
         },
-        symbolSize: 30,
+        // symbolSize: 30,
         data: json.nodes,
         links: json.links,
         categories: json.categories,
