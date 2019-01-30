@@ -383,6 +383,13 @@ const route = new Router({
         }
       },
       {
+        path: '/market',
+        component: News,
+        meta: {
+          title: '营销'
+        }
+      },
+      {
         path: '/client',
         component: Client,
         meta: {

@@ -14,7 +14,9 @@
   const TABS = [
     {text: '雷达', path: '/radar', id: 1, iconClass: 'icon-radar'},
     {text: '消息', path: '/news', id: 2, iconClass: 'icon-news'},
-    {text: '客户', path: '/client', id: 3, iconClass: 'icon-client'}
+    {text: '营销', path: '/market', id: 3, iconClass: 'icon-market'},
+    {text: '客户', path: '/client', id: 4, iconClass: 'icon-client'},
+    {text: '我的', path: '/mine', id: 5, iconClass: 'icon-mine'}
   ]
   export default {
     name: COMPONENT_NAME,
@@ -56,23 +58,29 @@
           margin-bottom: 3px
           background-size: 20px 20px
           &.icon-radar
-            bg-image('./icon-radar_tabbar')
+            bg-image('./icon-radar')
           &.icon-news
-            bg-image('./icon-news_tabbar')
+            bg-image('./icon-news')
+          &.icon-market
+            bg-image('./icon-marketing')
           &.icon-client
-            bg-image('./icon-customer_tabbar')
+            bg-image('./icon-customer')
           &.icon-mine
-            bg-image('./icon-my_tabbar')
+            bg-image('./icon-mine')
         .icon-text
           font-family: $font-family-light
           font-size: $font-size-small-s
       &.router-link-active .item-container
         .icon-radar
-          bg-image('./icon-radar_selected')
+          bg-image('./icon-radar_pressed')
         .icon-news
-          bg-image('./icon-news_selected')
+          bg-image('./icon-news_pressed')
+        .icon-market
+          bg-image('./icon-marketing_pressed')
         .icon-client
-          bg-image('./icon-customer_selected')
+          bg-image('./icon-customer_pressed')
         .icon-mine
-          bg-image('./icon-my_selected')
+          bg-image('./icon-mine_pressed')
+        .icon-text
+          color: $color-main
 </style>
