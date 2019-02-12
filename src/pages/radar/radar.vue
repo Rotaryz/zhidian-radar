@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-link tag="button" to="/z-test-charts" style="z-index: 999; position: fixed;bottom: 0;height: 50px;width: 100px;background: red">图标测试按钮</router-link>
     <div class="radar">
       <div class="tab-container">
         <ul class="tab-wrapper">

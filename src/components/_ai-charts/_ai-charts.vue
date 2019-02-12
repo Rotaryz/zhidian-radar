@@ -27,7 +27,11 @@
         return CHARTS_CONFIG[this.CHARTS_TYPE]
       },
       chartsHeight() {
-        return `padding-top:${CHARTS_CONFIG[this.CHARTS_TYPE].height || BASE_CHARTS_HEIGHT}%`
+        let styles = CHARTS_CONFIG[this.CHARTS_TYPE].styles
+        if (!styles) {
+          styles = `padding-top:${CHARTS_CONFIG[this.CHARTS_TYPE].height || BASE_CHARTS_HEIGHT}%`
+        }
+        return styles
       }
     },
     mounted() {

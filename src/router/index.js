@@ -64,6 +64,10 @@ const route = new Router({
       component: zTestEcharts
     },
     {
+      path: '/z-test',
+      component: zTest
+    },
+    {
       path: '/oauth',
       component: Oauth
     },

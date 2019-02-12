@@ -7,7 +7,7 @@ DEFAULT_SERIES_DATA_FN = function (number) {
     }
   })
 }
-
+const hostUrl = `${window.location.protocol}//${window.location.host}/static/chart-icon`
 /**
  * 兴趣的商品占比
  * @param args
@@ -26,16 +26,16 @@ export function createShop(args = {}) {
   })
   const colorObj = [
     {
-      color: '#AA41E0'
+      color: '#58e276'
     },
     {
-      color: '#FD3F3F'
+      color: '#bb86fc'
     },
     {
-      color: '#4050EF'
+      color: '#7495ff'
     },
     {
-      color: '#FDC33F'
+      color: '#6dd2ff'
     }
   ]
   let colorArr = seriesData.map((item, index) => {
@@ -80,6 +80,19 @@ export function createShop(args = {}) {
           normal: {
             show: false
           }
+        },
+        itemStyle: {
+          normal: {
+            borderWidth: 3,
+            borderColor: '#ffffff'
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '15',
+              fontWeight: 'normal'
+            }
+          }
         }
       }
     ]
@@ -96,25 +109,28 @@ export function createGender(args = {}) {
   if (!seriesData || !seriesData.length) {
     seriesData = DEFAULT_SERIES_DATA_FN(3)
   }
-  const legendData = seriesData.map((item) => {
-    return {
-      name: item.name,
-      icon: `image://https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548249415269&di=c5c9059bd8d1093afc1a1e3e7f131ddd&imgtype=0&src=http%3A%2F%2Fp0.so.qhimgs1.com%2Ft018c598c510a2918e4.png` // todo
-    }
-  })
   const colorObj = [
     {
-      color: '#4050EF'
+      color: '#7e9cfe',
+      icon: 'icon-male@2x.png'
     },
     {
-      color: '#AA41E0'
+      color: '#aa8bf8',
+      icon: 'icon-female@2x.png'
     },
     {
-      color: '#FD3F3F'
+      color: '#59e576',
+      icon: 'icon-nome@2x.png'
     }
   ]
-  let colorArr = seriesData.map((item, index) => {
-    return colorObj[index].color
+  let colorArr = []
+  let legendData = []
+  seriesData.map((item, index) => {
+    colorArr.push(colorObj[index].color)
+    legendData.push({
+      name: item.name,
+      icon: `image://${hostUrl}/${colorObj[index].icon}`
+    })
   })
   return {
     legend: {
@@ -156,6 +172,19 @@ export function createGender(args = {}) {
         labelLine: {
           normal: {
             show: false
+          }
+        },
+        itemStyle: {
+          normal: {
+            borderWidth: 3,
+            borderColor: '#ffffff'
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '15',
+              fontWeight: 'normal'
+            }
           }
         }
       }
@@ -173,28 +202,32 @@ export function createUser(args = {}) {
   if (!seriesData || !seriesData.length) {
     seriesData = DEFAULT_SERIES_DATA_FN(4)
   }
-  const legendData = seriesData.map((item) => {
-    return {
-      name: item.name,
-      icon: `image://https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548249415269&di=c5c9059bd8d1093afc1a1e3e7f131ddd&imgtype=0&src=http%3A%2F%2Fp0.so.qhimgs1.com%2Ft018c598c510a2918e4.png` // todo
-    }
-  })
   const colorObj = [
     {
-      color: '#22CED4'
+      color: '#59E576',
+      icon: 'icon-qzkh@2x.png'
     },
     {
-      color: '#4050EF'
+      color: '#6FD3FF',
+      icon: 'icon-xkh@2x.png'
     },
     {
-      color: '#FDC33F'
+      color: '#7495FF',
+      icon: 'icon-zlkh@2x.png'
     },
     {
-      color: '#FD3F3F'
+      color: '#BC86FD',
+      icon: 'icon-cskh@2x.png'
     }
   ]
-  let colorArr = seriesData.map((item, index) => {
-    return colorObj[index].color
+  let colorArr = []
+  let legendData = []
+  seriesData.map((item, index) => {
+    colorArr.push(colorObj[index].color)
+    legendData.push({
+      name: item.name,
+      icon: `image://${hostUrl}/${colorObj[index].icon}`
+    })
   })
   return {
     legend: {
@@ -236,6 +269,19 @@ export function createUser(args = {}) {
         labelLine: {
           normal: {
             show: false
+          }
+        },
+        itemStyle: {
+          normal: {
+            borderWidth: 3,
+            borderColor: '#ffffff'
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '15',
+              fontWeight: 'normal'
+            }
           }
         }
       }
