@@ -47,6 +47,7 @@ const OrderDetail = () => import('pages/order-detail/order-detail')
 const ShelfService = () => import('pages/shelf-service/shelf-service')
 const MyMsg = () => import('pages/my-msg/my-msg')
 const zTestEcharts = () => import('pages/z-test-echarts/z-test-echarts')
+const zTest = () => import('pages/z-test-z/z-test-z')
 // 新版
 const NClient = () => import('pages/n_client/n_client')
 
