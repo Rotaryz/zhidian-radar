@@ -4,6 +4,7 @@ import axios from 'axios'
 import { BASE_URL } from './config'
 import storage from 'storage-controller'
 import utils from './utils'
+import * as Utils from './request-utils'
 
 const TIME_OUT = 10000
 const ERR_OK = 0
@@ -17,6 +18,7 @@ http.defaults.baseURL = BASE_URL.api
 
 http.interceptors.request.use(config => {
   // 请求数据前的拦截
+  config.headers['Authorization'] = storage.get('token', '')
   return config
 }, error => {
   return Promise.reject(error)
@@ -68,63 +70,99 @@ function requestException(res) {
   }
   return error
 }
-
-export default {
-  post(url, data) {
-    return http({
-      method: 'post',
-      url,
-      data, // post 请求时带的参数
-      headers: {
-        Authorization: storage.get('token')
+// http请求
+const methodArr = ['get', 'post', 'put', 'delete']
+const HTTP = {}
+methodArr.forEach((item, index) => {
+  let method = item.toUpperCase()
+  HTTP[item] = (...args) => {
+    // 路径 数据 loading toast 中间件方法名称 自定义的方法...
+    const [url, data, loading = false, , middleFnName] = args
+    Utils.showLoading(loading)
+    let httpData = {}
+    if (item === 'get') {
+      httpData = {
+        method,
+        url,
+        params: data
       }
-    }).then((response) => {
-      return checkStatus(response)
-    }).then((res) => {
-      // alert(JSON.stringify(res))
-      return checkCode(res)
-    })
-  },
-  get(url, params) {
-    return http({
-      method: 'get',
-      url,
-      params, // get 请求时带的参数
-      headers: {
-        Authorization: storage.get('token')
+    } else {
+      httpData = {
+        method,
+        url,
+        data
       }
-    }).then((response) => {
-      return checkStatus(response)
-    }).then((res) => {
-      return checkCode(res)
-    })
-  },
-  put(url, data) {
-    return http({
-      method: 'put',
-      url,
-      data, // put 请求时带的参数
-      headers: {
-        Authorization: storage.get('token')
-      }
-    }).then((response) => {
-      return checkStatus(response)
-    }).then((res) => {
-      return checkCode(res)
-    })
-  },
-  delete(url, data) {
-    return http({
-      method: 'delete',
-      url,
-      data, // put 请求时带的参数
-      headers: {
-        Authorization: storage.get('token')
-      }
-    }).then((response) => {
-      return checkStatus(response)
-    }).then((res) => {
-      return checkCode(res)
-    })
+    }
+    return http(httpData)
+      .then((response) => {
+        return checkStatus(response)
+      })
+      .then((res) => {
+        return checkCode(res)
+      })
+      .then((res) => {
+        let fn = Utils[middleFnName] // 调用中间件的方法
+        return fn ? fn(res, ...args) : res
+      })
   }
-}
+})
+export default HTTP
+// export default {
+//   post(url, data) {
+//     return http({
+//       method: 'post',
+//       url,
+//       data, // post 请求时带的参数
+//       headers: {
+//         Authorization: storage.get('token')
+//       }
+//     }).then((response) => {
+//       return checkStatus(response)
+//     }).then((res) => {
+//       // alert(JSON.stringify(res))
+//       return checkCode(res)
+//     })
+//   },
+//   get(url, params) {
+//     return http({
+//       method: 'get',
+//       url,
+//       params, // get 请求时带的参数
+//       headers: {
+//         Authorization: storage.get('token')
+//       }
+//     }).then((response) => {
+//       return checkStatus(response)
+//     }).then((res) => {
+//       return checkCode(res)
+//     })
+//   },
+//   put(url, data) {
+//     return http({
+//       method: 'put',
+//       url,
+//       data, // put 请求时带的参数
+//       headers: {
+//         Authorization: storage.get('token')
+//       }
+//     }).then((response) => {
+//       return checkStatus(response)
+//     }).then((res) => {
+//       return checkCode(res)
+//     })
+//   },
+//   delete(url, data) {
+//     return http({
+//       method: 'delete',
+//       url,
+//       data, // put 请求时带的参数
+//       headers: {
+//         Authorization: storage.get('token')
+//       }
+//     }).then((response) => {
+//       return checkStatus(response)
+//     }).then((res) => {
+//       return checkCode(res)
+//     })
+//   }
+// }
