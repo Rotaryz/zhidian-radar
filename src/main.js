@@ -10,6 +10,7 @@ import echarts from 'echarts'
 import './utils/env-clear'
 import './utils/compatible' // 兼容部分ios手机input失焦后页面上移问题
 import 'components/_globals'
+import 'utils/audio-plugin'
 
 Vue.prototype.$echarts = echarts
 

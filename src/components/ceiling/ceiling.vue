@@ -24,6 +24,7 @@
   import Utils from 'common/js/utils'
 
   const COMPONENT_NAME = 'Ceiling'
+
   export default {
     name: COMPONENT_NAME,
     data() {
@@ -111,6 +112,7 @@
             let content = webimHandler.transitionMsg(res)
             let html = ''
             if (res.type === 'chat') {
+              // window.$playAudio() // todo
               html = Utils.msgFaceToHtml(content)
             }
             this.setNewMsg({avatar: res.avatar, content, html, type: res.type})

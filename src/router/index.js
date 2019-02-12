@@ -6,7 +6,7 @@ const Oauth = () => import('pages/oauth/oauth')
 const Radar = () => import('pages/radar/radar')
 const News = () => import('pages/news/news')
 const Chat = () => import('pages/chat-msg/chat-msg')
-const Client = () => import('pages/client/client')
+// const Client = () => import('pages/client/client')
 const Mine = () => import('pages/mine/mine')
 const ScrollDemo = () => import('pages/scroll-demo/scroll-demo')
 const Echarts = () => import('pages/vue-echarts/vue-echarts')
@@ -45,6 +45,11 @@ const OrderFormManage = () => import('pages/order-form-manage/order-form-manage'
 const OrderDetail = () => import('pages/order-detail/order-detail')
 const ShelfService = () => import('pages/shelf-service/shelf-service')
 const MyMsg = () => import('pages/my-msg/my-msg')
+const zTestEcharts = () => import('pages/z-test-echarts/z-test-echarts')
+const zTest = () => import('pages/z-test-z/z-test-z')
+// 新版
+const NClient = () => import('pages/n_client/n_client')
+const NMarketing = () => import('pages/n-marketing/n-marketing')
 
 Vue.use(Router)
 
@@ -55,6 +60,14 @@ const route = new Router({
     //   path: '/',
     //   redirect: '/shareCard'
     // },
+    {
+      path: '/z-test-charts',
+      component: zTestEcharts
+    },
+    {
+      path: '/z-test',
+      component: zTest
+    },
     {
       path: '/oauth',
       component: Oauth
@@ -377,8 +390,15 @@ const route = new Router({
         }
       },
       {
+        path: '/market',
+        component: NMarketing,
+        meta: {
+          title: '营销'
+        }
+      },
+      {
         path: '/client',
-        component: Client,
+        component: NClient,
         meta: {
           title: '客户'
         },
