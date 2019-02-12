@@ -90,17 +90,17 @@
 
   .client-user-card
     flex: 1
-    margin-left: 15px
+    margin-left: 12px
     .container
       layout(row, block, no-warp)
       align-items: center
-      padding: 15px 0
+      padding: 12px 0
       height: 45px
       overflow: hidden
       .user-icon
-        width: 45px
-        height: 45px
-        opacity: 0.8
+        width: 40px
+        height: 40px
+        border-radius: 50%
         margin-right: 10px
       .user-info
         flex: 1
@@ -129,10 +129,10 @@
               height: 13.5px
               margin-left: 5px
           .last-time
-            padding-right: 15px
+            padding-right: 12px
             font-family: $font-family-regular
             font-size: $font-size-12
-            color: $color-888888
+            color: $color-text-main
             no-wrap()
         .tags
           font-family: $font-family-regular

@@ -7,7 +7,7 @@ const Oauth = () => import('pages/oauth/oauth')
 const Radar = () => import('pages/radar/radar')
 const News = () => import('pages/news/news')
 const Chat = () => import('pages/chat-msg/chat-msg')
-const Client = () => import('pages/client/client')
+// const Client = () => import('pages/client/client')
 const Mine = () => import('pages/mine/mine')
 const ScrollDemo = () => import('pages/scroll-demo/scroll-demo')
 const Echarts = () => import('pages/vue-echarts/vue-echarts')
@@ -47,6 +47,8 @@ const OrderDetail = () => import('pages/order-detail/order-detail')
 const ShelfService = () => import('pages/shelf-service/shelf-service')
 const MyMsg = () => import('pages/my-msg/my-msg')
 const zTestEcharts = () => import('pages/z-test-echarts/z-test-echarts')
+// 新版
+const NClient = () => import('pages/n_client/n_client')
 
 Vue.use(Router)
 
@@ -391,7 +393,7 @@ const route = new Router({
       },
       {
         path: '/client',
-        component: Client,
+        component: NClient,
         meta: {
           title: '客户'
         },
