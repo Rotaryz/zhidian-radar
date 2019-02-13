@@ -1,9 +1,11 @@
 export const CARD_TYPE = {
-  newCustomer: '0',
-  newProduct: '1',
-  sevenBack: '2',
-  weChat: '3',
-  weGroup: '4'
+  newCustomer: 1,
+  newProduct: 2,
+  sevenBack: 3,
+  weChat: 4,
+  weGroup: 40, // todo
+  activeCustomer: 5,
+  boughtCustomer: 6
 }
 export const CONFIG = {
   [CARD_TYPE.newCustomer]: {
@@ -12,7 +14,9 @@ export const CONFIG = {
     buttonType: 'switch',
     leftText: '触达数',
     middleText: '领取数',
-    rightText: 'charts'
+    rightText: 'charts',
+    leftKey: 'reach_count',
+    middleKey: 'take_count'
   },
   [CARD_TYPE.newProduct]: {
     icon: require('./icon-clock@2x.png'),
@@ -20,7 +24,9 @@ export const CONFIG = {
     buttonType: 'switch',
     leftText: '触达数',
     middleText: '进店数',
-    rightText: 'charts'
+    rightText: 'charts',
+    leftKey: 'reach_count',
+    middleKey: 'into_shop_count'
   },
   [CARD_TYPE.sevenBack]: {
     icon: require('./icon-seven@2x.png'),
@@ -28,7 +34,9 @@ export const CONFIG = {
     buttonType: 'switch',
     leftText: '触达数',
     middleText: '进店数',
-    rightText: 'charts'
+    rightText: 'charts',
+    leftKey: 'reach_count',
+    middleKey: 'into_shop_count'
   },
   [CARD_TYPE.weChat]: {
     icon: require('./icon-wechat@2x.png'),
@@ -36,7 +44,9 @@ export const CONFIG = {
     buttonType: 'switch',
     leftText: '触达数',
     middleText: '复制二维码数',
-    rightText: ''
+    rightText: '',
+    leftKey: 'reach_count',
+    middleKey: 'copy_qrcode_count'
   },
   [CARD_TYPE.weGroup]: {
     icon: require('./icon-wechat-group@2x.png'),
@@ -44,6 +54,8 @@ export const CONFIG = {
     buttonType: 'switch',
     leftText: '触达数',
     middleText: '扫码微信群码数',
-    rightText: ''
+    rightText: '',
+    leftKey: 'reach_count',
+    middleKey: 'copy_qrcode_count'
   }
 }

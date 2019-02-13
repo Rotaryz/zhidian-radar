@@ -15,11 +15,11 @@
       </article>
       <article class="bottom">
         <section class="left item-text">
-          <p class="number" :class="{active: isClosed}">282</p>
+          <p class="number" :class="{active: isClosed}">{{info[CONFIG.leftKey] || 0}}</p>
           <p class="text">{{CONFIG.leftText}}</p>
         </section>
         <section class="middle item-text">
-          <p class="number" :class="{active: isClosed}">182</p>
+          <p class="number" :class="{active: isClosed}">{{info[CONFIG.middleKey] || 0}}</p>
           <p class="text">{{CONFIG.middleText}}</p>
         </section>
         <section class="right charts" v-if="CONFIG.rightText === 'charts'">
@@ -36,6 +36,7 @@
   import AiCharts from 'components/_ai-charts/_ai-charts'
   import {CHARTS_TYPE} from 'utils/constants-charts'
   import {CONFIG, CARD_TYPE} from './card-config'
+  import * as API from 'api'
 
   const COMPONENT_NAME = 'MARKET_CARD'
 
@@ -52,7 +53,7 @@
     },
     data() {
       return {
-        isClosed: false,
+        isClosed: this.info.status,
         nowTime: 0,
         CHARTS_TYPE: CHARTS_TYPE,
         CARD_TYPE: CARD_TYPE
@@ -71,11 +72,28 @@
       switchHandle() {
         if (Date.now() - this.nowTime < 300) return
         this.nowTime = Date.now()
-        this.isClosed = !this.isClosed
-        this._chartActions(this.isClosed)
+        let isClosed = this.isClosed
+        isClosed = !isClosed
+        this._updateStatus(isClosed, () => {
+          this.$toast.show('操作成功!')
+          this._chartActions(isClosed)
+          this.isClosed = isClosed
+        })
       },
       _chartActions(isClosed = false) {
         this.$refs._charts && this.$refs._charts.action({isClosed})
+      },
+      _updateStatus(status, success, fail) {
+        let data = {
+          id: this.info.id,
+          status: status ? 1 : 0
+        }
+        console.log(data)
+        API.Marketing.updateActiveStatus(data).then((res) => {
+          success && success()
+        }).catch(() => {
+          fail && fail()
+        })
       }
     }
   }

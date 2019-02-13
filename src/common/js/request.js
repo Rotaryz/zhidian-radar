@@ -11,10 +11,11 @@ const ERR_OK = 0
 const ERR_NO = -404
 
 const http = axios.create({
-  timeout: TIME_OUT
+  timeout: TIME_OUT,
+  baseURL: BASE_URL.api
 })
 
-http.defaults.baseURL = BASE_URL.api
+// http.defaults.baseURL = BASE_URL.api
 
 http.interceptors.request.use(config => {
   // 请求数据前的拦截
@@ -107,62 +108,3 @@ methodArr.forEach((item, index) => {
   }
 })
 export default HTTP
-// export default {
-//   post(url, data) {
-//     return http({
-//       method: 'post',
-//       url,
-//       data, // post 请求时带的参数
-//       headers: {
-//         Authorization: storage.get('token')
-//       }
-//     }).then((response) => {
-//       return checkStatus(response)
-//     }).then((res) => {
-//       // alert(JSON.stringify(res))
-//       return checkCode(res)
-//     })
-//   },
-//   get(url, params) {
-//     return http({
-//       method: 'get',
-//       url,
-//       params, // get 请求时带的参数
-//       headers: {
-//         Authorization: storage.get('token')
-//       }
-//     }).then((response) => {
-//       return checkStatus(response)
-//     }).then((res) => {
-//       return checkCode(res)
-//     })
-//   },
-//   put(url, data) {
-//     return http({
-//       method: 'put',
-//       url,
-//       data, // put 请求时带的参数
-//       headers: {
-//         Authorization: storage.get('token')
-//       }
-//     }).then((response) => {
-//       return checkStatus(response)
-//     }).then((res) => {
-//       return checkCode(res)
-//     })
-//   },
-//   delete(url, data) {
-//     return http({
-//       method: 'delete',
-//       url,
-//       data, // put 请求时带的参数
-//       headers: {
-//         Authorization: storage.get('token')
-//       }
-//     }).then((response) => {
-//       return checkStatus(response)
-//     }).then((res) => {
-//       return checkCode(res)
-//     })
-//   }
-// }

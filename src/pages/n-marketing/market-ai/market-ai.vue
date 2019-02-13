@@ -1,8 +1,14 @@
 <template>
-  <scroll class="market-ai" bcColor="#f0f5ff">
+  <scroll class="market-ai"
+          ref="scroll"
+          bcColor="#f0f5ff"
+          @pullingDown="onPullingDown"
+          :pullDownRefresh="true"
+          :data="dataArray"
+  >
     <div class="empty"></div>
-    <section v-for="(item, index) in '12345'" :key="index" class="item-wrapper">
-      <market-card :info="{type: index}"></market-card>
+    <section v-for="(item, index) in dataArray" :key="index" class="item-wrapper">
+      <market-card :info="item"></market-card>
     </section>
     <div class="empty"></div>
   </scroll>
@@ -22,19 +28,23 @@
     },
     data() {
       return {
-
+        dataArray: []
       }
     },
     created() {
       this._getList()
     },
     methods: {
-      _getList() {
-        API.Marketing.getList({
+      _getList(loading) {
+        let data = {
           market_type: 0
-        }).then((res) => {
-          console.log(res)
+        }
+        API.Marketing.getList(data, loading).then((res) => {
+          this.dataArray = res.data
         })
+      },
+      onPullingDown() {
+        this._getList(false)
       }
     }
   }

@@ -1,6 +1,6 @@
 // import storage from 'storage-controller'
 import _this from '@/main'
-// import {LOGIN_PAGE} from '@utils/constant'
+import { ERR_OK } from 'common/js/config'
 // 判断是否为浏览器环境
 const isBrowser = !!window
 // 错误码检查
@@ -50,7 +50,7 @@ export function defaultMiddleWare(res, ...args) {
     throw new Error('' + res)
   }
   // toast处理
-  if (_this.$ERR_OK !== res.error) {
+  if (ERR_OK !== res.error) {
     toast && _toastShow(res.message)
     throw new Error(res.message)
   }
