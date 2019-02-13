@@ -32,8 +32,8 @@
       background: #FFF
       justify-content: center
       align-items: center
-      border-radius: 8px
-      border-1px(#E1E1E1, 8px)
+      border-radius: 4px
+      border-1px(#E1E1E1, 4px)
       .icon
         width: 14.7px
         height: 14.6px

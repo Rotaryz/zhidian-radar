@@ -130,7 +130,7 @@
             <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.CITY_TOP"></ai-charts>
           </article>
           <router-link tag="div" to="" class="panel">
-            <router-link tag="div" to="z-test" class="title ">KOL传播 TOP6</router-link>
+            <router-link tag="div" to="z-test" class="title ">KOL传播 TOP10</router-link>
             <ai-charts ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
           </router-link>
           <div style="height: 5px"></div>
@@ -233,13 +233,19 @@
         this.selectTab = index
         if (index === 2) {
           this.$nextTick(() => {
-            let seriesData = [
-              {name: '男 50%', value: 50},
-              {name: '女 40%', value: 40},
-              {name: '未知 10%', value: 10}
-            ]
-            this.$refs.c1.action({seriesData})
-            this.$refs.c2.action()
+            let pieData = {
+              seriesData: [
+                {name: '男 50%', value: 50},
+                {name: '女 40%', value: 40},
+                {name: '未知 10%', value: 10}
+              ]
+            }
+            let barData = {
+              xAxisData: ['北京', '广州', '成都', '上海', '西安', '深圳'],
+              seriesData: [500, 300, 800, 1000, 200, 600]
+            }
+            this.$refs.c1.action(pieData)
+            this.$refs.c2.action(barData)
             this.$refs.c3.action()
           })
         }

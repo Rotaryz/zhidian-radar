@@ -55,7 +55,7 @@
       </article>
     </section>
     <!--通用-->
-    <section class="container" v-else-if="useType==='kol'">
+    <section class="container" v-else>
       <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnesColor('p')}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
