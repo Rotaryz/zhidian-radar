@@ -4,12 +4,15 @@
       <article class="top">
         <section class="left">
           <img class="logo" :src="CONFIG.icon" alt="">
-          <p class="title">{{CONFIG.title}}</p>
+          <p class="title">{{info.name}}</p>
           <img class="arrow-right" src="./icon_pressed@2x.png" alt="">
         </section>
         <section class="right">
           <article v-if="CONFIG.buttonType === 'switch'" class="switch-wrapper" :class="{active: isClosed}" @click="switchHandle">
             <div class="circle" :class="{active: isClosed}"></div>
+          </article>
+          <article v-if="CONFIG.buttonType === 'status'" class="status-wrapper" :class="{active: info.status}">
+            <span class="text" :class="{active: info.status}">{{info.exec_status_str}}</span>
           </article>
         </section>
       </article>
@@ -88,7 +91,6 @@
           id: this.info.id,
           status: status ? 1 : 0
         }
-        console.log(data)
         API.Marketing.updateActiveStatus(data).then((res) => {
           success && success()
         }).catch(() => {
@@ -152,6 +154,21 @@
           display :flex
           align-items :center
           justify-content :flex-end
+          .status-wrapper
+            border-radius: 8.266666666666666vw
+            height :5.333333333333334vw
+            line-height :@height
+            border:1px solid #CDCDCD
+            &.active
+              border:1px solid $color-pnes-p
+            .text
+              padding :0 2.2666666666666666vw
+              font-family: $font-family-regular
+              font-size: 3.4666666666666663vw
+              color: #CDCDCD
+              line-height: @font-size
+              &.active
+                color: $color-pnes-p
           .switch-wrapper
             position :relative
             width :10.133333333333333vw

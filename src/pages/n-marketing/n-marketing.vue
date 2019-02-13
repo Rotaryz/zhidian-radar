@@ -8,9 +8,18 @@
         </dt>
       </dl>
     </header>
-    <section class="content-wrapper">
-      <market-ai v-show="tabIndex===0"></market-ai>
-      <market-scene v-show="tabIndex===1"></market-scene>
+    <section class="container">
+      <div class="big-container" :style="'transform: translate(-' + tabIndex*(100 / tabLength) + '%,0)'">
+        <template v-for="(item, index) in TAB_LIST">
+          <nav class="scroll-wrapper" :key="index">
+            <div class="top-bg"></div>
+            <div class="scroll-item">
+              <market-ai v-if="index===0"></market-ai>
+              <market-scene  v-if="index===1" :key="1"></market-scene>
+            </div>
+          </nav>
+        </template>
+      </div>
     </section>
   </div>
 </template>
@@ -36,6 +45,7 @@
     data() {
       return {
         TAB_LIST: TAB_LIST,
+        tabLength: TAB_LIST.length,
         tabIndex: 0
       }
     },
@@ -52,6 +62,7 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   $header-height=60px
+  $tab-number=2
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
@@ -62,11 +73,10 @@
     right: 0
     bottom: $tab-height
     .header
+      position :fixed
       height :75px
       width :100vw
-      display: inline-block
-      background-size: 100% 100%
-      background-image: url("./bg-znyx@1x.png")
+      z-index :40
       .tab-wrapper
         height :60px
         margin :0 46.5px
@@ -95,10 +105,29 @@
             height :100%
             background: #FFFFFF
             border-radius: 4px
-    .content-wrapper
-      position :absolute
-      top:$header-height
-      left :0
-      right :0
-      bottom :0
+    .container
+      width: 100vw
+      height: 100vh
+      overflow :hidden
+      .big-container
+        width: 200vw
+        height: 100vh
+        display :flex
+        flex-direction :row
+        transition: transform 0.6s
+        .scroll-wrapper
+          height :100%
+          position :relative
+          .top-bg
+            height :75px
+            width :100vw
+            display: inline-block
+            background-size: 100% 100%
+            background-image: url("./bg-znyx@1x.png")
+          .scroll-item
+            position :absolute
+            top:$header-height
+            left :0
+            right :0
+            bottom :$tab-height
 </style>

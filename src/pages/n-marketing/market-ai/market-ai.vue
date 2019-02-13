@@ -1,6 +1,5 @@
 <template>
   <scroll class="market-ai"
-          ref="scroll"
           bcColor="#f0f5ff"
           @pullingDown="onPullingDown"
           :pullDownRefresh="true"
@@ -18,6 +17,7 @@
   import Scroll from 'components/scroll/scroll'
   import MarketCard from '../market-card/market-card'
   import * as API from 'api'
+
   const COMPONENT_NAME = 'MARKET_AI'
 
   export default {
