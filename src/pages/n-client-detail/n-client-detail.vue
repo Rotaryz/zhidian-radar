@@ -5,7 +5,7 @@
         <scroll ref="scroll"
                 :data="list"
                 :probeType="probeType"
-                :bcColor="bcColor"
+                bcColor="#FFF"
                 :listenScroll="listenScroll"
                 @scroll="scroll"
                 :pullUpLoad="pullUpLoadObj"
@@ -13,60 +13,8 @@
                 @pullingUp="onPullingUp">
           <div class="client-top" ref="eleven">
             <div class="cliten-bg"></div>
-            <div class="cliten-box">
-              <div class="cliten-con">
-                <img class="cliten-con-bg" src="./bg-customer_details@2x.png" alt="">
-                <div class="cliten-top">
-                  <div class="cliten-img">
-                    <div class="detail-img-box">
-                      <div class="img">
-                        <img :src="clientData.image_url" alt="">
-                      </div>
-                      <div class="label-right">
-                        <div class="label-name">{{clientData.name}}</div>
-                        <div class="text">{{clientData.sources}}</div>
-                      </div>
-                    </div>
-                    <div class="detail-jump" @click="jumpData">
-                      <img class="jump-img" src="./icon-pressed@2x.png" alt="">
-                    </div>
-                  </div>
-                  <div class="label-box">
-                    <div class="label-content">
-                      <div class="label active" v-for="(item, index) in labelList" v-bind:key="index"
-                           @click="toClientTag">{{item.name}}
-                      </div>
-                      <div class="label" v-if="labelList.length<3" @click="toClientTag">添加标签</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="cliten-bottom">
-                  <div class="bottom-number">
-                    <div class="number-top">
-                      <div class="number">{{clientData.conversion_rate}}</div>
-                      <div class="icon" :class="slide === 'slide'? '' : 'iosicon'">%</div>
-                    </div>
-                    <div class="number-bottom">
-                      <div class="text">预计成交率</div>
-                    </div>
-                  </div>
-                  <div class="bottom-number">
-                    <div class="number-top" v-if="clientData.progress < 110">
-                      <div class="number">{{clientData.progress}}</div>
-                      <div class="icon" :class="slide === 'slide'? '' : 'iosicon'">%</div>
-                    </div>
-                    <div class="number-top" v-if="clientData.progress === '无法签单' || clientData.progress === '成交'">
-                      <div class="text">{{clientData.progress}}</div>
-                    </div>
-                    <div class="number-bottom" @click="showModel">
-                      <div class="text">实际跟进阶段</div>
-                      <div class="img-box">
-                        <img class="img" src="./icon-switch@2x.png" alt="">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="msg">
+              <detail-msg :clientData="clientData" :labelList="labelList"></detail-msg>
             </div>
           </div>
           <div class="select-tab select-client">
@@ -150,9 +98,6 @@
               <div class="text">{{item.record}}</div>
               <div class="icon-log" v-if="index * 1 === 0"></div>
               <div class="icon-cri" v-if="index * 1 !== 0"></div>
-              <div class="icon-img" v-if="index * 1 === 0">
-                <img class="icon-small-img" src="./icon-address@2x.png" alt="">
-              </div>
             </div>
           </div>
           <div class="ai-box" v-if="menuIdx * 1 === 2">
@@ -192,25 +137,11 @@
           <div class="chilen-line"></div>
         </div>
       </div>
-      <div class="client-box" v-if="!showBox">
-        <div class="box-bg" :class="showMode ? 'submit-bg-active' : ''" @click="hideModel"></div>
-        <div class="box-bottom" :class="showMode ? 'model-con-active' : ''">
-          <div class="bottom-list" v-for="(item, index) in barList" :key="index" @click="selectBar(index, item)">
-            <div class="left">{{item.text}}{{item.icon}}</div>
-            <div class="right">
-              <img v-if="barIndex === index" class="right-img" src="./icon-selected@2x.png" alt="">
-            </div>
-          </div>
-          <div class="box-line"></div>
-          <div class="btn" @click="hideModel">取消</div>
-        </div>
-      </div>
       <div class="bottom-box">
         <div class="box-btn" @click="phoneCall">
           <img src="./icon-telephone@2x.png" alt="" class="btn-img">
-          <div class="text">打电话</div>
+          <div class="text">添加微信</div>
         </div>
-        <img src="./icon-write@2x.png" alt="" class="add-jump" @click="toAddFlow" v-if="menuIdx * 1 === 1">
         <div class="box-btn message-btn" @click="jumpMessage">
           <img src="./icon-news@2x.png" alt="" class="btn-img">
           <div class="text">发消息</div>
@@ -229,6 +160,7 @@
   import storage from 'storage-controller'
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
+  import DetailMsg from './detail-msg/detail-msg'
   import {mapActions, mapGetters} from 'vuex'
   import utils from 'common/js/utils'
   const PIEHINT = [{text: '个人', icon: 'one'}, {text: '商品', icon: 'two'}, {text: '拼团', icon: 'thr'}, {text: '砍价', icon: 'four'}]
@@ -238,33 +170,8 @@
       return {
         listenScroll: true,
         probeType: 3,
-        bcColor: '#F0F2F5',
-        barList: [
-          {
-            text: '20',
-            icon: '%'
-          },
-          {
-            text: '40',
-            icon: '%'
-          },
-          {
-            text: '80',
-            icon: '%'
-          },
-          {
-            text: '成交',
-            icon: ''
-          },
-          {
-            text: '无法签单',
-            icon: ''
-          }
-        ],
-        tabList: ['来访记录', '跟进记录', 'AI分析'],
+        tabList: ['来访记录', 'AI分析', '营销记录'],
         showMode: true,
-        showBox: true,
-        barIndex: null,
         menuIdx: 0,
         dataEcharts: false,
         clientData: {
@@ -592,36 +499,6 @@
           }]
         })
       },
-      showModel() {
-        this.showBox = false
-        setTimeout(() => {
-          this.showMode = false
-        }, 100)
-      },
-      hideModel() {
-        this.showMode = true
-        setTimeout(() => {
-          this.showBox = true
-        }, 500)
-      },
-      selectBar(index, item) {
-        this.barIndex = index
-        this.flow.progress = item.text
-        setTimeout(() => {
-          this.showMode = true
-          ClientDetail.saveClientDetail(this.clientData.id, this.flow).then((res) => {
-            if (res.error === ERR_OK) {
-              this.getClientId(this.id)
-            } else {
-              this.$refs.toast.show(res.message)
-            }
-          })
-        }, 800)
-        setTimeout(() => {
-          this.showBox = true
-          this.barIndex = null
-        }, 1500)
-      },
       switchTab(index) {
         this.$refs.scroll.scrollTo(0, 0)
         this.scroll(0)
@@ -804,7 +681,8 @@
     components: {
       Toast,
       Exception,
-      Scroll
+      Scroll,
+      DetailMsg
     },
     computed: {
       pullUpLoadObj: function () {
@@ -859,164 +737,27 @@
   .exception-box
     padding-top: 70px
 
-  .tab-padding
-    height: 48px
-
   .client-detail
     fill-box()
     z-index: 50
+    background: #FFF
 
   .container
     fill-box(absolute)
-    bottom: 45px
+    bottom: 55px
 
   .client-top
     position: relative
     .cliten-bg
-      position: absolute
-      z-index: 1
-      height: 73px
-      background: #20202E
+      height: 131px
       width: 100%
-      top: 0
-      left: 0
-    .cliten-box
-      position: relative
-      padding: 20px 15px 0
-      width: 100%
-      z-index: 2
-      .cliten-con
-        background: #fff
-        width: 100%
-        padding: 15px
-        position: relative
-        .cliten-con-bg
-          position: absolute
-          display: block
-          width: 100%
-          height: 100%
-          left: 0px
-          top: 0px
-          z-index: 0
-        .cliten-img
-          layout(row)
-          justify-content: space-between
-          align-items: center
-          position: relative
-          z-index: 1
-          .detail-img-box
-            flex: 1
-            overflow: hidden
-            layout(row)
-            .img
-              position: relative
-              height: 0
-              width: 60px
-              height: 60px
-              background: #333
-              img
-                width: 60px
-                height: 60px
-                display: block
-            .label-right
-              flex: 1
-              overflow: hidden
-              margin-left: 10px
-              .label-name
-                font-size: $font-size-medium-x
-                color: $color-text
-                font-family: $font-family-regular
-                padding-top: 5px
-                margin-bottom: 15px
-              .text
-                font-size: $font-size-12
-                color: $color-888888
-                font-family: $font-family-regular
-          .detail-jump
-            height: 45px
-            width: 25px
-            position: relative
-            .jump-img
-              width: 6px
-              height: 12px
-              position: absolute
-              right: 0
-              top: 0
-              bottom: 0
-              margin: auto
-        .label-box
-          overflow-x: auto
-          position:relative
-          margin-top: 10px
-          z-index: 66
-          .label-content
-            display: inline-block
-            white-space: nowrap
-          .label
-            padding: 0 10px
-            height: 20px
-            line-height: 20px
-            text-align: center
-            display: inline-block
-            font-size: $font-size-12
-            color: $color-text-88
-            font-family: $font-family-regular
-            background: #F0F2F5
-            margin-right: 5px
-          .active
-            background: rgba(86, 186, 21, 0.2)
-            color: #56BA15
-        .cliten-top
-          padding-bottom: 10px
-          border-bottom-1px(#e5e5e5)
-        .cliten-bottom
-          position: relative
-          z-index: 1
-          layout(row)
-          padding: 15px 0
-          .bottom-number
-            width: 50%
-            .number-top
-              justify-content: center
-              layout(row)
-              align-items: flex-end
-              .number
-                font-size: 40px
-                color: $color-text
-                font-family: DINCondensed-Bold
-                line-height: 1
-                height: 40px
-              .text
-                font-size: 24px
-                height: 40px
-                line-height: 43px
-                color: $color-text
-                font-family: DINCondensed-Bold
-              .icon
-                font-size: $font-size-small
-                color: $color-text
-                font-family: $font-family-light
-                padding-bottom: 5px
-              .iosicon
-                padding-bottom: 10px
-            .number-bottom
-              justify-content: center
-              layout(row)
-              margin-top: 6.5px
-              align-items: center
-              .text
-                font-size: $font-size-medium
-                color: $color-text
-                font-family: $font-family-regular
-              .img-box
-                width: 10px
-                height: 10px
-                margin-left: 5px
-                .img
-                  display: block
-                  width: 10px
-                  height: 10px
-
+      icon-image("bg-khxq")
+      background-size: cover
+      box-sizing: border-box
+      background-color: #FFF
+    .msg
+      margin: -80px 15px 0
+      height: 150px
   .client-box
     position: fixed
     width: 100%
@@ -1086,7 +827,7 @@
     top: 0
     left: 0
     z-index: 11
-    background: #F0F2F5
+    margin-top: 10px
     .tab
       flex: 1
       text-align: center
@@ -1300,29 +1041,39 @@
             font-family: $font-family-regular
   .bottom-box
     layout(row)
+    border-top-1px(#E1E1E1)
     position: absolute
     left: 0
     bottom: 0
-    height: 45px
+    height: 55px
     width: 100%
     z-index: 11
+    padding: 7.5px 12px
+    box-sizing: border-box
+    background: #FFF
+
     .box-btn
       layout(row)
-      background: #20202E
-      width: 50%
+      background: $color-linear-main
+      flex: 1
+      overflow: hidden
       justify-content: center
       align-items: center
+      border-radius: 4px
+      color: #FFF
+      margin-right: 10px
       .btn-img
         width: 15px
         height: 17px
         display: block
         margin-right: 4px
       .text
-        font-size: $font-size-medium-x
+        font-size: $font-size-14
         font-family: $font-family-regular
         color: #fff
     .message-btn
-      background: #56BA15
+      margin-right: 0
+      background: linear-gradient(131deg, #02E68B, #06D4AA)
       .btn-img
         width: 18px
         padding-top: 2px

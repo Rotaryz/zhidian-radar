@@ -2,7 +2,7 @@
   <div class="client-user-card">
     <!--最新加入-->
     <section class="container" v-if="useType==='join'">
-      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnesColor('p')}" :src="userInfo.image_url" alt=""/>
+      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes.p}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
@@ -20,7 +20,7 @@
     </section>
     <!--活跃指数-->
     <section class="container" v-else-if="useType==='activity'">
-      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnesColor('p')}" :src="userInfo.image_url" alt=""/>
+      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes.p}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
@@ -38,7 +38,7 @@
     </section>
     <!--RFM指数-->
     <section class="container" v-else-if="useType==='rfm'">
-      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnesColor('p')}" :src="userInfo.image_url" alt=""/>
+      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes.p}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
@@ -56,7 +56,7 @@
     </section>
     <!--通用-->
     <section class="container" v-else>
-      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnesColor('p')}" :src="userInfo.image_url" alt=""/>
+      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes.p}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
@@ -76,15 +76,15 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import method from 'common/mixins/base'
+  import {PNES_COLOR} from 'common/js/utils'
   export default {
     props: {
       userInfo: Object,
       useType: String
     },
-    methods: {
-      pnesColor(pnes) {
-        return method.methods.pnesColor(pnes)
+    data() {
+      return {
+        pnes: PNES_COLOR
       }
     }
   }
