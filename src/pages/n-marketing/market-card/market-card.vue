@@ -2,7 +2,7 @@
   <div class="market-card">
     <div class="wrapper">
       <article class="top">
-        <section class="left">
+        <section class="left" @click="navHandle">
           <img class="logo" :src="CONFIG.icon" alt="">
           <p class="title">{{info.name}}</p>
           <img class="arrow-right" src="./icon_pressed@2x.png" alt="">
@@ -11,8 +11,8 @@
           <article v-if="CONFIG.buttonType === 'switch'" class="switch-wrapper" :class="{active: isClosed}" @click="switchHandle">
             <div class="circle" :class="{active: isClosed}"></div>
           </article>
-          <article v-if="CONFIG.buttonType === 'status'" class="status-wrapper" :class="{active: info.status}">
-            <span class="text" :class="{active: info.status}">{{info.exec_status_str}}</span>
+          <article v-if="CONFIG.buttonType === 'status'" class="status-wrapper" :style="{borderColor: STATUS_COLOR[info.exec_status]}">
+            <span class="text" :style="{color: STATUS_COLOR[info.exec_status]}">{{info.exec_status_str}}</span>
           </article>
         </section>
       </article>
@@ -42,6 +42,7 @@
   import * as API from 'api'
 
   const COMPONENT_NAME = 'MARKET_CARD'
+  const STATUS_COLOR = ['#CDCDCD', '#0DCDAE', '#F29D34', '#CDCDCD']
 
   export default {
     name: COMPONENT_NAME,
@@ -59,7 +60,8 @@
         isClosed: this.info.status,
         nowTime: 0,
         CHARTS_TYPE: CHARTS_TYPE,
-        CARD_TYPE: CARD_TYPE
+        CARD_TYPE: CARD_TYPE,
+        STATUS_COLOR: STATUS_COLOR
       }
     },
     computed: {
@@ -72,6 +74,10 @@
       this._chartActions(this.isClosed)
     },
     methods: {
+      navHandle() {
+        let url = this.$route.path + '/market-detail'
+        this.$router.push(url)
+      },
       switchHandle() {
         if (Date.now() - this.nowTime < 300) return
         this.nowTime = Date.now()
@@ -159,16 +165,12 @@
             height :5.333333333333334vw
             line-height :@height
             border:1px solid #CDCDCD
-            &.active
-              border:1px solid $color-pnes-p
             .text
               padding :0 2.2666666666666666vw
               font-family: $font-family-regular
               font-size: 3.4666666666666663vw
               color: #CDCDCD
               line-height: @font-size
-              &.active
-                color: $color-pnes-p
           .switch-wrapper
             position :relative
             width :10.133333333333333vw

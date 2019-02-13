@@ -21,6 +21,7 @@
         </template>
       </div>
     </section>
+    <base-router-view></base-router-view>
   </div>
 </template>
 
@@ -72,6 +73,7 @@
     top: 0
     right: 0
     bottom: $tab-height
+    z-index :20
     .header
       position :fixed
       height :75px

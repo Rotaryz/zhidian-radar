@@ -57,7 +57,6 @@ export const CONFIG = {
   [CARD_TYPE.DIY]: { // 自定义
     icon: require('./icon-custom@2x.png'),
     buttonType: 'status',
-    buttonStatusText: [''],
     leftText: '触达数',
     middleText: '进店数',
     rightText: 'charts',

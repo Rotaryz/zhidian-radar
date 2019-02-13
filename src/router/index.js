@@ -50,6 +50,7 @@ const zTest = () => import('pages/z-test-z/z-test-z')
 // 新版
 const NClient = () => import('pages/n_client/n_client')
 const NMarketing = () => import('pages/n-marketing/n-marketing')
+const NMarketingDetail = () => import('pages/n-marketing-detail/n-marketing-detail')
 
 Vue.use(Router)
 
@@ -394,7 +395,16 @@ const route = new Router({
         component: NMarketing,
         meta: {
           title: '营销'
-        }
+        },
+        children: [
+          {
+            path: 'market-detail',
+            component: NMarketingDetail,
+            meta: {
+              title: '营销详情'
+            }
+          }
+        ]
       },
       {
         path: '/client',
