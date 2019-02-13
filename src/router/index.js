@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import Router from 'vue-router'
 import storage from 'storage-controller'
@@ -49,7 +48,8 @@ const MyMsg = () => import('pages/my-msg/my-msg')
 const zTestEcharts = () => import('pages/z-test-echarts/z-test-echarts')
 const zTest = () => import('pages/z-test-z/z-test-z')
 // 新版
-const NClient = () => import('pages/n-client/n-client')
+const NClient = () => import('pages/n_client/n_client')
+const NMarketing = () => import('pages/n-marketing/n-marketing')
 
 Vue.use(Router)
 
@@ -391,7 +391,7 @@ const route = new Router({
       },
       {
         path: '/market',
-        component: News,
+        component: NMarketing,
         meta: {
           title: '营销'
         }
