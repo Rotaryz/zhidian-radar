@@ -5,7 +5,7 @@
         <p class="txt">{{this.title}}（{{dataArray.length}}人）</p>
         <div class="icon"></div>
       </section>
-      <div class="simple-scroll-demo"  v-if="dataArray.length">
+      <div class="simple-scroll"  v-if="dataArray.length">
         <div class="scroll-list-wrap">
           <scroll ref="scroll"
                   bcColor="#fff"
@@ -26,8 +26,15 @@
         <exception errType="nodata"></exception>
       </section>
       <div class="bottom">
-        <div class="btn"></div>
-        <div class="btn"></div>
+        <router-link tag="div" to="" class="btn ">
+          <span class="icon"></span>
+          <span class="text">添加微信</span>
+        </router-link>
+        <span style="width: 12px"></span>
+        <router-link tag="div" to="" class="btn ">
+          <span class="icon"></span>
+          <span class="text">发消息</span>
+        </router-link>
       </div>
       <confirm-msg ref="confirm" @confirm="msgConfirm" @cancel="msgCancel"></confirm-msg>
       <toast ref="toast"></toast>
@@ -264,12 +271,12 @@
       font-size: $font-size-12
       color: $color-888888
 
-  .simple-scroll-demo
+  .simple-scroll
     position: fixed
     left: 0
     top: 50px
     right: 0
-    bottom: 0
+    bottom: 55px
     z-index: 10
     .scroll-list-wrap
       position relative
@@ -288,20 +295,30 @@
     left: 0
     background: #FFFF
     border-top-1px(#E1E1E1)
-    position: fixed
+    position: absolute
     z-index: 20
     display: flex
     justify-content: space-between
     align-items: center
     padding: 0 12px
+    box-sizing: border-box
+    .icon
+      width: 18px
+      height: 18px
+      margin-right: 5px
     .btn
       flex: 1
-      margin-right: 12px
+      overflow: hidden
       height: 40px
       display: flex
       justify-content: center
       align-items: center
-      background: $color-linear-s
-      border-radius: 4px
+      background: $color-linear-main
+      border-radius: 6px
+      color: #FFF
+      font-size: $font-size-14
+      font-family: $font-family-regular
+      &:last-child
+        background: linear-gradient(129deg, #02E68B, #06D4AA)
 
 </style>
