@@ -163,7 +163,7 @@
     z-index: 10
     left: 0
     right: 0
-    bottom: 45px
+    bottom: 50px
     top: 0
   .mine-top
     bg-image('pic-mybg')

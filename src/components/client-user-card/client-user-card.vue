@@ -1,44 +1,8 @@
 <template>
   <div class="client-user-card">
-    <!--最后跟进-->
-    <section class="container" v-if="useType==='follow'">
-      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :src="userInfo.image_url" alt=""/>
-      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
-      <article class="user-info">
-        <section class="base-info">
-          <div class="name">
-            <div class="txt">{{userInfo.name}}</div>
-            <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
-          </div>
-          <div class="last-time">最后跟进</div>
-        </section>
-        <div class="tags">
-          <div class="left">{{userInfo.last_follow_day}}</div>
-          <div class="tags-right">{{userInfo.last_follow_at}}</div>
-        </div>
-      </article>
-    </section>
-    <!--最近活跃-->
-    <section class="container" v-else-if="useType==='active'">
-      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :src="userInfo.image_url" alt=""/>
-      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
-      <article class="user-info">
-        <section class="base-info">
-          <div class="name">
-            <div class="txt">{{userInfo.name}}</div>
-            <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
-          </div>
-          <div class="last-time">最后活跃</div>
-        </section>
-        <div class="tags">
-          <div class="left">{{userInfo.last_follow_day}}</div>
-          <div class="tags-right">{{userInfo.last_active_at}}</div>
-        </div>
-      </article>
-    </section>
     <!--最新加入-->
-    <section class="container" v-else-if="useType==='join'">
-      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :src="userInfo.image_url" alt=""/>
+    <section class="container" v-if="useType==='join'">
+      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnesColor('p')}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
@@ -54,9 +18,45 @@
         </div>
       </article>
     </section>
+    <!--活跃指数-->
+    <section class="container" v-else-if="useType==='activity'">
+      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnesColor('p')}" :src="userInfo.image_url" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
+      <article class="user-info">
+        <section class="base-info">
+          <div class="name">
+            <div class="txt">{{userInfo.name}}</div>
+            <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
+          </div>
+          <div class="last-time">活跃指数40</div>
+        </section>
+        <div class="tags">
+          <div class="left">{{userInfo.last_follow_day}}</div>
+          <div class="tags-right">{{userInfo.last_active_at}}</div>
+        </div>
+      </article>
+    </section>
+    <!--RFM指数-->
+    <section class="container" v-else-if="useType==='rfm'">
+      <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnesColor('p')}" :src="userInfo.image_url" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
+      <article class="user-info">
+        <section class="base-info">
+          <div class="name">
+            <div class="txt">{{userInfo.name}}</div>
+            <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
+          </div>
+          <div class="last-time">最后跟进</div>
+        </section>
+        <div class="tags">
+          <div class="left">{{userInfo.last_follow_day}}</div>
+          <div class="tags-right">{{userInfo.last_follow_at}}</div>
+        </div>
+      </article>
+    </section>
     <!--通用-->
-    <section class="container" v-else>
-      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :src="userInfo.image_url" alt=""/>
+    <section class="container" v-else-if="useType==='kol'">
+      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnesColor('p')}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
@@ -76,10 +76,16 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import method from 'common/mixins/base'
   export default {
     props: {
       userInfo: Object,
       useType: String
+    },
+    methods: {
+      pnesColor(pnes) {
+        return method.methods.pnesColor(pnes)
+      }
     }
   }
 </script>
@@ -101,6 +107,8 @@
         width: 40px
         height: 40px
         border-radius: 50%
+        padding: 2px
+        border: 2px solid $color-pnes-e
         margin-right: 10px
       .user-info
         flex: 1
@@ -137,14 +145,14 @@
         .tags
           font-family: $font-family-regular
           font-size: $font-size-12
-          color: $color-56BA15
+          color: #949494
           layout(row, block, nowrap)
           justify-content: space-between
           align-items: flex-start
           .tags-right
             font-family: $font-family-regular
             font-size: $font-size-12
-            color: $color-888888
+            color: #949494
             padding-right: 15px
             no-wrap()
 

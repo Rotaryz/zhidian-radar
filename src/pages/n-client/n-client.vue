@@ -1,5 +1,6 @@
 <template>
   <div class="client">
+    <!--头部搜索/tab栏-->
     <header>
       <search @toNav="toSearch"></search>
       <dl class="tab-wrapper">
@@ -7,6 +8,8 @@
         <dd class="tab" :class="{'active':selectTab === index}" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.title}}({{item.number}})</dd>
       </dl>
     </header>
+
+    <!--客户列表-->
     <section class="custom-content" v-if="selectTab === 0">
       <ul class="custom-tab border-bottom-1px" v-if="dataArray.length">
         <li v-for="(item, index) in groupList" :key="index" class="tab-item" :class="item.isCheck?'active':''" @click="checkCustom(item, index)">{{item.name}}</li>
@@ -19,7 +22,7 @@
                 :pullUpLoad="pullUpLoadObj"
                 @pullingUp="onPullingUp"
         >
-          <ul class="user-list">
+          <ul class="user-list" v-if="checkedGroup.orderBy === 'join' || checkedGroup.orderBy === 'activity'">
             <li class="user-list-item"
                 v-for="(item,index) in dataArray"
                 :key="index"
@@ -36,8 +39,10 @@
         <exception errType="customer"></exception>
       </section>
     </section>
+
+    <!--分组列表-->
     <section class="group-content" v-if="selectTab === 1">
-      <section class="group-add border-bottom-1px" @click="toCreateGroup">
+      <section class="group-add border-top-1px border-bottom-1px" @click="toCreateGroup">
         <div class="icon"></div>
         <div class="title">新建分组</div>
       </section>
@@ -46,6 +51,34 @@
                 :data="userListArr"
         >
           <ul class="user-list-box" v-if="userListArr.length">
+            <!--默认分组-->
+            <li class="user-list-item"
+                v-for="(item,index) in clientGroup"
+                :key="'g'+index"
+                @click="toUserList(item)"
+            >
+              <slide-view :useType="4" @del="delHandler" :item="item">
+                <div slot="content" class="user-list-item-wrapper">
+                  <div class="users-avatar" :class="{'no-border': item.customers.length === 1}">
+                    <img v-if="item.customers && item.customers.length && i < 9"
+                         v-for="(user,i) in item.customers"
+                         class="avatar"
+                         :key="i"
+                         :src="user.avatar"
+                         :class="{
+                         'one':item.customers.length === 1,
+                         'four': (item.customers.length > 1 && item.customers.length < 5),
+                         'six': item.customers.length > 4
+                         }"
+                    />
+                  </div>
+                  <div class="name">{{item.name}}</div>
+                  <div class="number">{{item.total || 0}}人</div>
+                </div>
+              </slide-view>
+            </li>
+
+            <!--自定义分组-->
             <li class="user-list-item"
                 v-for="(item,index) in userListArr"
                 :key="index"
@@ -53,12 +86,17 @@
             >
               <slide-view :useType="3" @del="delHandler" :item="item">
                 <div slot="content" class="user-list-item-wrapper">
-                  <div class="users-avatar">
+                  <div class="users-avatar" :class="{'no-border': item.customers.length === 1}">
                     <img v-if="item.customers && item.customers.length && i < 9"
                          v-for="(user,i) in item.customers"
                          class="avatar"
                          :key="i"
                          :src="user.avatar"
+                         :class="{
+                         'one':item.customers.length === 1,
+                         'four': (item.customers.length > 1 && item.customers.length < 5),
+                         'six': item.customers.length > 4
+                         }"
                     />
                   </div>
                   <div class="name">{{item.name}}</div>
@@ -72,6 +110,32 @@
       <section class="exception-box" v-if="userListIsEmpty">
         <exception errType="nodata"></exception>
       </section>
+    </section>
+
+    <!--客户分析-->
+    <section class="data-content" v-if="selectTab === 2">
+      <ul class="custom-tab border-bottom-1px" v-if="dataArray.length">
+        <li v-for="(item, index) in dataList" :key="index" class="tab-item" :class="dataIndex === index ?'active':''" @click="checkData(index)">{{item}}</li>
+        <li class="line-tab" :style="'transform: translate3d('+ dataIndex * 100 +'%, 0, 0)'"></li>
+      </ul>
+      <div class="custom-scroll">
+        <scroll bcColor="#fff">
+          <div style="height: 3px"></div>
+          <article class="panel">
+            <h1 class="title ">客户性别占比</h1>
+            <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.GENDER"></ai-charts>
+          </article>
+          <article class="panel">
+            <h1 class="title ">客户城市占比 TOP6</h1>
+            <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.CITY_TOP"></ai-charts>
+          </article>
+          <router-link tag="div" to="" class="panel">
+            <router-link tag="div" to="z-test" class="title ">KOL传播 TOP6</router-link>
+            <ai-charts ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+          </router-link>
+          <div style="height: 5px"></div>
+        </scroll>
+      </div>
     </section>
     <toast ref="toast"></toast>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
@@ -91,6 +155,8 @@
   import Toast from 'components/toast/toast'
   import {ERR_OK} from '../../common/js/config'
   import Exception from 'components/exception/exception'
+  import AiCharts from 'components/_ai-charts/_ai-charts'
+  import {CHARTS_TYPE} from 'utils/constants-charts'
 
   const groupList = [{
     orderBy: 'join',
@@ -101,21 +167,41 @@
     name: '活跃指数',
     isCheck: false
   }, {
-    orderBy: 'rfm',
+    orderBy: '',
     name: 'RFM指数',
     isCheck: false
   }, {
-    orderBy: 'kol',
+    orderBy: '',
     name: 'KOL指数',
     isCheck: false
+  }]
+  const clientGroup = [{
+    name: '潜在客户',
+    total: 0,
+    customers: [1, 2, 3, 4, 5]
+  }, {
+    name: '新客户',
+    total: 0,
+    customers: [1, 2, 3]
+  }, {
+    name: '主力客户',
+    total: 0,
+    customers: [1, 2, 3]
+  }, {
+    name: '沉睡客户',
+    total: 0,
+    customers: [1, 2, 3]
   }]
   const LIMIT = 10
   export default {
     name: 'Client',
     data() {
       return {
-        groupList: groupList,
+        groupList,
+        clientGroup,
         tabList: [{title: '客户', number: 0}, {title: '分组', number: 0}, {title: '客户分析', number: 0}],
+        dataList: ['昨天', '近7天', '近30天', '全部'],
+        data: ['today', 'week', 'month', 'all'],
         selectTab: 0,
         userListArr: [],
         dataArray: [],
@@ -130,7 +216,9 @@
         limit: LIMIT,
         isAll: false,
         total: 0,
-        tabIndex: 0
+        tabIndex: 0,
+        dataIndex: 0,
+        CHARTS_TYPE: CHARTS_TYPE
       }
     },
     created() {
@@ -140,12 +228,23 @@
     },
     beforeDestroy() {
     },
-    mounted() {
-    },
     methods: {
       changeTab(index) {
         this.selectTab = index
+        if (index === 2) {
+          this.$nextTick(() => {
+            let seriesData = [
+              {name: '男 50%', value: 50},
+              {name: '女 40%', value: 40},
+              {name: '未知 10%', value: 10}
+            ]
+            this.$refs.c1.action({seriesData})
+            this.$refs.c2.action()
+            this.$refs.c3.action()
+          })
+        }
       },
+      // 客户列表切换
       checkCustom(item, index) {
         if (item.isCheck) return
         this.groupList.forEach(item => { item.isCheck = false })
@@ -155,6 +254,11 @@
         this.isAll = false
         this.page = 1
         this.changeGroup()
+      },
+      // 客户分析切换时间
+      checkData(index) {
+        if (this.dataIndex === index) return
+        this.dataIndex = index
       },
       refresh() {
         this.isAll = false
@@ -300,7 +404,8 @@
       ConfirmMsg,
       ActionSheet,
       Toast,
-      Exception
+      Exception,
+      AiCharts
     }
   }
 </script>
@@ -389,24 +494,94 @@
           position: relative
           .user-list-item
             height: 70px
-            lr-border-bottom-1px()
+            border-bottom-1px($color-col-line)
 
+    .data-content
+      .custom-tab
+        height: 45px
+        layout(row, block, nowrap)
+        align-items: center
+        justify-content: space-around
+        font-family: $font-family-medium
+        font-size: $font-size-14
+        color: $color-text-main
+        letter-spacing: 0.52px
+        text-align: center
+        line-height: 45px
+        border-bottom-1px(#E1E1E1)
+        position: relative
+        .tab-item
+          flex: 1
+          text-align: center
+        .line-tab
+          width: 25%
+          height: 4px
+          position: absolute
+          left: 0
+          bottom: 0
+          display: flex
+          justify-content: center
+          transition: all 0.3s
+          &:after
+            content: ''
+            height: 4px
+            width: 42px
+            border-radius: 4px
+            background: $color-linear-main
+      .custom-scroll
+        position: absolute
+        top: 150px
+        bottom: 6px
+        left: 0
+        right: 0
+        overflow: hidden
+        .user-list
+          position: relative
+          .user-list-item
+            height: 70px
+            border-bottom-1px($color-col-line)
+
+      .panel
+        margin :12px
+        background: #FFFFFF
+        box-shadow: 0 2px 20px 0 rgba(21,24,45,0.12)
+        border-radius: 6px
+        overflow :hidden
+        .title
+          font-family: PingFangSC-Regular
+          font-size: 16px
+          color: #0E1249
+          line-height: 16px
+          padding :13.5px 0
+          margin : 0 15px 10px
+          border-bottom-1px(#E1E1E1)
   .group-content
     font-family: $font-family-regular
     font-size: $font-size-16
-    color: $color-20202E
+    color: #0E1249
     letter-spacing: 0.6px
     .group-add
       height: 70px
       layout(row)
       align-items: center
-      margin-left: 15px
+      padding-left: 22px
       .icon
-        width: 45px
-        height: 45px
-        margin-right: 10px
-        opacity: 0.8
-        background: $color-20202E url("./icon-newconstruction@3x.png") no-repeat center / 20px 20px
+        width: 34px
+        height: 34px
+        margin-right: 18px
+        background: linear-gradient(-180deg, #02E68B, #06D4AA)
+        border-radius: 2px
+        position: relative
+        &:before,&:after
+          content: ''
+          width: 2px
+          height: 15px
+          all-center()
+          background: #FFF
+          border-radius: 2px
+        &:after
+          width: 15px
+          height: 2px
     .group-scroll
       position: absolute
       top: 175px
@@ -418,7 +593,7 @@
         background-color: $color-white-fff
         .user-list-item
           height: 70px
-          lr-border-bottom-1px()
+          border-bottom-1px($color-col-line)
           .user-list-item-wrapper
             width: 100%
             box-sizing: border-box
@@ -427,25 +602,52 @@
             .users-avatar
               width: 45px
               height: 45px
-              background-color: $color-f5f7f9
+              background-color: #E6E6E6
+              border: 2px solid #EBEBEB
+              border-radius: 2px
               overflow: hidden
               margin-left: 15px
+              box-sizing: border-box
               .avatar
                 float: left
-                width: 15px
-                height: 15px
                 box-sizing: border-box
                 border: 1px solid $color-white-fff
                 object-fit :cover
+                width: 45px
+                height: 45px
+              .one
+                width: 45px
+                height: 45px
+              .four
+                width: 20px
+                height: 20px
+                margin-right: 1px
+                margin-bottom: 1px
+                &:nth-child(2n)
+                  margin-right: 0
+                &:nth-child(n+2)
+                  margin-bottom: 0
+              .six
+                width: 13px
+                height: 13px
+                margin-right: 1px
+                margin-bottom: 1px
+                &:nth-child(3n)
+                  margin-right: 0
+                &:nth-child(n+6)
+                  margin-bottom: 0
+            .no-border
+              border: 0
             .name
               flex: 1
               margin: 0 10px
               height: 70px
               line-height: @height
+              color: $color-text
               no-wrap()
             .number
               font-size: $font-size-14
-              color: $color-888888
+              color: $color-text-99
               letter-spacing: 0.3px
               margin-right: 15px
 

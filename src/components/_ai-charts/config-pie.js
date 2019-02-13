@@ -152,7 +152,7 @@ export function createGender(args = {}) {
       {
         name: '',
         type: 'pie',
-        radius: ['40%', '70%'],
+        radius: ['42%', '80%'],
         center: ['40%', '50%'],
         avoidLabelOverlap: false,
         data: seriesData,
