@@ -10,14 +10,14 @@ const Chat = () => import('pages/chat-msg/chat-msg')
 const Mine = () => import('pages/mine/mine')
 const ScrollDemo = () => import('pages/scroll-demo/scroll-demo')
 const Echarts = () => import('pages/vue-echarts/vue-echarts')
-const Cdetail = () => import('pages/client-detail/client-detail')
+// const Cdetail = () => import('pages/client-detail/client-detail')
 const Cdata = () => import('pages/detail-data/detail-data')
 const ClientTag = () => import('pages/client-tag/client-tag')
-const ClientSetGroup = () => import('pages/client-set-group/client-set-group')
-const ClientCreateGroup = () => import('pages/client-create-group/client-create-group')
+// const ClientSetGroup = () => import('pages/client-set-group/client-set-group')
+// const ClientCreateGroup = () => import('pages/client-create-group/client-create-group')
 const ClientAddUser = () => import('pages/client-add-user/client-add-user')
-const ClientSearch = () => import('pages/client-search/client-search')
-const ClientUserList = () => import('pages/client-user-list/client-user-list')
+// const ClientSearch = () => import('pages/client-search/client-search')
+// const ClientUserList = () => import('pages/client-user-list/client-user-list')
 const EditCard = () => import('pages/edit-card/edit-card')
 const ChangeAutograph = () => import('pages/change-autograph/change-autograph')
 const ShareCard = () => import('pages/share-card/share-card')
@@ -48,8 +48,13 @@ const MyMsg = () => import('pages/my-msg/my-msg')
 const zTestEcharts = () => import('pages/z-test-echarts/z-test-echarts')
 const zTest = () => import('pages/z-test-z/z-test-z')
 // 新版
-const NClient = () => import('pages/n_client/n_client')
+const NClient = () => import('pages/n-client/n-client')
 const NMarketing = () => import('pages/n-marketing/n-marketing')
+const NClientSearch = () => import('pages/n-client-search/n-client-search')
+const NClientUserList = () => import('pages/n-client-user-list/n-client-user-list')
+const NClientSetGroup = () => import('pages/n-client-set-group/n-client-set-group')
+const NClientCreateGroup = () => import('pages/n-client-create-group/n-client-create-group')
+const NClientDetail = () => import('pages/n-client-detail/n-client-detail')
 const NRadar = () => import('pages/n-radar/n-radar')
 
 Vue.use(Router)
@@ -290,7 +295,7 @@ const route = new Router({
         children: [
           {
             path: 'client-detail',
-            component: Cdetail,
+            component: NClientDetail,
             meta: {
               title: '客户详情'
             },
@@ -410,7 +415,7 @@ const route = new Router({
         children: [
           {
             path: 'client-user-list',
-            component: ClientUserList,
+            component: NClientUserList,
             meta: {
               title: '客户列表'
             },
@@ -424,21 +429,21 @@ const route = new Router({
               },
               {
                 path: 'client-set-group',
-                component: ClientSetGroup,
+                component: NClientSetGroup,
                 meta: {
                   title: '设置分组'
                 }
               },
               {
                 path: 'client-search',
-                component: ClientSearch,
+                component: NClientSearch,
                 meta: {
                   title: '搜索'
                 }
               },
               {
                 path: 'client-detail',
-                component: Cdetail,
+                component: NClientDetail,
                 meta: {
                   title: '客户详情'
                 },
@@ -470,7 +475,7 @@ const route = new Router({
           },
           {
             path: 'client-detail',
-            component: Cdetail,
+            component: NClientDetail,
             meta: {
               title: '客户详情'
             },
@@ -500,21 +505,21 @@ const route = new Router({
           },
           {
             path: 'client-set-group',
-            component: ClientSetGroup,
+            component: NClientSetGroup,
             meta: {
               title: '设置分组'
             }
           },
           {
             path: 'client-create-group',
-            component: ClientCreateGroup,
+            component: NClientCreateGroup,
             meta: {
               title: '添加分组'
             }
           },
           {
             path: 'client-search',
-            component: ClientSearch,
+            component: NClientSearch,
             meta: {
               title: '搜索'
             }
@@ -537,14 +542,14 @@ const route = new Router({
       // },
       {
         path: '/client-set-group',
-        component: ClientSetGroup,
+        component: NClientSetGroup,
         meta: {
           title: '设置分组'
         }
       },
       {
         path: '/client-create-group',
-        component: ClientCreateGroup,
+        component: NClientCreateGroup,
         meta: {
           title: '添加分组'
         }
@@ -552,14 +557,14 @@ const route = new Router({
     },
     {
       path: '/client-search',
-      component: ClientSearch,
+      component: NClientSearch,
       meta: {
         title: '搜索'
       }
     },
     {
       path: '/client-detail',
-      component: Cdetail,
+      component: NClientDetail,
       meta: {
         title: '客户详情'
       },

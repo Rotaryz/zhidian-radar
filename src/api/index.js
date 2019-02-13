@@ -15,6 +15,10 @@ import service from './service'
 import activity from './activity'
 import orderForm from './orderForm'
 import radar from './radar'
+import marketing from './n-marketing'
+
+// 营销
+export const Marketing = marketing
 // 授权模块
 export const Jwt = jwt
 

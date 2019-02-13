@@ -17,10 +17,12 @@ Vue.prototype.$echarts = echarts
 // fastclick.attach(document.body)
 
 /* eslint-disable no-new */
-export default new Vue({
+const app = new Vue({
   el: '#app',
   router,
   store,
   components: {App},
   template: '<App/>'
 })
+
+export default app
