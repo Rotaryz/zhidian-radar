@@ -76,7 +76,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {PNES_COLOR} from 'common/js/utils'
+  import {PNES_COLOR} from 'common/js/pnes'
   export default {
     props: {
       userInfo: Object,

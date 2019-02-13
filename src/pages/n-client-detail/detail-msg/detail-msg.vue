@@ -1,9 +1,7 @@
 <template>
   <div class="cliten-box">
     <div class="cliten-con">
-      <div class="img">
-        <img :src="clientData.image_url" alt="">
-      </div>
+      <img :src="clientData.image_url" class="logo" :style="{borderColor: pnes.n}" alt="">
       <div class="label-name">{{clientData.name}}</div>
       <div class="text">{{clientData.sources}}</div>
     </div>
@@ -11,6 +9,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {PNES_COLOR} from 'common/js/pnes'
   export default{
     name: 'detail-msg',
     props: {
@@ -25,6 +24,7 @@
     },
     data() {
       return {
+        pnes: PNES_COLOR
       }
     }
   }
@@ -48,6 +48,13 @@
       width: 100%
       padding: 15px
       position: relative
+      .logo
+        width: 55px
+        height: 55px
+        object-fit: cover
+        border-radius: 50%
+        padding: 2px
+        border: 2px solid #fff
       .cliten-con-bg
         position: absolute
         display: block

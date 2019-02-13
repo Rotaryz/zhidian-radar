@@ -9,13 +9,6 @@ const CLOSED = 12002 // AI雷达被关闭
 const NET_404 = 404
 const REGPHONE = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/ // 手机号正则
 
-export const PNES_COLOR = {
-  p: '#0DCDAE',
-  n: '#4B92F2',
-  e: '#F6931A',
-  s: '#EF4F9B'
-}
-
 export default class utils {
   static formatDate (time) {
     if (!time) {
