@@ -134,12 +134,14 @@ export function createGender(args = {}) {
   })
   return {
     legend: {
-      itemWidth: 14,
-      itemHeight: 14,
+      itemWidth: 15,
+      itemHeight: 15,
       borderRadius: 0,
       orient: 'vertical',
+      itemGap: 25,
+      textStyle: {color: '#858585', fontSize: '12px', fontFamily: 'PingFangSC-Regular'},
       x: '60%',
-      y: 'center',
+      y: '-5%',
       padding: [50, 25, 50, 50],
       data: legendData
     },
@@ -152,7 +154,7 @@ export function createGender(args = {}) {
       {
         name: '',
         type: 'pie',
-        radius: ['40%', '70%'],
+        radius: ['42%', '80%'],
         center: ['40%', '50%'],
         avoidLabelOverlap: false,
         data: seriesData,

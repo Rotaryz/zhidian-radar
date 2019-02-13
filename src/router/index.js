@@ -16,8 +16,8 @@ const ClientTag = () => import('pages/client-tag/client-tag')
 const ClientSetGroup = () => import('pages/client-set-group/client-set-group')
 const ClientCreateGroup = () => import('pages/client-create-group/client-create-group')
 const ClientAddUser = () => import('pages/client-add-user/client-add-user')
-const ClientSearch = () => import('pages/client-search/client-search')
-const ClientUserList = () => import('pages/client-user-list/client-user-list')
+// const ClientSearch = () => import('pages/client-search/client-search')
+// const ClientUserList = () => import('pages/client-user-list/client-user-list')
 const EditCard = () => import('pages/edit-card/edit-card')
 const ChangeAutograph = () => import('pages/change-autograph/change-autograph')
 const ShareCard = () => import('pages/share-card/share-card')
@@ -48,8 +48,10 @@ const MyMsg = () => import('pages/my-msg/my-msg')
 const zTestEcharts = () => import('pages/z-test-echarts/z-test-echarts')
 const zTest = () => import('pages/z-test-z/z-test-z')
 // 新版
-const NClient = () => import('pages/n_client/n_client')
+const NClient = () => import('pages/n-client/n-client')
 const NMarketing = () => import('pages/n-marketing/n-marketing')
+const NClientSearch = () => import('pages/n-client-search/n-client-search')
+const NClientUserList = () => import('pages/n-client-user-list/n-client-user-list')
 const NMarketingDetail = () => import('pages/n-marketing-detail/n-marketing-detail')
 
 Vue.use(Router)
@@ -415,7 +417,7 @@ const route = new Router({
         children: [
           {
             path: 'client-user-list',
-            component: ClientUserList,
+            component: NClientUserList,
             meta: {
               title: '客户列表'
             },
@@ -436,7 +438,7 @@ const route = new Router({
               },
               {
                 path: 'client-search',
-                component: ClientSearch,
+                component: NClientSearch,
                 meta: {
                   title: '搜索'
                 }
@@ -519,7 +521,7 @@ const route = new Router({
           },
           {
             path: 'client-search',
-            component: ClientSearch,
+            component: NClientSearch,
             meta: {
               title: '搜索'
             }
@@ -557,7 +559,7 @@ const route = new Router({
     },
     {
       path: '/client-search',
-      component: ClientSearch,
+      component: NClientSearch,
       meta: {
         title: '搜索'
       }
