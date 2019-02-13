@@ -43,7 +43,7 @@ export function createSEM(args = {}) {
       colorStops1: 'rgba(136,103,242,0.05)'
     }
   ]
-  if (isClosed) {
+  if (!isClosed) {
     colorObj = [
       {
         name: '活跃度',
