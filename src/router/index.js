@@ -50,6 +50,7 @@ const zTest = () => import('pages/z-test-z/z-test-z')
 // 新版
 const NClient = () => import('pages/n_client/n_client')
 const NMarketing = () => import('pages/n-marketing/n-marketing')
+const NRadar = () => import('pages/n-radar/n-radar')
 
 Vue.use(Router)
 
@@ -94,6 +95,10 @@ const route = new Router({
               title: '修改签名'
             }
           }]
+        },
+        {
+          path: '/radar1',
+          component: NRadar
         },
         {
           path: 'my-data',
