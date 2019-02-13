@@ -48,7 +48,7 @@ const MyMsg = () => import('pages/my-msg/my-msg')
 const zTestEcharts = () => import('pages/z-test-echarts/z-test-echarts')
 const zTest = () => import('pages/z-test-z/z-test-z')
 // 新版
-const NClient = () => import('pages/n_client/n_client')
+const NClient = () => import('pages/n-client/n-client')
 const NMarketing = () => import('pages/n-marketing/n-marketing')
 
 Vue.use(Router)
