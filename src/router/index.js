@@ -12,7 +12,7 @@ const ScrollDemo = () => import('pages/scroll-demo/scroll-demo')
 const Echarts = () => import('pages/vue-echarts/vue-echarts')
 // const Cdetail = () => import('pages/client-detail/client-detail')
 const Cdata = () => import('pages/detail-data/detail-data')
-const ClientTag = () => import('pages/client-tag/client-tag')
+// const ClientTag = () => import('pages/client-tag/client-tag')
 // const ClientSetGroup = () => import('pages/client-set-group/client-set-group')
 // const ClientCreateGroup = () => import('pages/client-create-group/client-create-group')
 const ClientAddUser = () => import('pages/client-add-user/client-add-user')
@@ -55,6 +55,7 @@ const NClientUserList = () => import('pages/n-client-user-list/n-client-user-lis
 const NClientSetGroup = () => import('pages/n-client-set-group/n-client-set-group')
 const NClientCreateGroup = () => import('pages/n-client-create-group/n-client-create-group')
 const NClientDetail = () => import('pages/n-client-detail/n-client-detail')
+const NClientTag = () => import('pages/n-client-tag/n-client-tag')
 
 Vue.use(Router)
 
@@ -297,7 +298,7 @@ const route = new Router({
             children: [
               {
                 path: 'client-tag',
-                component: ClientTag,
+                component: NClientTag,
                 meta: {
                   title: '标签'
                 }
@@ -445,7 +446,7 @@ const route = new Router({
                 children: [
                   {
                     path: 'client-tag',
-                    component: ClientTag,
+                    component: NClientTag,
                     meta: {
                       title: '标签'
                     }
@@ -477,7 +478,7 @@ const route = new Router({
             children: [
               {
                 path: 'client-tag',
-                component: ClientTag,
+                component: NClientTag,
                 meta: {
                   title: '标签'
                 }
@@ -566,7 +567,7 @@ const route = new Router({
       children: [
         {
           path: 'client-tag',
-          component: ClientTag,
+          component: NClientTag,
           meta: {
             title: '标签'
           }
