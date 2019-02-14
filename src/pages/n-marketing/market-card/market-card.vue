@@ -40,6 +40,7 @@
   import {CHARTS_TYPE} from 'utils/constants-charts'
   import {CONFIG, CARD_TYPE} from './card-config'
   import * as API from 'api'
+  import * as Helpers from '@/store/helpers'
 
   const COMPONENT_NAME = 'MARKET_CARD'
   const STATUS_COLOR = ['#CDCDCD', '#0DCDAE', '#F29D34', '#CDCDCD']
@@ -74,7 +75,9 @@
       this._chartActions(this.isClosed)
     },
     methods: {
-      navHandle() {
+      ...Helpers.marketMethods,
+      async navHandle() {
+        await this.requestMarketData(this.info)
         let url = this.$route.path + '/market-detail'
         this.$router.push(url)
       },

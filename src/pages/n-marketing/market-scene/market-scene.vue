@@ -9,7 +9,7 @@
           @pullingUp="onPullingUp"
   >
     <div class="empty"></div>
-    <market-card-button></market-card-button>
+    <market-card-button :dataArray="dataArray"></market-card-button>
     <div class="empty"></div>
     <section v-for="(item, index) in dataArray" :key="index" class="item-wrapper">
       <market-card :info="item"></market-card>

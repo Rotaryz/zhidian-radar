@@ -1,13 +1,5 @@
-export const CARD_TYPE = {
-  newCustomer: 1,
-  newProduct: 2,
-  sevenBack: 3,
-  weChat: 4,
-  weGroup: 40, // todo
-  activeCustomer: 5,
-  boughtCustomer: 6,
-  DIY: 0
-}
+import {MARKET_TYPE} from 'utils/constant'
+export const CARD_TYPE = MARKET_TYPE
 export const CONFIG = {
   [CARD_TYPE.newCustomer]: { // 新客有礼
     icon: require('./icon-newguest@2x.png'),

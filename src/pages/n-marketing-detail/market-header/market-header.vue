@@ -1,6 +1,6 @@
 <template>
   <div class="market-header">
-    <header v-if="true" class="header-wrapper">
+    <header v-if="!marketData.id" class="header-wrapper">
       <label class="header">
         <p class="left">活动名称</p>
         <section class="right">
@@ -10,12 +10,12 @@
       </label>
       <div class="h-empty"></div>
     </header>
-    <header class="header-wrapper-auto">
+    <header v-else class="header-wrapper-auto">
       <section class="top">
-        <img class="left" src="./pic-bought@2x.png" alt=""/>
+        <img v-if="CONFIG.icon" class="left" :src="CONFIG.icon" alt=""/>
         <div class="right">
-          <p class="title">添加个人微信</p>
-          <p class="explain">针对最近30天进店的未复制个人微信号，每次登录小程序，展示个人微信的弹窗。</p>
+          <p class="title">{{marketData.name}}</p>
+          <p class="explain">{{marketData.desc}}</p>
         </div>
       </section>
       <div class="h-empty"></div>
@@ -24,6 +24,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import * as Helpers from '@/store/helpers'
+  import {CONFIG} from '../config-detail'
+
   const COMPONENT_NAME = 'MARKET_HEADER'
 
   export default {
@@ -31,6 +34,13 @@
     data() {
       return {
         name: ''
+      }
+    },
+    computed: {
+      ...Helpers.marketComputed,
+      CONFIG() {
+        let key = this.marketData.type || 0
+        return CONFIG[key] || {}
       }
     }
   }
@@ -56,6 +66,7 @@
         width :50px
         height :@width
       .right
+        flex: 1
         margin-left :10px
         .title
           opacity: 0.8;

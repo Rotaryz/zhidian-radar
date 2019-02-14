@@ -1,33 +1,57 @@
 <template>
   <div class="market-card-button">
-    <div v-for="(item, index) in CARD_LIST" class="item-wrapper">
-      <img class="icon" :src="item.icon" alt="">
-      <p class="text">{{item.text}}</p>
+    <div v-for="(item, index) in dataArray" class="item-wrapper" @click="navHandle(item)">
+      <img class="icon" :src="CARD_CONFIG[item.type].icon" alt="">
+      <p class="text">{{CARD_CONFIG[item.type].text}}</p>
+    </div>
+    <div class="item-wrapper" @click="navHandle({})">
+      <img class="icon" :src="CARD_CONFIG['ADD'].icon" alt="">
+      <p class="text">{{CARD_CONFIG['ADD'].text}}</p>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import {MARKET_TYPE} from 'utils/constant'
+  import * as Helpers from '@/store/helpers'
+
   const COMPONENT_NAME = 'MARKET_CARD_BUTTON'
-  const CARD_LIST = [
-    {
+
+  const CARD_CONFIG = {
+    [MARKET_TYPE.activeCustomer]: {
       icon: require('./icon-active_new@2x.png'),
       text: '活跃新客'
     },
-    {
+    [MARKET_TYPE.boughtCustomer]: {
       icon: require('./icon-already@2x.png'),
       text: '已购客户'
     },
-    {
+    'ADD': {
       icon: require('./icon-add@2x.png'),
       text: '添加'
     }
-  ]
+  }
   export default {
     name: COMPONENT_NAME,
+    props: {
+      dataArray: {
+        type: Array,
+        default() {
+          return []
+        }
+      }
+    },
     data() {
       return {
-        CARD_LIST
+        CARD_CONFIG
+      }
+    },
+    methods: {
+      ...Helpers.marketMethods,
+      async navHandle(item = {}) {
+        await this.requestMarketData(item)
+        let url = this.$route.path + '/market-detail'
+        this.$router.push(url)
       }
     }
   }

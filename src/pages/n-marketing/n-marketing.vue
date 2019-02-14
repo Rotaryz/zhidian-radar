@@ -1,12 +1,14 @@
 <template>
   <div class="n-marketing">
-    <header class="header">
+    <section class="tab-bg"></section>
+    <header class="header" :class="{active: tabChanging}">
       <dl class="tab-wrapper">
         <dd v-for="(item,index) in TAB_LIST" :key="index" class="tab-item" @click="tabHandle(index)">{{item.text}}</dd>
         <dt class="line-wrapper" :style="{transform: 'translate3d('+tabIndex*100+'%,0,0)'}">
           <div class="line"></div>
         </dt>
       </dl>
+      <div v-if="tabChanging" class="header-tab-empty"></div>
     </header>
     <section class="container">
       <div class="big-container" :style="'transform: translate(-' + tabIndex*(100 / tabLength) + '%,0)'">
@@ -47,13 +49,21 @@
       return {
         TAB_LIST: TAB_LIST,
         tabLength: TAB_LIST.length,
-        tabIndex: 0
+        tabIndex: 0,
+        tabChanging: false,
+        nowTime: 0,
+        timer: null
       }
     },
     methods: {
       tabHandle(index) {
         if (this.tabIndex === index) return
+        this.timer && clearTimeout(this.timer)
+        this.tabChanging = true
         this.tabIndex = index
+        this.timer = setTimeout(() => {
+          this.tabChanging = false
+        }, 600)
       }
     }
   }
@@ -74,11 +84,30 @@
     right: 0
     bottom: $tab-height
     z-index :20
+    .tab-bg
+      position :fixed
+      height :75px
+      width :100vw
+      display: inline-block
+      background-size: 100% 100%
+      background-image: url("./bg-znyx@1x.png")
     .header
       position :fixed
       height :75px
       width :100vw
       z-index :40
+      &.active
+        display: inline-block
+        background-size: 100% 100%
+        background-image: url("./bg-znyx@1x.png")
+      .header-tab-empty
+        position :absolute
+        bottom :0
+        height :15px
+        left :0
+        right :0
+        border-radius :15px 15px 0 0
+        background:$color-background
       .tab-wrapper
         height :60px
         margin :0 46.5px
@@ -122,14 +151,13 @@
           position :relative
           .top-bg
             height :75px
+            padding-bottom :5px
             width :100vw
-            display: inline-block
-            background-size: 100% 100%
-            background-image: url("./bg-znyx@1x.png")
           .scroll-item
             position :absolute
             top:$header-height
             left :0
             right :0
             bottom :$tab-height
+            z-index :22
 </style>
