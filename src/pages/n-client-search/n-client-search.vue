@@ -182,7 +182,7 @@
         align-items: center
         background: $color-white
         border-radius: 4px
-        border-1px(#E1E1E1, 4px)
+        border-1px($color-line, 4px)
         .icon
           width: 12.8px
           height: 13.2px
