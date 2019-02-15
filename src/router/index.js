@@ -7,7 +7,7 @@ const Radar = () => import('pages/radar/radar')
 const News = () => import('pages/news/news')
 const Chat = () => import('pages/chat-msg/chat-msg')
 // const Client = () => import('pages/client/client')
-const Mine = () => import('pages/mine/mine')
+// const Mine = () => import('pages/mine/mine')
 const ScrollDemo = () => import('pages/scroll-demo/scroll-demo')
 const Echarts = () => import('pages/vue-echarts/vue-echarts')
 // const Cdetail = () => import('pages/client-detail/client-detail')
@@ -26,15 +26,15 @@ const GoodsList = () => import('pages/goods-list/goods-list')
 const DynamicList = () => import('pages/dynamic-list/dynamic-list')
 const EditDynamic = () => import('pages/edit-dynamic/edit-dynamic')
 const AddFlow = () => import('pages/add-flow/add-flow')
-const MyData = () => import('pages/my-data/my-data')
+// const MyData = () => import('pages/my-data/my-data')
 const PageError = () => import('pages/page-error/page-error')
 const Home = () => import('pages/home/home')
 const SelectGoods = () => import('pages/select-goods/select-goods')
 const NewGroupMsg = () => import('pages/new-group-msg/new-group-msg')
 const NewsAddGroup = () => import('pages/news-add-group/news-add-group')
 const NewsChatGroup = () => import('pages/news-chat-group/news-chat-group')
-const UsefulWord = () => import('pages/useful-word/useful-word')
-const AddWord = () => import('pages/add-word/add-word')
+// const UsefulWord = () => import('pages/useful-word/useful-word')
+// const AddWord = () => import('pages/add-word/add-word')
 const GroupCode = () => import('pages/group-code/group-code')
 const PersonCode = () => import('pages/person-code/person-code')
 const RobotCode = () => import('pages/robot-code/robot-code')
@@ -56,6 +56,10 @@ const NClientSetGroup = () => import('pages/n-client-set-group/n-client-set-grou
 const NClientCreateGroup = () => import('pages/n-client-create-group/n-client-create-group')
 const NClientDetail = () => import('pages/n-client-detail/n-client-detail')
 const NClientTag = () => import('pages/n-client-tag/n-client-tag')
+const NMine = () => import('pages/n-mine/n-mine')
+const NUsefulWord = () => import('pages/n-useful-word/n-useful-word')
+const NAddWord = () => import('pages/n-add-word/n-add-word')
+const NMyData = () => import('pages/n-my-data/n-my-data')
 
 Vue.use(Router)
 
@@ -83,7 +87,7 @@ const route = new Router({
       component: Home,
       children: [{
         path: 'mine',
-        component: Mine,
+        component: NMine,
         meta: {
           title: '我的'
         },
@@ -103,7 +107,7 @@ const route = new Router({
         },
         {
           path: 'my-data',
-          component: MyData,
+          component: NMyData,
           meta: {
             title: '我的图表'
           }
@@ -205,6 +209,22 @@ const route = new Router({
               title: '订单详情'
             }
           }]
+        },
+        {
+          path: 'useful-word',
+          component: NUsefulWord,
+          meta: {
+            title: '话术'
+          },
+          children: [
+            {
+              path: 'add-word',
+              component: NAddWord,
+              meta: {
+                title: '新增话术'
+              }
+            }
+          ]
         }]
       }, {
         path: '/chat/:id',
@@ -218,21 +238,6 @@ const route = new Router({
           meta: {
             title: '选择商品'
           }
-        }, {
-          path: 'useful-word',
-          component: UsefulWord,
-          meta: {
-            title: '常用语'
-          },
-          children: [
-            {
-              path: 'add-word',
-              component: AddWord,
-              meta: {
-                title: '常用语'
-              }
-            }
-          ]
         }, {
           path: 'group-code',
           component: GroupCode,
@@ -369,22 +374,6 @@ const route = new Router({
                 title: '机器人微信'
               }
             }]
-          },
-          {
-            path: 'useful-word',
-            component: UsefulWord,
-            meta: {
-              title: '常用语'
-            },
-            children: [
-              {
-                path: 'add-word',
-                component: AddWord,
-                meta: {
-                  title: '常用语'
-                }
-              }
-            ]
           }
         ]
       },
