@@ -16,6 +16,7 @@ import activity from './activity'
 import orderForm from './orderForm'
 import radar from './radar'
 import marketing from './n-marketing'
+import coupon from './coupon'
 
 // 营销
 export const Marketing = marketing
@@ -66,3 +67,6 @@ export const OrderForm = orderForm
 
 // 雷达
 export const Radar = radar
+
+// 优惠券
+export const Coupon = coupon

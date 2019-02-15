@@ -160,7 +160,6 @@
         </div>
       </div>
     </scroll>
-    <selector-view ref="selector"></selector-view>
   </div>
 </template>
 
@@ -173,7 +172,6 @@
   import {ease} from 'common/js/ease'
   import utils from 'common/js/utils'
   import {PNES_COLOR} from 'common/js/pnes'
-  import SelectorView from 'components/selector-view/selector-view'
   const PNES = [
     {type: 'p', txt: '潜力客户'},
     {type: 'n', txt: '新客户'},
@@ -200,8 +198,7 @@
       }
     },
     components: {
-      Scroll,
-      SelectorView
+      Scroll
     },
     created() {
       if (!this.imIng) {
@@ -218,8 +215,7 @@
         'setImInfo'
       ]),
       diagnose() {
-        // this.topType = true
-        this.$refs.selector.showModel()
+        this.topType = true
         setTimeout(() => {
           this.$refs.scroll && this.$refs.scroll.forceUpdate()
         }, 20)

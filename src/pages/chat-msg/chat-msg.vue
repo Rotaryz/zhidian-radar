@@ -113,7 +113,7 @@
       <div class="chat-input border-top-1px">
         <div class="chat-input-box">
           <div class="face-box" @click.stop="showEmoji">
-            <img src="../../../static/img/icon-emoji@2x.png" class="face-icon">
+            <img src="./icon-face@2x.png" class="face-icon">
           </div>
           <div class="input-container" ref="textBox">
             <textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>
@@ -152,7 +152,7 @@
       <!--</div>-->
       <!--</transition>-->
       <toast ref="toast"></toast>
-      <selector-view></selector-view>
+      <selector-view ref="selector"></selector-view>
       <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
@@ -369,24 +369,17 @@
       },
       nextWork(item) {
         let type = item.type * 1
-        let url
         switch (type) {
           case 1:
             break
           case 2:
-            url = this.$route.fullPath + '/select-goods?type=1'
-            this.mortListShow = false
-            this.$router.push({path: url})
+            this.$refs.selector.showModel('service')
             break
           case 20:
-            url = this.$route.fullPath + '/select-goods?type=20'
-            this.mortListShow = false
-            this.$router.push({path: url})
+            this.$refs.selector.showModel('goods')
             break
           case 3:
-            url = this.$route.fullPath + '/select-goods?type=2'
-            this.mortListShow = false
-            this.$router.push({path: url})
+            this.$refs.selector.showModel('activity')
             break
           case 4:
             if (!this.codeStatus.have_personal_qrcode) {
@@ -513,9 +506,7 @@
             }
             break
           case 6:
-            url = this.$route.fullPath + '/useful-word'
-            this.mortListShow = false
-            this.$router.push({path: url})
+            this.$refs.selector.showModel('words')
             break
         }
       },
@@ -1014,7 +1005,7 @@
               width: 6.666666vw
               height: 6.666666vw
         .addimg-list
-          padding: 25px 0 0 8vw
+          padding: 15px 0 0 8vw
           display: flex
           flex-wrap: wrap
           .addimg-item
