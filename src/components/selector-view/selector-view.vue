@@ -115,7 +115,7 @@
           </div>
         </scroll>
       </div>
-      <div class="bottom-btn border-top-1px">
+      <div class="bottom-btn border-top-1px" @click="submitHandle">
         <div class="btn">发送</div>
       </div>
     </div>
@@ -152,6 +152,14 @@
       }
     },
     methods: {
+      submitHandle() {
+        this.$emit('submit', this.checkItem)
+        this.hideModel()
+      },
+      _resetItem() {
+        this.checkIdx = -1
+        this.checkItem = {}
+      },
       onPullingUp() {
         if (this.showNoMore) {
           this.$refs.scroll && this.$refs.scroll.forceUpdate()
@@ -182,9 +190,9 @@
       },
       hideModel() {
         this.modelShow = !this.modelShow
+        this._resetItem()
       },
       chioceItem(idx, item) {
-        console.log(idx)
         if (+this.checkIdx !== +idx) {
           this.checkIdx = +idx
           this.checkItem = item

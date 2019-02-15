@@ -220,8 +220,9 @@
         display: flex
         align-items: center
       .news-left
-        width: 45px
-        height: 45px
+        width: 46px
+        height: 46px
+        display: flex
         position: relative
         margin-right: 10px
         .avatar-box

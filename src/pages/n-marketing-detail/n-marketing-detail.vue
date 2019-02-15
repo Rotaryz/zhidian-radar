@@ -9,10 +9,7 @@
       </scroll>
     </section>
     <market-button></market-button>
-    <!--test-->
-    <ul v-if=isShow class=test-wrapper>
-      <li v-for="(item, index) in couponList" :key="index" class="test" @click="chooseHandle(item)">{{item.coupon_name}}</li>
-    </ul>
+    <selector-view ref="selector" @submit="submitHandle"></selector-view>
   </div>
 </template>
 
@@ -21,8 +18,10 @@
   import MarketHeader from './market-header/market-header'
   import MarketChoice from './market-choice/market-choice'
   import MarketButton from './market-button/market-button'
-  import * as API from 'api'
+  import SelectorView from 'components/selector-view/selector-view'
   import * as Helpers from '@/store/helpers'
+  import {CONFIG} from './config-detail'
+  import {MARKET_TYPE} from 'utils/constant'
 
   const PAGE_NAME = 'N_MARKETING_DETAIL'
 
@@ -32,16 +31,20 @@
       Scroll,
       MarketHeader,
       MarketChoice,
-      MarketButton
+      MarketButton,
+      SelectorView
     },
     data() {
       return {
-        isShow: false,
         couponList: []
       }
     },
     computed: {
-      ...Helpers.marketComputed
+      ...Helpers.marketComputed,
+      CONFIG() {
+        let key = this.marketData.type || MARKET_TYPE.DIY
+        return CONFIG[key] || {}
+      }
     },
     created() {
       this._initPage()
@@ -55,16 +58,11 @@
         }
       },
       incomeHandle(idx) {
-        this.isShow = true
-        this._test()
+        let type = this.CONFIG.choicesArr[1].incomeArr[idx].type
+        this.$refs.selector.showModel(type)
       },
-      _test() {
-        API.Marketing.getCouponList().then((res) => {
-          this.couponList = res.data
-        })
-      },
-      chooseHandle(item) {
-        this.isShow = false
+      submitHandle(item) {
+        console.log(item)
         let benefit = [
           {
             benefit_id: item.id,
@@ -72,8 +70,6 @@
             name: item.coupon_name,
             start_at: item.start_at,
             end_at: item.end_at,
-            stock: '20',
-            status: '1',
             image_url_thumb: '',
             coupon_range_type_str: item.range_type_str,
             coupon_denomination: item.denomination,

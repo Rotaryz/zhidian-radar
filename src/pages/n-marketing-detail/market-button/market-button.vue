@@ -1,6 +1,6 @@
 <template>
   <footer class="market-button" @click="submitHandle">
-    <div class="button">{{buttonText}}</div>
+    <div class="button">{{CONFIG.submitButton.text}}</div>
   </footer>
 </template>
 
@@ -17,20 +17,18 @@
       }
     },
     computed: {
-      buttonText() {
-        let id = this.$route.query.id
-        return id ? '编辑计划' : '创建计划'
-      }
+      ...Helpers.marketComputed
     },
     methods: {
       ...Helpers.marketMethods,
       async submitHandle() {
         if (Date.now() - this.nowTime < 100) return
         this.nowTime = Date.now()
-        let flag = await this.updateMarket()
-        console.log(flag)
-        // this.$router.back()
-        // this.$emit('refresh')
+        let method = this.CONFIG.submitButton.fn
+        let flag = await this[method]()
+        if (!flag) return
+        this.$router.back()
+        this.$emit('refresh')
       }
     }
   }
@@ -51,6 +49,7 @@
     background: #FFFFFF;
     box-shadow: 0 -1px 0 0 #E1E1E1;
     line-height :@height
+    z-index :60
     .button
       display :inline-block
       width :100%

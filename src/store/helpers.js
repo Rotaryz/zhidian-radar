@@ -1,15 +1,9 @@
 import {mapGetters, mapActions} from 'vuex'
-//
-// export const musicComputed = {
-//   ...mapGetters('music', ['musicAudio'])
-// }
-//
-// export const musicMethods = {
-//   ...mapActions('music', ['setMusicAudio', 'playAudio'])
-// }
+
 export const marketComputed = {
   ...mapGetters('market', [
-    'marketData'
+    'marketData',
+    'CONFIG'
   ])
 }
 export const marketMethods = {
@@ -17,6 +11,7 @@ export const marketMethods = {
     'requestMarketData',
     'updateBenefit',
     'createMarket',
-    'updateMarket'
+    'updateMarket',
+    'updateBenefitType'
   ])
 }
