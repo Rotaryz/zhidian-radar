@@ -11,6 +11,14 @@ const mutations = {
   },
   [TYPES.SET_LATELY_LIST](state, latelyList) {
     state.latelyList = latelyList
+    let hasNoReadArr = state.latelyList.filter((item) => {
+      return item.unreadMsgCount
+    })
+    if (hasNoReadArr.length) {
+      state.hasNoRead = true
+    } else {
+      state.hasNoRead = false
+    }
   },
   [TYPES.SET_CURRENT](state, current) {
     state.currentMsg = current
@@ -22,6 +30,14 @@ const mutations = {
       }
       return item
     })
+    let hasNoReadArr = state.latelyList.filter((item) => {
+      return item.unreadMsgCount
+    })
+    if (hasNoReadArr.length) {
+      state.hasNoRead = true
+    } else {
+      state.hasNoRead = false
+    }
   },
   [TYPES.SET_NEW_MSG](state, msg) {
     state.newMsg = msg
@@ -53,6 +69,14 @@ const mutations = {
           return item
         })
       }
+    }
+    let hasNoReadArr = state.latelyList.filter((item) => {
+      return item.unreadMsgCount
+    })
+    if (hasNoReadArr.length) {
+      state.hasNoRead = true
+    } else {
+      state.hasNoRead = false
     }
   },
   [TYPES.ADD_LIST_MSG](state, typeObj) {
@@ -88,6 +112,14 @@ const mutations = {
       inItem = Object.assign({}, addMsg)
     }
     state.latelyList = [inItem, ...notIn]
+    let hasNoReadArr = state.latelyList.filter((item) => {
+      return item.unreadMsgCount
+    })
+    if (hasNoReadArr.length) {
+      state.hasNoRead = true
+    } else {
+      state.hasNoRead = false
+    }
   },
   [TYPES.SET_IM_INFO](state, imInfo) {
     state.imInfo = imInfo

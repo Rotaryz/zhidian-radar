@@ -77,7 +77,7 @@
           <div class="radar-item" v-for="(item, index) in list" :key="index">
             <div class="item-time" v-if="item.is_showtime">{{item.created_at | timeFormat}}</div>
             <div class="msg-item-content">
-              <div class="flag" :style="{background: item.group_rule_name ? '#ccc' : '#ccc'}"></div>
+              <div class="flag" :style="{background: item.group_rule_name ? pnesColor[item.group_rule_name] : '#f3f3f3'}"></div>
               <div class="item-top">
                 <div class="top-left">
                   <img :src="item.image_url" class="top-avatar">
@@ -93,6 +93,11 @@
                 <p class="msgs-p" v-show="item.event_no * 1 === 10005"><span class="green">保存</span>了你的<span class="green">小店海报</span></p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 10006">给你<span class="green">点了</span><span class="green">赞</span>，看来认可你</p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 10007"><span class="green">取消</span>给你点的<span class="green">赞</span></p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 20001">正在查看大转盘，可能对该活动感兴趣</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 20002">正在转发你的大转盘，您的活动正在裂变</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 20003">正在参加大转盘活动</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 20004">中了大转盘的{{item.title | titleCut}}，现在去使用</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 20006">未中奖，返回了店铺首页</p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 30001">给拼团活动<span class="green">{{item.title | titleCut}}</span>点了<span class="green">赞</span></p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 30002">正在转发你的拼团活动<span class="green">{{item.title | titleCut}}</span>，您的活动正在裂变</p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 30003"><span class="green">保存</span>了你的拼团活动<span class="green">{{item.title | titleCut}}</span>海报</p>
@@ -116,28 +121,46 @@
                 <p class="msgs-p" v-show="item.event_no * 1 === 30021">正在<span class="green">购买</span>砍价活动<span class="green">{{item.title  | titleCut}}</span></p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 30022">提交了砍价活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total | titleCut}}元</span></p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 30023">提交了砍价活动<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total | titleCut}}元</span>，并完成了支付</p>
-                <p class="msgs-p" v-show="item.event_no * 1 === 40001">通过扫描他人分享的海报<span class="green">查看</span>了<span class="green">你的项目</span></p>
-                <p class="msgs-p" v-show="item.event_no * 1 === 40002">通过点击他人分享的链接<span class="green">查看</span>了<span class="green">你的项目</span></p>
-                <p class="msgs-p" v-show="item.event_no * 1 === 40003">第{{item.count_sum}}次<span class="green">查看</span>了你的项目<span class="green">{{item.title | titleCut}}</span>，请把握商机</p>
-                <p class="msgs-p" v-show="item.event_no * 1 === 40004"><span class="green">转发</span>了你的<span class="green">{{item.title | titleCut}}</span>，你的项目正在裂变</p>
-                <p class="msgs-p" v-show="item.event_no * 1 === 40005"><span class="green">保存</span>了你的<span class="green">{{item.title | titleCut}}</span>海报</p>
-                <p class="msgs-p" v-show="item.event_no * 1 === 40006">提交了<span class="green">{{item.title | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40001">通过扫描他人分享的服务海报<span class="green">查看</span>了<span class="green">你的服务</span></p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40002">通过点击他人分享的服务链接<span class="green">查看</span>了<span class="green">你的服务</span></p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40003">正在<span class="green">查看</span>你的服务<span class="green">{{item.title | titleCut}}</span>，可能对该服务感兴趣</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40004"><span class="green">转发</span>了你的服务<span class="green">{{item.title | titleCut}}</span>，你的服务正在裂变</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40005"><span class="green">保存</span>了你的服务<span class="green">{{item.title | titleCut}}</span>海报</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40006">提交了服务<span class="green">{{item.title | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 40007">第{{item.count_sum}}次<span class="green">查看</span>了你的<span class="green">品牌故事</span>，请把握商机</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40008">正在查看门店的相册，对门店装修很感兴趣</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40009">正在查看门店的位置，在想如何去门店</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40010">正在查看门店的联系方式，对门店很感兴趣</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40013">正在购买服务{{item.title | titleCut}}</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40014">从{{item.title | titleCut}}返回您的店铺</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40017">通过扫描他人分享的服务海报<span class="green">查看</span>了<span class="green">你的服务</span></p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40016">通过点击他人分享的服务链接<span class="green">查看</span>了<span class="green">你的服务</span></p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40015">正在<span class="green">查看</span>你的商品<span class="green">{{item.title | titleCut}}</span>，可能对该商品感兴趣</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40018"><span class="green">转发</span>了你的商品<span class="green">{{item.title | titleCut}}</span>，你的商品正在裂变</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40019"><span class="green">保存</span>了你的商品<span class="green">{{item.title | titleCut}}</span>海报</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40020">正在对商品<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40023">提交了商品<span class="green">{{item.title | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40022">从{{item.title | titleCut}}返回您的店铺</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 40021">正在购买商品{{item.title | titleCut}}</p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 50001">第{{item.count_sum}}次<span class="green">查看</span>了你的<span class="green">动态</span></p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 50002">通过扫描他人分享的动态海报<span class="green">访问</span>了你的动态<span class="green">{{item.title | titleCut}}</span></p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 50003">通过点击他人分享的动态链接<span class="green">访问</span>了你的动态<span class="green">{{item.title | titleCut}}</span></p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 50004"><span class="green">评论</span>了你的<span class="green">动态</span></p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 50005">给你的动态<span class="green">{{item.title  | titleCut}}</span>点了<span class="green">赞</span></p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 50006">正在转发你的动态</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 50007">保存你的动态海报</p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 60001"><span class="green">拨打</span>了你的<span class="green">手机</span>，请记录跟进内容</p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 60002">正在对砍价活动<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 60003">正在对拼团活动<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
                 <p class="msgs-p" v-show="item.event_no * 1 === 60004">正在对服务<span class="green">{{item.title  | titleCut}}</span>向你<span class="green">咨询</span>，请做好准备应答</p>
+                <p class="msgs-p" v-show="item.event_no * 1 === 60006">保存你的微信号，请准备通过好友</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </scroll>
+    <selector-view ref="selector"></selector-view>
   </div>
 </template>
 
@@ -149,6 +172,8 @@
   import {ERR_OK} from 'common/js/config'
   import {ease} from 'common/js/ease'
   import utils from 'common/js/utils'
+  import {PNES_COLOR} from 'common/js/pnes'
+  import SelectorView from 'components/selector-view/selector-view'
   const PNES = [
     {type: 'p', txt: '潜力客户'},
     {type: 'n', txt: '新客户'},
@@ -160,6 +185,7 @@
     data() {
       return {
         pnesObj: PNES,
+        pnesColor: PNES_COLOR,
         topType: false, // 头部信息是否点击诊断
         topHide: false, // 头部是否消失
         list: [],
@@ -174,7 +200,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      SelectorView
     },
     created() {
       if (!this.imIng) {
@@ -191,7 +218,8 @@
         'setImInfo'
       ]),
       diagnose() {
-        this.topType = true
+        // this.topType = true
+        this.$refs.selector.showModel()
         setTimeout(() => {
           this.$refs.scroll && this.$refs.scroll.forceUpdate()
         }, 20)
@@ -204,11 +232,7 @@
         })
       },
       getRadarList() {
-        this.loading = true
-        this.loaded = false
         Radar.getRadarList(0, 30, this.userInfo ? this.userInfo.id : '').then((res) => {
-          this.loading = false
-          this.loaded = true
           if (res.error === ERR_OK) {
             this.list = res.data
             setTimeout(() => {
@@ -268,26 +292,6 @@
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
       },
-      pullUpPeoleLoadObj: function () {
-        return this.pullUpPeopleLoad ? {
-          threshold: parseInt(this.pullUpPeopleLoadThreshold),
-          txt: {more: this.pullUpPeopleLoadMoreTxt, noMore: this.pullUpPeopleLoadNoMoreTxt}
-        } : false
-      },
-      pullDownRefreshObj: function () {
-        return this.pullDownRefresh ? {
-          threshold: parseInt(this.pullDownRefreshThreshold),
-          stop: parseInt(this.pullDownRefreshStop),
-          txt: '没有更多了'
-        } : false
-      },
-      pullDownPeopleRefreshObj: function () {
-        return this.pullDownRefresh ? {
-          threshold: parseInt(this.pullDownRefreshThreshold),
-          stop: parseInt(this.pullDownRefreshStop),
-          txt: '没有更多了'
-        } : false
-      },
       userInfo() {
         return storage.get('info')
       }
@@ -297,25 +301,6 @@
         handler() {
           if (!this.pullUpLoad) return
           this.rebuildScroll()
-        },
-        deep: true
-      },
-      pullUpPeoleLoadObj: {
-        handler() {
-          this.rebuildPeopleScroll()
-        },
-        deep: true
-      },
-      pullDownRefreshObj: {
-        handler() {
-          if (!this.pullDownRefresh) return
-          this.rebuildScroll()
-        },
-        deep: true
-      },
-      pullDownPeopleRefreshObj: {
-        handler() {
-          this.rebuildPeopleScroll()
         },
         deep: true
       }
@@ -578,7 +563,6 @@
               left: 0
               top: 50%
               transform: translate(0, -50%)
-              background: red
               border-radius: 0 3px 3px 0
             .item-top
               height: 30px

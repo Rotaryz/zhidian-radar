@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import storage from 'storage-controller'
 
 const Oauth = () => import('pages/oauth/oauth')
-const Radar = () => import('pages/radar/radar')
+// const Radar = () => import('pages/radar/radar')
 const News = () => import('pages/news/news')
 const Chat = () => import('pages/chat-msg/chat-msg')
 // const Client = () => import('pages/client/client')
@@ -288,7 +288,7 @@ const route = new Router({
         }
       }, {
         path: '/radar',
-        component: Radar,
+        component: NRadar,
         meta: {
           title: '雷达'
         },

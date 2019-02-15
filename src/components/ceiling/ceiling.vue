@@ -3,13 +3,18 @@
        @touchstart.prevent="touchStart"
        @touchmove.prevent="touchMove"
        @touchend="touchEnd">
-    <img :src="newMsg.avatar" class="ceiling-left">
+    <div class="ceiling-left">
+      <img :src="newMsg.avatar" class="avatar">
+    </div>
     <div class="ceiling-right">
+      <div class="right-top">
+        <div class="top-name">{{newMsg.nickName}}</div>
+        <div class="time">刚刚</div>
+      </div>
       <div class="content">
         <p class="msgs-p" v-show="newMsg.type === 'custom'">{{newMsg.content}}</p>
         <p class="txt-p" v-show="newMsg.type === 'chat'" v-html="newMsg.html"></p>
       </div>
-      <div class="time">刚刚</div>
     </div>
   </div>
 </template>
@@ -115,7 +120,7 @@
               // window.$playAudio() // todo
               html = Utils.msgFaceToHtml(content)
             }
-            this.setNewMsg({avatar: res.avatar, content, html, type: res.type})
+            this.setNewMsg({avatar: res.avatar, content, html, type: res.type, nickName: res.fromAccountNick})
           }, // 监听新消息(私聊(包括普通消息和全员推送消息)，普通群(非直播聊天室)消息)事件，必填
           'onGroupSystemNotifys': (msg) => {
           } // 监听（多终端同步）群系统消息事件，必填
@@ -135,7 +140,7 @@
           page: 1,
           limit: 50
         }
-        Im.getContactList(reqData).then((res) => {
+        Im.getNewContactList(reqData).then((res) => {
           if (res.error === ERR_OK) {
             let data = res.data
             webimHandler.initUnread(data).then((resp) => {
@@ -244,28 +249,46 @@
     top: -70px
     z-index: 999
     background: $color-white
-    border: 0.5px solid rgba(32, 32, 46, 0.10)
-    box-shadow: 0 2px 6px 0 rgba(43, 43, 145, 0.07)
-    border-radius: 1px 1px 4px 4px
+    box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04)
     display: flex
     align-items: center
     padding: 0 15px
     transition: all .5s
     .ceiling-left
-      width: 40px
-      height: 40px
-      border: 0.5px solid rgba(32, 32, 46, 0.10)
+      border-radius: 50%
+      border: 1.5px solid #f3f3f3
       margin-right: 10px
+      .avatar
+        width: 38px
+        height: 38px
+        border: 1.5px solid #ffffff
+        border-radius: 50%
+        overflow: hidden
+        display: block
     .ceiling-right
       flex: 1
       overflow: hidden
       display: flex
-      align-items: center
-      .time
-        font-size: $font-size-small
-        color: $color-text-88
-        font-family: $font-family-regular
-        margin-left: 30px
+      flex-direction: column
+      justify-content: center
+      .right-top
+        display: flex
+        justify-content: space-between
+        margin-bottom: 4px
+        .top-name
+          flex: 1
+          overflow: hidden
+          white-space: nowrap
+          text-overflow: ellipsis
+          font-size: $font-size-14
+          color: $color-text-sub
+          font-family: $font-family-regular
+          letter-spacing: 1.23px
+        .time
+          font-size: $font-size-small
+          color: $color-text-88
+          font-family: $font-family-regular
+          margin-left: 30px
       .content
         flex: 1
         overflow: hidden
@@ -273,6 +296,11 @@
           line-height: 18px
           font-family: $font-family-regular
           font-size: $font-size-medium
+          width: 100%
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+          color: $color-text-main
           .green
             color: $color-text-56
         .txt-p
@@ -280,6 +308,7 @@
           overflow: hidden
           text-overflow: ellipsis
           white-space: nowrap
+          color: $color-text-main
           font-size: $font-size-medium
           font-family: $font-family-regular
 

@@ -152,6 +152,7 @@
       <!--</div>-->
       <!--</transition>-->
       <toast ref="toast"></toast>
+      <selector-view></selector-view>
       <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
@@ -160,6 +161,7 @@
 <script>
   import Scroll from 'components/scroll/scroll'
   import Toast from 'components/toast/toast'
+  import SelectorView from 'components/selector-view/selector-view'
   import { ease } from 'common/js/ease'
   import { mapActions, mapGetters } from 'vuex'
   import webimHandler from 'common/js/webim_handler'
@@ -632,7 +634,8 @@
     },
     components: {
       Scroll,
-      Toast
+      Toast,
+      SelectorView
     },
     filters: {
       timeFormat(val) {

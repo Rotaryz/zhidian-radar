@@ -2,7 +2,9 @@
   <div class="tab border-top-1px">
     <router-link tag="div" v-for="(item, index) in tabList" :key="index" :to="item.path" class="tab-item">
       <div class="item-container">
-        <div  class="icon" :class="item.iconClass"></div>
+        <div  class="icon" :class="item.iconClass">
+          <div class="red-block" v-if="index == 1 && hasNoRead"></div>
+        </div>
         <p class="icon-text">{{item.text}}</p>
       </div>
     </router-link>
@@ -10,6 +12,7 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   const COMPONENT_NAME = 'Tab'
   const TABS = [
     {text: '雷达', path: '/radar', id: 1, iconClass: 'icon-radar'},
@@ -24,6 +27,11 @@
       return {
         tabList: TABS
       }
+    },
+    computed: {
+      ...mapGetters([
+        'hasNoRead'
+      ])
     }
   }
 </script>
@@ -57,6 +65,16 @@
           height: 21px
           margin-bottom: 5px
           background-size: 20px 20px
+          position: relative
+          .red-block
+            position: absolute
+            width: 6px
+            height: 6px
+            border: 1px solid $color-white
+            border-radius: 50%
+            background: $color-red
+            top: -2px
+            right: -1px
           &.icon-radar
             bg-image('./icon-radar')
           &.icon-news
