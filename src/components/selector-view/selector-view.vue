@@ -185,6 +185,8 @@
       showModel(type) {
         this.modelShow = true
         this.page = 1
+        this.checkIdx = -1
+        this.checkItem = {}
         this.showType = type
         this.getList()
       },
