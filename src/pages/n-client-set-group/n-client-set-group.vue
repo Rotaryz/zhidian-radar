@@ -43,24 +43,6 @@
         }
       })
     },
-    // beforeDestroy() {
-    //   let arr = []
-    //   this.dataArray.filter(item => {
-    //     item.is_selecte && arr.push({group_id: item.id})
-    //   })
-    //   const data = {
-    //     customer_id: this.id, // 分组id
-    //     data: arr
-    //   }
-    //   Client.setGroup(data).then(res => {
-    //     if (res.error === ERR_OK) {
-    //       //
-    //     } else {
-    //       //
-    //     }
-    //     this.$emit('refresh')
-    //   })
-    // },
     beforeRouteLeave(to, from, next) {
       let groupIds = []
       this.dataArray.map(item => {
@@ -98,7 +80,7 @@
       color: #333
       padding: 15px
       background: #F7F7F8
-      border-bottom-1px(#E1E1E1)
+      border-bottom-1px($color-line)
     .content
       margin: 20px 75px 0 20px
       layout(row, block, wrap)

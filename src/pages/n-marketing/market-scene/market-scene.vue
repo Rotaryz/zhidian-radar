@@ -9,6 +9,8 @@
           @pullingUp="onPullingUp"
   >
     <div class="empty"></div>
+    <market-card-button :dataArray="dataArray"></market-card-button>
+    <div class="empty"></div>
     <section v-for="(item, index) in dataArray" :key="index" class="item-wrapper">
       <market-card :info="item"></market-card>
     </section>
@@ -19,6 +21,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import MarketCard from '../market-card/market-card'
+  import MarketCardButton from '../market-card-button/market-card-button'
   import * as API from 'api'
 
   const COMPONENT_NAME = 'MARKET_SCENE'
@@ -27,7 +30,8 @@
     name: COMPONENT_NAME,
     components: {
       Scroll,
-      MarketCard
+      MarketCard,
+      MarketCardButton
     },
     data() {
       return {
