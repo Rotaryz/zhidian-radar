@@ -16,6 +16,14 @@ export default {
     data = ''
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   },
+  create(data, loading = true, toast = true) {
+    let url = '/api/employee/ai-market/activity'
+    return request.post(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
+  },
+  update(data, loading = true, toast = true) {
+    let url = '/api/employee/ai-market/activity/' + data.id
+    return request.put(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
+  },
   getCouponList(data, loading = true, toast = true) {
     let url = '/api/employee/coupon-lists'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)

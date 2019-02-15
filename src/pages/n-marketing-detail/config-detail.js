@@ -41,7 +41,8 @@ export const CONFIG = {
         explain: '(消息模板)',
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
-    ]
+    ],
+    checkArr: ['_checkDefault', 'hasBenefit', '_checkDefault']
   },
   [MARKET_TYPE.sevenBack]: { // 7天召回
     icon: require('./market-header/pic-seven@2x.png'),
@@ -89,7 +90,8 @@ export const CONFIG = {
         explain: '(消息模板)',
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
-    ]
+    ],
+    checkArr: ['_checkDefault', 'hasBenefit', '_checkDefault']
   },
   [MARKET_TYPE.activeCustomer]: { // 活跃新客
     icon: require('./market-header/pic-newguess@2x.png'),

@@ -158,6 +158,6 @@
             top:$header-height
             left :0
             right :0
-            bottom :$tab-height
+            bottom :0
             z-index :22
 </style>

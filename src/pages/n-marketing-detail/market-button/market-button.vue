@@ -1,10 +1,12 @@
 <template>
   <footer class="market-button" @click="submitHandle">
-    <div class="button">创建计划</div>
+    <div class="button">{{buttonText}}</div>
   </footer>
 </template>
 
 <script type="text/ecmascript-6">
+  import * as Helpers from '@/store/helpers'
+
   const COMPONENT_NAME = 'MARKET_BUTTON'
 
   export default {
@@ -14,12 +16,21 @@
         nowTime: 0
       }
     },
+    computed: {
+      buttonText() {
+        let id = this.$route.query.id
+        return id ? '编辑计划' : '创建计划'
+      }
+    },
     methods: {
-      submitHandle() {
+      ...Helpers.marketMethods,
+      async submitHandle() {
         if (Date.now() - this.nowTime < 100) return
         this.nowTime = Date.now()
-        this.$router.back()
-        this.$emit('refresh')
+        let flag = await this.updateMarket()
+        console.log(flag)
+        // this.$router.back()
+        // this.$emit('refresh')
       }
     }
   }

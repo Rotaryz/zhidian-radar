@@ -1,8 +1,8 @@
 <template>
   <div class="market-card-button">
-    <div v-for="(item, index) in dataArray" class="item-wrapper" @click="navHandle(item)">
-      <img class="icon" :src="CARD_CONFIG[item.type].icon" alt="">
-      <p class="text">{{CARD_CONFIG[item.type].text}}</p>
+    <div v-if="index < 2" v-for="(item, index) in dataArray" class="item-wrapper" @click="navHandle(item)">
+      <img class="icon" :src="CARD_CONFIG[item.type] && CARD_CONFIG[item.type].icon" alt="">
+      <p class="text">{{CARD_CONFIG[item.type] && CARD_CONFIG[item.type].text}}</p>
     </div>
     <div class="item-wrapper" @click="navHandle({})">
       <img class="icon" :src="CARD_CONFIG['ADD'].icon" alt="">

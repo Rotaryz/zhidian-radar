@@ -48,10 +48,10 @@
     },
     methods: {
       ...Helpers.marketMethods,
-      _initPage() {
+      async _initPage() {
         let id = +this.$route.query.id
-        if (id !== this.marketData.id) {
-          this.requestMarketData({id})
+        if (id && !this.marketData.id) {
+          await this.requestMarketData({id})
         }
       },
       incomeHandle(idx) {
@@ -61,7 +61,6 @@
       _test() {
         API.Marketing.getCouponList().then((res) => {
           this.couponList = res.data
-          console.log(res.data)
         })
       },
       chooseHandle(item) {
