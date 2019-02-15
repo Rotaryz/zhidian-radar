@@ -3,11 +3,11 @@
     <div class="selector-cover" @click.stop="hideModel" v-show="modelShow"></div>
     <div class="selector-container" :class="modelShow ? 'show' : ''" @click.stop="">
       <div class="selector-title" v-if="showType === 'words'">选择话术</div>
-      <div class="selector-title" v-if="showType === 'coupon'">可用<span class="red-num">30</span>张优惠券</div>
-      <div class="selector-title" v-if="showType === 'goods'">上线<span class="red-num">30</span>个商品</div>
-      <div class="selector-title" v-if="showType === 'service'">上线<span class="red-num">30</span>个服务</div>
-      <div class="selector-title" v-if="showType === 'activity'">上线<span class="red-num">30</span>个活动</div>
-      <div class="selector-title" v-if="showType === 'group'">可用<span class="red-num">30</span>组用户</div>
+      <div class="selector-title" v-if="showType === 'coupon'">可用<span class="red-num">{{total}}</span>张优惠券</div>
+      <div class="selector-title" v-if="showType === 'goods'">上线<span class="red-num">{{total}}</span>个商品</div>
+      <div class="selector-title" v-if="showType === 'service'">上线<span class="red-num">{{total}}</span>个服务</div>
+      <div class="selector-title" v-if="showType === 'activity'">上线<span class="red-num">{{total}}</span>个活动</div>
+      <div class="selector-title" v-if="showType === 'group'">可用<span class="red-num">{{total}}</span>组用户</div>
       <div class="selector-list">
         <scroll
           ref="scroll"
@@ -18,88 +18,88 @@
           @pullingUp="onPullingUp">
           <div class="list-container">
             <div class="words-list" v-if="showType === 'words'">
-              <div class="words-item" v-for="(item, index) in list" :key="index">
+              <div class="words-item" v-for="(item, index) in list" :key="index" @click.stop="chioceItem(index, item)">
                 <div class="item-left">
-                  <p class="left-txt">您好，欢迎光临我的小店，请问您看中哪些宝贝？我可以帮你介绍</p>
+                  <p class="left-txt">{{item.message}}</p>
                 </div>
                 <div class="item-right">
-                  <div class="circle"></div>
-                  <img v-show="false" src="./icon_pick_goods@2x.png" class="right-checked">
+                  <div class="circle" v-if="index != checkIdx"></div>
+                  <img v-if="index == checkIdx" src="./icon_pick_goods@2x.png" class="right-img">
                 </div>
               </div>
             </div>
             <div class="coupon-list" v-if="showType === 'coupon'">
-              <div class="coupon-item" v-for="(item, index) in list" :key="index">
+              <div class="coupon-item" v-for="(item, index) in list" :key="index" @click.stop="chioceItem(index, item)">
                 <img src="./pic-coupon_xzyhq@2x.png" class="item-bc">
                 <div class="item-content">
                   <div class="item-left">
-                    <div class="left-money" v-if="false">
+                    <div class="left-money" v-if="item.coupon_type == 3">
                       <span class="money-icon">¥</span>
-                      <span class="money-txt">8</span>
+                      <span class="money-txt">{{item.denomination}}</span>
                     </div>
-                    <div class="left-money">
-                      <span class="money-txt">8</span>
+                    <div class="left-money" v-if="item.coupon_type == 4">
+                      <span class="money-txt">{{item.denomination}}</span>
                       <span class="discount-txt">折</span>
                     </div>
-                    <div class="left-txt">满100可用</div>
+                    <div class="left-txt">{{item.condition_str}}</div>
                   </div>
                   <div class="item-right">
                     <div class="right-msg">
-                      <div class="msg-title">国颐堂新手优惠券</div>
-                      <div class="msg-subtitle">指定商品可用</div>
-                      <div class="msg-time">2018.12.01-2018.12.31</div>
+                      <div class="msg-title">{{item.coupon_name}}</div>
+                      <div class="msg-subtitle">{{item.range_type_str}}</div>
+                      <div class="msg-time">{{item.start_at}}-{{item.end_at}}</div>
                     </div>
                     <div class="right-checked">
-                      <div class="circle" v-if="false"></div>
-                      <img src="./icon-pick@2x.png" class="right-checked">
+                      <div class="circle" v-if="index != checkIdx"></div>
+                      <img src="./icon-pick@2x.png" class="right-img" v-if="index == checkIdx">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="goods-list" v-if="showType === 'goods' || showType === 'service'">
-              <div class="goods-item" v-for="(item, index) in list" :key="index">
+              <div class="goods-item" v-for="(item, index) in list" :key="index" @click.stop="chioceItem(index, item)">
                 <div class="item-left">
                   <div class="left-img">
-                    <img src="" class="goods-img">
+                    <img :src="item.image_url_thumb" class="goods-img">
                   </div>
                   <div class="left-msg">
-                    <div class="goods-title">国颐堂瑜伽养发美发SPA</div>
+                    <div class="goods-title">{{item.goods_title}}</div>
                     <div class="flag">
-                      <div class="flag-box">销量38个</div>
+                      <div class="flag-box">销量{{item.sale_count}}个</div>
                     </div>
-                    <div class="goods-price">现价: ¥168</div>
+                    <div class="goods-price">现价: ¥{{item.platform_price}}</div>
                   </div>
                 </div>
                 <div class="item-right">
-                  <div v-if="false" class="circle"></div>
-                  <img src="./icon_pick_goods@2x.png" class="right-checked">
+                  <div v-if="index != checkIdx" class="circle"></div>
+                  <img v-if="index == checkIdx" src="./icon_pick_goods@2x.png" class="right-img">
                 </div>
               </div>
             </div>
             <div class="activity-list" v-if="showType === 'activity'">
-              <div class="activity-item" v-for="(item, index) in list" :key="index">
+              <div class="activity-item" v-for="(item, index) in list" :key="index" @click.stop="chioceItem(index, item)">
                 <div class="item-left">
                   <div class="left-img">
-                    <img src="" class="goods-img">
+                    <img :src="item.image_url_thumb" class="goods-img">
                   </div>
                   <div class="left-msg">
-                    <div class="goods-title">国颐堂瑜伽养发美发SPA</div>
-                    <div class="goods-price">有效期至2019-10-01</div>
+                    <div class="goods-title">{{item.goods_title}}</div>
+                    <div class="goods-price">有效期至{{item.end_at}}</div>
                   </div>
                 </div>
                 <div class="item-right">
-                  <div v-if="false" class="circle"></div>
-                  <img src="./icon-pick_activity@2x.png" class="right-checked">
+                  <div v-if="index != checkIdx" class="circle"></div>
+                  <img v-if="index == checkIdx" src="./icon-pick_activity@2x.png" class="right-img">
                 </div>
                 <div class="item-flag">
-                  <img src="./pic-label@2x.png" class="flag-img" v-if="false">
-                  <img src="./pic-label_kj@2x.png" class="flag-img">
+                  <img src="./pic-label@2x.png" class="flag-img" v-if="item.rule_id * 1 === 1">
+                  <img src="./pic-label_kj@2x.png" class="flag-img" v-if="item.rule_id * 1 === 3">
                 </div>
               </div>
             </div>
             <div class="group-list" v-if="showType === 'group'">
-              <div class="group-item" v-for="(item, index) in list" :key="index">
+              <div class="group-item" v-for="(item, index) in list" :key="index" @click.stop="chioceItem(index, item)">
                 <div class="item-left">
                   <div class="left-img-box">
                     <customer-group></customer-group>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="item-right">
                   <div v-if="false" class="circle"></div>
-                  <img src="./icon_pick_goods@2x.png" class="right-checked">
+                  <img src="./icon_pick_goods@2x.png" class="right-img">
                 </div>
               </div>
             </div>
@@ -125,23 +125,25 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import CustomerGroup from 'components/customer-group/customer-group'
+  import { Im, Coupon } from 'api'
+  import { ERR_OK } from 'common/js/config'
+  import {ease} from 'common/js/ease'
   export default {
-    props: {
-      showType: {
-        type: String,
-        default: 'group' // 话术库words 优惠券coupon 商品goods 服务service 活动activity 分组group
-      }
-    },
     components: {
       Scroll,
       CustomerGroup
     },
     data() {
       return {
-        modelShow: true,
+        modelShow: false,
         showNoMore: false,
-        list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        showType: 'words', // 话术库words 优惠券coupon 商品goods 服务service 活动activity 分组group
+        list: [],
         pullUpLoad: true,
+        page: 1,
+        total: 0, // 总数
+        checkIdx: -1, // 被选中索引
+        checkItem: {},
         pullUpLoadThreshold: 0,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
@@ -155,13 +157,253 @@
           this.$refs.scroll && this.$refs.scroll.forceUpdate()
           return
         }
-        console.log(8989898)
+        switch (this.showType) {
+          case 'coupon':
+            this.getMoreCouponList()
+            break
+          case 'goods':
+            this.getMoreGoodsList()
+            break
+          case 'service':
+            this.getMoreServiceList()
+            break
+          case 'activity':
+            this.getMoreActivityList()
+            break
+          case 'words':
+            break
+        }
       },
-      showModel() {
+      showModel(type) {
         this.modelShow = true
+        this.page = 1
+        this.showType = type
+        this.getList()
       },
       hideModel() {
         this.modelShow = !this.modelShow
+      },
+      chioceItem(idx, item) {
+        console.log(idx)
+        if (+this.checkIdx !== +idx) {
+          this.checkIdx = +idx
+          this.checkItem = item
+        }
+      },
+      getList() {
+        switch (this.showType) {
+          case 'coupon':
+            this.getCouponList()
+            break
+          case 'goods':
+            this.getGoodsList()
+            break
+          case 'service':
+            this.getServiceList()
+            break
+          case 'activity':
+            this.getActivityList()
+            break
+          case 'words':
+            this.getWordsList()
+            break
+        }
+      },
+      // 优惠券
+      getCouponList() {
+        let data = {
+          page: this.page,
+          limit: 15
+        }
+        Coupon.getCouponList(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.list = res.data
+            this.total = res.meta.total
+            if (this.total < 15) {
+              this.showNoMore = true
+            }
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+            }, 20)
+          }
+        })
+      },
+      // 优惠券
+      getMoreCouponList() {
+        if (this.showNoMore) {
+          this.$refs.scroll && this.$refs.scroll.forceUpdate()
+          return
+        }
+        this.page++
+        let data = {
+          page: this.page,
+          limit: 15
+        }
+        Coupon.getCouponList(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.total = res.meta.total
+            if (res.data < 15) {
+              this.showNoMore = true
+              return
+            }
+            this.list = [...this.list, ...res.data]
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+            }, 20)
+          }
+        })
+      },
+      // 商品
+      getGoodsList() {
+        let data = {
+          page: this.page,
+          limit: 15,
+          status: 1
+        }
+        Im.getProductList(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.list = res.data
+            this.total = res.meta.total
+            if (this.total < 15) {
+              this.showNoMore = true
+            }
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+            }, 20)
+          }
+        })
+      },
+      // 商品
+      getMoreGoodsList() {
+        if (this.showNoMore) {
+          this.$refs.scroll && this.$refs.scroll.forceUpdate()
+          return
+        }
+        this.page++
+        let data = {
+          page: this.page,
+          limit: 15,
+          status: 1
+        }
+        Im.getProductList(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.total = res.meta.total
+            if (res.data < 15) {
+              this.showNoMore = true
+            }
+            this.list = [...this.list, ...res.data]
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+            }, 20)
+          }
+        })
+      },
+      // 服务
+      getServiceList() {
+        let data = {
+          page: this.page,
+          limit: 15,
+          status: 1
+        }
+        Im.getGoodsList(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.list = res.data
+            this.total = res.meta.total
+            if (this.total < 15) {
+              this.showNoMore = true
+            }
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+            }, 20)
+          }
+        })
+      },
+      // 服务
+      getMoreServiceList() {
+        if (this.showNoMore) {
+          this.$refs.scroll && this.$refs.scroll.forceUpdate()
+          return
+        }
+        this.page++
+        let data = {
+          page: this.page,
+          limit: 15,
+          status: 1
+        }
+        Im.getGoodsList(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.total = res.meta.total
+            if (res.data < 15) {
+              this.showNoMore = true
+            }
+            this.list = [...this.list, ...res.data]
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+            }, 20)
+          }
+        })
+      },
+      // 活动
+      getActivityList() {
+        let data = {
+          page: this.page,
+          limit: 15,
+          status: 1
+        }
+        Im.getActivityList(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.list = res.data
+            this.total = res.meta.total
+            if (this.total < 15) {
+              this.showNoMore = true
+            }
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+            }, 20)
+          }
+        })
+      },
+      // 活动
+      getMoreActivityList() {
+        if (this.showNoMore) {
+          this.$refs.scroll && this.$refs.scroll.forceUpdate()
+          return
+        }
+        this.page++
+        let data = {
+          page: this.page,
+          limit: 15,
+          status: 1
+        }
+        Im.getActivityList(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.total = res.meta.total
+            if (res.data < 15) {
+              this.showNoMore = true
+            }
+            this.list = [...this.list, ...res.data]
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+            }, 20)
+          }
+        })
+      },
+      // 话术
+      getWordsList() {
+        Im.getMyWordList().then(res => {
+          if (res.error === ERR_OK) {
+            this.list = res.data
+            this.showNoMore = true
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+              this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+            }, 20)
+          }
+        })
       }
     },
     computed: {
@@ -251,9 +493,10 @@
                   border: 1px solid $color-main
                   border-radius: 50%
                   box-sizing: border-box
-                .right-checked
+                .right-img
                   width: 20px
                   height: 20px
+                  display: block
           .coupon-list
             .coupon-item
               width: 100%
@@ -352,9 +595,10 @@
                       border: 1px solid $color-F94346
                       border-radius: 50%
                       box-sizing: border-box
-                    .right-checked
+                    .right-img
                       width: 20px
                       height: 20px
+                      display: block
           .goods-list
             .goods-item
               margin-bottom: 15px
@@ -377,6 +621,7 @@
                   .goods-img
                     width: 55px
                     height: 55px
+                    object-fit: cover
                     border-radius: 2px
                 .left-msg
                   flex: 1
@@ -414,9 +659,10 @@
                   border: 1px solid $color-main
                   border-radius: 50%
                   box-sizing: border-box
-                .right-checked
+                .right-img
                   width: 20px
                   height: 20px
+                  display: block
           .activity-list
             .activity-item
               margin-bottom: 15px
@@ -440,6 +686,7 @@
                   .goods-img
                     width: 55px
                     height: 55px
+                    object-fit: cover
                     border-radius: 2px
                 .left-msg
                   flex: 1
@@ -467,9 +714,10 @@
                   border: 1px solid $color-F6931A
                   border-radius: 50%
                   box-sizing: border-box
-                .right-checked
+                .right-img
                   width: 20px
                   height: 20px
+                  display: block
               .item-flag
                 position: absolute
                 left: 0
@@ -510,9 +758,10 @@
                   border: 1px solid $color-main
                   border-radius: 50%
                   box-sizing: border-box
-                .right-checked
+                .right-img
                   width: 20px
                   height: 20px
+                  display: block
       .bottom-btn
         height: 55px
         display: flex
