@@ -7,7 +7,6 @@
                   placeholder="请输入话术内容，最多200字"></textarea>
       </div>
       <div class="bot-btn" @click="addFlow">确定</div>
-      <toast ref="toast"></toast>
     </div>
   </transition>
 </template>
@@ -15,7 +14,6 @@
 <script type="text/ecmascript-6">
   import {ClientDetail} from 'api'
   import {ERR_OK} from '../../common/js/config'
-  import Toast from 'components/toast/toast'
   import {mapGetters} from 'vuex'
 
   export default {
@@ -37,19 +35,19 @@
         if (this.subimt) return
         this.subimt = true
         if (this.note.length === 0) {
-          this.$refs.toast.show('跟进内容不能为空')
+          this.$toast.show('话术内容不能为空')
           return
         }
         ClientDetail.addFlowList(this.id, this.flowId, this.note).then((res) => {
           if (res.error === ERR_OK) {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
             setTimeout(() => {
               this.$emit('refresh')
               this.$router.back()
             }, 500)
           } else {
             this.subimt = false
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
