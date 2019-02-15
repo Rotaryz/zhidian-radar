@@ -28,7 +28,7 @@
                 :key="index"
                 @click="check(item)"
             >
-              <slide-view :useType="1" @grouping="groupingHandler" :item="item">
+              <slide-view :useType="1" @grouping="groupingHandler" :item="item"  @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                 <user-card :userInfo="item" slot="content" :useType="checkedGroup.orderBy"></user-card>
               </slide-view>
             </li>
@@ -84,7 +84,7 @@
                 :key="index"
                 @click="toUserList(item)"
             >
-              <slide-view :useType="3" @del="delHandler" :item="item">
+              <slide-view :useType="3" @del="delHandler" :item="item" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                 <div slot="content" class="user-list-item-wrapper">
                   <div class="users-avatar" :class="{'no-border': item.customers.length === 1}">
                     <img v-if="item.customers && item.customers.length && i < 9"
@@ -163,7 +163,7 @@
     name: '加入时间',
     isCheck: true
   }, {
-    orderBy: 'activity',
+    orderBy: 'active_index',
     name: '活跃指数',
     isCheck: false
   }, {
@@ -171,7 +171,7 @@
     name: 'RFM指数',
     isCheck: false
   }, {
-    orderBy: '',
+    orderBy: 'kol_index',
     name: 'KOL指数',
     isCheck: false
   }]
@@ -218,7 +218,8 @@
         total: 0,
         tabIndex: 0,
         dataIndex: 0,
-        CHARTS_TYPE: CHARTS_TYPE
+        CHARTS_TYPE: CHARTS_TYPE,
+        moveIdx: -1
       }
     },
     created() {
@@ -231,6 +232,7 @@
     methods: {
       changeTab(index) {
         this.selectTab = index
+        this.moveIdx = -1
         if (index === 2) {
           this.$nextTick(() => {
             let pieData = {
@@ -373,6 +375,15 @@
             this.$refs.toast.show(res.message)
           }
         })
+      },
+      touchBegin(idx) {
+        if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
+          let refName = 'slide' + this.moveIdx
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+        }
+      },
+      touchEnd(idx) {
+        this.moveIdx = idx
       },
       rebuildScroll() {
         this.$nextTick(() => {

@@ -51,7 +51,7 @@
         this.setNewsGetType(false)
         return
       }
-      this.getMsg(true)
+      this.getMsg(false)
     },
     mounted() {
     },

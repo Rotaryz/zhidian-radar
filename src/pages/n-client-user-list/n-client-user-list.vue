@@ -14,7 +14,7 @@
                   @pullingUp="onPullingUp">
             <ul class="user-list">
               <li class="user-list-item" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
-                <slide-view @grouping="groupingHandler" :item="item" @del="delHandler">
+                <slide-view @grouping="groupingHandler" :item="item" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                   <user-card :userInfo="item" slot="content" useType="join"></user-card>
                 </slide-view>
               </li>
@@ -83,7 +83,8 @@
         page: 1,
         limit: LIMIT,
         isAll: false,
-        isEmpty: false
+        isEmpty: false,
+        moveIdx: -1
       }
     },
     created() {
@@ -194,6 +195,15 @@
           this.$refs.scroll && this.$refs.scroll.destroy()
           this.$refs.scroll && this.$refs.scroll.initScroll()
         })
+      },
+      touchBegin(idx) {
+        if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
+          let refName = 'slide' + this.moveIdx
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+        }
+      },
+      touchEnd(idx) {
+        this.moveIdx = idx
       }
     },
     watch: {
@@ -318,7 +328,11 @@
       color: #FFF
       font-size: $font-size-14
       font-family: $font-family-regular
+      .icon
+        icon-image(icon-addwechat)
       &:last-child
         background: linear-gradient(129deg, #02E68B, #06D4AA)
+        .icon
+          icon-image(icon-sendnews)
 
 </style>

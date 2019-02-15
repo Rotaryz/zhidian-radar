@@ -159,7 +159,7 @@
     bottom: 50px
     top: 0
   .mine-top
-    bg-image('pic-mybg')
+    bg-image('bg-my')
     padding: 25px 15px
     height: 172px
     background-size: 100% 100%
