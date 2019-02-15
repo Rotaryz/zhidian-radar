@@ -56,6 +56,7 @@ const NClientSetGroup = () => import('pages/n-client-set-group/n-client-set-grou
 const NClientCreateGroup = () => import('pages/n-client-create-group/n-client-create-group')
 const NClientDetail = () => import('pages/n-client-detail/n-client-detail')
 const NClientTag = () => import('pages/n-client-tag/n-client-tag')
+const NMarketingDetail = () => import('pages/n-marketing-detail/n-marketing-detail')
 const NMine = () => import('pages/n-mine/n-mine')
 const NUsefulWord = () => import('pages/n-useful-word/n-useful-word')
 const NAddWord = () => import('pages/n-add-word/n-add-word')
@@ -389,7 +390,16 @@ const route = new Router({
         component: NMarketing,
         meta: {
           title: '营销'
-        }
+        },
+        children: [
+          {
+            path: 'market-detail',
+            component: NMarketingDetail,
+            meta: {
+              title: '营销详情'
+            }
+          }
+        ]
       },
       {
         path: '/client',

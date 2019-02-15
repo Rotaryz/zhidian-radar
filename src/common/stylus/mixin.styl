@@ -184,3 +184,13 @@ lr-border-bottom-1px($color = $color-col-line, $left = 15px, $right = 0px)
     right: $right
     transform: scaleY(.5) translateZ(0)
     border-bottom: 1px solid $color
+// 扩展点击区域
+extend-click($number = -20px)
+  position: relative
+  &:before
+    content: ''
+    position: absolute
+    top: $number
+    left: $number
+    right: $number
+    bottom: $number

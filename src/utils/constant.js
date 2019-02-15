@@ -6,3 +6,14 @@
 // export const HOME_PAGE = '/home/data-overview'
 // export const LOGIN_PAGE = '/login'
 export const API_DEFAULT_MIDDLE_FN = 'defaultMiddleWare'
+// 营销活动类型
+export const MARKET_TYPE = {
+  newCustomer: 1,
+  newProduct: 2,
+  sevenBack: 3,
+  weChat: 4,
+  weGroup: 40, // todo
+  activeCustomer: 5,
+  boughtCustomer: 6,
+  DIY: 0
+}
