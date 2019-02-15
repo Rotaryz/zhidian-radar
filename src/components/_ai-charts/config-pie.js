@@ -236,9 +236,11 @@ export function createUser(args = {}) {
       itemWidth: 14,
       itemHeight: 14,
       borderRadius: 0,
+      itemGap: 25,
+      textStyle: {color: '#858585', fontSize: '12px', fontFamily: 'PingFangSC-Regular'},
       orient: 'vertical',
       x: '60%',
-      y: 'center',
+      y: '-5%',
       padding: [50, 25, 50, 50],
       data: legendData
     },
@@ -251,7 +253,7 @@ export function createUser(args = {}) {
       {
         name: '',
         type: 'pie',
-        radius: ['40%', '70%'],
+        radius: ['40%', '80%'],
         center: ['40%', '50%'],
         avoidLabelOverlap: false,
         data: seriesData,

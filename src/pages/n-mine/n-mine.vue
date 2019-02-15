@@ -1,0 +1,282 @@
+<template>
+  <div class="mine">
+    <Scroll bcColor="#f0f5ff">
+      <div class="mine-top">
+        <div class="top-box">
+          <div class="top-box-left">
+            <img v-if="mine.avatar&&mine.avatar.length" class="mine-header" :src="mine.avatar">
+            <img v-else class="mine-header" src="./pic-default_people@2x.png">
+            <p class="peo-name">
+              <span>{{mine.name}}</span><br />
+              <span class="data">到期日期：至2018-12-20</span>
+            </p>
+          </div>
+          <div class="top-box-right" @click="toShareCard">
+            <span class="code"></span>
+          </div>
+        </div>
+        <div class="mine-shadow">
+          <router-link class="mian-box" to="mine/my-data">
+            <div class="main">
+              <div class="item-box">
+                <div class="number">{{allDatas.customer_total || 0}}</div>
+                <div class="text">主力客户</div>
+              </div>
+              <div class="item-box">
+                <div class="number">{{allDatas.order_total || 0}}</div>
+                <div class="text">活跃度</div>
+              </div>
+              <div class="item-box">
+                <div class="number">{{allDatas.success_order_total || 0}}</div>
+                <div class="text">客单价</div>
+              </div>
+            </div>
+          </router-link>
+        </div>
+        <div class="main-content">
+          <h3 class="title">工作台</h3>
+          <ul class="content-item">
+            <li class="item" v-for="(item, index) in contentList" :key="index" @click="_goPage(item.src)">
+              <span class="icon" :class="item.icon"></span>
+              <span class="text">{{item.title}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </Scroll>
+    <toast ref="toast"></toast>
+    <router-view @refresh="refresh" v-if="show"></router-view>
+  </div>
+</template>
+
+<script>
+  import Scroll from 'components/scroll/scroll'
+  import { Mine } from 'api'
+  import { ERR_OK } from '../../common/js/config'
+  import storage from 'storage-controller'
+  import {mapGetters} from 'vuex'
+  import Toast from 'components/toast/toast'
+
+  const CONTENTLIST = [
+    {title: '报表', src: 'mine/my-data', icon: 'myform'},
+    {title: '话术', src: 'mine/useful-word', icon: 'useful'},
+    {title: '微信', src: '', icon: 'weixin'},
+    {title: '微信群', src: '', icon: 'group'}
+  ]
+
+  export default {
+    name: 'Mine',
+    data () {
+      return {
+        contentList: CONTENTLIST,
+        mine: {},
+        allDatas: {},
+        show: true,
+        count: 0
+      }
+    },
+    created () {
+      this.$emit('tabChange', '我的')
+      this.getMine()
+      this.getMineData()
+    },
+    methods: {
+      toShareCard() {
+        this.$router.push('/shareCard')
+        if (this.ios) {
+          setTimeout(() => {
+            location.reload()
+            location.reload()
+          }, 200)
+        }
+      },
+      _goPage (src) {
+        if (!src) {
+          return
+        }
+        this.$router.push(src)
+      },
+      refresh () {
+        this.mine = storage.get('info')
+      },
+      getMine () {
+        this.mine = storage.get('info')
+      },
+      getMineData(time) {
+        Mine.getMineData(time).then(res => {
+          if (res.error === ERR_OK) {
+            this.allDatas = res.data
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'ios'
+      ]),
+      userInfo() {
+        return storage.get('info')
+      },
+      slide() {
+        return 'slide'
+      },
+      tag() {
+        switch (this.mine.role_id) {
+          case 0:
+            return '未知'
+          case 1:
+            return '店长'
+          case 2:
+            return '普通店员'
+          case 3:
+            return '财务'
+        }
+      }
+    },
+    components: {
+      Scroll,
+      Toast
+    }
+  }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+  @import '~common/stylus/mixin'
+  div
+    box-sizing: border-box
+    -moz-box-sizing: border-box
+    -webkit-box-sizing: border-box
+  .mine
+    position: fixed
+    background: #f0f5ff
+    z-index: 10
+    left: 0
+    right: 0
+    bottom: 50px
+    top: 0
+  .mine-top
+    bg-image('pic-mybg')
+    padding: 25px 15px
+    height: 172px
+    background-size: 100% 100%
+    box-sizing: border-box
+    position: relative
+    margin-bottom: 56px
+    .top-box
+      layout(row)
+      align-items: center
+      justify-content: space-between
+      .top-box-left
+        layout(row)
+        align-items: center
+        .mine-header
+          width: 54px
+          height: 54px
+          display: block
+          border-radius: 50%
+          margin-right: 10px
+          border: 2px solid rgba(255,255,255,0.30)
+        .peo-name
+          font-size: $font-size-16
+          font-family: $font-family-medium
+          color: $color-white
+          width: 180px
+          no-wrap()
+          .data
+            font-size: $font-size-12
+            font-family: $font-family-regular
+            margin-top: 10px
+            display: inline-block
+            opacity: .6
+      .top-box-right
+        layout(row)
+        align-items: center
+        .code
+          icon-image('icon-code')
+          width: 36px
+          height: 36px
+    .mine-shadow
+      margin-top: 26px
+      .mian-box
+        box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04)
+        border-radius: 6px
+        background: $color-white
+        padding: 15px 15px 20px
+        display: block
+        border-1px(#D9F0FE, 12px)
+        .main
+          layout(row)
+          align-items: center
+          .item-box
+            width: 33.33%
+            text-align: center
+            position: relative
+            border-right-1px(#E1E1E1)
+            &:after
+              content: ''
+              display: block
+              background: #000
+              height: 20px
+              right: 0
+              margin: auto
+              col-center()
+              position: absolute
+            &:last-child:after
+              width: 0
+              border: 0
+            .number
+              color: #0E1249
+              font-family: DIN-Regular
+              font-size: $font-size-18
+              margin-bottom: 14px
+            .text
+              color: #333
+              font-family: $font-family-regular
+              font-size: $font-size-12
+
+
+    .main-content
+      box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04)
+      border-radius: 6px
+      background: $color-white
+      padding: 15px 15px 20px
+      display: block
+      border-1px(#D9F0FE, 12px)
+      margin-top: 10px
+      .title
+        color: #333
+        font-size: $font-size-16
+        font-family: $font-family-medium
+      .content-item
+        padding: 30px 0
+        height: 200px
+        .item
+          width: 25%
+          display: flex
+          flex-direction: column
+          align-items: center
+          justify-content: center
+          float: left
+          .icon
+            width: 32px
+            height: 32px
+          .myform
+            icon-image(icon-statement)
+          .useful
+            icon-image(icon-talk)
+          .weixin
+            icon-image(icon-wechat_my)
+          .group
+            icon-image(icon-wechatgroup)
+          .text
+            font-family: $font-family-regular
+            font-size: $font-size-14
+            color: #333
+            margin-top: 10px
+            display: block
+
+</style>

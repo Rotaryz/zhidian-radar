@@ -14,6 +14,7 @@ import mine from './mine'
 import service from './service'
 import activity from './activity'
 import orderForm from './orderForm'
+import radar from './radar'
 import marketing from './n-marketing'
 
 // 营销
@@ -62,3 +63,6 @@ export const Activity = activity
 
 // 我的订单
 export const OrderForm = orderForm
+
+// 雷达
+export const Radar = radar

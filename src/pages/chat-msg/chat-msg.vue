@@ -152,6 +152,7 @@
       <!--</div>-->
       <!--</transition>-->
       <toast ref="toast"></toast>
+      <selector-view></selector-view>
       <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
@@ -160,6 +161,7 @@
 <script>
   import Scroll from 'components/scroll/scroll'
   import Toast from 'components/toast/toast'
+  import SelectorView from 'components/selector-view/selector-view'
   import { ease } from 'common/js/ease'
   import { mapActions, mapGetters } from 'vuex'
   import webimHandler from 'common/js/webim_handler'
@@ -293,17 +295,16 @@
               let resData = res.data.reverse()
               let list = [...resData, ...this.nowChat]
               this.setNowChat(list)
-              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+              // this.$refs.scroll && this.$refs.scroll.forceUpdate()
               let timer = setTimeout(() => {
                 let heightEnd = this.listDom.clientHeight
-                this.$refs.scroll && this.$refs.scroll.scrollTo(0, heightBegin - heightEnd, 10, ease[this.scrollToEasing])
+                this.$refs.scroll.scrollTo(0, heightBegin - heightEnd, 0, ease[this.scrollToEasing])
                 clearTimeout(timer)
               }, 30)
             } else {
               this.noMore = true
               this.page--
             }
-            this.$refs.scroll && this.$refs.scroll.forceUpdate()
           }
         })
       },
@@ -633,7 +634,8 @@
     },
     components: {
       Scroll,
-      Toast
+      Toast,
+      SelectorView
     },
     filters: {
       timeFormat(val) {
