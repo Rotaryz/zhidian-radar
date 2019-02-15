@@ -26,3 +26,11 @@
 
 .fade-enter, .fade-leave-to
   opacity: 0
+
+//由下向上动画
+.slide-up-enter-active, .slide-up-leave-active
+  transition: all 0.3s
+
+.slide-up-enter, .slide-up-leave-to
+  transform: translate3d(0, 100%, 0)
+
