@@ -101,7 +101,9 @@
             <div class="group-list" v-if="showType === 'group'">
               <div class="group-item" v-for="(item, index) in list" :key="index">
                 <div class="item-left">
-                  <div class="left-img-box"></div>
+                  <div class="left-img-box">
+                    <customer-group></customer-group>
+                  </div>
                   <div class="left-title">潜在客户(20人)</div>
                 </div>
                 <div class="item-right">
@@ -122,6 +124,7 @@
 
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
+  import CustomerGroup from 'components/customer-group/customer-group'
   export default {
     props: {
       showType: {
@@ -130,7 +133,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      CustomerGroup
     },
     data() {
       return {
@@ -489,6 +493,7 @@
                 display: flex
                 align-items: center
                 margin-left: 15px
+                margin-right: 10px
                 .left-img-box
                   width: 45px
                   height: 45px
