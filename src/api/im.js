@@ -55,6 +55,18 @@ export default {
     return request.get(url, data, loading)
   },
 
+  // 最近联系人列表-1.5新
+  getNewContactList(data, loading = false) {
+    const url = `/api/employee/ai/contacts`
+    return request.get(url, data, loading)
+  },
+
+  // 删除最近联系人-1.5新
+  delContact(data, loading = false) {
+    const url = `/api/employee/ai/delete-contact`
+    return request.post(url, data, loading)
+  },
+
   // 推荐商品
   getGoodsList(data, loading = false) {
     const url = `/api/employee/goods-lists`

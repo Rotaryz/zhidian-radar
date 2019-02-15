@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import storage from 'storage-controller'
 
 const Oauth = () => import('pages/oauth/oauth')
-const Radar = () => import('pages/radar/radar')
+// const Radar = () => import('pages/radar/radar')
 const News = () => import('pages/news/news')
 const Chat = () => import('pages/chat-msg/chat-msg')
 // const Client = () => import('pages/client/client')
@@ -55,6 +55,7 @@ const NClientUserList = () => import('pages/n-client-user-list/n-client-user-lis
 const NClientSetGroup = () => import('pages/n-client-set-group/n-client-set-group')
 const NClientCreateGroup = () => import('pages/n-client-create-group/n-client-create-group')
 const NClientDetail = () => import('pages/n-client-detail/n-client-detail')
+const NRadar = () => import('pages/n-radar/n-radar')
 const NClientTag = () => import('pages/n-client-tag/n-client-tag')
 const NMarketingDetail = () => import('pages/n-marketing-detail/n-marketing-detail')
 const NMine = () => import('pages/n-mine/n-mine')
@@ -105,6 +106,10 @@ const route = new Router({
               title: '修改签名'
             }
           }]
+        },
+        {
+          path: '/radar1',
+          component: NRadar
         },
         {
           path: 'my-data',
@@ -290,7 +295,7 @@ const route = new Router({
         }
       }, {
         path: '/radar',
-        component: Radar,
+        component: NRadar,
         meta: {
           title: '雷达'
         },

@@ -35,6 +35,11 @@
       item: {
         type: Object,
         default: {}
+      },
+      // 是否需要出发函数后收起
+      hasFn: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -43,6 +48,7 @@
         endX: '',
         endY: '',
         moveStart: '',
+        show: false,
         styles: '',
         timeStamp: 0
       }
@@ -50,13 +56,12 @@
     methods: {
       touchBegin(e) {
         this.timeStamp = e.timeStamp
-        if (this.showIdx !== this.index) {
-          this.$emit('touchBegin', this.index)
-        }
+        this.$emit('touchBegin', this.index, this.item)
         this.startX = e.touches[0].clientX
         this.moveStart = this.startX
       },
       touchEnd(e) {
+        this.$emit('touchEnd', this.index, this.item)
         this.endX = e.changedTouches[0].clientX
         // this.endY = e.changedTouches[0].clientY
         // if (this.endY > this.endX) {
@@ -116,6 +121,8 @@
       },
       del(item) {
         this.$emit('del', this.index, item)
+        console.log(this.hasFn)
+        if (this.hasFn) return
         this.styles = 'width: 0px; transition: all .3s ease-out'
         this.show = false
       },
