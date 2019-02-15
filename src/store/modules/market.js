@@ -23,12 +23,18 @@ const actions = {
         commit('REQ_DATA', res.data)
       })
     }
+  },
+  updateBenefit({commit, state}, benefit = []) {
+    commit('UPDATE_BENEFIT', benefit)
   }
 }
 
 const mutations = {
   'REQ_DATA'(state, obj) {
     state.marketData = obj
+  },
+  UPDATE_BENEFIT(state, benefit) {
+    state.marketData.benefit = benefit
   }
 }
 

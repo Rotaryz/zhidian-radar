@@ -15,5 +15,9 @@ export default {
     let url = '/api/employee/ai-market/activity/' + data.id
     data = ''
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
+  },
+  getCouponList(data, loading = true, toast = true) {
+    let url = '/api/employee/coupon-lists'
+    return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
 }

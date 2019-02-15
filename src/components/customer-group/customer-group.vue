@@ -3,7 +3,7 @@
     <ul class="container">
       <li v-for="(item,index) in dataArray" :key="index" class="avatar-wrapper":style="avatarWrapperStyles">
         <div class="avatar" :class="{single: dataArray.length <= 1}">
-          <img v-if="true" class="avatar-img" src="./2@1x.png" alt="">
+          <img v-if="item" class="avatar-img" :src="item.avatar" alt="">
           <img v-else class="avatar-img" src="./pic-default@2x.png" alt="">
         </div>
       </li>
@@ -20,7 +20,7 @@
       dataArray: {
         type: Array,
         default() {
-          return new Array(3).fill({})
+          return []
         }
       }
     },

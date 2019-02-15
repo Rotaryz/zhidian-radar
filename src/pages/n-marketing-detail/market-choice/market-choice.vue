@@ -1,47 +1,50 @@
 <template>
   <nav class="market-choice">
     <section v-for="(item, index) in dataArray" :key="index" class="panel-wrapper">
-      <aside class="line-wrapper">
-        <div v-if="dataArray.length - index >= 1" class="icon" :class="{active: index===0}">{{index+1}}</div>
-        <p v-if="dataArray.length - index > 1" class="line" :class="{active: index===0}"></p>
+      <aside v-if="dataArray" class="line-wrapper">
+        <!--<div v-if="dataArray.length - index >= 1" class="icon" :class="{active:lineCheckHandle(index)}">{{index+1}}</div>-->
+        <!--<p v-if="dataArray.length - index > 1" class="line" :class="{active:lineCheckHandle(index)}"></p>-->
       </aside>
       <div class="panel" :class="{active: index===0}">
-        <section class="top">
-          <div class="left">
-            <p class="title">{{item.title}}</p>
-            <p v-if="index === 0" class="explain">{{item.explain}}{{marketData.group[0].cover_count}}人)</p>
-            <p v-else class="explain">{{item.explain}}</p>
-          </div>
-          <div v-if="isShowDelButton(index, item)" class="right">
-            <img class="del-icon" src="./icon-del_yx@2x.png" alt="">
-          </div>
-        </section>
-        <section v-if="index==0" class="bottom one">
-          <div class="left">
-            <customer-group></customer-group>
-          </div>
-          <div class="right">
-            <p class="title">{{marketData.group[0].group_name}}</p>
-            <p class="explain">{{marketData.group[0].group_desc}}</p>
-          </div>
-        </section>
-        <section v-if="index==1" class="bottom two">
-          <ul class="button-group">
-            <li v-for="(child, idx) in item.incomeArr" :key="idx" class="button">
-              <img class="add-icon" src="./icon-add@2x.png" alt="">
-              <p class="text">{{child}}</p>
-            </li>
-          </ul>
-        </section>
-        <section v-if="index===2" class="bottom three">
-          <ul class="button-group">
-            <li v-for="(child, idx) in item.channelTextArr" :key="idx" class="button">
-              <img v-if="idx===marketData.channel_type" class="icon" src="./icon-ok@2x.png" alt="">
-              <img v-else class="icon" src="./icon-no@2x.png" alt="">
-              <p class="text">{{child}}</p>
-            </li>
-          </ul>
-        </section>
+        <!--<section class="top">-->
+          <!--<div class="left">-->
+            <!--<p class="title">{{item.title}}</p>-->
+            <!--<p v-if="index === 0" class="explain">{{item.explain}}{{groupData.cover_count}}人)</p>-->
+            <!--<p v-else class="explain">{{item.explain}}</p>-->
+          <!--</div>-->
+          <!--<div v-if="isShowDelButton(index, item) && hasBenefit" class="right" @click="delHandle(index)">-->
+            <!--<img class="del-icon" src="./icon-del_yx@2x.png" alt="">-->
+          <!--</div>-->
+        <!--</section>-->
+        <!--<section v-if="index==0" class="bottom one">-->
+          <!--<div class="left">-->
+            <!--<customer-group :dataArray="groupData.customers"></customer-group>-->
+          <!--</div>-->
+          <!--<div class="right">-->
+            <!--<p class="title">{{groupData.group_name}}</p>-->
+            <!--<p class="explain">{{groupData.group_desc}}</p>-->
+          <!--</div>-->
+        <!--</section>-->
+        <!--<section v-if="index==1" class="bottom two">-->
+          <!--<ul v-if="!(marketData.benefit && marketData.benefit.length)" class="button-group">-->
+            <!--<li v-for="(child, idx) in item.incomeArr" :key="idx" class="button" @click="incomeHandle(idx)">-->
+              <!--<img class="add-icon" src="./icon-add@2x.png" alt="">-->
+              <!--<p class="text">{{child}}</p>-->
+            <!--</li>-->
+          <!--</ul>-->
+          <!--<div v-else v-for="(item,index) in marketData.benefit" :key="index" class="income-wrapper">-->
+            <!--<market-coupon v-if="index === 0" :info="item"></market-coupon>-->
+          <!--</div>-->
+        <!--</section>-->
+        <!--<section v-if="index===2" class="bottom three">-->
+          <!--<ul class="button-group">-->
+            <!--<li v-for="(child, idx) in item.channelTextArr" :key="idx" class="button">-->
+              <!--<img v-if="idx===marketData.channel_type" class="icon" src="./icon-ok@2x.png" alt="">-->
+              <!--<img v-else class="icon" src="./icon-no@2x.png" alt="">-->
+              <!--<p class="text">{{child}}</p>-->
+            <!--</li>-->
+          <!--</ul>-->
+        <!--</section>-->
       </div>
     </section>
   </nav>
@@ -52,12 +55,14 @@
   import * as Helpers from '@/store/helpers'
   import {CONFIG} from '../config-detail'
   import {MARKET_TYPE} from 'utils/constant'
+  import MarketCoupon from '../market-coupon/market-coupon'
 
   const COMPONENT_NAME = 'MARKET_CHOICE'
   export default {
     name: COMPONENT_NAME,
     components: {
-      CustomerGroup
+      CustomerGroup,
+      MarketCoupon
     },
     data() {
       return {
@@ -72,18 +77,47 @@
     computed: {
       ...Helpers.marketComputed,
       CONFIG() {
-        let key = this.marketData.type || MARKET_TYPE.DIY || 0
+        let key = this.marketData.type || MARKET_TYPE.DIY
         return CONFIG[key] || {}
       },
       dataArray() {
-        return this.CONFIG.choicesArr || []
+        return this.CONFIG.choicesArr
+      },
+      hasBenefit() {
+        let benefit = this.marketData.benefit
+        let flag = benefit && benefit.length
+        return flag
+      },
+      groupData() {
+        let group = this.marketData.group
+        return (group && group[0]) || {}
+      },
+      _checkDefault() {
+        return true
       }
     },
     methods: {
+      ...Helpers.marketMethods,
       isShowDelButton(index, item) {
         let position = index + 1 !== this.dataArray.length
         let enableChange = item.enableChange
         return position && enableChange
+      },
+      incomeHandle(idx) {
+        this.$emit('income', idx)
+      },
+      delHandle(idx) {
+        this.updateBenefit()
+      },
+      lineCheckHandle(idx = 0) {
+        let key = this.CONFIG.checkArr[idx]
+        let flag = this[key]
+        if (idx !== 0) {
+          key = this.CONFIG.checkArr[idx - 1]
+          flag = flag && this[key]
+        }
+        console.log(flag, '--213')
+        return flag
       }
     }
   }
@@ -92,6 +126,12 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
+
+  .income-wrapper
+    width :100%
+    display :flex
+    justify-content :center
+    align-items :center
 
   .market-choice
     display :flex

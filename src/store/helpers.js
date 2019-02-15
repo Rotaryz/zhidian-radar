@@ -14,6 +14,7 @@ export const marketComputed = {
 }
 export const marketMethods = {
   ...mapActions('market', [
-    'requestMarketData'
+    'requestMarketData',
+    'updateBenefit'
   ])
 }

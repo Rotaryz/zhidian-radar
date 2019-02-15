@@ -78,7 +78,7 @@
       ...Helpers.marketMethods,
       async navHandle() {
         await this.requestMarketData(this.info)
-        let url = this.$route.path + '/market-detail'
+        let url = this.$route.path + '/market-detail?id=' + this.info.id
         this.$router.push(url)
       },
       switchHandle() {

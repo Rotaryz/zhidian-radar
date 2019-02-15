@@ -19,7 +19,8 @@ export const CONFIG = {
         explain: '(页面弹窗)',
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
-    ]
+    ],
+    checkArr: ['_checkDefault', 'hasBenefit', '_checkDefault']
   },
   [MARKET_TYPE.newProduct]: { // 上新提醒
     icon: require('./market-header/pic-remind@2x.png'),
