@@ -26,9 +26,6 @@
           </div>
         </section>
         <section v-if="index==1" class="bottom two">
-          <!--<div class="income-wrapper">-->
-            <!--<market-active></market-active>-->
-          <!--</div>-->
           <ul v-if="!(marketData.benefit && marketData.benefit.length)" class="button-group">
             <li v-for="(child, idx) in item.incomeArr" :key="idx" class="button" @click="incomeHandle(child, idx)">
               <img class="add-icon" src="./icon-add@2x.png" alt="">
@@ -36,8 +33,8 @@
             </li>
           </ul>
           <div v-else v-for="(child,index) in marketData.benefit" :key="index" class="income-wrapper">
-            <market-coupon v-if="marketData.benefit_type === 1" :info="child"></market-coupon>
-            <market-active v-if="marketData.benefit_type === 4" :info="child"></market-active>
+            <market-coupon v-if="marketData.benefit_type === INCOME_TYPE.coupon.benefit_type" :info="child"></market-coupon>
+            <market-active v-if="marketData.benefit_type === INCOME_TYPE.activity.benefit_type" :info="child"></market-active>
           </div>
         </section>
         <section v-if="index===2" class="bottom three">
@@ -59,7 +56,7 @@
   import * as Helpers from '@/store/helpers'
   import MarketCoupon from '../market-coupon/market-coupon'
   import MarketActive from '../market-active/market-active'
-  // import {INCOME_TYPE} from '../config-detail'
+  import {INCOME_TYPE} from '../config-detail'
 
   const COMPONENT_NAME = 'MARKET_CHOICE'
   export default {
@@ -71,6 +68,7 @@
     },
     data() {
       return {
+        INCOME_TYPE
       }
     },
     computed: {
@@ -99,7 +97,6 @@
         return position && enableChange
       },
       incomeHandle(child, idx) {
-        console.log(child)
         this.updateBenefitType(child.benefit_type)
         this.$emit('income', idx)
       },
@@ -115,12 +112,6 @@
         }
         return flag
       }
-      // showIncome(item, idx, type) {
-      //   // let flag = idx === 0
-      //   // let income = item.incomeArr[idx].type === type
-      //   console.log(item.incomeArr[idx].type)
-      //   return item.incomeArr[idx].type === type
-      // }
     }
   }
 </script>

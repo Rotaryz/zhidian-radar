@@ -65,12 +65,13 @@
         console.log(item)
         let benefit = [
           {
-            benefit_id: item.id,
-            recommend_benefit_id: item.recommend_coupon_id,
-            name: item.coupon_name,
+            benefit_id: item.id || item.activity_id,
+            recommend_benefit_id: item.recommend_coupon_id || item.recommend_activity_id,
+            name: item.coupon_name || item.goods_title,
             start_at: item.start_at,
             end_at: item.end_at,
-            image_url_thumb: '',
+            image_url_thumb: item.image_url_thumb,
+            active_type: item.rule_id,
             coupon_range_type_str: item.range_type_str,
             coupon_denomination: item.denomination,
             coupon_type: item.coupon_type,

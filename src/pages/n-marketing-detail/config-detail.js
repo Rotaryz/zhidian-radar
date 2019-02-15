@@ -1,11 +1,26 @@
 import {MARKET_TYPE} from 'utils/constant'
 // 优惠券coupon 商品goods 服务service 活动activity 分组group
 export const INCOME_TYPE = {
-  coupon: 'coupon',
-  goods: 'goods',
-  service: 'service',
-  activity: 'activity',
-  group: 'group'
+  coupon: {
+    type: 'coupon',
+    benefit_type: 1
+  },
+  goods: {
+    type: 'goods',
+    benefit_type: 2
+  },
+  service: {
+    type: 'service',
+    benefit_type: 3
+  },
+  activity: {
+    type: 'activity',
+    benefit_type: 4
+  },
+  group: {
+    type: 'group',
+    benefit_type: 0 // todo
+  }
 }
 export const CONFIG = {
   [MARKET_TYPE.newCustomer]: { // 新客有礼
@@ -22,8 +37,8 @@ export const CONFIG = {
         incomeArr: [
           {
             text: '添加权益',
-            type: INCOME_TYPE.coupon,
-            benefit_type: 1
+            type: INCOME_TYPE.coupon.type,
+            benefit_type: INCOME_TYPE.coupon.benefit_type
           }
         ],
         enableChange: true
@@ -80,13 +95,13 @@ export const CONFIG = {
         incomeArr: [
           {
             text: '活动',
-            type: INCOME_TYPE.activity,
-            benefit_type: 4
+            type: INCOME_TYPE.activity.type,
+            benefit_type: INCOME_TYPE.activity.benefit_type
           },
           {
             text: '优惠券',
-            type: INCOME_TYPE.coupon,
-            benefit_type: 1
+            type: INCOME_TYPE.coupon.type,
+            benefit_type: INCOME_TYPE.coupon.benefit_type
           }
         ],
         enableChange: true
@@ -120,7 +135,13 @@ export const CONFIG = {
       {
         title: '选择权益',
         explain: '(优惠券)',
-        incomeArr: ['添加权益'],
+        incomeArr: [
+          {
+            text: '添加权益',
+            type: INCOME_TYPE.coupon.type,
+            benefit_type: INCOME_TYPE.coupon.benefit_type
+          }
+        ],
         enableChange: true
       },
       {
@@ -129,7 +150,11 @@ export const CONFIG = {
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
     ],
-    checkArr: ['_checkDefault', 'hasBenefit', '_checkDefault']
+    checkArr: ['_checkDefault', 'hasBenefit', '_checkDefault'],
+    submitButton: {
+      text: '编辑计划',
+      fn: 'updateMarket'
+    }
   },
   [MARKET_TYPE.activeCustomer]: { // 活跃新客
     icon: require('./market-header/pic-newguess@2x.png'),
@@ -142,7 +167,13 @@ export const CONFIG = {
       {
         title: '选择权益',
         explain: '(优惠券)',
-        incomeArr: ['添加权益'],
+        incomeArr: [
+          {
+            text: '添加权益',
+            type: INCOME_TYPE.coupon.type,
+            benefit_type: INCOME_TYPE.coupon.benefit_type
+          }
+        ],
         enableChange: true
       },
       {
@@ -150,7 +181,12 @@ export const CONFIG = {
         explain: '(消息模板)',
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
-    ]
+    ],
+    checkArr: ['_checkDefault', '_checkDefault', '_checkDefault'],
+    submitButton: {
+      text: '编辑计划',
+      fn: 'updateMarket'
+    }
   },
   [MARKET_TYPE.boughtCustomer]: { // 已购新客
     icon: require('./market-header/pic-bought@2x.png'),
@@ -163,7 +199,13 @@ export const CONFIG = {
       {
         title: '选择权益',
         explain: '(优惠券)',
-        incomeArr: ['添加权益'],
+        incomeArr: [
+          {
+            text: '添加权益',
+            type: INCOME_TYPE.coupon.type,
+            benefit_type: INCOME_TYPE.coupon.benefit_type
+          }
+        ],
         enableChange: true
       },
       {
@@ -171,6 +213,11 @@ export const CONFIG = {
         explain: '(消息模板)',
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
-    ]
+    ],
+    checkArr: ['_checkDefault', '_checkDefault', '_checkDefault'],
+    submitButton: {
+      text: '编辑计划',
+      fn: 'updateMarket'
+    }
   }
 }

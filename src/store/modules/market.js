@@ -30,7 +30,6 @@ const actions = {
   },
   // 更新权益类型
   updateBenefitType({commit, state}, type = 1) {
-    console.log(type, '-1238190')
     commit('UPDATE_BENEFIT_TYPE', type)
   },
   // 请求创建
