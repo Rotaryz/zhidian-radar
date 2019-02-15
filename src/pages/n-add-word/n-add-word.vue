@@ -60,9 +60,6 @@
       slide() {
         return this.ios ? '' : 'slide'
       }
-    },
-    components: {
-      Toast
     }
   }
 </script>
