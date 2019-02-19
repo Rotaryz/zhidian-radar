@@ -22,13 +22,13 @@
                 :pullUpLoad="pullUpLoadObj"
                 @pullingUp="onPullingUp"
         >
-          <ul class="user-list" v-if="checkedGroup.orderBy === 'join' || checkedGroup.orderBy === 'activity'">
+          <ul class="user-list" v-if="checkedGroup.orderBy !== ''">
             <li class="user-list-item"
                 v-for="(item,index) in dataArray"
                 :key="index"
                 @click="check(item)"
             >
-              <slide-view :useType="1" @grouping="groupingHandler" :item="item">
+              <slide-view :useType="1" @grouping="groupingHandler" :item="item"  @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                 <user-card :userInfo="item" slot="content" :useType="checkedGroup.orderBy"></user-card>
               </slide-view>
             </li>
@@ -52,7 +52,7 @@
         >
           <ul class="user-list-box" v-if="userListArr.length">
             <!--默认分组-->
-            <li class="user-list-item"
+            <!--<li class="user-list-item"
                 v-for="(item,index) in clientGroup"
                 :key="'g'+index"
                 @click="toUserList(item)"
@@ -76,7 +76,7 @@
                   <div class="number">{{item.total || 0}}人</div>
                 </div>
               </slide-view>
-            </li>
+            </li>-->
 
             <!--自定义分组-->
             <li class="user-list-item"
@@ -84,7 +84,7 @@
                 :key="index"
                 @click="toUserList(item)"
             >
-              <slide-view :useType="3" @del="delHandler" :item="item">
+              <slide-view :useType="3" @del="delHandler" :item="item" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                 <div slot="content" class="user-list-item-wrapper">
                   <div class="users-avatar" :class="{'no-border': item.customers.length === 1}">
                     <img v-if="item.customers && item.customers.length && i < 9"
@@ -163,7 +163,7 @@
     name: '加入时间',
     isCheck: true
   }, {
-    orderBy: 'activity',
+    orderBy: 'active_index',
     name: '活跃指数',
     isCheck: false
   }, {
@@ -171,7 +171,7 @@
     name: 'RFM指数',
     isCheck: false
   }, {
-    orderBy: '',
+    orderBy: 'kol_index',
     name: 'KOL指数',
     isCheck: false
   }]
@@ -218,19 +218,21 @@
         total: 0,
         tabIndex: 0,
         dataIndex: 0,
-        CHARTS_TYPE: CHARTS_TYPE
+        CHARTS_TYPE: CHARTS_TYPE,
+        moveIdx: -1,
+        shopId: null
       }
     },
     created() {
-      this.$emit('tabChange', 3)
+      // this.$emit('tabChange', 3)
+      this.shopId = this.$storage.get('info').shop_id
       this.getGroupList()
       this.getCustomerList()
-    },
-    beforeDestroy() {
     },
     methods: {
       changeTab(index) {
         this.selectTab = index
+        this.moveIdx = -1
         if (index === 2) {
           this.$nextTick(() => {
             let pieData = {
@@ -278,7 +280,12 @@
         this.$router.push({path})
       },
       getGroupList() {
-        Client.getGroupList().then(res => {
+        let data = {
+          page: 1,
+          limit: 10,
+          shop_id: this.shopId
+        }
+        Client.getGroupList(data).then(res => {
           if (res.error === ERR_OK) {
             let arr = res.data
             this.userListArr = arr
@@ -290,7 +297,12 @@
         })
       },
       getCustomerList() {
-        const data = {order_by: this.checkedGroup.orderBy, page: 1, limit: LIMIT}
+        const data = {
+          order_by: this.checkedGroup.orderBy,
+          shop_id: this.shopId,
+          page: 1,
+          limit: LIMIT
+        }
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             this.dataArray = res.data
@@ -304,7 +316,7 @@
       },
       toUserList(item) {
         const path = `/client/client-user-list`
-        this.$router.push({path, query: {title: item.name, id: item.id}}) // 分组名称 和 分组id
+        this.$router.push({path, query: {title: item.name, id: item.id, groupType: item.type}}) // 分组名称 和 分组id
       },
       toCreateGroup() {
         const path = `/client/client-create-group`
@@ -319,7 +331,12 @@
         this.$router.push({path, query: {id: item.id}}) // 客户id
       },
       changeGroup() {
-        const data = {order_by: this.checkedGroup.orderBy, limit: this.limit}
+        const data = {
+          order_by: this.checkedGroup.orderBy,
+          shop_id: this.shopId,
+          page: 1,
+          limit: this.limit
+        }
         Client.getCustomerList(data).then(res => {
           if (res.data) {
             this.dataArray = res.data
@@ -335,6 +352,9 @@
         const data = {groupId: this.checkedItem.id}
         Client.delGroup(data).then(res => {
           if (res.error === ERR_OK) {
+            let refName = 'slide' + this.moveIdx
+            this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+            this.moveIdx = -1
             const idx = this.userListArr.findIndex(val => val.id === this.checkedItem.id)
             this.userListArr.splice(idx, 1)
             this.tabList[1].number = this.userListArr.length
@@ -373,6 +393,15 @@
             this.$refs.toast.show(res.message)
           }
         })
+      },
+      touchBegin(idx) {
+        if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
+          let refName = 'slide' + this.moveIdx
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+        }
+      },
+      touchEnd(idx) {
+        this.moveIdx = idx
       },
       rebuildScroll() {
         this.$nextTick(() => {

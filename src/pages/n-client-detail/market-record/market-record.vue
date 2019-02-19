@@ -37,14 +37,14 @@
       padding-top: 24px
       border-left-1px(#e3eefc)
       padding-left: 15px
-      &:before
+      &:after
         content: ''
         width: 4px
         height: 4px
         border: 1.5px solid #4B92F2
         border-radius: 50%
         position: absolute
-        left: -4px
+        left: -3px
         top: 27px
         background: #FFF
       .time

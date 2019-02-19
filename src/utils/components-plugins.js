@@ -1,6 +1,6 @@
 import ToastComponent from 'components/toast/toast'
 import LoadingComponent from 'components/loading/loading'
-import LoginComponent from 'components/login/login'
+// import LoginComponent from 'components/login/login'
 
 const Toast = {}
 
@@ -31,18 +31,18 @@ Loading.install = function (Vue) {
   Vue.prototype.$loading = instance
 }
 
-const Login = {}
-
-Login.install = function (Vue) {
-  const LoadingConstructor = Vue.extend(LoginComponent)
-  const instance = new LoadingConstructor()
-  instance.$mount(document.createElement('div'))
-  document.body.appendChild(instance.$el)
-  Vue.prototype.$login = instance
-}
+// const Login = {}
+//
+// Login.install = function (Vue) {
+//   const LoadingConstructor = Vue.extend(LoginComponent)
+//   const instance = new LoadingConstructor()
+//   instance.$mount(document.createElement('div'))
+//   document.body.appendChild(instance.$el)
+//   Vue.prototype.$login = instance
+// }
 
 export default {
   Toast,
-  Loading,
-  Login
+  Loading
+  // Login
 }
