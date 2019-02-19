@@ -133,6 +133,13 @@
       Scroll,
       CustomerGroup
     },
+    props: {
+      // hasFn是否要等方法执行完再收起遮罩
+      'hasFn': {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         modelShow: false,
@@ -153,10 +160,12 @@
     },
     methods: {
       submitHandle() {
-        this.$emit('submit', this.checkItem)
+        this.$emit('submit', this.checkItem, this.showType)
+        if (this.hasFn) return
         this.hideModel()
       },
       _resetItem() {
+        this.page = 1
         this.checkIdx = -1
         this.checkItem = {}
       },
@@ -184,14 +193,12 @@
       },
       showModel(type) {
         this.modelShow = true
-        this.page = 1
-        this.checkIdx = -1
-        this.checkItem = {}
         this.showType = type
+        this._resetItem()
         this.getList()
       },
       hideModel() {
-        this.modelShow = !this.modelShow
+        this.modelShow = false
         this._resetItem()
       },
       chioceItem(idx, item) {
