@@ -8,7 +8,9 @@ export default {
   },
   updateActiveStatus(data, loading = true, toast = true) {
     let url = 'api/employee/ai-market/activity-change-status/' + data.id
-    data = ''
+    data = {
+      status: data.status
+    }
     return request.put(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   },
   getDetail(data, loading = true, toast = true) {
