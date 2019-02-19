@@ -130,7 +130,15 @@ export const CONFIG = {
       {
         title: '选择人群',
         explain: '(覆盖人数',
-        enableChange: true
+        enableChange: true,
+        enableChangeType: 'group',
+        groupArr: [
+          {
+            text: '添加权益',
+            type: INCOME_TYPE.group.type,
+            benefit_type: INCOME_TYPE.group.benefit_type
+          }
+        ]
       },
       {
         title: '选择权益',
@@ -142,7 +150,8 @@ export const CONFIG = {
             benefit_type: INCOME_TYPE.coupon.benefit_type
           }
         ],
-        enableChange: true
+        enableChange: true,
+        enableChangeType: 'income'
       },
       {
         title: '选择渠道',

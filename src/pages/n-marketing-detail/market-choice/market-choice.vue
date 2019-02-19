@@ -12,24 +12,33 @@
             <p v-if="index === 0" class="explain">{{item.explain}}{{groupData.cover_count}}人)</p>
             <p v-else class="explain">{{item.explain}}</p>
           </div>
-          <div v-if="isShowDelButton(index, item) && hasBenefit" class="right" @click="delHandle(index)">
+          <div v-if="isShowDelButton(index, item, 'group') && hasGroup" class="right" @click="delHandle(index)">
+            <img class="del-icon" src="./icon-del_yx@2x.png" alt="">
+          </div>
+          <div v-if="isShowDelButton(index, item, 'income') && hasBenefit" class="right" @click="delHandle(index)">
             <img class="del-icon" src="./icon-del_yx@2x.png" alt="">
           </div>
         </section>
         <section v-if="index==0" class="bottom one">
-          <div class="left">
-            <customer-group :dataArray="groupData.customers"></customer-group>
-          </div>
-          <div class="right">
-            <p class="title">{{groupData.group_name}}</p>
-            <p class="explain">{{groupData.group_desc}}</p>
-          </div>
-        </section>
-        <section v-if="index==1" class="bottom two">
-          <ul v-if="!(marketData.benefit && marketData.benefit.length)" class="button-group">
-            <li v-for="(child, idx) in item.incomeArr" :key="idx" class="button" @click="incomeHandle(child, idx)">
+          <ul v-if="true" class="button-group">
+            <li v-for="(child, idx) in item.groupArr" :key="idx" class="button" @click="incomeHandle(child, idx, 'group')">
               <img class="add-icon" src="./icon-add@2x.png" alt="">
               <p class="text">{{child.text}}</p>
+            </li>
+          </ul>
+          <!--<div class="left">-->
+            <!--<customer-group :dataArray="groupData.customers"></customer-group>-->
+          <!--</div>-->
+          <!--<div class="right">-->
+            <!--<p class="title">{{groupData.group_name}}</p>-->
+            <!--<p class="explain">{{groupData.group_desc}}</p>-->
+          <!--</div>-->
+        </section>
+        <section v-if="index==1" class="bottom two">
+          <ul v-if="isShowIncomeButton" class="button-group">
+            <li v-for="(child, idx) in item.incomeArr" :key="idx" class="button" @click="incomeHandle(child, idx)">
+              <img class="add-icon" src="./icon-add@2x.png" alt="">
+              <p class="text">{{child.text}}{{!(marketData.benefit)}}</p>
             </li>
           </ul>
           <div v-else v-for="(child,index) in marketData.benefit" :key="index" class="income-wrapper">
@@ -76,9 +85,17 @@
       dataArray() {
         return this.CONFIG.choicesArr
       },
+      isShowIncomeButton() {
+        return !(this.marketData.benefit && this.marketData.benefit.length)
+      },
       hasBenefit() {
         let benefit = this.marketData.benefit
         let flag = benefit && benefit.length
+        return flag
+      },
+      hasGroup() {
+        let group = this.marketData.group
+        let flag = group && group.length
         return flag
       },
       groupData() {
@@ -91,12 +108,16 @@
     },
     methods: {
       ...Helpers.marketMethods,
-      isShowDelButton(index, item) {
-        let position = index + 1 !== this.dataArray.length
+      isShowDelButton(index, item, type) {
+        let position = item.enableChangeType === type
         let enableChange = item.enableChange
         return position && enableChange
       },
-      incomeHandle(child, idx) {
+      incomeHandle(child, idx, type) {
+        if (type === 'group') {
+          this.$emit('income', idx, 'group')
+          return
+        }
         this.updateBenefitType(child.benefit_type)
         this.$emit('income', idx)
       },
@@ -266,6 +287,28 @@
           &.one
             layout(row,block,nowrap)
             align-items :center
+          .button-group
+            flex:1
+            layout(row,block,nowrap)
+            align-items :center
+            justify-content :space-around
+            .button
+              display :flex
+              flex-direction :column
+              align-items :center
+              justify-content :center
+              .add-icon
+                display :inline-block
+                text-align :center
+                width :10.666666666666668vw
+                height :@width
+              .text
+                margin-top :1.3333333333333335vw
+                font-family: $font-family-regular
+                font-size: 3.2vw
+                color: #333333;
+                line-height: @font-size
+                text-align :center
           .left
             width :12vw
             height :@width

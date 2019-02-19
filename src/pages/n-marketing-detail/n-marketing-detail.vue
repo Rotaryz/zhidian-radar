@@ -20,8 +20,6 @@
   import MarketButton from './market-button/market-button'
   import SelectorView from 'components/selector-view/selector-view'
   import * as Helpers from '@/store/helpers'
-  import {CONFIG} from './config-detail'
-  import {MARKET_TYPE} from 'utils/constant'
 
   const PAGE_NAME = 'N_MARKETING_DETAIL'
 
@@ -36,15 +34,12 @@
     },
     data() {
       return {
-        couponList: []
+        couponList: [],
+        chooseType: ''
       }
     },
     computed: {
-      ...Helpers.marketComputed,
-      CONFIG() {
-        let key = this.marketData.type || MARKET_TYPE.DIY
-        return CONFIG[key] || {}
-      }
+      ...Helpers.marketComputed
     },
     created() {
       this._initPage()
@@ -53,32 +48,45 @@
       ...Helpers.marketMethods,
       async _initPage() {
         let id = +this.$route.query.id
+        if (isNaN(id) || !id) {
+          await this.requestMarketData()
+        }
         if (id && !this.marketData.id) {
           await this.requestMarketData({id})
         }
       },
-      incomeHandle(idx) {
-        let type = this.CONFIG.choicesArr[1].incomeArr[idx].type
+      incomeHandle(idx, chooseType) {
+        let type = ''
+        if (chooseType === 'group') {
+          type = this.CONFIG.choicesArr[0].groupArr[idx].type
+        } else {
+          type = this.CONFIG.choicesArr[1].incomeArr[idx].type
+        }
         this.$refs.selector.showModel(type)
+        this.chooseType = chooseType
       },
       submitHandle(item) {
-        console.log(item)
-        let benefit = [
-          {
-            benefit_id: item.id || item.activity_id,
-            recommend_benefit_id: item.recommend_coupon_id || item.recommend_activity_id,
-            name: item.coupon_name || item.goods_title,
-            start_at: item.start_at,
-            end_at: item.end_at,
-            image_url_thumb: item.image_url_thumb,
-            active_type: item.rule_id,
-            coupon_range_type_str: item.range_type_str,
-            coupon_denomination: item.denomination,
-            coupon_type: item.coupon_type,
-            coupon_condition_str: item.condition_str
-          }
-        ]
-        this.updateBenefit(benefit)
+        if (this.chooseType === 'group') {
+          let group = []
+          this.updateGroup(group)
+        } else {
+          let benefit = [
+            {
+              benefit_id: item.id || item.activity_id,
+              recommend_benefit_id: item.recommend_coupon_id || item.recommend_activity_id,
+              name: item.coupon_name || item.goods_title,
+              start_at: item.start_at,
+              end_at: item.end_at,
+              image_url_thumb: item.image_url_thumb,
+              active_type: item.rule_id,
+              coupon_range_type_str: item.range_type_str,
+              coupon_denomination: item.denomination,
+              coupon_type: item.coupon_type,
+              coupon_condition_str: item.condition_str
+            }
+          ]
+          this.updateBenefit(benefit)
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <footer class="market-button" @click="submitHandle">
-    <div class="button">{{CONFIG.submitButton.text}}</div>
+    <div class="button">{{CONFIG.submitButton && CONFIG.submitButton.text}}</div>
   </footer>
 </template>
 
@@ -18,6 +18,9 @@
     },
     computed: {
       ...Helpers.marketComputed
+    },
+    mounted() {
+      console.log(this.CONFIG)
     },
     methods: {
       ...Helpers.marketMethods,
