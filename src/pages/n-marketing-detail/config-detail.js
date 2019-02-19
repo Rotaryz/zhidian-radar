@@ -41,7 +41,8 @@ export const CONFIG = {
             benefit_type: INCOME_TYPE.coupon.benefit_type
           }
         ],
-        enableChange: true
+        enableChange: true,
+        enableChangeType: 'income'
       },
       {
         title: '选择渠道',
@@ -67,7 +68,8 @@ export const CONFIG = {
         title: '选择权益',
         explain: '(上新的商品或活动)',
         incomeArr: [],
-        enableChange: false
+        enableChange: false,
+        enableChangeType: 'income'
       },
       {
         title: '选择渠道',
@@ -104,7 +106,8 @@ export const CONFIG = {
             benefit_type: INCOME_TYPE.coupon.benefit_type
           }
         ],
-        enableChange: true
+        enableChange: true,
+        enableChangeType: 'income'
       },
       {
         title: '选择渠道',
@@ -159,7 +162,7 @@ export const CONFIG = {
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
     ],
-    checkArr: ['_checkDefault', 'hasBenefit', '_checkDefault'],
+    checkArr: ['hasGroup', 'hasBenefit', '_checkDefault'],
     submitButton: {
       text: '编辑计划',
       fn: 'updateMarket'
@@ -183,7 +186,8 @@ export const CONFIG = {
             benefit_type: INCOME_TYPE.coupon.benefit_type
           }
         ],
-        enableChange: true
+        enableChange: true,
+        enableChangeType: 'income'
       },
       {
         title: '选择渠道',
@@ -215,7 +219,8 @@ export const CONFIG = {
             benefit_type: INCOME_TYPE.coupon.benefit_type
           }
         ],
-        enableChange: true
+        enableChange: true,
+        enableChangeType: 'income'
       },
       {
         title: '选择渠道',

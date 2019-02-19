@@ -78,7 +78,7 @@
               start_at: item.start_at,
               end_at: item.end_at,
               image_url_thumb: item.image_url_thumb,
-              active_type: item.rule_id,
+              activity_type: item.rule_id,
               coupon_range_type_str: item.range_type_str,
               coupon_denomination: item.denomination,
               coupon_type: item.coupon_type,

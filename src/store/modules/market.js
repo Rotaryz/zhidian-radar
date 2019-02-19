@@ -24,7 +24,6 @@ const getters = {
 const actions = {
   // 请求数据
   async requestMarketData({commit, state}, obj = {}) {
-    console.log(obj)
     if (!obj.id) {
       commit('REQ_DATA', initMarketData())
     } else {

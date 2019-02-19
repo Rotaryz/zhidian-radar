@@ -20,25 +20,26 @@
           </div>
         </section>
         <section v-if="index==0" class="bottom one">
-          <ul v-if="true" class="button-group">
+          <ul v-if="isShowGroupButton" class="button-group">
             <li v-for="(child, idx) in item.groupArr" :key="idx" class="button" @click="incomeHandle(child, idx, 'group')">
               <img class="add-icon" src="./icon-add@2x.png" alt="">
               <p class="text">{{child.text}}</p>
             </li>
           </ul>
-          <!--<div class="left">-->
-            <!--<customer-group :dataArray="groupData.customers"></customer-group>-->
-          <!--</div>-->
-          <!--<div class="right">-->
-            <!--<p class="title">{{groupData.group_name}}</p>-->
-            <!--<p class="explain">{{groupData.group_desc}}</p>-->
-          <!--</div>-->
+          <div v-if="!isShowGroupButton && hasGroup" class="left">
+            <customer-group :dataArray="groupData.customers"></customer-group>
+          </div>
+          <div v-if="!isShowGroupButton && hasGroup" class="right">
+            <p class="title">{{groupData.group_name}}</p>
+            <p class="explain">{{groupData.group_desc}}</p>
+          </div>
         </section>
         <section v-if="index==1" class="bottom two">
+          <p v-if="!item.enableChange && !marketData.benefit.length" class="income-empty">每日上新的商品或活动，只推送一次</p>
           <ul v-if="isShowIncomeButton" class="button-group">
             <li v-for="(child, idx) in item.incomeArr" :key="idx" class="button" @click="incomeHandle(child, idx)">
               <img class="add-icon" src="./icon-add@2x.png" alt="">
-              <p class="text">{{child.text}}{{!(marketData.benefit)}}</p>
+              <p class="text">{{child.text}}</p>
             </li>
           </ul>
           <div v-else v-for="(child,index) in marketData.benefit" :key="index" class="income-wrapper">
@@ -85,6 +86,9 @@
       dataArray() {
         return this.CONFIG.choicesArr
       },
+      isShowGroupButton() {
+        return !(this.marketData.group && this.marketData.group.length)
+      },
       isShowIncomeButton() {
         return !(this.marketData.benefit && this.marketData.benefit.length)
       },
@@ -125,11 +129,12 @@
         this.updateBenefit()
       },
       lineCheckHandle(idx) {
-        let key = this.CONFIG.checkArr[idx]
-        let flag = this[key]
-        if (idx !== 0) {
-          key = this.CONFIG.checkArr[idx - 1]
-          flag = flag && this[key]
+        let key = ''
+        let flag = false
+        for (let index = idx; index >= 0; index--) {
+          key = this.CONFIG.checkArr[index]
+          flag = this[key]
+          if (!flag) break
         }
         return flag
       }
@@ -146,6 +151,16 @@
     display :flex
     justify-content :center
     align-items :center
+
+  .income-empty
+    width :100%
+    display :flex
+    justify-content :center
+    align-items :center
+    font-family: $font-family-regular
+    font-size: 3.733333333333334vw
+    color: #666666;
+    line-height: 1
 
   .market-choice
     display :flex
@@ -317,7 +332,7 @@
             overflow :hidden
             margin-left :3.0666666666666664vw
             font-family: $font-family-regular
-            line-height: 1
+            line-height: 1.2
             .title
               font-size: 3.733333333333334vw
               color: #333333;

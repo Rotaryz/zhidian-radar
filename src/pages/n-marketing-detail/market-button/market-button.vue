@@ -19,9 +19,6 @@
     computed: {
       ...Helpers.marketComputed
     },
-    mounted() {
-      console.log(this.CONFIG)
-    },
     methods: {
       ...Helpers.marketMethods,
       async submitHandle() {

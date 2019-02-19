@@ -8,8 +8,8 @@
         <p class="title">{{info.name}}</p>
         <p class="explain">有效期至{{info.end_at}}1</p>
       </section>
-      <img v-if="info.active_type === 1" class="icon" src="./pic-label@2x.png" alt="">
-      <img v-if="info.active_type === 3" class="icon" src="./pic-label_kj@2x.png" alt="">
+      <img v-if="info.activity_type === 1" class="icon" src="./pic-label@2x.png" alt="">
+      <img v-if="info.activity_type === 3" class="icon" src="./pic-label_kj@2x.png" alt="">
     </div>
   </div>
 </template>
