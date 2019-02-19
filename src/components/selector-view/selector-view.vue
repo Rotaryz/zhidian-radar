@@ -102,7 +102,7 @@
               <div class="group-item" v-for="(item, index) in list" :key="index" @click.stop="chioceItem(index, item)">
                 <div class="item-left">
                   <div class="left-img-box">
-                    <customer-group></customer-group>
+                    <customer-group :dataArray="item.customers"></customer-group>
                   </div>
                   <div class="left-title">潜在客户(20人)</div>
                 </div>
@@ -125,7 +125,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import CustomerGroup from 'components/customer-group/customer-group'
-  import { Im, Coupon } from 'api'
+  import { Im, Coupon, Client } from 'api'
   import { ERR_OK } from 'common/js/config'
   import {ease} from 'common/js/ease'
   export default {
@@ -224,7 +224,36 @@
           case 'words':
             this.getWordsList()
             break
+          case 'group':
+            this.getGroupList()
+            break
+          default:
+            break
         }
+      },
+      // 客户分组
+      getGroupList() {
+        let data = {
+          page: 1,
+          limit: 15,
+          shop_id: this.$storage.get('info').shop_id
+        }
+        Client.getGroupList(data).then(res => {
+          console.log(res.data)
+          if (res.error === ERR_OK) {
+            this.list = res.data
+            this.total = res.meta.total
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+          if (this.total < 15) {
+            this.showNoMore = true
+          }
+          setTimeout(() => {
+            this.$refs.scroll && this.$refs.scroll.forceUpdate()
+            this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
+          }, 20)
+        })
       },
       // 优惠券
       getCouponList() {
@@ -763,6 +792,7 @@
                   width: 45px
                   height: 45px
                 .left-title
+                  margin-left :11px
                   font-family: $font-family-regular
                   color: $color-text-main
                   font-size: $font-size-16
