@@ -64,11 +64,11 @@
             <div class="txt">{{userInfo.name}}</div>
             <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
           </div>
-          <div class="last-time">AI预计成交率{{userInfo.conversion_rate}}%</div>
+          <div class="last-time">KOL指数{{userInfo.conversion_rate}}%</div>
         </section>
         <div class="tags">
           <div class="left">{{userInfo.flow_join_at}}</div>
-          <div class="tags-right"></div>
+          <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
     </section>
