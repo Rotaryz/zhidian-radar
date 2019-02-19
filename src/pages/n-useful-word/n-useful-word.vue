@@ -10,7 +10,7 @@
                   <span>{{item.message}}</span>
                 </div>
                 <div class="item-right">
-                  <div class="icon-box editor-box" @click="editItem(item)">
+                  <div class="icon-box editor-box" @click="editItem(item, index)">
                     <div class="right-icon-editor right-icon"></div>
                   </div>
                 </div>
@@ -117,7 +117,8 @@
           }
         })
       },
-      editItem(item) {
+      editItem(item, index) {
+        this.$router.push(`/add-word?index=${index}`)
         this.editorMsg = item.message
         this.editorItem = item
         this.editorShow = true

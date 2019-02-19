@@ -19,7 +19,7 @@
       </article>
     </section>
     <!--活跃指数-->
-    <section class="container" v-else-if="useType==='activity'">
+    <section class="container" v-else-if="useType==='active_index'">
       <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes.p}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
@@ -28,11 +28,11 @@
             <div class="txt">{{userInfo.name}}</div>
             <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
           </div>
-          <div class="last-time">活跃指数40</div>
+          <div class="last-time">活跃指数{{userInfo.active_value}}</div>
         </section>
         <div class="tags">
           <div class="left">{{userInfo.last_follow_day}}</div>
-          <div class="tags-right">{{userInfo.last_active_at}}</div>
+          <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
     </section>
@@ -50,12 +50,12 @@
         </section>
         <div class="tags">
           <div class="left">{{userInfo.last_follow_day}}</div>
-          <div class="tags-right">{{userInfo.last_follow_at}}</div>
+          <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
     </section>
     <!--通用-->
-    <section class="container" v-else>
+    <section class="container" v-else-if="useType==='kol_index'">
       <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes.p}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
@@ -67,7 +67,7 @@
           <div class="last-time">AI预计成交率{{userInfo.conversion_rate}}%</div>
         </section>
         <div class="tags">
-          <div class="left">{{userInfo.last_follow_day}}</div>
+          <div class="left">{{userInfo.flow_join_at}}</div>
           <div class="tags-right"></div>
         </div>
       </article>
@@ -108,7 +108,7 @@
         height: 40px
         border-radius: 50%
         padding: 2px
-        border: 2px solid $color-pnes-e
+        border: 1.5px solid $color-pnes-e
         margin-right: 10px
       .user-info
         flex: 1

@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import './utils/app-plugins'
 import 'common/stylus/index.styl'
 // import fastclick from 'fastclick'
 import store from './store'

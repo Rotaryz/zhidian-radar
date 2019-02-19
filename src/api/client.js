@@ -3,7 +3,7 @@ import request from 'common/js/request'
 export default {
   // 获取客户分组列表
   getGroupList(data, loading) {
-    const url = `/api/employee/groups`
+    const url = `/api/employee/ai/groups-list`
     return request.get(url, data, loading)
   },
   // 新建分组
@@ -17,8 +17,8 @@ export default {
     return request.get(url, data, loading)
   },
   // 获取分组内客户列表
-  getGroupCustomerList(groupId, data, loading) {
-    const url = `/api/employee/groups/${groupId}/customers`
+  getGroupCustomerList(data, loading) {
+    const url = `api/employee/ai/groups-users`
     return request.get(url, data, loading)
   },
   // 获取设置分组的客户列表

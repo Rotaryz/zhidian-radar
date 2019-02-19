@@ -84,7 +84,8 @@
         limit: LIMIT,
         isAll: false,
         isEmpty: false,
-        moveIdx: -1
+        moveIdx: -1,
+        groupType: null
       }
     },
     created() {
@@ -115,15 +116,18 @@
       getParams() {
         this.title = this.$route.query.title
         this.id = this.$route.query.id
+        this.groupType = this.$route.query.groupType
       },
       getCustomerList() {
         this.page = 1
         this.isAll = false
         let data = {
           page: this.page,
-          limit: this.limit
+          limit: this.limit,
+          group_id: this.id,
+          group_type: this.groupType // 分组类型0自定义1pens，2kol，3活跃新客，4已购客户
         }
-        Client.getGroupCustomerList(this.id, data).then(res => {
+        Client.getGroupCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             this.dataArray = res.data
             this.isEmpty = !this.dataArray.length
