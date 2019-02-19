@@ -12,10 +12,10 @@
             <p v-if="index === 0" class="explain">{{item.explain}}{{groupData.cover_count}}人)</p>
             <p v-else class="explain">{{item.explain}}</p>
           </div>
-          <div v-if="isShowDelButton(index, item, 'group') && hasGroup" class="right" @click="delHandle(index)">
+          <div v-if="isShowDelButton(index, item, 'group') && hasGroup" class="right" @click="delHandle(index, 'group')">
             <img class="del-icon" src="./icon-del_yx@2x.png" alt="">
           </div>
-          <div v-if="isShowDelButton(index, item, 'income') && hasBenefit" class="right" @click="delHandle(index)">
+          <div v-if="isShowDelButton(index, item, 'income') && hasBenefit" class="right" @click="delHandle(index), 'income'">
             <img class="del-icon" src="./icon-del_yx@2x.png" alt="">
           </div>
         </section>
@@ -125,8 +125,12 @@
         this.updateBenefitType(child.benefit_type)
         this.$emit('income', idx)
       },
-      delHandle(idx) {
-        this.updateBenefit()
+      delHandle(idx, type) {
+        if (type === 'group') {
+          this.updateGroup()
+        } else {
+          this.updateBenefit()
+        }
       },
       lineCheckHandle(idx) {
         let key = ''

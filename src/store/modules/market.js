@@ -46,7 +46,7 @@ const actions = {
     commit('UPDATE_NAME', name)
   },
   // 更新客户组
-  updateGroup({commit, state}, group) {
+  updateGroup({commit, state}, group = []) {
     commit('UPDATE_GROUP', group)
   },
   // 请求创建
@@ -54,7 +54,7 @@ const actions = {
     try {
       let data = _formatUpdateData(state.marketData)
       await API.Marketing.create(data)
-      commit('CLEAR_MARKET')
+      // commit('CLEAR_MARKET')
       return true
     } catch (e) {
     }
@@ -64,7 +64,7 @@ const actions = {
     try {
       let data = _formatUpdateData(state.marketData)
       await API.Marketing.update(data)
-      commit('CLEAR_MARKET')
+      // commit('CLEAR_MARKET')
       return true
     } catch (e) {
     }
@@ -88,7 +88,7 @@ const mutations = {
   },
   // 清空数据
   CLEAR_MARKET(state) {
-    this.state.marketData = initMarketData()
+    state.marketData = initMarketData()
   },
   // 更新权益类型
   UPDATE_BENEFIT_TYPE(state, type) {

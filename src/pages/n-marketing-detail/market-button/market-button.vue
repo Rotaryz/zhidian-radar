@@ -6,6 +6,7 @@
 
 <script type="text/ecmascript-6">
   import * as Helpers from '@/store/helpers'
+  import {MARKET_TYPE} from 'utils/constant'
 
   const COMPONENT_NAME = 'MARKET_BUTTON'
 
@@ -21,14 +22,51 @@
     },
     methods: {
       ...Helpers.marketMethods,
-      async submitHandle() {
+      submitHandle() {
         if (Date.now() - this.nowTime < 100) return
         this.nowTime = Date.now()
-        let method = this.CONFIG.submitButton.fn
-        let flag = await this[method]()
-        if (!flag) return
-        this.$router.back()
-        this.$emit('refresh')
+        this._check(async () => {
+          let id = +this.$route.query.id
+          let method = id ? this.CONFIG.submitButton.fn : this.CONFIG.submitButton.defaultFn
+          let flag = await this[method]()
+          if (!flag) return
+          this.$parent.$emit('refresh')
+          this.$router.back()
+        })
+      },
+      _check(cb) {
+        let marketData = this.marketData
+        let checkArr = []
+        let flag = false
+        if (+this.marketData.type === +MARKET_TYPE.DIY) {
+          flag = marketData.name.trim()
+          console.log(flag)
+          !flag && checkArr.push('请输入活动名称')
+        }
+        this.CONFIG.checkArr.forEach((item) => {
+          switch (item) {
+            case 'hasGroup':
+              flag = marketData.group && marketData.group.length
+              !flag && checkArr.push('请选择人群')
+              break
+            case 'hasBenefit':
+              flag = marketData.benefit && marketData.benefit.length
+              !flag && checkArr.push('请选择权益')
+              break
+            default:
+              break
+          }
+        })
+        this._toast(checkArr, cb)
+      },
+      _toast(arr, cb) {
+        if (!arr.length) {
+          cb && cb()
+          return
+        }
+        arr.forEach((item) => {
+          this.$toast.show(item)
+        })
       }
     }
   }

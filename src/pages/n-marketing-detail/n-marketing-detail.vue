@@ -20,6 +20,7 @@
   import MarketButton from './market-button/market-button'
   import SelectorView from 'components/selector-view/selector-view'
   import * as Helpers from '@/store/helpers'
+  import {Client} from 'api'
 
   const PAGE_NAME = 'N_MARKETING_DETAIL'
 
@@ -54,6 +55,30 @@
         if (id && !this.marketData.id) {
           await this.requestMarketData({id})
         }
+        this._getGroupInfo()
+      },
+      _getGroupInfo() {
+        let {groupName, groupId} = this.$route.query
+        if (!groupId) return
+        let data = {
+          page: 1,
+          limit: 9,
+          group_id: groupId
+        }
+        Client.getGroupCustomerList(data).then(res => {
+          if (res.error === this.$.ERR_OK) {
+            let group = [{
+              group_id: groupId,
+              group_name: groupName,
+              cover_count: res.meta.total,
+              group_desc: '',
+              customers: res.data
+            }]
+            this.updateGroup(group)
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
       },
       incomeHandle(idx, chooseType) {
         let type = ''
@@ -67,7 +92,13 @@
       },
       submitHandle(item) {
         if (this.chooseType === 'group') {
-          let group = []
+          let group = [{
+            group_id: item.id,
+            group_name: item.name,
+            cover_count: item.total,
+            group_desc: '',
+            customers: item.customers
+          }]
           this.updateGroup(group)
         } else {
           let benefit = [

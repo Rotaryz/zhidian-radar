@@ -67,7 +67,7 @@
     },
     computed: {
       CONFIG() {
-        let key = this.info.type || CARD_TYPE.newCustomer
+        let key = '' + this.info.type || CARD_TYPE.newCustomer
         return CONFIG[key]
       }
     },

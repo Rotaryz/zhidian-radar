@@ -104,11 +104,11 @@
                   <div class="left-img-box">
                     <customer-group :dataArray="item.customers"></customer-group>
                   </div>
-                  <div class="left-title">潜在客户(20人)</div>
+                  <div class="left-title">{{item.name}}({{item.total}}人)</div>
                 </div>
                 <div class="item-right">
-                  <div v-if="false" class="circle"></div>
-                  <img src="./icon_pick_goods@2x.png" class="right-img">
+                  <div v-if="index != checkIdx" class="circle"></div>
+                  <img v-if="index == checkIdx" src="./icon_pick_goods@2x.png" class="right-img">
                 </div>
               </div>
             </div>
@@ -189,6 +189,11 @@
             break
           case 'words':
             break
+          case 'group':
+            this.getMoreGroupList()
+            break
+          default:
+            break
         }
       },
       showModel(type) {
@@ -239,7 +244,6 @@
           shop_id: this.$storage.get('info').shop_id
         }
         Client.getGroupList(data).then(res => {
-          console.log(res.data)
           if (res.error === ERR_OK) {
             this.list = res.data
             this.total = res.meta.total
@@ -253,6 +257,30 @@
             this.$refs.scroll && this.$refs.scroll.forceUpdate()
             this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
           }, 20)
+        })
+      },
+      getMoreGroupList() {
+        if (this.showNoMore) {
+          this.$refs.scroll && this.$refs.scroll.forceUpdate()
+          return
+        }
+        this.page++
+        let data = {
+          page: this.page,
+          limit: 15
+        }
+        Client.getGroupList(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.total = res.meta.total
+            if (res.data < 15) {
+              this.showNoMore = true
+              return
+            }
+            this.list = [...this.list, ...res.data]
+            setTimeout(() => {
+              this.$refs.scroll && this.$refs.scroll.forceUpdate()
+            }, 20)
+          }
         })
       },
       // 优惠券

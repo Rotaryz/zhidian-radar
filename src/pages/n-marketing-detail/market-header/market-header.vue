@@ -1,6 +1,6 @@
 <template>
   <div class="market-header">
-    <header v-if="!marketData.id" class="header-wrapper">
+    <header v-if="!CONFIG.icon" class="header-wrapper">
       <label class="header">
         <p class="left">活动名称</p>
         <section class="right">

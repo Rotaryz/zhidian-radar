@@ -165,7 +165,8 @@ export const CONFIG = {
     checkArr: ['hasGroup', 'hasBenefit', '_checkDefault'],
     submitButton: {
       text: '编辑计划',
-      fn: 'updateMarket'
+      fn: 'updateMarket',
+      defaultFn: 'createMarket'
     }
   },
   [MARKET_TYPE.activeCustomer]: { // 活跃新客
@@ -195,7 +196,7 @@ export const CONFIG = {
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
     ],
-    checkArr: ['_checkDefault', '_checkDefault', '_checkDefault'],
+    checkArr: ['_checkDefault', 'hasBenefit', '_checkDefault'],
     submitButton: {
       text: '编辑计划',
       fn: 'updateMarket'
@@ -228,7 +229,7 @@ export const CONFIG = {
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
     ],
-    checkArr: ['_checkDefault', '_checkDefault', '_checkDefault'],
+    checkArr: ['_checkDefault', 'hasBenefit', '_checkDefault'],
     submitButton: {
       text: '编辑计划',
       fn: 'updateMarket'
