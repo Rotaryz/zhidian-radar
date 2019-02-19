@@ -2,49 +2,53 @@
   <nav class="market-choice">
     <section v-for="(item, index) in dataArray" :key="index" class="panel-wrapper">
       <aside v-if="dataArray" class="line-wrapper">
-        <!--<div v-if="dataArray.length - index >= 1" class="icon" :class="{active:lineCheckHandle(index)}">{{index+1}}</div>-->
-        <!--<p v-if="dataArray.length - index > 1" class="line" :class="{active:lineCheckHandle(index)}"></p>-->
+        <div v-if="dataArray.length - index >= 1" class="icon" :class="{active:lineCheckHandle(index)}">{{index+1}}</div>
+        <p v-if="dataArray.length - index > 1" class="line" :class="{active:lineCheckHandle(index)}"></p>
       </aside>
       <div class="panel" :class="{active: index===0}">
-        <!--<section class="top">-->
-          <!--<div class="left">-->
-            <!--<p class="title">{{item.title}}</p>-->
-            <!--<p v-if="index === 0" class="explain">{{item.explain}}{{groupData.cover_count}}人)</p>-->
-            <!--<p v-else class="explain">{{item.explain}}</p>-->
+        <section class="top">
+          <div class="left">
+            <p class="title">{{item.title}}</p>
+            <p v-if="index === 0" class="explain">{{item.explain}}{{groupData.cover_count}}人)</p>
+            <p v-else class="explain">{{item.explain}}</p>
+          </div>
+          <div v-if="isShowDelButton(index, item) && hasBenefit" class="right" @click="delHandle(index)">
+            <img class="del-icon" src="./icon-del_yx@2x.png" alt="">
+          </div>
+        </section>
+        <section v-if="index==0" class="bottom one">
+          <div class="left">
+            <customer-group :dataArray="groupData.customers"></customer-group>
+          </div>
+          <div class="right">
+            <p class="title">{{groupData.group_name}}</p>
+            <p class="explain">{{groupData.group_desc}}</p>
+          </div>
+        </section>
+        <section v-if="index==1" class="bottom two">
+          <!--<div class="income-wrapper">-->
+            <!--<market-active></market-active>-->
           <!--</div>-->
-          <!--<div v-if="isShowDelButton(index, item) && hasBenefit" class="right" @click="delHandle(index)">-->
-            <!--<img class="del-icon" src="./icon-del_yx@2x.png" alt="">-->
-          <!--</div>-->
-        <!--</section>-->
-        <!--<section v-if="index==0" class="bottom one">-->
-          <!--<div class="left">-->
-            <!--<customer-group :dataArray="groupData.customers"></customer-group>-->
-          <!--</div>-->
-          <!--<div class="right">-->
-            <!--<p class="title">{{groupData.group_name}}</p>-->
-            <!--<p class="explain">{{groupData.group_desc}}</p>-->
-          <!--</div>-->
-        <!--</section>-->
-        <!--<section v-if="index==1" class="bottom two">-->
-          <!--<ul v-if="!(marketData.benefit && marketData.benefit.length)" class="button-group">-->
-            <!--<li v-for="(child, idx) in item.incomeArr" :key="idx" class="button" @click="incomeHandle(idx)">-->
-              <!--<img class="add-icon" src="./icon-add@2x.png" alt="">-->
-              <!--<p class="text">{{child}}</p>-->
-            <!--</li>-->
-          <!--</ul>-->
-          <!--<div v-else v-for="(item,index) in marketData.benefit" :key="index" class="income-wrapper">-->
-            <!--<market-coupon v-if="index === 0" :info="item"></market-coupon>-->
-          <!--</div>-->
-        <!--</section>-->
-        <!--<section v-if="index===2" class="bottom three">-->
-          <!--<ul class="button-group">-->
-            <!--<li v-for="(child, idx) in item.channelTextArr" :key="idx" class="button">-->
-              <!--<img v-if="idx===marketData.channel_type" class="icon" src="./icon-ok@2x.png" alt="">-->
-              <!--<img v-else class="icon" src="./icon-no@2x.png" alt="">-->
-              <!--<p class="text">{{child}}</p>-->
-            <!--</li>-->
-          <!--</ul>-->
-        <!--</section>-->
+          <ul v-if="!(marketData.benefit && marketData.benefit.length)" class="button-group">
+            <li v-for="(child, idx) in item.incomeArr" :key="idx" class="button" @click="incomeHandle(child, idx)">
+              <img class="add-icon" src="./icon-add@2x.png" alt="">
+              <p class="text">{{child.text}}</p>
+            </li>
+          </ul>
+          <div v-else v-for="(child,index) in marketData.benefit" :key="index" class="income-wrapper">
+            <market-coupon v-if="marketData.benefit_type === 1" :info="child"></market-coupon>
+            <market-active v-if="marketData.benefit_type === 4" :info="child"></market-active>
+          </div>
+        </section>
+        <section v-if="index===2" class="bottom three">
+          <ul class="button-group">
+            <li v-for="(child, idx) in item.channelTextArr" :key="idx" class="button">
+              <img v-if="idx===marketData.channel_type" class="icon" src="./icon-ok@2x.png" alt="">
+              <img v-else class="icon" src="./icon-no@2x.png" alt="">
+              <p class="text">{{child}}</p>
+            </li>
+          </ul>
+        </section>
       </div>
     </section>
   </nav>
@@ -53,33 +57,24 @@
 <script type="text/ecmascript-6">
   import CustomerGroup from 'components/customer-group/customer-group'
   import * as Helpers from '@/store/helpers'
-  import {CONFIG} from '../config-detail'
-  import {MARKET_TYPE} from 'utils/constant'
   import MarketCoupon from '../market-coupon/market-coupon'
+  import MarketActive from '../market-active/market-active'
+  // import {INCOME_TYPE} from '../config-detail'
 
   const COMPONENT_NAME = 'MARKET_CHOICE'
   export default {
     name: COMPONENT_NAME,
     components: {
       CustomerGroup,
-      MarketCoupon
+      MarketCoupon,
+      MarketActive
     },
     data() {
       return {
-        // dataArray: {
-        //   type: Array,
-        //   default() {
-        //     return []
-        //   }
-        // }
       }
     },
     computed: {
       ...Helpers.marketComputed,
-      CONFIG() {
-        let key = this.marketData.type || MARKET_TYPE.DIY
-        return CONFIG[key] || {}
-      },
       dataArray() {
         return this.CONFIG.choicesArr
       },
@@ -89,8 +84,8 @@
         return flag
       },
       groupData() {
-        let group = this.marketData.group
-        return (group && group[0]) || {}
+        let group = this.marketData.group || []
+        return group[0] || {}
       },
       _checkDefault() {
         return true
@@ -103,22 +98,29 @@
         let enableChange = item.enableChange
         return position && enableChange
       },
-      incomeHandle(idx) {
+      incomeHandle(child, idx) {
+        console.log(child)
+        this.updateBenefitType(child.benefit_type)
         this.$emit('income', idx)
       },
       delHandle(idx) {
         this.updateBenefit()
       },
-      lineCheckHandle(idx = 0) {
+      lineCheckHandle(idx) {
         let key = this.CONFIG.checkArr[idx]
         let flag = this[key]
         if (idx !== 0) {
           key = this.CONFIG.checkArr[idx - 1]
           flag = flag && this[key]
         }
-        console.log(flag, '--213')
         return flag
       }
+      // showIncome(item, idx, type) {
+      //   // let flag = idx === 0
+      //   // let income = item.incomeArr[idx].type === type
+      //   console.log(item.incomeArr[idx].type)
+      //   return item.incomeArr[idx].type === type
+      // }
     }
   }
 </script>

@@ -14,7 +14,9 @@
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
                 <!--<div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>-->
-                <img class="avatar" :src="currentMsg.avatar" alt="">
+                <div class="avatar">
+                  <img class="avatar-img" :src="currentMsg.avatar" alt="">
+                </div>
                 <div class="chat-msg-box other" v-if="item.type * 1 === 1">
                   <div class="arrow-box">
                     <div class="gray-arrow">
@@ -45,12 +47,12 @@
                     <img class="goods-img" :src="item.url" alt="">
                   </div>
                   <div class="new-goods-down border-top-1px">
-                    <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
+                    <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon">
                     <span>赞播智店</span>
                   </div>
                 </div>
                 <div>
-                  <img class="chat-msg-img other" :src="item.url" v-if="item.type * 1 == 20" @load="refushBox" @click.stop="showPic(item)">
+                  <img class="chat-msg-img other" :style="{height: (200 / item.width * item.height) + 'px'}" :src="item.url" v-if="item.type * 1 == 20" @click.stop="showPic(item)">
                 </div>
               </div>
               <div class="chat-content mine" v-if="item.from_account_id === imInfo.im_account">
@@ -78,18 +80,18 @@
                     <img class="goods-img" :src="item.url" alt="">
                   </div>
                   <div class="new-goods-down border-top-1px">
-                    <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
+                    <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon">
                     <span>赞播智店</span>
                   </div>
                 </div>
                 <div>
-                  <img class="chat-msg-img mine" :src="item.url" v-if="item.type * 1 == 20" @load="refushBox" @click.stop="showPic(item)">
+                  <img class="chat-msg-img mine" :style="{height: (200 / item.width * item.height) + 'px'}" :src="item.url" v-if="item.type * 1 == 20" @click.stop="showPic(item)">
                 </div>
                 <div class="chat-msg-qrCode mine" v-if="item.type * 1 === 6">
                   <div class="qrCode-content">
-                    <p class="qrCode-title">欢迎光临我的小店</p>
+                    <p class="qrCode-title">添加我的个人微信，更多优惠！</p>
                     <div class="qrCode-text-content">
-                      <div class="qrCode-txt">点击本条消息加微信，随时找我聊天</div>
+                      <div class="qrCode-txt">点击本条消息，长按识别添加，随时找我聊天。</div>
                       <img src="./pic-code@3x.png" class="qrCode-img">
                     </div>
                   </div>
@@ -103,8 +105,31 @@
                     </div>
                   </div>
                 </div>
+                <div class="chat-msg-coupon mine" v-if="item.type * 1 === 30">
+                  <div class="coupon-content">
+                    <img src="./pic-coupon_bg@2x.png" class="coupon-bc">
+                    <div class="coupon-container">
+                      <div class="coupon-left">
+                        <div class="left-money">
+                          <span class="money-icon">¥</span>
+                          <span class="money-txt">{{item.denomination}}5</span>
+                        </div>
+                        <div class="left-money" v-if="item.coupon_type == 4">
+                          <span class="money-txt">{{item.denomination}}</span>
+                          <span class="discount-txt">折</span>
+                        </div>
+                      </div>
+                      <div class="coupon-right">
+                        <div class="coupon-title">国颐堂新手优惠券</div>
+                        <div class="coupon-time">有效期至2019-10-01</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <!--<div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>-->
-                <img class="avatar" :src="userInfo.avatar" alt="">
+                <div class="avatar">
+                  <img class="avatar-img" :src="userInfo.avatar" alt="">
+                </div>
               </div>
             </div>
           </div>
@@ -113,7 +138,7 @@
       <div class="chat-input border-top-1px">
         <div class="chat-input-box">
           <div class="face-box" @click.stop="showEmoji">
-            <img src="../../../static/img/icon-emoji@2x.png" class="face-icon">
+            <img src="./icon-face@2x.png" class="face-icon">
           </div>
           <div class="input-container" ref="textBox">
             <textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>
@@ -123,22 +148,24 @@
           </div>
           <div class="submit-btn" @click="sendMsg" v-if="inputMsg">发送</div>
         </div>
-        <div class="more-box">
-          <div class="emoji-list" v-if="emojiShow">
-            <div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">
-              <img :src="item.url" class="emoji-icon">
-            </div>
-          </div>
-          <div class="addimg-list" v-if="mortListShow">
-            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)" :style="item.type === -1 ? 'opacity: 0' : ''">
-              <div class="img-box">
-                <div class="item-icon" :class="item.icon"></div>
+        <transition name="slide-up">
+          <div class="more-box border-top-1px" v-if="emojiShow || mortListShow">
+            <div class="emoji-list" v-if="emojiShow">
+              <div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">
+                <img :src="item.url" class="emoji-icon">
               </div>
-              <p class="item-txt">{{item.txt}}</p>
-              <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
+            </div>
+            <div class="addimg-list" v-if="mortListShow">
+              <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)" :style="item.type === -1 ? 'opacity: 0' : ''">
+                <div class="img-box">
+                  <div class="item-icon" :class="item.icon"></div>
+                </div>
+                <p class="item-txt">{{item.txt}}</p>
+                <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
+              </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <!--<transition name="fade">-->
       <!--<div class="cover-full" v-if="coverFullShow">-->
@@ -152,7 +179,7 @@
       <!--</div>-->
       <!--</transition>-->
       <toast ref="toast"></toast>
-      <selector-view></selector-view>
+      <selector-view ref="selector"></selector-view>
       <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
@@ -176,12 +203,13 @@
   const LIMIT = 40
   const MORELIST = [
     {txt: '图片', icon: 'im-image', type: 1},
-    // {txt: '个人微信', icon: 'im-weixin', type: 4},
+    {txt: '个人微信', icon: 'im-weixin', type: 4},
     // {txt: '微信群码', icon: 'im-group', type: 5},
     {txt: '常用语', icon: 'im-useful', type: 6},
-    {txt: '发送服务', icon: 'im-server', type: 2},
-    {txt: '发送商品', icon: 'im-goods', type: 20},
-    {txt: '发送活动', icon: 'im-activity', type: 3}
+    {txt: '优惠券', icon: 'im-server', type: 30},
+    {txt: '商品', icon: 'im-goods', type: 20},
+    {txt: '服务', icon: 'im-server', type: 2},
+    {txt: '活动', icon: 'im-activity', type: 3}
     // {txt: '', icon: '', type: -1}
   ]
   export default {
@@ -369,24 +397,17 @@
       },
       nextWork(item) {
         let type = item.type * 1
-        let url
         switch (type) {
           case 1:
             break
           case 2:
-            url = this.$route.fullPath + '/select-goods?type=1'
-            this.mortListShow = false
-            this.$router.push({path: url})
+            this.$refs.selector.showModel('service')
             break
           case 20:
-            url = this.$route.fullPath + '/select-goods?type=20'
-            this.mortListShow = false
-            this.$router.push({path: url})
+            this.$refs.selector.showModel('goods')
             break
           case 3:
-            url = this.$route.fullPath + '/select-goods?type=2'
-            this.mortListShow = false
-            this.$router.push({path: url})
+            this.$refs.selector.showModel('activity')
             break
           case 4:
             if (!this.codeStatus.have_personal_qrcode) {
@@ -513,9 +534,10 @@
             }
             break
           case 6:
-            url = this.$route.fullPath + '/useful-word'
-            this.mortListShow = false
-            this.$router.push({path: url})
+            this.$refs.selector.showModel('words')
+            break
+          case 30:
+            this.$refs.selector.showModel('coupon')
             break
         }
       },
@@ -742,8 +764,15 @@
           .avatar
             width: 45px
             height: 45px
-            border-radius: 2px
-            object-fit :cover
+            border-radius: 50%
+            border: 1.5px solid #e6e6e6
+            box-sizing: border-box
+            .avatar-img
+              width: 39px
+              height: 39px
+              border-radius: 50%
+              object-fit: cover
+              border: 1.5px solid #fff
           .chat-msg-box
             flex: 1
             overflow: hidden
@@ -753,17 +782,17 @@
               overflow: hidden
               display: flex
             .chat-msg-content
-              padding: 13px 15px
-              border-radius: 8px
-              line-height: 19px
-              font-size: $font-size-medium
+              padding: 9px 15px
+              line-height: 21px
+              font-size: $font-size-16
               font-family: $font-family-regular
               word-wrap: break-word
               word-break: break-all
               vertical-align: middle
+              border-radius: 8px
             .chat-msg-content.other
               background: $color-white
-              border: 0.5px solid #D6DCE0
+              border: 0.5px solid #DEDEDE
             .chat-msg-content.mine
               background: $color-green
           .other.chat-msg-box
@@ -807,6 +836,74 @@
                 position: absolute
                 left: 0
                 top: 17.5px
+          .chat-msg-coupon
+            margin-right: 10px
+            .coupon-content
+              width: 232px
+              height: 67px
+              padding: 9px
+              border: 0.5px solid rgba(0, 0, 0, 0.10)
+              border-radius: 4px
+              background: $color-white
+              overflow: hidden
+              position: relative
+              .coupon-bc
+                width: 100%
+                height: 100%
+              .coupon-container
+                position: absolute
+                left: 9px
+                top: 9px
+                right: 9px
+                bottom: 9px
+                display: flex
+                .coupon-left
+                  width: 29%
+                  display: flex
+                  align-items: center
+                  justify-content: center
+                  overflow: hidden
+                  .left-money
+                    display: flex
+                    align-items: flex-end
+                    margin-bottom: 5px
+                    .money-icon
+                      font-family: $font-family-bold
+                      font-size: $font-size-15
+                      color: $color-white
+                      margin-bottom: 4px
+                      line-height: 15px
+                    .money-txt
+                      font-family: $font-family-bold
+                      font-size: 35px
+                      color: $color-white
+                      margin: 0 1px
+                      line-height: 35px
+                    .discount-txt
+                      font-family: $font-family-regular
+                      font-size: $font-size-14
+                      color: $color-white
+                      margin-bottom: 4px
+                      line-height: 14px
+                .coupon-right
+                  width: 71%
+                  display: flex
+                  flex-direction: column
+                  justify-content: center
+                  box-sizing: border-box
+                  padding-left: 10px
+                  .coupon-title
+                    font-family: $font-family-medium
+                    color: $color-white
+                    opacity: 0.9px
+                    font-size: $font-size-15
+                    line-height: 15px
+                    margin-bottom: 17px
+                  .coupon-time
+                    font-family: $font-family-regular
+                    color: $color-white
+                    opacity: 0.7
+                    font-size: $font-size-11
           .chat-msg-img
             width: 200px
             height: auto
@@ -822,6 +919,28 @@
             background: $color-white
             overflow: hidden
             font-size: 0
+            .arrow-box
+              width: 10px
+              height: 45px
+              position: relative
+              .gray-arrow
+                width: 0
+                height: 0
+                border-width: 5px 6px 5px 0
+                border-style: solid
+                border-color: transparent #D6DCE0 transparent transparent /*透明 灰 透明 透明 */
+                position: absolute
+                right: 0
+                top: 17.5px
+                .white-arrow
+                  width: 0
+                  height: 0
+                  border-width: 5px 6px 5px 0
+                  border-style: solid
+                  border-color: transparent #FFF transparent transparent /*透明 灰 透明 透明 */
+                  position: absolute
+                  left: 1px
+                  top: -5px
             .new-goods-top
               padding: 12.5px
               box-sizing: border-box
@@ -847,13 +966,13 @@
                   text-overflow: ellipsis
                   font-family: $font-family-regular
                   font-size: $font-size-12
-                  color: #828AA2
+                  color: $color-text-sub
                   letter-spacing: 0.26px
               .goods-title
                 line-height: 21px
                 font-family: $font-family-regular
-                font-size: $font-size-14
-                color: #374B63
+                font-size: $font-size-16
+                color: $color-text-main
                 letter-spacing: 0.3px
                 word-wrap: break-word
                 word-break: break-all
@@ -865,6 +984,7 @@
               .goods-img
                 width: 200px
                 height: 200px
+                margin-top: 5px
                 object-fit :cover
             .new-goods-down
               height: 25px
@@ -937,7 +1057,7 @@
       width: 100%
       box-sizing: border-box
       min-height: 38px
-      background: $color-background-f9
+      background: #f7f7f8
       position: absolute
       left: 0
       right: 0
@@ -1014,7 +1134,7 @@
               width: 6.666666vw
               height: 6.666666vw
         .addimg-list
-          padding: 25px 0 0 8vw
+          padding: 15px 0 0 8vw
           display: flex
           flex-wrap: wrap
           .addimg-item
@@ -1029,17 +1149,18 @@
             .img-box
               width: 16vw
               height: 16vw
-              border-1px(#ccc, 12px)
+              background: $color-white
+              border-radius: 16px
               display: flex
               justify-content: center
               align-items: center
               .item-icon
-                width: 33px
-                height: 33px
+                width: 30px
+                height: 30px
               .im-image
                 icon-image('./icon-picture')
               .im-weixin
-                icon-image('./icon-wechat')
+                icon-image('./icon-wechatadd')
               .im-group
                 icon-image('./icon-groupcode')
               .im-useful
@@ -1049,12 +1170,12 @@
               .im-activity
                 icon-image('./icon-activity')
               .im-server
-                icon-image('./icon-sendfw')
+                icon-image('./icon-coupon_add')
             .item-txt
-              margin-top: 5px
+              margin-top: 7.5px
               font-size: $font-size-12
               font-family: $font-family-regular
-              color: #828AA2
+              color: #999999
               text-align: center
             .image-file
               position: absolute
