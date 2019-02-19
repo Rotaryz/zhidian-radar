@@ -4,7 +4,6 @@
           :data="dataArray"
           :pullDownRefresh="true"
           :pullUpLoad="pullUpLoad"
-          :showNoMore="false"
           @pullingDown="onPullingDown"
           @pullingUp="onPullingUp"
   >
@@ -67,7 +66,7 @@
       },
       onPullingUp() {
         this.page++
-        this._getList(true)
+        this._getList(false)
       }
     }
   }
