@@ -179,7 +179,7 @@
       <!--</div>-->
       <!--</transition>-->
       <toast ref="toast"></toast>
-      <selector-view ref="selector"></selector-view>
+      <selector-view ref="selector" :hasFn="true" @submit="selectorDown"></selector-view>
       <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
@@ -413,6 +413,7 @@
             if (!this.codeStatus.have_personal_qrcode) {
               this.coverFullShow = true
               this.coverShowType = 'person'
+              this.$refs.toast && this.$refs.toast.show('无微信, 请在门店信息中添加')
             } else {
               let data = {}
               let desc = {log_type: 6}
@@ -539,6 +540,130 @@
           case 30:
             this.$refs.selector.showModel('coupon')
             break
+        }
+      },
+      selectorDown(item, type) {
+        console.log(item, type)
+        let timeStamp, msg, list, addMsg, data, option
+        switch (type) {
+          case 'words':
+            timeStamp = parseInt(Date.parse(new Date()) / 1000)
+            msg = {
+              from_account_id: this.imInfo.im_account,
+              avatar: this.userInfo.avatar,
+              content: item.message,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              nickName: this.userInfo.nickName,
+              sessionId: this.userInfo.account,
+              unreadMsgCount: 0,
+              type: 1
+            }
+            if (this.nowChat.length) {
+              let lastItem = this.nowChat[this.nowChat.length - 1]
+              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+              msg.is_showtime = timeStamp - lastTime > TIMELAG
+            } else {
+              msg.is_showtime = true
+            }
+            list = [...this.nowChat, msg]
+            addMsg = {
+              text: item.message,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              fromAccount: this.currentMsg.account,
+              sessionId: this.currentMsg.account,
+              unreadMsgCount: 0,
+              avatar: this.currentMsg.avatar,
+              nickName: this.currentMsg.nickName
+            }
+            this.setNowChat(list)
+            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            webimHandler.onSendMsg(item.message, this.currentMsg.account).then(res => {
+            }, () => {
+              // this.$refs.toast.show('网络异常, 请稍后重试')
+            })
+            break
+          case 'coupon':
+            break
+          case 'goods':
+          case 'service':
+            data = {
+              url: item.image_url,
+              goods_id: item.goods_id,
+              title: item.goods_title,
+              goods_price: item.platform_price,
+              original_price: item.original_price,
+              avatar: this.userInfo.avatar,
+              shop_name: item.shop_name
+            }
+            let msgUrl = data.url
+            let msgTitle = data.title
+            let logType = 3
+            let descMsg = {log_type: logType}
+            data = JSON.stringify(data)
+            let desc = JSON.stringify(descMsg)
+            let ext = '20005'
+            option = {
+              data,
+              desc,
+              ext
+            }
+            timeStamp = parseInt(Date.now() / 1000)
+            msg = {
+              from_account_id: this.imInfo.im_account,
+              avatar: this.userInfo.avatar,
+              content: '',
+              url: msgUrl,
+              title: msgTitle,
+              goods_price: item.platform_price,
+              original_price: item.original_price,
+              shop_name: item.shop_name,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              nickName: this.userInfo.nickName,
+              sessionId: this.userInfo.account,
+              unreadMsgCount: 0,
+              type: logType
+            }
+            if (this.nowChat.length) {
+              let lastItem = this.nowChat[this.nowChat.length - 1]
+              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+              msg.is_showtime = timeStamp - lastTime > TIMELAG
+            } else {
+              msg.is_showtime = true
+            }
+            list = [...this.nowChat, msg]
+            addMsg = {
+              text: type === 'goods' ? '[商品信息]' : '[服务信息]',
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              fromAccount: this.currentMsg.account,
+              sessionId: this.currentMsg.account,
+              unreadMsgCount: 0,
+              avatar: this.currentMsg.avatar,
+              nickName: this.currentMsg.nickName // todo
+            }
+            this.setNowChat(list)
+            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            webimHandler.onSendCustomMsg(option, this.currentMsg.account).then(res => {
+            }, () => {
+              this.$refs.toast.show('网络异常, 请稍后重试')
+            })
+            break
+          case 'activity':
+            break
+        }
+        this.$refs.scroll && this.$refs.scroll.forceUpdate()
+        this.$refs.selector && this.$refs.selector.hideModel()
+        this.emojiShow = false
+        this.mortListShow = false
+        if (this.listDom.clientHeight > this.chatDom.clientHeight) {
+          let timer = setTimeout(() => {
+            let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+            this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+            clearTimeout(timer)
+          }, 20)
         }
       },
       toMineCode() {
