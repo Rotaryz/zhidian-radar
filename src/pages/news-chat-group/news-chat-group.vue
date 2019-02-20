@@ -35,7 +35,7 @@
       <div class="chat-input border-top-1px">
         <div class="chat-input-box">
           <div class="face-box" @click.stop="showEmoji">
-            <img src="../../../static/img/icon-emoji@2x.png" class="face-icon">
+            <img src="./icon-face@2x.png" class="face-icon">
           </div>
           <div class="input-container" ref="textBox">
             <textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>
@@ -45,22 +45,24 @@
           </div>
           <div class="submit-btn" @click="sendMsg" v-if="inputMsg">发送</div>
         </div>
-        <div class="more-box">
-          <div class="emoji-list" v-if="emojiShow">
-            <div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">
-              <img :src="item.url" class="emoji-icon">
-            </div>
-          </div>
-          <div class="addimg-list" v-if="mortListShow">
-            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)" :style="item.type === -1 ?'opacity: 0':''">
-              <div class="img-box">
-                <div class="item-icon" :class="item.icon"></div>
+        <transition name="slide-up">
+          <div class="more-box border-top-1px" v-if="emojiShow || mortListShow">
+            <div class="emoji-list" v-if="emojiShow">
+              <div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">
+                <img :src="item.url" class="emoji-icon">
               </div>
-              <p class="item-txt">{{item.txt}}</p>
-              <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
+            </div>
+            <div class="addimg-list" v-if="mortListShow">
+              <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)" :style="item.type === -1 ? 'opacity: 0' : ''">
+                <div class="img-box">
+                  <div class="item-icon" :class="item.icon"></div>
+                </div>
+                <p class="item-txt">{{item.txt}}</p>
+                <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
+              </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <!--<transition name="fade">-->
         <!--<div class="cover-full" v-if="coverFullShow">-->
@@ -74,6 +76,7 @@
         <!--</div>-->
       <!--</transition>-->
       <toast ref="toast"></toast>
+      <selector-view ref="selector" :hasFn="true" @submit="selectorDown"></selector-view>
       <router-view @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
@@ -82,6 +85,7 @@
 <script>
   import Toast from 'components/toast/toast'
   import { mapActions, mapGetters } from 'vuex'
+  import SelectorView from 'components/selector-view/selector-view'
   import storage from 'storage-controller'
   import { Im, News } from 'api'
   import { ERR_OK } from 'common/js/config'
@@ -89,15 +93,18 @@
   import { emotionsFaceArr } from 'common/js/constants'
   import * as COS from '@/utils/cos/cos'
 
+  const TIMELAG = 300
+
   const MORELIST = [
     {txt: '图片', icon: 'im-image', type: 1},
-    // {txt: '个人微信', icon: 'im-weixin', type: 4},
+    {txt: '个人微信', icon: 'im-weixin', type: 4},
     // {txt: '微信群码', icon: 'im-group', type: 5},
     {txt: '常用语', icon: 'im-useful', type: 6},
-    {txt: '发送服务', icon: 'im-server', type: 2},
-    {txt: '发送商品', icon: 'im-goods', type: 20},
-    {txt: '发送活动', icon: 'im-activity', type: 3},
-    {txt: '', icon: '', type: -1}
+    {txt: '优惠券', icon: 'im-server', type: 30},
+    {txt: '商品', icon: 'im-goods', type: 20},
+    {txt: '服务', icon: 'im-server', type: 2},
+    {txt: '活动', icon: 'im-activity', type: 3}
+    // {txt: '', icon: '', type: -1}
   ]
 
   export default {
@@ -382,7 +389,7 @@
           }
         })
       },
-      nextWork(item) {
+      nextWork1(item) {
         let type = item.type * 1
         let url
         switch (type) {
@@ -482,6 +489,320 @@
             break
         }
       },
+      nextWork(item) {
+        let type = item.type * 1
+        switch (type) {
+          case 1:
+            break
+          case 2:
+            this.$refs.selector.showModel('service')
+            break
+          case 20:
+            this.$refs.selector.showModel('goods')
+            break
+          case 3:
+            this.$refs.selector.showModel('activity')
+            break
+          case 4:
+            if (!this.userInfo.weixin_no) {
+              this.coverFullShow = true
+              this.coverShowType = 'person'
+              this.$refs.toast && this.$refs.toast.show('无微信, 请在门店信息中添加')
+            } else {
+              let data = {}
+              let desc = {log_type: 6}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+              let addMsg = {
+                text: '[其他消息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: this.id,
+                sessionId: this.id,
+                unreadMsgCount: 0,
+                avatar: this.currentMsg.avatar,
+                nickName: this.currentMsg.nickName
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            }
+            break
+          case 5:
+            if (!this.codeStatus.have_wxgroup_qrcode) {
+              this.coverFullShow = true
+              this.coverShowType = 'group'
+            } else {
+              let data = {}
+              let desc = {log_type: 7}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let timeStamp = parseInt(Date.now() / 1000)
+              let msg = {
+                from_account_id: this.imInfo.im_account,
+                avatar: this.userInfo.avatar,
+                content: '',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                nickName: this.userInfo.nickName,
+                sessionId: this.userInfo.account,
+                unreadMsgCount: 0,
+                type: 7
+              }
+              if (this.nowChat.length) {
+                let lastItem = this.nowChat[this.nowChat.length - 1]
+                let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+                msg.is_showtime = timeStamp - lastTime > TIMELAG
+              } else {
+                msg.is_showtime = true
+              }
+              let list = [...this.nowChat, msg]
+              this.setNowChat(list)
+              let addMsg = {
+                text: '[其他消息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: this.id,
+                sessionId: this.id,
+                unreadMsgCount: 0,
+                avatar: this.currentMsg.avatar,
+                nickName: this.currentMsg.nickName
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            }
+            break
+          case 6:
+            this.$refs.selector.showModel('words')
+            break
+          case 30:
+            this.$refs.selector.showModel('coupon')
+            break
+        }
+      },
+      selectorDown(item, type) {
+        let timeStamp, msg, list, addMsg, data, logType, descMsg, desc, ext, title, url
+        switch (type) {
+          case 'words':
+            timeStamp = parseInt(Date.parse(new Date()) / 1000)
+            msg = {
+              from_account_id: this.imInfo.im_account,
+              avatar: this.userInfo.avatar,
+              content: item.message,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              nickName: this.userInfo.nickName,
+              sessionId: this.userInfo.account,
+              unreadMsgCount: 0,
+              type: 1
+            }
+            if (this.nowChat.length) {
+              let lastItem = this.nowChat[this.nowChat.length - 1]
+              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+              msg.is_showtime = timeStamp - lastTime > TIMELAG
+            } else {
+              msg.is_showtime = true
+            }
+            list = [...this.nowChat, msg]
+            addMsg = {
+              text: item.message,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              fromAccount: this.currentMsg.account,
+              sessionId: this.currentMsg.account,
+              unreadMsgCount: 0,
+              avatar: this.currentMsg.avatar,
+              nickName: this.currentMsg.nickName
+            }
+            this.setNowChat(list)
+            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            break
+          case 'coupon':
+            title = item.coupon_name
+            url = item.image_url
+            data = {
+              title,
+              avatar: this.userInfo.avatar,
+              coupon_id: item.recommend_coupon_id,
+              end_at: item.end_at,
+              coupon_type: item.coupon_type,
+              coupon_num: item.denomination
+            }
+            logType = 30
+            descMsg = {log_type: logType}
+            data = JSON.stringify(data)
+            desc = JSON.stringify(descMsg)
+            ext = '20005'
+            option = {
+              data,
+              desc,
+              ext
+            }
+            timeStamp = parseInt(Date.now() / 1000)
+            msg = {
+              from_account_id: this.imInfo.im_account,
+              avatar: this.userInfo.avatar,
+              content: '',
+              url: '',
+              title,
+              shop_name: item.shop_name,
+              coupon_id: item.recommend_coupon_id,
+              end_at: item.end_at,
+              coupon_type: item.coupon_type,
+              coupon_num: item.denomination,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              nickName: this.userInfo.nickName,
+              sessionId: this.userInfo.account,
+              unreadMsgCount: 0,
+              type: logType
+            }
+            if (this.nowChat.length) {
+              let lastItem = this.nowChat[this.nowChat.length - 1]
+              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+              msg.is_showtime = timeStamp - lastTime > TIMELAG
+            } else {
+              msg.is_showtime = true
+            }
+            list = [...this.nowChat, msg]
+            addMsg = {
+              text: '[优惠券信息]',
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              fromAccount: this.currentMsg.account,
+              sessionId: this.currentMsg.account,
+              unreadMsgCount: 0,
+              avatar: this.currentMsg.avatar,
+              nickName: this.currentMsg.nickName // todo
+            }
+            this.setNowChat(list)
+            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            break
+          case 'goods':
+          case 'service':
+            title = item.goods_title
+            url = item.image_url
+            data = {
+              url,
+              goods_id: item.goods_id,
+              title,
+              goods_price: item.platform_price,
+              original_price: item.original_price,
+              avatar: this.userInfo.avatar,
+              shop_name: item.shop_name
+            }
+            logType = 3
+            descMsg = {log_type: logType}
+            data = JSON.stringify(data)
+            desc = JSON.stringify(descMsg)
+            ext = '20005'
+            option = {
+              data,
+              desc,
+              ext
+            }
+            timeStamp = parseInt(Date.now() / 1000)
+            msg = {
+              from_account_id: this.imInfo.im_account,
+              avatar: this.userInfo.avatar,
+              content: '',
+              url,
+              title,
+              goods_price: item.platform_price,
+              original_price: item.original_price,
+              shop_name: item.shop_name,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              nickName: this.userInfo.nickName,
+              sessionId: this.userInfo.account,
+              unreadMsgCount: 0,
+              type: logType
+            }
+            if (this.nowChat.length) {
+              let lastItem = this.nowChat[this.nowChat.length - 1]
+              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+              msg.is_showtime = timeStamp - lastTime > TIMELAG
+            } else {
+              msg.is_showtime = true
+            }
+            list = [...this.nowChat, msg]
+            addMsg = {
+              text: type === 'goods' ? '[商品信息]' : '[服务信息]',
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              fromAccount: this.currentMsg.account,
+              sessionId: this.currentMsg.account,
+              unreadMsgCount: 0,
+              avatar: this.currentMsg.avatar,
+              nickName: this.currentMsg.nickName // todo
+            }
+            this.setNowChat(list)
+            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            break
+          case 'activity':
+            title = item.goods_title
+            url = item.image_url
+            data = {
+              url,
+              goods_id: item.activity_id,
+              title,
+              goods_price: item.platform_price,
+              original_price: item.original_price,
+              avatar: this.userInfo.avatar,
+              shop_name: item.shop_name
+            }
+            logType = +item.rule_id === 3 ? 5 : 4
+            descMsg = {log_type: logType}
+            data = JSON.stringify(data)
+            desc = JSON.stringify(descMsg)
+            ext = '20005'
+            option = {
+              data,
+              desc,
+              ext
+            }
+            timeStamp = parseInt(Date.now() / 1000)
+            msg = {
+              from_account_id: this.imInfo.im_account,
+              avatar: this.userInfo.avatar,
+              content: '',
+              url,
+              title,
+              goods_price: item.platform_price,
+              original_price: item.original_price,
+              shop_name: item.shop_name,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              nickName: this.userInfo.nickName,
+              sessionId: this.userInfo.account,
+              unreadMsgCount: 0,
+              type: logType
+            }
+            list = [...this.nowChat, msg]
+            addMsg = {
+              text: '[活动信息]',
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              fromAccount: this.currentMsg.account,
+              sessionId: this.currentMsg.account,
+              unreadMsgCount: 0,
+              avatar: this.currentMsg.avatar,
+              nickName: this.currentMsg.nickName // todo
+            }
+            this.setNowChat(list)
+            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+        }
+      },
       sendMsg() {
         if (this.groupMsgIng) {
           this.$refs.toast.show('群发消息发送中，请稍后再发')
@@ -542,7 +863,8 @@
       }
     },
     components: {
-      Toast
+      Toast,
+      SelectorView
     },
     watch: {
       inputMsg() {
@@ -609,7 +931,7 @@
       width: 100%
       box-sizing: border-box
       min-height: 38px
-      background: $color-background-f9
+      background: #f7f7f8
       position: absolute
       left: 0
       right: 0
@@ -686,7 +1008,7 @@
               width: 6.666666vw
               height: 6.666666vw
         .addimg-list
-          padding: 25px 0 0 8vw
+          padding: 15px 0 0 8vw
           display: flex
           flex-wrap: wrap
           .addimg-item
@@ -701,17 +1023,18 @@
             .img-box
               width: 16vw
               height: 16vw
-              border-1px(#ccc, 12px)
+              background: $color-white
+              border-radius: 16px
               display: flex
               justify-content: center
               align-items: center
               .item-icon
-                width: 33px
-                height: 33px
+                width: 30px
+                height: 30px
               .im-image
                 icon-image('./icon-picture')
               .im-weixin
-                icon-image('./icon-wechat')
+                icon-image('./icon-wechatadd')
               .im-group
                 icon-image('./icon-groupcode')
               .im-useful
@@ -721,12 +1044,12 @@
               .im-activity
                 icon-image('./icon-activity')
               .im-server
-                icon-image('./icon-sendfw')
+                icon-image('./icon-coupon_add')
             .item-txt
-              margin-top: 5px
+              margin-top: 7.5px
               font-size: $font-size-12
               font-family: $font-family-regular
-              color: #828AA2
+              color: #999999
               text-align: center
             .image-file
               position: absolute

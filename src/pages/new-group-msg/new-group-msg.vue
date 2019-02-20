@@ -12,9 +12,8 @@
             <span class="time-box">{{item.created_at ? item.created_at : item.msgTimeStamp | timeFormat}}</span>
           </div>
           <div class="item-content">
-            <div class="item-top border-bottom-1px">
-              <div class="item-title">群发组：<span v-for="(item1, index1) in item.groups" :key="index1">{{index1 == (item.groups.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
-              +
+            <div class="item-title">群发组：<span v-for="(item1, index1) in item.groups" :key="index1">{{index1 == (item.groups.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
+            <div class="item-top">
               <div class="item-text" v-html="item.html" v-if="item.type == 1"></div>
               <div class="item-text item-text3" v-if="item.type == 3">
                 <!--[商品信息]-->
@@ -41,8 +40,8 @@
                 <!--[个人微信二维码]-->
                 <img :src="item.url" alt="" class="item-code-img">
                 <div class="content">
-                  <div class="content-title">欢迎光临我的小店</div>
-                  <div class="content-text">点击本条消息加微信，随时找我聊天</div>
+                  <div class="content-title">欢迎加入我的微信福利群</div>
+                  <div class="content-text">点击本条消息加微信群，不定时抢购福利</div>
                 </div>
               </div>
               <div class="item-text item-text6" v-if="item.type == 7">
@@ -56,12 +55,16 @@
               <!--图片-->
               <img class="item-img" @load="refushBox" v-if="item.type == 20" :src="item.url"/>
             </div>
-            <div class="item-down" @click="toChat(item)">再发一条</div>
+            <div class="item-down">
+              <div class="item-down-btn" @click="toChat(item)">再发一条</div>
+            </div>
           </div>
         </div>
       </div>
     </scroll>
-    <div class="new-btn" @click="newGroup">新建群发</div>
+    <div class="bottom-box border-top-1px">
+      <div class="new-btn" @click="newGroup">新建群发</div>
+    </div>
     <toast ref="toast"></toast>
   </div>
 </template>
@@ -253,18 +256,20 @@
           border: 1px solid rgba(32,32,46,0.10)
           box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
           border-radius: 2px
+          overflow: hidden
+          .item-title
+            padding: 11px 15px
+            background: #f5f6f8
+            white-space:normal
+            word-break:break-all
+            font-family: $font-family-regular
+            font-size: $font-size-16
+            color: $color-text
+            line-height: 24px
           .item-top
             padding: 12px 15px 15px
             font-size: 0
-            .item-title
-              white-space:normal
-              word-break:break-all
-              font-family: $font-family-regular
-              font-size: $font-size-16
-              color: $color-text
-              line-height: 24px
             .item-text
-              padding-top: 12px
               line-height: 21px
               font-family: $font-family-light
               font-size: $font-size-14
@@ -314,33 +319,43 @@
                   display: inline-block
                   color: #F94C5F
                   padding: 2.5px 5.5px
-                  border-1px(#F94C5F)
+                  border-1px(#F94C5F, 3px)
             .item-img
               padding-top: 12px
               width: 100%
           .item-down
-            width: 100%
-            height: 40px
-            line-height: 40px
-            text-align: center
-            font-family: $font-family-regular
-            font-size: $font-size-14
-            color: #56BA15
+            padding: 0 15px
+            display: flex
+            padding-bottom: 15px
+            justify-content: flex-end
+            .item-down-btn
+              width: 84px
+              height: 26px
+              line-height: 26px
+              border-1px(#5929DC, 26px)
+              text-align: center
+              font-family: $font-family-regular
+              font-size: $font-size-14
+              color: #5929DC
 
 
-  .new-btn
+  .bottom-box
+    padding: 7.5px 15px
     position: fixed
     left: 0
     bottom: 0
     right: 0
-    height: 45px
+    height: 55px
     z-index: 55
-    background: $color-text
+    box-sizing: border-box
+    background: $color-white
+  .new-btn
+    background-image: linear-gradient(135deg, #953DE1 0%, #4541F9 100%)
+    border-radius: 6px
     color: $color-white
     text-align: center
-    line-height: 44px
+    line-height: 40px
     font-family: $font-family-medium
-    font-size: $font-size-16
-    letter-spacing: 0.3px
+    font-size: $font-size-14
 
 </style>

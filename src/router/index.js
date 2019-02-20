@@ -6,6 +6,7 @@ const Oauth = () => import('pages/oauth/oauth')
 // const Radar = () => import('pages/radar/radar')
 const News = () => import('pages/news/news')
 const Chat = () => import('pages/chat-msg/chat-msg')
+const ChatList = () => import('pages/chat-msg-list/chat-msg-list')
 // const Client = () => import('pages/client/client')
 // const Mine = () => import('pages/mine/mine')
 const ScrollDemo = () => import('pages/scroll-demo/scroll-demo')
@@ -239,6 +240,13 @@ const route = new Router({
           title: ''
         },
         children: [{
+          path: 'chat-list',
+          component: ChatList,
+          meta: {
+            title: '聊天记录'
+          }
+        },
+        {
           path: 'select-goods',
           component: SelectGoods,
           meta: {

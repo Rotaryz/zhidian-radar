@@ -3,11 +3,15 @@
     <div class="chat">
       <div class="chat-container" ref="chat">
         <scroll ref="scroll"
-                :data="nowChat"
-                :pullDownRefresh="pullDownRefreshObj"
-                @pullingDown="onPullingDown">
+                :data="nowChat">
           <div class="chat-list" ref="list">
             <div class="list-line"></div>
+            <div class="history-box" v-if="nowChat.length > 20">
+              <div class="history-content" @click="toChatList">
+                <span class="history-txt">查看更多历史记录</span>
+                <img src="./icon-presse_more@2x.png" class="arrow">
+              </div>
+            </div>
             <div class="chat-item" v-for="(item, index) in nowChat" :key="index">
               <div class="item-time" v-if="item.is_showtime">
                 <span class="time-box">{{item.created_at ? item.created_at : item.msgTimeStamp | timeFormat}}</span>
@@ -91,7 +95,7 @@
                   <div class="qrCode-content">
                     <p class="qrCode-title">添加我的个人微信，更多优惠！</p>
                     <div class="qrCode-text-content">
-                      <div class="qrCode-txt">点击本条消息，长按识别添加，随时找我聊天。</div>
+                      <div class="qrCode-txt">点击本条消息，复制微信号添加，随时找我聊天。</div>
                       <img src="./pic-code@3x.png" class="qrCode-img">
                     </div>
                   </div>
@@ -112,16 +116,16 @@
                       <div class="coupon-left">
                         <div class="left-money">
                           <span class="money-icon">¥</span>
-                          <span class="money-txt">{{item.denomination}}5</span>
+                          <span class="money-txt">{{item.coupon_num}}</span>
                         </div>
                         <div class="left-money" v-if="item.coupon_type == 4">
-                          <span class="money-txt">{{item.denomination}}</span>
+                          <span class="money-txt">{{item.coupon_num}}</span>
                           <span class="discount-txt">折</span>
                         </div>
                       </div>
                       <div class="coupon-right">
-                        <div class="coupon-title">国颐堂新手优惠券</div>
-                        <div class="coupon-time">有效期至2019-10-01</div>
+                        <div class="coupon-title">{{item.title}}</div>
+                        <div class="coupon-time">有效期至{{item.end_at}}</div>
                       </div>
                     </div>
                   </div>
@@ -278,6 +282,11 @@
         'addListMsg',
         'setNowChat'
       ]),
+      toChatList() {
+        let pageUrl = this.$route.path
+        let path = `${pageUrl}/chat-list?id=${this.id}`
+        this.$router.push(path)
+      },
       showPic(item) {
         wx.previewImage({urls: [item.url]})
       },
@@ -410,7 +419,7 @@
             this.$refs.selector.showModel('activity')
             break
           case 4:
-            if (!this.codeStatus.have_personal_qrcode) {
+            if (!this.userInfo.weixin_no) {
               this.coverFullShow = true
               this.coverShowType = 'person'
               this.$refs.toast && this.$refs.toast.show('无微信, 请在门店信息中添加')
@@ -543,8 +552,7 @@
         }
       },
       selectorDown(item, type) {
-        console.log(item, type)
-        let timeStamp, msg, list, addMsg, data, option
+        let timeStamp, msg, list, addMsg, data, option, logType, descMsg, desc, ext, title, url
         switch (type) {
           case 'words':
             timeStamp = parseInt(Date.parse(new Date()) / 1000)
@@ -585,25 +593,21 @@
             })
             break
           case 'coupon':
-            break
-          case 'goods':
-          case 'service':
+            title = item.coupon_name
+            url = item.image_url
             data = {
-              url: item.image_url,
-              goods_id: item.goods_id,
-              title: item.goods_title,
-              goods_price: item.platform_price,
-              original_price: item.original_price,
+              title,
               avatar: this.userInfo.avatar,
-              shop_name: item.shop_name
+              coupon_id: item.recommend_coupon_id,
+              end_at: item.end_at,
+              coupon_type: item.coupon_type,
+              coupon_num: item.denomination
             }
-            let msgUrl = data.url
-            let msgTitle = data.title
-            let logType = 3
-            let descMsg = {log_type: logType}
+            logType = 30
+            descMsg = {log_type: logType}
             data = JSON.stringify(data)
-            let desc = JSON.stringify(descMsg)
-            let ext = '20005'
+            desc = JSON.stringify(descMsg)
+            ext = '20005'
             option = {
               data,
               desc,
@@ -614,8 +618,75 @@
               from_account_id: this.imInfo.im_account,
               avatar: this.userInfo.avatar,
               content: '',
-              url: msgUrl,
-              title: msgTitle,
+              url: '',
+              title,
+              shop_name: item.shop_name,
+              coupon_id: item.recommend_coupon_id,
+              end_at: item.end_at,
+              coupon_type: item.coupon_type,
+              coupon_num: item.denomination,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              nickName: this.userInfo.nickName,
+              sessionId: this.userInfo.account,
+              unreadMsgCount: 0,
+              type: logType
+            }
+            if (this.nowChat.length) {
+              let lastItem = this.nowChat[this.nowChat.length - 1]
+              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+              msg.is_showtime = timeStamp - lastTime > TIMELAG
+            } else {
+              msg.is_showtime = true
+            }
+            list = [...this.nowChat, msg]
+            addMsg = {
+              text: '[优惠券信息]',
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              fromAccount: this.currentMsg.account,
+              sessionId: this.currentMsg.account,
+              unreadMsgCount: 0,
+              avatar: this.currentMsg.avatar,
+              nickName: this.currentMsg.nickName // todo
+            }
+            this.setNowChat(list)
+            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            webimHandler.onSendCustomMsg(option, this.currentMsg.account).then(res => {
+            }, () => {
+              this.$refs.toast.show('网络异常, 请稍后重试')
+            })
+            break
+          case 'goods':
+          case 'service':
+            title = item.goods_title
+            url = item.image_url
+            data = {
+              url,
+              goods_id: item.goods_id,
+              title,
+              goods_price: item.platform_price,
+              original_price: item.original_price,
+              avatar: this.userInfo.avatar,
+              shop_name: item.shop_name
+            }
+            logType = 3
+            descMsg = {log_type: logType}
+            data = JSON.stringify(data)
+            desc = JSON.stringify(descMsg)
+            ext = '20005'
+            option = {
+              data,
+              desc,
+              ext
+            }
+            timeStamp = parseInt(Date.now() / 1000)
+            msg = {
+              from_account_id: this.imInfo.im_account,
+              avatar: this.userInfo.avatar,
+              content: '',
+              url,
+              title,
               goods_price: item.platform_price,
               original_price: item.original_price,
               shop_name: item.shop_name,
@@ -652,6 +723,68 @@
             })
             break
           case 'activity':
+            title = item.goods_title
+            url = item.image_url
+            data = {
+              url,
+              goods_id: item.activity_id,
+              title,
+              goods_price: item.platform_price,
+              original_price: item.original_price,
+              avatar: this.userInfo.avatar,
+              shop_name: item.shop_name
+            }
+            logType = +item.rule_id === 3 ? 5 : 4
+            descMsg = {log_type: logType}
+            data = JSON.stringify(data)
+            desc = JSON.stringify(descMsg)
+            ext = '20005'
+            option = {
+              data,
+              desc,
+              ext
+            }
+            timeStamp = parseInt(Date.now() / 1000)
+            msg = {
+              from_account_id: this.imInfo.im_account,
+              avatar: this.userInfo.avatar,
+              content: '',
+              url,
+              title,
+              goods_price: item.platform_price,
+              original_price: item.original_price,
+              shop_name: item.shop_name,
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              nickName: this.userInfo.nickName,
+              sessionId: this.userInfo.account,
+              unreadMsgCount: 0,
+              type: logType
+            }
+            if (this.nowChat.length) {
+              let lastItem = this.nowChat[this.nowChat.length - 1]
+              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+              msg.is_showtime = timeStamp - lastTime > TIMELAG
+            } else {
+              msg.is_showtime = true
+            }
+            list = [...this.nowChat, msg]
+            addMsg = {
+              text: '[活动信息]',
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              fromAccount: this.currentMsg.account,
+              sessionId: this.currentMsg.account,
+              unreadMsgCount: 0,
+              avatar: this.currentMsg.avatar,
+              nickName: this.currentMsg.nickName // todo
+            }
+            this.setNowChat(list)
+            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            webimHandler.onSendCustomMsg(option, this.currentMsg.account).then(res => {
+            }, () => {
+              this.$refs.toast.show('网络异常, 请稍后重试')
+            })
             break
         }
         this.$refs.scroll && this.$refs.scroll.forceUpdate()
@@ -698,7 +831,9 @@
           if (res.error === ERR_OK) {
             let data = {
               image_id: res.data.id,
-              url: res.data.url
+              url: res.data.url,
+              width: res.data.width,
+              height: res.data.height
             }
             let desc = {log_type: 20}
             let ext = '20005'
@@ -720,7 +855,9 @@
               nickName: this.userInfo.nickName,
               sessionId: this.userInfo.account,
               unreadMsgCount: 0,
-              type: 20
+              type: 20,
+              width: res.data.width,
+              height: res.data.height
             }
             if (this.nowChat.length) {
               let lastItem = this.nowChat[this.nowChat.length - 1]
@@ -748,6 +885,13 @@
             }, () => {
               this.$refs.toast.show('图片发送失败，请重新发送')
             })
+            if (this.listDom.clientHeight > this.chatDom.clientHeight) {
+              let timer = setTimeout(() => {
+                let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+                this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+                clearTimeout(timer)
+              }, 20)
+            }
           } else {
             this.$refs.toast.show('图片发送失败，请重新发送')
           }
@@ -861,6 +1005,26 @@
       right: 0
       width: 100%
       overflow: hidden
+      .history-box
+        display: flex
+        justify-content: center
+        margin-bottom: 15px
+        height: 20px
+        .history-content
+          display: flex
+          align-items: center
+          background: #D6D6D9
+          border-radius: 4px
+          padding: 0 10px
+          .history-txt
+            font-size: $font-size-12
+            font-family: $font-family-regular
+            color: $color-white
+            margin-right: 3px
+          .arrow
+            height: 8px
+            width: 4.5px
+            display: block
       .chat-list
         width: 100%
         padding-bottom: 40px
@@ -1000,10 +1164,10 @@
                       line-height: 15px
                     .money-txt
                       font-family: $font-family-bold
-                      font-size: 35px
+                      font-size: 30px
                       color: $color-white
                       margin: 0 1px
-                      line-height: 35px
+                      line-height: 30px
                     .discount-txt
                       font-family: $font-family-regular
                       font-size: $font-size-14
