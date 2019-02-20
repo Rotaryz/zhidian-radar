@@ -12,6 +12,8 @@ export const marketMethods = {
     'updateBenefit',
     'createMarket',
     'updateMarket',
-    'updateBenefitType'
+    'updateBenefitType',
+    'updateName',
+    'updateGroup'
   ])
 }

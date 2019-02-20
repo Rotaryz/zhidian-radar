@@ -1,11 +1,11 @@
 <template>
   <div class="market-header">
-    <header v-if="!marketData.id" class="header-wrapper">
+    <header v-if="!CONFIG.icon" class="header-wrapper">
       <label class="header">
         <p class="left">活动名称</p>
         <section class="right">
-          <input type="text" class="input-wrapper" maxlength="10" v-model="name">
-          <aside class="number-wrapper"><p>{{name.length}}</p>/<p>10</p></aside>
+          <input type="text" class="input-wrapper" maxlength="10" v-model="groupName">
+          <aside class="number-wrapper"><p>{{marketData.name.length}}</p>/<p>10</p></aside>
         </section>
       </label>
       <div class="h-empty"></div>
@@ -25,7 +25,6 @@
 
 <script type="text/ecmascript-6">
   import * as Helpers from '@/store/helpers'
-  import {CONFIG} from '../config-detail'
 
   const COMPONENT_NAME = 'MARKET_HEADER'
 
@@ -33,15 +32,21 @@
     name: COMPONENT_NAME,
     data() {
       return {
-        name: ''
       }
     },
     computed: {
       ...Helpers.marketComputed,
-      CONFIG() {
-        let key = this.marketData.type || 0
-        return CONFIG[key] || {}
+      groupName: {
+        get() {
+          return this.marketData.name
+        },
+        set(val) {
+          this.updateName(val)
+        }
       }
+    },
+    methods: {
+      ...Helpers.marketMethods
     }
   }
 </script>

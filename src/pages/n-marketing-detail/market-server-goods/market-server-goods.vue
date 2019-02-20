@@ -1,5 +1,5 @@
 <template>
-  <div class="market-active">
+  <div class="market-server-goods">
     <div class="container">
       <section class="left">
         <img class="pic" :src="info.image_url_thumb" alt="">
@@ -8,14 +8,12 @@
         <p class="title">{{info.name}}</p>
         <p class="explain">有效期至{{info.end_at}}</p>
       </section>
-      <img v-if="info.activity_type === 1" class="icon" src="./pic-label@2x.png" alt="">
-      <img v-if="info.activity_type === 3" class="icon" src="./pic-label_kj@2x.png" alt="">
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  const COMPONENT_NAME = 'MARKET_ACTIVE'
+  const COMPONENT_NAME = 'MARKET_SERVER_GOODS'
 
   export default {
     name: COMPONENT_NAME,
@@ -37,13 +35,13 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .market-active
+  .market-server-goods
     position: relative
     width: 100%
     height :0
     padding-top :24.137931034482758%
-    background: rgba(246,147,26,0.06)
-    border: 1px solid rgba(246,147,26,0.2)
+    background: rgba(89,41,220,0.03);
+    border: 1px solid rgba(89,41,220,0.16);
     border-radius :1.0666666666666667vw
     .container
       fill-box(absolute)

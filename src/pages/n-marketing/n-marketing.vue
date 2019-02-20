@@ -16,14 +16,14 @@
           <nav class="scroll-wrapper" :key="index">
             <div class="top-bg"></div>
             <div class="scroll-item">
-              <market-ai v-if="index===0"></market-ai>
-              <market-scene  v-if="index===1" :key="1"></market-scene>
+              <market-ai ref="ai" v-if="index===0"></market-ai>
+              <market-scene ref="scene" v-if="index===1" :key="1"></market-scene>
             </div>
           </nav>
         </template>
       </div>
     </section>
-    <base-router-view></base-router-view>
+    <base-router-view @refresh="refresh"></base-router-view>
   </div>
 </template>
 
@@ -64,6 +64,13 @@
         this.timer = setTimeout(() => {
           this.tabChanging = false
         }, 600)
+      },
+      refresh() {
+        if (this.tabIndex) {
+          this.$refs.scene[0] && this.$refs.scene[0]._getList()
+        } else {
+          this.$refs.ai[0] && this.$refs.ai[0]._getList()
+        }
       }
     }
   }
