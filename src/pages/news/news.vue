@@ -135,7 +135,7 @@
             })
             this.saveList(newList)
             let refName = 'slide' + this.checkedIdx
-            this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+            this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
           } else {
             this.$refs.toast.show(res.message)
           }
