@@ -21,7 +21,7 @@ if (APP_CONFIG.env === 'production') {
   // 默认y轴的值=>seriesData.item
   let DEFAULT_SERIES_DATA_ITEM = (itemNumber) => {
     return new Array(7).fill(1).map((item, index) => {
-      return ~~(Math.random() * (itemNumber)) // todo
+      return ~~(Math.random() * (itemNumber)) * 0 // todo
     })
   }
   DEFAULT_SERIES_DATA_FN = (number, itemNumberArr = []) => {

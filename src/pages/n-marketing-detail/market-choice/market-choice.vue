@@ -19,7 +19,7 @@
             <img class="del-icon" src="./icon-del_yx@2x.png" alt="">
           </div>
         </section>
-        <section v-if="index==0" class="bottom one">
+        <section v-if="item.title === '选择人群'" class="bottom one">
           <ul v-if="isShowGroupButton" class="button-group">
             <li v-for="(child, idx) in item.groupArr" :key="idx" class="button" @click="incomeHandle(child, idx, 'group')">
               <img class="add-icon" src="./icon-add@2x.png" alt="">
@@ -34,7 +34,7 @@
             <p class="explain">{{groupData.group_desc}}</p>
           </div>
         </section>
-        <section v-if="index==1" class="bottom two">
+        <section v-if="item.title === '选择权益'" class="bottom two">
           <p v-if="!item.enableChange && !marketData.benefit.length" class="income-empty">每日上新的商品或活动，只推送一次</p>
           <ul v-if="isShowIncomeButton" class="button-group">
             <li v-for="(child, idx) in item.incomeArr" :key="idx" class="button" @click="incomeHandle(child, idx)">
@@ -43,11 +43,12 @@
             </li>
           </ul>
           <div v-else v-for="(child,index) in marketData.benefit" :key="index" class="income-wrapper">
-            <market-coupon v-if="marketData.benefit_type === INCOME_TYPE.coupon.benefit_type" :info="child"></market-coupon>
-            <market-active v-if="marketData.benefit_type === INCOME_TYPE.activity.benefit_type" :info="child"></market-active>
+            <market-coupon v-if="showIncomeType(INCOME_TYPE.coupon.benefit_type)" :info="child"></market-coupon>
+            <market-active v-if="showIncomeType(INCOME_TYPE.activity.benefit_type)" :info="child"></market-active>
+            <market-server-goods v-if="showIncomeType([INCOME_TYPE.goods.benefit_type, INCOME_TYPE.service.benefit_type])" :info="child"></market-server-goods>
           </div>
         </section>
-        <section v-if="index===2" class="bottom three">
+        <section v-if="item.title === '选择渠道'" class="bottom three">
           <ul class="button-group">
             <li v-for="(child, idx) in item.channelTextArr" :key="idx" class="button">
               <img v-if="idx===marketData.channel_type" class="icon" src="./icon-ok@2x.png" alt="">
@@ -66,6 +67,7 @@
   import * as Helpers from '@/store/helpers'
   import MarketCoupon from '../market-coupon/market-coupon'
   import MarketActive from '../market-active/market-active'
+  import MarketServerGoods from '../market-server-goods/market-server-goods'
   import {INCOME_TYPE} from '../config-detail'
 
   const COMPONENT_NAME = 'MARKET_CHOICE'
@@ -74,7 +76,8 @@
     components: {
       CustomerGroup,
       MarketCoupon,
-      MarketActive
+      MarketActive,
+      MarketServerGoods
     },
     data() {
       return {
@@ -112,6 +115,16 @@
     },
     methods: {
       ...Helpers.marketMethods,
+      showIncomeType(arr) {
+        let type = this.marketData.benefit_type
+        let flag = false
+        if (arr instanceof Array) {
+          flag = arr.some((val) => val === type)
+        } else {
+          flag = arr === type
+        }
+        return flag
+      },
       isShowDelButton(index, item, type) {
         let position = item.enableChangeType === type
         let enableChange = item.enableChange

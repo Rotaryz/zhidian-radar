@@ -122,10 +122,44 @@ export const CONFIG = {
     }
   },
   [MARKET_TYPE.weChat]: { // 加个人微信
-    icon: require('./market-header/pic-mywechat@2x.png')
+    icon: require('./market-header/pic-mywechat@2x.png'),
+    choicesArr: [
+      {
+        title: '选择人群',
+        explain: '(覆盖人数',
+        enableChange: false
+      },
+      {
+        title: '选择渠道',
+        explain: '(消息模板)',
+        channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
+      }
+    ],
+    checkArr: ['_checkDefault', '_checkDefault', '_checkDefault'],
+    submitButton: {
+      text: '编辑计划',
+      fn: 'updateMarket'
+    }
   },
   [MARKET_TYPE.weGroup]: { // 加微信群
-    icon: require('./market-header/pic-mywechat@2x.png')
+    icon: require('./market-header/pic-mywechat@2x.png'),
+    choicesArr: [
+      {
+        title: '选择人群',
+        explain: '(覆盖人数',
+        enableChange: false
+      },
+      {
+        title: '选择渠道',
+        explain: '(消息模板)',
+        channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
+      }
+    ],
+    checkArr: ['_checkDefault', '_checkDefault', '_checkDefault'],
+    submitButton: {
+      text: '编辑计划',
+      fn: 'updateMarket'
+    }
   },
   [MARKET_TYPE.DIY]: { // 自定义
     icon: '',

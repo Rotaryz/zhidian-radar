@@ -31,3 +31,15 @@ export default {
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
 }
+
+// function _formatListData(res) {
+//   console.log(res)
+//   let report = res.data.report || []
+//   let [xAxisData, seriesData] = [[], []]
+//
+//   report.forEach((item) => {
+//     xAxisData.push(item.at)
+//     seriesData.push()
+//   })
+//   return res
+// }

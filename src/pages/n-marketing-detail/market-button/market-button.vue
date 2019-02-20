@@ -40,7 +40,6 @@
         let flag = false
         if (+this.marketData.type === +MARKET_TYPE.DIY) {
           flag = marketData.name.trim()
-          console.log(flag)
           !flag && checkArr.push('请输入活动名称')
         }
         this.CONFIG.checkArr.forEach((item) => {

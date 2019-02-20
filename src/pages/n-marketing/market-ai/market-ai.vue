@@ -32,7 +32,7 @@
       }
     },
     created() {
-      this._getList()
+      this._getList(!this.dataArray.length)
     },
     methods: {
       _getList(loading) {
