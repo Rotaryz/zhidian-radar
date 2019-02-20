@@ -456,7 +456,7 @@
               let list = [...this.nowChat, msg]
               this.setNowChat(list)
               let addMsg = {
-                text: '[其他消息]',
+                text: '[个人微信二维码]',
                 time: timeStamp,
                 msgTimeStamp: timeStamp,
                 fromAccount: this.id,
@@ -598,7 +598,7 @@
             data = {
               title,
               avatar: this.userInfo.avatar,
-              coupon_id: item.recommend_coupon_id,
+              coupon_id: item.id,
               end_at: item.end_at,
               coupon_type: item.coupon_type,
               coupon_num: item.denomination
@@ -903,6 +903,7 @@
         textareaDom: '',
         heightBoxDom: '',
         txtHeight: '36px',
+        listenScroll: true,
         inputMsg: '',
         list: [],
         pullDownRefresh: true,
@@ -946,6 +947,15 @@
           this.rebuildScroll()
         },
         deep: true
+      },
+      nowChat() {
+        if (this.listDom.clientHeight > this.chatDom.clientHeight) {
+          let timer = setTimeout(() => {
+            let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+            this.$refs.scroll && this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+            clearTimeout(timer)
+          }, 20)
+        }
       }
     },
     computed: {

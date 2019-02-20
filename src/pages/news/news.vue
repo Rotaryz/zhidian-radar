@@ -47,6 +47,7 @@
     </scroll>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
+    <router-view/>
   </div>
 </template>
 
@@ -110,8 +111,9 @@
         this.$router.push(url)
       },
       createGroup() {
-        let url = '/new-group-msg'
-        this.$router.push(url)
+        let pageUrl = this.$route.path
+        let path = `${pageUrl}/new-group-msg`
+        this.$router.push(path)
       },
       delHandler(idx, item) {
         this.checkedItem = item
@@ -184,6 +186,7 @@
     left: 0
     top: 0
     right: 0
+    z-index: 30
     bottom: 45px
     background: $color-white
     .news-list

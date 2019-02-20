@@ -345,7 +345,41 @@ const route = new Router({
         component: News,
         meta: {
           title: '消息'
-        }
+        },
+        children: [
+          {
+            path: 'new-group-msg',
+            component: NewGroupMsg,
+            meta: {
+              title: '新建群发'
+            },
+            children: [
+              {
+                path: 'news-add-group',
+                component: NewsAddGroup,
+                meta: {
+                  title: '添加组'
+                },
+                children: [
+                  {
+                    path: 'news-chat-group',
+                    component: NewsChatGroup,
+                    meta: {
+                      title: '群发'
+                    }
+                  }
+                ]
+              },
+              {
+                path: 'news-chat-group',
+                component: NewsChatGroup,
+                meta: {
+                  title: '群发'
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         path: '/news-add-group',

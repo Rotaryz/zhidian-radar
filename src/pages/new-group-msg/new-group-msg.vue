@@ -38,7 +38,7 @@
               </div>
               <div class="item-text item-text6" v-if="item.type == 6">
                 <!--[个人微信二维码]-->
-                <img :src="item.url" alt="" class="item-code-img">
+                <img src="./pic-code@3x.png" alt="" class="item-code-img">
                 <div class="content">
                   <div class="content-title">欢迎加入我的微信福利群</div>
                   <div class="content-text">点击本条消息加微信群，不定时抢购福利</div>
@@ -54,6 +54,27 @@
               </div>
               <!--图片-->
               <img class="item-img" @load="refushBox" v-if="item.type == 20" :src="item.url"/>
+              <div class="chat-msg-coupon" v-if="item.type * 1 === 30">
+                <div class="coupon-content">
+                  <img src="./pic-coupon_bg@2x.png" class="coupon-bc">
+                  <div class="coupon-container">
+                    <div class="coupon-left">
+                      <div class="left-money">
+                        <span class="money-icon">¥</span>
+                        <span class="money-txt">{{item.coupon_num}}</span>
+                      </div>
+                      <div class="left-money" v-if="item.coupon_type == 4">
+                        <span class="money-txt">{{item.coupon_num}}</span>
+                        <span class="discount-txt">折</span>
+                      </div>
+                    </div>
+                    <div class="coupon-right">
+                      <div class="coupon-title">{{item.title}}</div>
+                      <div class="coupon-time">有效期至{{item.end_at}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="item-down">
               <div class="item-down-btn" @click="toChat(item)">再发一条</div>
@@ -66,6 +87,7 @@
       <div class="new-btn" @click="newGroup">新建群发</div>
     </div>
     <toast ref="toast"></toast>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -136,8 +158,9 @@
           return
         }
         this.setCurrentGroupMsg(item.groups)
-        let url = '/news-chat-group'
-        this.$router.push(url)
+        let pageUrl = this.$route.path
+        let path = `${pageUrl}/news-chat-group`
+        this.$router.push(path)
       },
       onPullingUp() {
         if (this.showNoMore) {
@@ -182,8 +205,9 @@
           this.$refs.toast.show('群发消息发送中，请稍后再发')
           return
         }
-        let url = '/news-add-group'
-        this.$router.push(url)
+        let pageUrl = this.$route.path
+        let path = `${pageUrl}/news-add-group`
+        this.$router.push(path)
       }
     },
     computed: {
@@ -233,7 +257,7 @@
     top: 0
     right: 0
     bottom: 0
-    z-index: 50
+    z-index: 70
     background: $color-background
     .news-list
       padding: 0 15px 75px
@@ -323,6 +347,75 @@
             .item-img
               padding-top: 12px
               width: 100%
+            .chat-msg-coupon
+              width: 100%
+              .coupon-content
+                width: 100%
+                height: 0
+                padding-bottom: 28.87%
+                background: $color-white
+                overflow: hidden
+                position: relative
+                .coupon-bc
+                  width: 100%
+                  height: 100%
+                  position: absolute
+                  left: 0
+                  bottom: 0
+                .coupon-container
+                  position: absolute
+                  left: 9px
+                  top: 9px
+                  right: 9px
+                  bottom: 9px
+                  display: flex
+                  .coupon-left
+                    width: 29%
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    overflow: hidden
+                    .left-money
+                      display: flex
+                      align-items: flex-end
+                      margin-bottom: 5px
+                      .money-icon
+                        font-family: $font-family-bold
+                        font-size: $font-size-15
+                        color: $color-white
+                        margin-bottom: 4px
+                        line-height: 15px
+                      .money-txt
+                        font-family: $font-family-bold
+                        font-size: 30px
+                        color: $color-white
+                        margin: 0 1px
+                        line-height: 30px
+                      .discount-txt
+                        font-family: $font-family-regular
+                        font-size: $font-size-14
+                        color: $color-white
+                        margin-bottom: 4px
+                        line-height: 14px
+                  .coupon-right
+                    width: 71%
+                    display: flex
+                    flex-direction: column
+                    justify-content: center
+                    box-sizing: border-box
+                    padding-left: 10px
+                    .coupon-title
+                      font-family: $font-family-medium
+                      color: $color-white
+                      opacity: 0.9px
+                      font-size: $font-size-15
+                      line-height: 15px
+                      margin-bottom: 17px
+                    .coupon-time
+                      font-family: $font-family-regular
+                      color: $color-white
+                      opacity: 0.7
+                      font-size: $font-size-11
           .item-down
             padding: 0 15px
             display: flex
@@ -338,7 +431,6 @@
               font-size: $font-size-14
               color: #5929DC
 
-
   .bottom-box
     padding: 7.5px 15px
     position: fixed
@@ -346,7 +438,7 @@
     bottom: 0
     right: 0
     height: 55px
-    z-index: 55
+    z-index: 75
     box-sizing: border-box
     background: $color-white
   .new-btn

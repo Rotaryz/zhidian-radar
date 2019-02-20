@@ -170,7 +170,7 @@
   .news-add-group
     fill-box()
     background-color: $color-white-fff
-    z-index: 10
+    z-index: 90
     .content
       fill-box(absolute)
       overflow: hidden

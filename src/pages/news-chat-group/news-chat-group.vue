@@ -87,7 +87,7 @@
   import { mapActions, mapGetters } from 'vuex'
   import SelectorView from 'components/selector-view/selector-view'
   import storage from 'storage-controller'
-  import { Im, News } from 'api'
+  import { News } from 'api'
   import { ERR_OK } from 'common/js/config'
   import utils from 'common/js/utils'
   import { emotionsFaceArr } from 'common/js/constants'
@@ -190,42 +190,49 @@
         this.setGroupMsgIng(false)
       },
       async _sendGroupMsg(arr, type, content) {
+        let text
         switch (type) {
           case 'custom' :
-            arr.forEach(item1 => {
-              let timeStamp = parseInt(Date.now() / 1000)
-              let addMsg = {
-                text: '[图片信息]',
-                time: timeStamp,
-                msgTimeStamp: timeStamp,
-                fromAccount: item1.account || item1.im_account,
-                sessionId: item1.account || item1.im_account,
-                unreadMsgCount: 0,
-                avatar: item1.avatar,
-                nickName: item1.nickname
-              }
-              this.addListMsg({msg: addMsg, type: 'mineAdd'})
-            })
+            text = '[图片信息]'
             break
           case 'chat' :
-            arr.forEach(item1 => {
-              let timeStamp = parseInt(Date.now() / 1000)
-              let addMsg = {
-                text: content,
-                time: timeStamp,
-                msgTimeStamp: timeStamp,
-                fromAccount: item1.account || item1.im_account,
-                sessionId: item1.account || item1.im_account,
-                unreadMsgCount: 0,
-                avatar: item1.avatar,
-                nickName: item1.nickname
-              }
-              this.addListMsg({msg: addMsg, type: 'mineAdd'})
-            })
+            text = content
+            break
+          case 'goods' :
+          case 'service' :
+            text = '[商品信息]'
+            break
+          case 'activity' :
+            text = '[活动信息]'
+            break
+          case 'coupon' :
+            text = '[优惠券信息]'
+            break
+          case 'weixin' :
+            text = '[个人微信二维码]'
             break
           default:
             break
         }
+        let msg = {
+          time: parseInt(Date.now() / 1000),
+          lastMsg: text
+        }
+        this.setGroupItem(msg)
+        arr.forEach(item1 => {
+          let timeStamp = parseInt(Date.now() / 1000)
+          let addMsg = {
+            text,
+            time: timeStamp,
+            msgTimeStamp: timeStamp,
+            fromAccount: item1.account || item1.im_account,
+            sessionId: item1.account || item1.im_account,
+            unreadMsgCount: 0,
+            avatar: item1.avatar,
+            nickName: item1.nickname
+          }
+          this.addListMsg({msg: addMsg, type: 'mineAdd'})
+        })
       },
       // _splitSendGroupMsg(arr, type, content) {
       //   this.setGroupMsgIng(true)
@@ -372,11 +379,6 @@
               desc,
               ext
             }
-            let msg = {
-              time: parseInt(Date.now() / 1000),
-              lastMsg: '[图片信息]'
-            }
-            this.setGroupItem(msg)
             this.setNewsGetType(true)
             this._sendGroupMessage(20, message, () => {
               let reqArr = this._splitArr(this.currentGroupMsg)
@@ -388,106 +390,6 @@
             this.$refs.toast.show('图片发送失败，请重新发送')
           }
         })
-      },
-      nextWork1(item) {
-        let type = item.type * 1
-        let url
-        switch (type) {
-          case 1:
-            break
-          case 2:
-            url = this.$route.fullPath + '/select-goods?type=1&chatType=group'
-            this.mortListShow = false
-            this.$router.push(url)
-            break
-          case 20:
-            url = this.$route.fullPath + '/select-goods?type=20&chatType=group'
-            this.mortListShow = false
-            this.$router.push({path: url})
-            break
-          case 3:
-            url = this.$route.fullPath + '/select-goods?type=2&chatType=group'
-            this.mortListShow = false
-            this.$router.push(url)
-            break
-          case 4:
-            if (!this.codeStatus.have_personal_qrcode) {
-              this.coverFullShow = true
-              this.coverShowType = 'person'
-            } else {
-              let data = {}
-              let desc = {log_type: 6}
-              let ext = '20005'
-              data = JSON.stringify(data)
-              desc = JSON.stringify(desc)
-              let opt = {
-                data,
-                desc,
-                ext
-              }
-              let msg = {
-                time: parseInt(Date.now() / 1000),
-                lastMsg: '[个人微信二维码]'
-              }
-              this.setGroupItem(msg)
-              this.setNewsGetType(true)
-              let groupIds = this.currentGroupMsg.map((item) => {
-                return item.id
-              })
-              let reqData = {
-                type: 6,
-                group_ids: groupIds
-              }
-              this.$router.go(-2)
-              Im.setGroupList(reqData).then((res) => {
-              })
-              this.mortListShow = false
-              let reqArr = this._splitArr(this.currentGroupMsg)
-              this._splitSendGroupMsg(reqArr, 'person-qr-code', opt)
-            }
-            break
-          case 5:
-            if (!this.codeStatus.have_wxgroup_qrcode) {
-              this.coverFullShow = true
-              this.coverShowType = 'group'
-            } else {
-              let data = {}
-              let desc = {log_type: 7}
-              let ext = '20005'
-              data = JSON.stringify(data)
-              desc = JSON.stringify(desc)
-              let opt = {
-                data,
-                desc,
-                ext
-              }
-              let msg = {
-                time: parseInt(Date.now() / 1000),
-                lastMsg: '[群微信二维码]'
-              }
-              this.setGroupItem(msg)
-              this.setNewsGetType(true)
-              let groupIds = this.currentGroupMsg.map((item) => {
-                return item.id
-              })
-              let reqData = {
-                type: 7,
-                group_ids: groupIds
-              }
-              this.$router.go(-2)
-              Im.setGroupList(reqData).then((res) => {
-              })
-              this.mortListShow = false
-              let reqArr = this._splitArr(this.currentGroupMsg)
-              this._splitSendGroupMsg(reqArr, 'group-qr-code', opt)
-            }
-            break
-          case 6:
-            url = this.$route.fullPath + '/useful-word'
-            this.mortListShow = false
-            this.$router.push({path: url, query: {chatType: 'group'}})
-            break
-        }
       },
       nextWork(item) {
         let type = item.type * 1
@@ -509,28 +411,11 @@
               this.coverShowType = 'person'
               this.$refs.toast && this.$refs.toast.show('无微信, 请在门店信息中添加')
             } else {
-              let data = {}
-              let desc = {log_type: 6}
-              let ext = '20005'
-              data = JSON.stringify(data)
-              desc = JSON.stringify(desc)
-              let opt = {
-                data,
-                desc,
-                ext
-              }
-              let timeStamp = parseInt(Date.parse(new Date()) / 1000)
-              let addMsg = {
-                text: '[其他消息]',
-                time: timeStamp,
-                msgTimeStamp: timeStamp,
-                fromAccount: this.id,
-                sessionId: this.id,
-                unreadMsgCount: 0,
-                avatar: this.currentMsg.avatar,
-                nickName: this.currentMsg.nickName
-              }
-              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+              this._sendGroupMessage(6, {}, () => {
+                let reqArr = this._splitArr(this.currentGroupMsg)
+                this._splitSendGroupMsg(reqArr, 'weixin', {})
+                this.$router.replace('/news')
+              })
             }
             break
           case 5:
@@ -548,6 +433,7 @@
                 desc,
                 ext
               }
+              console.log(opt)
               let timeStamp = parseInt(Date.now() / 1000)
               let msg = {
                 from_account_id: this.imInfo.im_account,
@@ -591,56 +477,33 @@
         }
       },
       selectorDown(item, type) {
-        let timeStamp, msg, list, addMsg, data, logType, descMsg, desc, ext, title, url
+        let data, logType, descMsg, desc, ext, title, url, message, option
         switch (type) {
           case 'words':
-            timeStamp = parseInt(Date.parse(new Date()) / 1000)
-            msg = {
-              from_account_id: this.imInfo.im_account,
-              avatar: this.userInfo.avatar,
-              content: item.message,
-              time: timeStamp,
-              msgTimeStamp: timeStamp,
-              nickName: this.userInfo.nickName,
-              sessionId: this.userInfo.account,
-              unreadMsgCount: 0,
-              type: 1
-            }
-            if (this.nowChat.length) {
-              let lastItem = this.nowChat[this.nowChat.length - 1]
-              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
-              msg.is_showtime = timeStamp - lastTime > TIMELAG
-            } else {
-              msg.is_showtime = true
-            }
-            list = [...this.nowChat, msg]
-            addMsg = {
-              text: item.message,
-              time: timeStamp,
-              msgTimeStamp: timeStamp,
-              fromAccount: this.currentMsg.account,
-              sessionId: this.currentMsg.account,
-              unreadMsgCount: 0,
-              avatar: this.currentMsg.avatar,
-              nickName: this.currentMsg.nickName
-            }
-            this.setNowChat(list)
-            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            this._sendGroupMessage(1, {text: item.message}, () => {
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, 'chat', item.message)
+              this.inputMsg = ''
+              this.hideInput()
+              this.setNewsGetType(true)
+              this.inputMsg = ''
+              this.hideInput()
+              this.$router.go(-2)
+            })
             break
           case 'coupon':
             title = item.coupon_name
-            url = item.image_url
-            data = {
+            message = {
               title,
               avatar: this.userInfo.avatar,
-              coupon_id: item.recommend_coupon_id,
+              coupon_id: item.id,
               end_at: item.end_at,
               coupon_type: item.coupon_type,
               coupon_num: item.denomination
             }
             logType = 30
             descMsg = {log_type: logType}
-            data = JSON.stringify(data)
+            data = JSON.stringify(message)
             desc = JSON.stringify(descMsg)
             ext = '20005'
             option = {
@@ -648,51 +511,17 @@
               desc,
               ext
             }
-            timeStamp = parseInt(Date.now() / 1000)
-            msg = {
-              from_account_id: this.imInfo.im_account,
-              avatar: this.userInfo.avatar,
-              content: '',
-              url: '',
-              title,
-              shop_name: item.shop_name,
-              coupon_id: item.recommend_coupon_id,
-              end_at: item.end_at,
-              coupon_type: item.coupon_type,
-              coupon_num: item.denomination,
-              time: timeStamp,
-              msgTimeStamp: timeStamp,
-              nickName: this.userInfo.nickName,
-              sessionId: this.userInfo.account,
-              unreadMsgCount: 0,
-              type: logType
-            }
-            if (this.nowChat.length) {
-              let lastItem = this.nowChat[this.nowChat.length - 1]
-              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
-              msg.is_showtime = timeStamp - lastTime > TIMELAG
-            } else {
-              msg.is_showtime = true
-            }
-            list = [...this.nowChat, msg]
-            addMsg = {
-              text: '[优惠券信息]',
-              time: timeStamp,
-              msgTimeStamp: timeStamp,
-              fromAccount: this.currentMsg.account,
-              sessionId: this.currentMsg.account,
-              unreadMsgCount: 0,
-              avatar: this.currentMsg.avatar,
-              nickName: this.currentMsg.nickName // todo
-            }
-            this.setNowChat(list)
-            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            this._sendGroupMessage(logType, message, () => {
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, 'coupon', option)
+              this.$router.replace('/news')
+            })
             break
           case 'goods':
           case 'service':
             title = item.goods_title
             url = item.image_url
-            data = {
+            message = {
               url,
               goods_id: item.goods_id,
               title,
@@ -703,7 +532,7 @@
             }
             logType = 3
             descMsg = {log_type: logType}
-            data = JSON.stringify(data)
+            data = JSON.stringify(message)
             desc = JSON.stringify(descMsg)
             ext = '20005'
             option = {
@@ -711,48 +540,16 @@
               desc,
               ext
             }
-            timeStamp = parseInt(Date.now() / 1000)
-            msg = {
-              from_account_id: this.imInfo.im_account,
-              avatar: this.userInfo.avatar,
-              content: '',
-              url,
-              title,
-              goods_price: item.platform_price,
-              original_price: item.original_price,
-              shop_name: item.shop_name,
-              time: timeStamp,
-              msgTimeStamp: timeStamp,
-              nickName: this.userInfo.nickName,
-              sessionId: this.userInfo.account,
-              unreadMsgCount: 0,
-              type: logType
-            }
-            if (this.nowChat.length) {
-              let lastItem = this.nowChat[this.nowChat.length - 1]
-              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
-              msg.is_showtime = timeStamp - lastTime > TIMELAG
-            } else {
-              msg.is_showtime = true
-            }
-            list = [...this.nowChat, msg]
-            addMsg = {
-              text: type === 'goods' ? '[商品信息]' : '[服务信息]',
-              time: timeStamp,
-              msgTimeStamp: timeStamp,
-              fromAccount: this.currentMsg.account,
-              sessionId: this.currentMsg.account,
-              unreadMsgCount: 0,
-              avatar: this.currentMsg.avatar,
-              nickName: this.currentMsg.nickName // todo
-            }
-            this.setNowChat(list)
-            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            this._sendGroupMessage(logType, message, () => {
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, type, option)
+              this.$router.replace('/news')
+            })
             break
           case 'activity':
             title = item.goods_title
             url = item.image_url
-            data = {
+            message = {
               url,
               goods_id: item.activity_id,
               title,
@@ -763,7 +560,7 @@
             }
             logType = +item.rule_id === 3 ? 5 : 4
             descMsg = {log_type: logType}
-            data = JSON.stringify(data)
+            data = JSON.stringify(message)
             desc = JSON.stringify(descMsg)
             ext = '20005'
             option = {
@@ -771,36 +568,11 @@
               desc,
               ext
             }
-            timeStamp = parseInt(Date.now() / 1000)
-            msg = {
-              from_account_id: this.imInfo.im_account,
-              avatar: this.userInfo.avatar,
-              content: '',
-              url,
-              title,
-              goods_price: item.platform_price,
-              original_price: item.original_price,
-              shop_name: item.shop_name,
-              time: timeStamp,
-              msgTimeStamp: timeStamp,
-              nickName: this.userInfo.nickName,
-              sessionId: this.userInfo.account,
-              unreadMsgCount: 0,
-              type: logType
-            }
-            list = [...this.nowChat, msg]
-            addMsg = {
-              text: '[活动信息]',
-              time: timeStamp,
-              msgTimeStamp: timeStamp,
-              fromAccount: this.currentMsg.account,
-              sessionId: this.currentMsg.account,
-              unreadMsgCount: 0,
-              avatar: this.currentMsg.avatar,
-              nickName: this.currentMsg.nickName // todo
-            }
-            this.setNowChat(list)
-            this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            this._sendGroupMessage(logType, message, () => {
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, type, option)
+              this.$router.replace('/news')
+            })
         }
       },
       sendMsg() {
@@ -818,11 +590,6 @@
           this._splitSendGroupMsg(reqArr, 'chat', value)
           this.inputMsg = ''
           this.hideInput()
-          let msg = {
-            time: parseInt(Date.now() / 1000),
-            lastMsg: value
-          }
-          this.setGroupItem(msg)
           this.setNewsGetType(true)
           this.inputMsg = ''
           this.hideInput()
