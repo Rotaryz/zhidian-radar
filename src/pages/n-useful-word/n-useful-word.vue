@@ -4,27 +4,27 @@
       <scroll :bcColor="'#ffffff'" ref="scroll">
         <div class="word-list">
           <div class="word-item" v-for="(item, index) in wordList" :key="index">
-            <slide-view :useType="3" @del="del" :item="item">
+            <slide-view :useType="3" @del="del" @touchBegin="touchBegin" @touchEnd="touchEnd" :item="item" :index="index" :hasFn="false" :ref="'slide' + index">
               <div slot="content" class="list-content">
                 <div class="item-left">
                   <span>{{item.message}}</span>
                 </div>
                 <div class="item-right">
-                  <div class="icon-box editor-box" @click="editItem(item)">
+                  <div class="icon-box editor-box" @click="editItem(item, index)">
                     <div class="right-icon-editor right-icon"></div>
                   </div>
                 </div>
               </div>
             </slide-view>
           </div>
-
         </div>
       </scroll>
       <div class="bottom">
         <router-link tag="div" class="word-bottom" to="/mine/useful-word/add-word">新增话术</router-link>
       </div>
-      <confirm-msg ref="confirm" @confirm="submitDelete"></confirm-msg>
+      <!--<confirm-msg ref="confirm" @confirm="submitDelete"></confirm-msg>-->
       <toast ref="toast"></toast>
+      <modal ref="modal" @confirm="submitDelete"></modal>
       <router-view @refresh="refresh"></router-view>
     </div>
   </transition>
@@ -37,6 +37,7 @@
   import Toast from 'components/toast/toast'
   import SlideView from 'components/slide-view/slide-view'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  import Modal from './modal/modal'
 
   export default {
     name: 'News',
@@ -52,12 +53,10 @@
         itemChecked: {},
         wordList: [],
         deleteAny: {},
-        editorShow: false,
-        editorMsg: '',
-        editorItem: {},
         allowSend: true,
         allowConfirm: true,
-        item: {}
+        item: {},
+        moveIdx: -1
       }
     },
     methods: {
@@ -73,7 +72,7 @@
       },
       del(Index, item) {
         this.deleteAny = item
-        this.$refs.confirm.show()
+        this.$refs.modal.showModal()
       },
       refresh() {
         this.getMsgList()
@@ -87,7 +86,9 @@
               return item.id !== this.deleteAny.id
             })
             this.deleteAny = {}
-            this.$emit('getMsg')
+            let refName = 'slide' + this.moveIdx
+            this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+            this.moveIdx = -1
             setTimeout(() => {
               this.allowConfirm = true
             }, 300)
@@ -99,85 +100,25 @@
           }
         })
       },
-      editItem(item) {
-        this.editorMsg = item.message
-        this.editorItem = item
-        this.editorShow = true
+      editItem(item, index) {
+        this.$router.push(`/mine/useful-word/add-word?id=${item.id}`)
       },
-      ediCancel() {
-        this.editorMsg = ''
-        this.editorItem = {}
-        this.editorShow = false
-      },
-      addMsgAny() {
-        this.editorShow = true
-      },
-      ediConfirm() {
-        if (!this.allowSend) return
-        this.allowSend = false
-        if (!this.editorMsg) {
-          this.$refs.toast.show('请先输入内容')
-          setTimeout(() => {
-            this.allowSend = true
-          }, 300)
-          return
+      touchBegin(idx) {
+        if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
+          let refName = 'slide' + this.moveIdx
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
         }
-        let data
-        if (this.editorItem.id) {
-          data = {
-            message: this.editorMsg
-          }
-          Im.editWord(data, this.editorItem.id).then(res => {
-            if (res.error === ERR_OK) {
-              this.wordList.map((item) => {
-                if (item.id * 1 === this.editorItem.id) {
-                  item.message = this.editorMsg
-                }
-                return item
-              })
-              this.editorMsg = ''
-              this.editorItem = {}
-              this.editorShow = false
-              this.getMsgList()
-              this.$emit('getMsg')
-              setTimeout(() => {
-                this.allowSend = true
-              }, 300)
-            } else {
-              this.$refs.toast.show(res.message)
-              setTimeout(() => {
-                this.allowSend = true
-              }, 300)
-            }
-          })
-        } else {
-          data = {
-            message: this.editorMsg
-          }
-          Im.addWordAny(data).then(res => {
-            if (res.error === ERR_OK) {
-              this.editorMsg = ''
-              this.editorShow = false
-              this.getMsgList()
-              this.$emit('getMsg')
-              setTimeout(() => {
-                this.allowSend = true
-              }, 300)
-            } else {
-              this.$refs.toast.show(res.message)
-              setTimeout(() => {
-                this.allowSend = true
-              }, 300)
-            }
-          })
-        }
+      },
+      touchEnd(idx) {
+        this.moveIdx = idx
       }
     },
     components: {
       Scroll,
       Toast,
       ConfirmMsg,
-      SlideView
+      SlideView,
+      Modal
     }
   }
 </script>

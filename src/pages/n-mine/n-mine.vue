@@ -8,7 +8,7 @@
             <img v-else class="mine-header" src="./pic-default_people@2x.png">
             <p class="peo-name">
               <span>{{mine.name}}</span><br />
-              <span class="data">到期日期：至2018-12-20</span>
+              <span class="data">到期日期：至{{mine.merchant.expire_time | timeFormat}}</span>
             </p>
           </div>
           <div class="top-box-right" @click="toShareCard">
@@ -19,15 +19,15 @@
           <router-link class="mian-box" to="mine/my-data">
             <div class="main">
               <div class="item-box">
-                <div class="number">{{allDatas.customer_total || 0}}</div>
+                <div class="number">{{allDatas.module_e_count || 0}}</div>
                 <div class="text">主力客户</div>
               </div>
               <div class="item-box">
-                <div class="number">{{allDatas.order_total || 0}}</div>
+                <div class="number">{{allDatas.order_count || 0}}</div>
                 <div class="text">活跃度</div>
               </div>
               <div class="item-box">
-                <div class="number">{{allDatas.success_order_total || 0}}</div>
+                <div class="number">{{allDatas.per_money || 0}}</div>
                 <div class="text">客单价</div>
               </div>
             </div>
@@ -102,8 +102,8 @@
       getMine () {
         this.mine = storage.get('info')
       },
-      getMineData(time) {
-        Mine.getMineData(time).then(res => {
+      getMineData() {
+        Mine.getMineData({shop_id: this.$storage.get('info').shop_id}).then(res => {
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {
@@ -135,6 +135,15 @@
         }
       }
     },
+    filters: {
+      timeFormat(val) {
+        if (val) {
+          let res = new Date(val * 1000).toLocaleDateString().replace(/\//g, '-')
+          return res
+        }
+        return ''
+      }
+    },
     components: {
       Scroll,
       Toast
@@ -159,7 +168,7 @@
     bottom: 50px
     top: 0
   .mine-top
-    bg-image('pic-mybg')
+    bg-image('bg-my')
     padding: 25px 15px
     height: 172px
     background-size: 100% 100%

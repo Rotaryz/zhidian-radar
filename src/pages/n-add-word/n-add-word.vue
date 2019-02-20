@@ -1,64 +1,106 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="add-box">
       <div class="data-bottom">
-        <div class="textarea-number">{{note.length}}<span>/200</span></div>
-        <textarea class="data-area" v-model="note" @touchmove.stop maxlength="200" name="" id="" cols="30" rows="10"
+        <div class="textarea-number">{{editorMsg.length}}<span>/200</span></div>
+        <textarea class="data-area" v-model="editorMsg" @touchmove.stop maxlength="200" name="" id="" cols="30" rows="10"
                   placeholder="请输入话术内容，最多200字"></textarea>
       </div>
-      <div class="bot-btn" @click="addFlow">确定</div>
+      <div class="bot-btn" @click="addWord">确定</div>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
-  import {ClientDetail} from 'api'
-  import {ERR_OK} from '../../common/js/config'
-  import {mapGetters} from 'vuex'
+  import { Im } from 'api'
 
   export default {
     name: 'add-word',
     data() {
       return {
-        note: '',
-        id: '',
-        flowId: '',
-        subimt: false
+        allowSend: true,
+        editorShow: false,
+        editorMsg: '',
+        editorItem: {},
+        wordList: [],
+        wordId: ''
       }
     },
     created () {
-      this.id = this.$route.query.id
-      this.flowId = this.$route.query.id
+      this.wordId = this.$route.query.id
+      this.getMsgList()
     },
     methods: {
-      addFlow() {
-        if (this.subimt) return
-        this.subimt = true
-        if (this.note.length === 0) {
-          this.$toast.show('话术内容不能为空')
-          return
-        }
-        ClientDetail.addFlowList(this.id, this.flowId, this.note).then((res) => {
-          if (res.error === ERR_OK) {
-            this.$toast.show(res.message)
-            setTimeout(() => {
-              this.$emit('refresh')
-              this.$router.back()
-            }, 500)
-          } else {
-            this.subimt = false
-            this.$toast.show(res.message)
+      getMsgList() {
+        Im.getMyWordList().then(res => {
+          if (res.error === this.$ERR_OK) {
+            this.wordList = res.data
+            res.data.map(item => {
+              if (this.wordId && (+item.id === +this.wordId)) {
+                this.editorItem = item
+                this.editorMsg = item.message
+              }
+            })
           }
         })
       },
+      addWord() {
+        if (!this.allowSend) return
+        this.allowSend = false
+        if (!this.editorMsg) {
+          this.$refs.toast.show('请先输入内容')
+          setTimeout(() => {
+            this.allowSend = true
+          }, 300)
+          return
+        }
+        let data
+        if (this.editorItem.id) {
+          data = {
+            message: this.editorMsg
+          }
+          Im.editWord(data, this.editorItem.id).then(res => {
+            if (res.error === this.$ERR_OK) {
+              this.wordList.map((item) => {
+                if (item.id * 1 === this.editorItem.id) {
+                  item.message = this.editorMsg
+                }
+                return item
+              })
+              this.$emit('refresh')
+              this.$router.back()
+              setTimeout(() => {
+                this.allowSend = true
+              }, 300)
+            } else {
+              this.$refs.toast.show(res.message)
+              setTimeout(() => {
+                this.allowSend = true
+              }, 300)
+            }
+          })
+        } else {
+          data = {
+            message: this.editorMsg
+          }
+          Im.addWordAny(data).then(res => {
+            if (res.error === this.$ERR_OK) {
+              this.$emit('refresh')
+              this.$router.back()
+              setTimeout(() => {
+                this.allowSend = true
+              }, 300)
+            } else {
+              this.$refs.toast.show(res.message)
+              setTimeout(() => {
+                this.allowSend = true
+              }, 300)
+            }
+          })
+        }
+      },
       toBack() {
         this.$router.back()
-      }
-    },
-    computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
       }
     }
   }

@@ -43,13 +43,13 @@ export function createOrderAmount(args = {}) {
   const smooth = 0.5
   const colorObj = [
     {
-      name: '订单',
+      name: '订单金额',
       color: '#59DF78',
       colorStops0: 'rgba(89,223,120,0.55)',
       colorStops1: 'rgba(89,223,120,0.05)'
     },
     {
-      name: '金额',
+      name: '交易金额',
       color: '#7495FF',
       colorStops0: 'rgba(116,149,255,0.55)',
       colorStops1: 'rgba(116,149,255,0.05)'
@@ -152,6 +152,7 @@ export function createOrderAmount(args = {}) {
       itemHeight: 8,
       borderRadius: 0,
       bottom: 12,
+      itemGap: 30,
       padding: [0, 25, 0, 25],
       data: legendData
     },

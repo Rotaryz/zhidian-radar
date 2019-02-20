@@ -80,17 +80,17 @@
           font-size: 2.6vw
           color: #333333;
           text-align: center;
-          line-height: 1
+          line-height: 1.2
           no-wrap()
       .right
         flex: 2.7060702875399363
         overflow :hidden
         .wrapper
           height :100%
-          padding : 2.933333333333333vw
+          padding : 2.7vw
           box-sizing :border-box
           layout(column,block,nowrap)
-          line-height: 1
+          line-height: 1.2
           font-family: $font-family-regular
           justify-content :space-between
           overflow :hidden

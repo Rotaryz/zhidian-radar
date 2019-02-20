@@ -62,20 +62,37 @@
         nowTime: 0,
         CHARTS_TYPE: CHARTS_TYPE,
         CARD_TYPE: CARD_TYPE,
-        STATUS_COLOR: STATUS_COLOR
+        STATUS_COLOR: STATUS_COLOR,
+        xAxisData: [],
+        seriesData: [{
+          data: []
+        }]
       }
     },
     computed: {
       CONFIG() {
-        let key = this.info.type || CARD_TYPE.newCustomer
+        let key = '' + this.info.type || CARD_TYPE.newCustomer
         return CONFIG[key]
       }
     },
     mounted() {
-      this._chartActions(this.isClosed)
+      this._initChatData()
     },
     methods: {
       ...Helpers.marketMethods,
+      _initChatData() {
+        let key = this.CONFIG.leftKey
+        let {xAxisData, seriesData, isClosed} = this
+        if (this.info.market_type) {
+          this.isClosed = isClosed = true
+        }
+        let report = this.info.report || []
+        report.forEach((item) => {
+          xAxisData.push(item.at)
+          seriesData[0].data.push(item[key])
+        })
+        this._chartActions({xAxisData, seriesData, isClosed})
+      },
       async navHandle() {
         await this.requestMarketData(this.info)
         let url = this.$route.path + '/market-detail?id=' + this.info.id
@@ -84,16 +101,16 @@
       switchHandle() {
         if (Date.now() - this.nowTime < 300) return
         this.nowTime = Date.now()
-        let isClosed = this.isClosed
+        let {xAxisData, seriesData, isClosed} = this
         isClosed = !isClosed
         this._updateStatus(isClosed, () => {
           this.$toast.show('操作成功!')
-          this._chartActions(isClosed)
+          this._chartActions({xAxisData, seriesData, isClosed})
           this.isClosed = isClosed
         })
       },
-      _chartActions(isClosed = false) {
-        this.$refs._charts && this.$refs._charts.action({isClosed})
+      _chartActions(data) {
+        this.$refs._charts && this.$refs._charts.action(data)
       },
       _updateStatus(status, success, fail) {
         let data = {

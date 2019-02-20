@@ -39,7 +39,7 @@
             <div class="tag">
               <h3 class="title">
                 <span class="left">用户标签</span>
-                <p class="right" v-if="labelList.length<3" @click="toClientTag"><span class="icon"></span><span class="text">添加标签</span></p>
+                <p class="right" @click="toClientTag"><span class="icon"></span><span class="text">添加标签</span></p>
               </h3>
               <ul class="tag-list">
                 <li class="tags" v-for="(item, index) in labelList" :key="index" @click="toClientTag">{{item.name}}</li>
@@ -50,20 +50,16 @@
               <div id="myLine"></div>
               <div class="title-box">
                 <div class="title">近15天活跃度</div>
+                <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
               </div>
             </div>
             <div class="pie-box">
               <div id="myPie"></div>
               <div class="title-box">
                 <div class="title">兴趣的商品占比</div>
-                <!--<div class="sub-title">(每小时更新)</div>-->
+                <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.SHOP"></ai-charts>
               </div>
-              <div class="pie-list">
-                <div class="list" v-for="(item, index) in pieHint" v-bind:key="index">
-                  <div class="icon" :class="item.icon"></div>
-                  <div class="text">{{item.text}}</div>
-                </div>
-              </div>
+
             </div>
             <div class="pie-box" v-if="false">
               <div id="myBar"></div>
@@ -91,11 +87,11 @@
       </div>
       <div class="bottom-box">
         <div class="box-btn" @click="phoneCall">
-          <img src="./icon-telephone@2x.png" alt="" class="btn-img">
+          <img src="./icon-addwechat@2x.png" alt="" class="btn-img">
           <div class="text">添加微信</div>
         </div>
         <div class="box-btn message-btn" @click="jumpMessage">
-          <img src="./icon-news@2x.png" alt="" class="btn-img">
+          <img src="./icon-sendnews@2x.png" alt="" class="btn-img">
           <div class="text">发消息</div>
         </div>
       </div>
@@ -107,7 +103,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {ClientDetail, Client, Echart} from 'api'
+  import {ClientDetail, Client, NEchart} from 'api'
   import {ERR_OK} from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import storage from 'storage-controller'
@@ -117,6 +113,8 @@
   import MsgBox from './msg-box/msg-box'
   import MarketRecord from './market-record/market-record'
   import Modal from './modal/modal'
+  import AiCharts from 'components/_ai-charts/_ai-charts'
+  import {CHARTS_TYPE} from 'utils/constants-charts'
 
   import {mapActions, mapGetters} from 'vuex'
   const PIEHINT = [{text: '个人', icon: 'one'}, {text: '商品', icon: 'two'}, {text: '拼团', icon: 'thr'}, {text: '砍价', icon: 'four'}]
@@ -158,21 +156,9 @@
         highgt: 216,
         pageUrl: '',
         labelList: [],
-        pieData: [
-          {value: 1, name: '对我感兴趣'},
-          {value: 1, name: '对产品感兴趣'},
-          {value: 1, name: '对公司感兴趣'}
-        ],
-        ationLine: {
-          x: [],
-          y: []
-        },
-        barData: {
-          x: [],
-          y: []
-        },
         pieHint: PIEHINT,
-        showTab: false
+        showTab: false,
+        CHARTS_TYPE
       }
     },
     created() {
@@ -180,9 +166,6 @@
       this.pageUrl = this.$route.path
       this.getClientId(this.id)
       this.getCusomerTagList()
-      this.getActionLineData()
-      this.getPieData()
-      // this.getBarData()
     },
     mounted() {
       this.highgt = this.$refs.eleven.offsetHeight
@@ -206,8 +189,8 @@
       getCusomerTagList() {
         Client.getCusomerTagList(this.id).then(res => {
           if (res.error === ERR_OK) {
-            let arr = res.data.labels.slice(0, 3)
-            this.labelList = arr
+            // let arr = res.data.labels.slice(0, 3)
+            this.labelList = res.data.labels
           }
         })
       },
@@ -233,246 +216,53 @@
           this.showTab = false
         }
       },
-      drawPie() {
-        let myChart = this.$echarts.init(document.getElementById('myPie'))
-        // 绘制图表
-        myChart.setOption({
-          tooltip: {
-            trigger: 'item',
-            formatter: '{d}%'
-          },
-          color: ['#F9543C', '#23799D', '#8E3C68', '#F9B43C'],
-          series: [
-            {
-              name: '',
-              type: 'pie',
-              radius: '55%',
-              center: ['50%', '54%'],
-              data: this.pieData,
-              itemStyle: {
-                emphasis: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-              }
-            }
-          ]
-        })
-      },
-      drawLine() {
-        let myChart = this.$echarts.init(document.getElementById('myLine'))
-        // 绘制图表
-        myChart.setOption({
-          grid: {
-            top: 45,
-            left: '2%',
-            right: '5%',
-            bottom: 15,
-            containLabel: true
-          },
-          xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: this.ationLine.x,
-            splitLine: {
-              show: true,
-              lineStyle: {
-                color: '#E6E6E6',
-                width: 0.5
-              }
-            },
-            axisLabel: {
-              color: '#343439',
-              align: 'center'
-            },
-            axisTick: {
-              show: false,
-              lineStyle: {
-                color: '#c4c4c4',
-                width: 0.5
-              }
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#c4c4c4',
-                width: 0.5
-              }
-            }
-          },
-          tooltip: {
-            trigger: 'axis',
-            formatter: '活跃度：{c}',
-            axisPointer: {
-              type: 'none'
-            }
-          },
-          yAxis: {
-            minInterval: 1,
-            type: 'value',
-            splitLine: {
-              show: true,
-              lineStyle: {
-                color: '#E6E6E6',
-                width: 0.5
-              }
-            },
-            axisTick: {
-              show: false,
-              lineStyle: {
-                color: '#c4c4c4',
-                width: 0.5
-              }
-            },
-            axisLabel: {
-              formatter: '{value}',
-              color: '#343439'
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#c4c4c4',
-                width: 0.5
-              }
-            }
-          },
-          series: [{
-            data: this.ationLine.y,
-            type: 'line',
-            smooth: true,
-            showSymbol: false,
-            smoothMonotone: 'x',
-            areaStyle: {
-              color: {
-                type: 'linear',
-                x: 0,
-                x2: 0,
-                y: 0,
-                y2: 1,
-                colorStops: [{
-                  offset: 0, color: 'rgba(249,80,60,0.55)'
-                }, {
-                  offset: 1, color: 'rgba(249,80,60,0.05)'
-                }],
-                globalCoord: false
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: 'rgba(249,80,60,0.85)',
-                borderWidth: 2,
-                lineStyle: {
-                  color: 'rgba(249,80,60,0.75)',
-                  width: 3
-                }
-              }
-            }
-          }]
-        })
-      },
-      drawBar() {
-        let myChart = this.$echarts.init(document.getElementById('myBar'))
-        // 绘制图表
-        myChart.setOption({
-          tooltip: {
-            trigger: 'axis',
-            formatter: '{b}数：{c}',
-            axisPointer: {
-              type: 'none'
-            }
-          },
-          grid: {
-            top: 45,
-            left: '0',
-            right: '5%',
-            bottom: 15,
-            containLabel: true
-          },
-          xAxis: {
-            minInterval: 1,
-            type: 'value',
-            boundaryGap: false,
-            splitLine: {
-              show: false
-            },
-            axisLabel: {
-              interval: 0,
-              color: '#20202E',
-              fontSize: 12,
-              formatter: function (value) {
-                return value
-              },
-              align: 'center'
-            },
-            axisTick: {
-              lineStyle: {
-                color: '#c4c4c4',
-                width: 0.5
-              }
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#c4c4c4',
-                width: 0.5
-              }
-            }
-          },
-          yAxis: {
-            type: 'category',
-            data: this.barData.y,
-            axisLabel: {
-              interval: 0,
-              color: '#20202E',
-              fontSize: 12
-            },
-            axisTick: {
-              lineStyle: {
-                color: '#c4c4c4',
-                width: 0.5
-              }
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#c4c4c4',
-                width: 0.5
-              }
-            }
-          },
-          series: [{
-            data: this.barData.x,
-            type: 'bar',
-            showSymbol: false,
-            barWidth: 15,
-            itemStyle: {
-              normal: {
-                color: '#F9543C',
-                borderWidth: 2,
-                lineStyle: {
-                  color: '#F9543C',
-                  width: 3
-                }
-              }
-            }
-          }]
-        })
-      },
       switchTab(index) {
         this.$refs.scroll.scrollTo(0, 0)
         this.scroll(0)
         this.menuIdx = index
         if (index * 1 === 1) {
-          setTimeout(() => {
-            this.drawPie()
-            this.drawLine()
-            // this.drawBar()
-          }, 200)
+          this.$nextTick(() => {
+            this.actionRetio()
+            this.interestedRetio()
+          })
         } else if (index * 1 === 0) {
           this.list = this.flowList
-        } else if (index * 0 === 0) {
-          this.list = this.twoList
         }
         setTimeout(() => {
           this.$refs.scroll.forceUpdate()
         }, 20)
+      },
+      actionRetio() {
+        NEchart.actionRetio({customer_id: this.id})
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            let lineData = {
+              xAxisData: res.data.x,
+              seriesData: [ {data: res.data.y} ]
+            }
+            this.$refs.c1.action(lineData)
+          })
+      },
+      interestedRetio() {
+        NEchart.interestedRetio()
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            let pieData = {
+              seriesData: [
+                {name: '护发素', value: 20},
+                {name: '洗发水', value: 10},
+                {name: '护手霜', value: 30},
+                {name: '美容水', value: 20}
+              ]
+            }
+            this.$refs.c2.action(pieData)
+          })
       },
       getClientId(id) {
         ClientDetail.getClientId(id).then((res) => {
@@ -601,33 +391,6 @@
           this.$refs.scroll.destroy()
           this.$refs.scroll.initScroll()
         })
-      },
-      getPieData() {
-        Echart.getPie(this.id).then(res => {
-          if (res.error === ERR_OK) {
-            this.pieData = res.data
-          } else {
-            this.$refs.toast.show(res.message)
-          }
-        })
-      },
-      getActionLineData() {
-        Echart.getActionLine(this.id).then(res => {
-          if (res.error === ERR_OK) {
-            this.ationLine = res.data
-          } else {
-            this.$refs.toast.show(res.message)
-          }
-        })
-      },
-      getBarData() {
-        Echart.getBar(this.id).then(res => {
-          if (res.error === ERR_OK) {
-            this.barData = res.data
-          } else {
-            this.$refs.toast.show(res.message)
-          }
-        })
       }
     },
     components: {
@@ -637,7 +400,8 @@
       DetailMsg,
       MsgBox,
       MarketRecord,
-      Modal
+      Modal,
+      AiCharts
     },
     computed: {
       pullUpLoadObj: function () {
@@ -831,7 +595,7 @@
           width: 70px
           height: 24px
           line-height: 24px
-          border: 2px solid $color-main
+          border: 1.5px solid $color-main
           color: $color-main
           text-align: center
           font-size: $font-size-14

@@ -17,6 +17,7 @@ import orderForm from './orderForm'
 import radar from './radar'
 import marketing from './n-marketing'
 import coupon from './coupon'
+import nEchart from './n-echart'
 
 // 营销
 export const Marketing = marketing
@@ -70,3 +71,6 @@ export const Radar = radar
 
 // 优惠券
 export const Coupon = coupon
+
+// AI智能运营图表
+export const NEchart = nEchart

@@ -8,7 +8,9 @@ export default {
   },
   updateActiveStatus(data, loading = true, toast = true) {
     let url = 'api/employee/ai-market/activity-change-status/' + data.id
-    data = ''
+    data = {
+      status: data.status
+    }
     return request.put(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   },
   getDetail(data, loading = true, toast = true) {
@@ -29,3 +31,15 @@ export default {
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
 }
+
+// function _formatListData(res) {
+//   console.log(res)
+//   let report = res.data.report || []
+//   let [xAxisData, seriesData] = [[], []]
+//
+//   report.forEach((item) => {
+//     xAxisData.push(item.at)
+//     seriesData.push()
+//   })
+//   return res
+// }

@@ -170,7 +170,8 @@
           group_id: this.id,
           page: 1,
           limit: LIMIT,
-          order_by: this.selectText
+          order_by: this.selectText,
+          shop_id: this.$storage.get('info').shop_id
         }
         Client.getCustomerList(data).then(res => {
           if (res.error !== ERR_OK) {

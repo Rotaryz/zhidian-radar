@@ -1,12 +1,14 @@
 <template>
   <div class="customer-group">
     <ul class="container">
-      <li v-for="(item,index) in dataArray" :key="index" class="avatar-wrapper":style="avatarWrapperStyles">
-        <div class="avatar" :class="{single: dataArray.length <= 1}">
-          <img v-if="item" class="avatar-img" :src="item.avatar" alt="">
-          <img v-else class="avatar-img" src="./pic-default@2x.png" alt="">
-        </div>
-      </li>
+      <template v-for="(item,index) in dataArray">
+        <li v-if="index < 9"  :key="index" class="avatar-wrapper":style="avatarWrapperStyles">
+          <div class="avatar" :class="{single: dataArray.length <= 1}">
+            <img v-if="item" class="avatar-img" :src="item.avatar" alt="">
+            <img v-else class="avatar-img" src="./pic-default@2x.png" alt="">
+          </div>
+        </li>
+      </template>
     </ul>
   </div>
 </template>

@@ -16,8 +16,8 @@ export default {
    * @returns {*}
    */
   getMineData (data) {
-    let url = '/api/employee/dashboard'
-    return request.get(url)
+    let url = '/api/employee/ai/get-trade-description'
+    return request.get(url, data)
   },
   /**
    * 获取我的信息
