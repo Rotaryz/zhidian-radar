@@ -107,29 +107,6 @@
     name: 'my-data',
     data() {
       return {
-        pieData: [
-          {value: 1, name: '对我感兴趣'},
-          {value: 1, name: '对产品感兴趣'},
-          {value: 1, name: '对公司感兴趣'}
-        ],
-        ationLine: {
-          x: [],
-          y: []
-        },
-        addationLine: {
-          x: [],
-          y: []
-        },
-        barData: {
-          x: [],
-          y: []
-        },
-        successData: [
-          {value: 80, name: '32222'},
-          {value: 60, name: '155'},
-          {value: 40, name: '21'},
-          {value: 20, name: '0'}
-        ],
         allDatas: {},
         tabList: [
           {
@@ -156,11 +133,6 @@
     },
     created() {
       this.id = this.$route.query.id
-      this.getActionLineData()
-      this.getPieData()
-      // this.getBarData() // 太丑暂时去掉这个图表
-      this.getAddActionLineData()
-      this.getSuccessData()
       this.getAllDataObj('all')
     },
     methods: {

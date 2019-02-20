@@ -1,9 +1,9 @@
 <template>
   <transition name="slide">
     <article class="client-user-list">
-      <section class="add-user" @click="toAddUser">
+      <section class="add-user">
         <p class="txt">{{this.title}}（{{dataArray.length}}人）</p>
-        <div class="icon"></div>
+        <div v-if="this.groupType === 0" class="icon" @click="toAddUser"></div>
       </section>
       <div class="simple-scroll"  v-if="dataArray.length">
         <div class="scroll-list-wrap">
@@ -14,7 +14,7 @@
                   @pullingUp="onPullingUp">
             <ul class="user-list">
               <li class="user-list-item" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
-                <slide-view @grouping="groupingHandler" :item="item" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
+                <slide-view @grouping="groupingHandler" :item="item" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="false" :ref="'slide' + index">
                   <user-card :userInfo="item" slot="content" useType="join"></user-card>
                 </slide-view>
               </li>
@@ -26,10 +26,10 @@
         <exception errType="nodata"></exception>
       </section>
       <div class="bottom">
-        <router-link tag="div" to="" class="btn ">
+        <div class="btn" @click="marketing">
           <span class="icon"></span>
-          <span class="text">添加微信</span>
-        </router-link>
+          <span class="text">场景营销</span>
+        </div>
         <span style="width: 12px"></span>
         <router-link tag="div" to="" class="btn ">
           <span class="icon"></span>
@@ -85,10 +85,12 @@
         isAll: false,
         isEmpty: false,
         moveIdx: -1,
-        groupType: null
+        groupType: null,
+        userInfo: ''
       }
     },
     created() {
+      this.userInfo = this.$storage.get('info')
       this.getParams()
       this.getCustomerList()
       document.title = this.title
@@ -125,7 +127,9 @@
           page: this.page,
           limit: this.limit,
           group_id: this.id,
-          group_type: this.groupType // 分组类型0自定义1pens，2kol，3活跃新客，4已购客户
+          group_type: this.groupType, // 分组类型0自定义1pens，2kol，3活跃新客，4已购客户
+          store_id: this.userInfo.store_id,
+          merchant_id: this.userInfo.merchant_id
         }
         Client.getGroupCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
@@ -135,6 +139,9 @@
             this.$refs.toast.show(res.message)
           }
         })
+      },
+      marketing() {
+        this.$router.push(`/market?groupId=${this.id}&groupName=${this.title}`)
       },
       toAddUser() {
         const path = `/client/client-user-list/client-add-user`

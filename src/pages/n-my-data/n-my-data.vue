@@ -25,7 +25,7 @@
                     <span class="icon" :class="item.icon"></span>
                     <span class="text">{{item.name}}</span>
                   </div>
-                  <div class="num">100</div>
+                  <div class="num">{{allDatas[item.type] || 0}}</div>
                 </div>
               </div>
             </div>
@@ -71,33 +71,31 @@
           <div style="height: 5px"></div>
         </div>
       </scroll>
-      <toast ref="toast"></toast>
     </article>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
-  import {Echart} from 'api'
+  import {NEchart, Mine} from 'api'
   import AiCharts from 'components/_ai-charts/_ai-charts'
   import {CHARTS_TYPE} from 'utils/constants-charts'
   import {ERR_OK} from '../../common/js/config'
   import Scroll from 'components/scroll/scroll'
-  import Toast from 'components/toast/toast'
   import storage from 'storage-controller'
 
   const PIEHINT = [{text: '个人', icon: 'one'}, {text: '商品', icon: 'two'}, {text: '拼团', icon: 'thr'}, {text: '砍价', icon: 'four'}]
   const SUCCESSHINT = [{text: '0-50%', icon: ''}, {text: '51-80%', icon: 'two'}, {text: '81-99%', icon: 'thr'}, {text: '100%', icon: 'four'}]
   const DATA_ARR = [
-    {name: '交易金额', icon: 'money', type: 'money'},
-    {name: '主力客户', icon: 'business', type: 'business'},
-    {name: '活跃度', icon: 'active', type: 'active'},
-    {name: '客单价', icon: 'price', type: 'price'}
+    {name: '交易金额', icon: 'money', type: 'total'},
+    {name: '主力客户', icon: 'business', type: 'order_count'},
+    {name: '活跃度', icon: 'active', type: 'per_money'},
+    {name: '客单价', icon: 'price', type: 'module_e_count'}
   ]
   const groupList = [{
     orderBy: 'join',
     name: '客户数据'
   }, {
-    orderBy: 'activity',
+    orderBy: 'activity_index',
     name: '活跃数据'
   }, {
     orderBy: '',
@@ -132,61 +130,189 @@
         successHint: SUCCESSHINT,
         groupList,
         charTab: 0,
-        CHARTS_TYPE
+        CHARTS_TYPE,
+        shopId: ''
       }
     },
     created() {
       this.id = this.$route.query.id
+      this.shopId = this.$storage.get('info').shop_id
       this.getAllDataObj('all')
     },
     mounted() {
       this.$nextTick(() => {
-        let pieData = {
-          seriesData: [
-            {name: '潜在客户', value: 30},
-            {name: '新客户', value: 40},
-            {name: '主力客户', value: 10},
-            {name: '沉睡客户', value: 20}
-          ]
-        }
-        this.$refs.c1.action(pieData)
-        this.$refs.c2.action()
+        this.groupRetio()
+        this.PENSRetio()
         this.$refs.c3.action()
       })
     },
     methods: {
+      // 用户分组占比
+      groupRetio() {
+        let data = {
+          shop_id: this.shopId,
+          time: this.tabList[this.tabNumber].value
+        }
+        NEchart.groupRetio(data)
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            let pieData = {
+              seriesData: [
+                {name: '潜在客户', value: res.data.p},
+                {name: '新客户', value: res.data.n},
+                {name: '主力客户', value: res.data.e},
+                {name: '沉睡客户', value: res.data.s}
+              ]
+            }
+            this.$refs.c1.action(pieData)
+          })
+      },
+      // PNES动力模型
+      PENSRetio() {
+        let data = {
+          shop_id: this.shopId,
+          time: this.tabList[this.tabNumber].value
+        }
+        NEchart.PENSRetio(data)
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            let day = res.data.map(item => {
+              return item.day
+            })
+            console.log(day)
+            // 新增
+            let growth = res.data.map(item => {
+              return item.growth
+            })
+            // 转化
+            let conversion = res.data.map(item => {
+              return item.conversion
+            })
+            // 流失
+            let churn = res.data.map(item => {
+              return item.churn
+            })
+            // 唤醒
+            let wakeup = res.data.map(item => {
+              return item.wakeup
+            })
+            // let seriesData = [
+            //   {data: [50, 70, 30, 80, 40]},
+            //   {data: [10, 50, 40, 70, 20]},
+            //   {data: [30, 60, 20, 60, 50]},
+            //   {data: [60, 10, 100, 90, 60]}
+            // ]
+            let lineData = {
+              xAxisData: ['3/10', '3/15', '3/20', '3/25', '3/30'],
+              seriesData: [
+                {data: growth},
+                {data: conversion},
+                {data: churn},
+                {data: wakeup}
+              ]
+            }
+            this.$refs.c2.action(lineData)
+          })
+      },
+      // 活跃度
+      actionRetio() {
+        NEchart.actionRetio({customer_id: this.id})
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            let lineData = {
+              xAxisData: res.data.x,
+              seriesData: [ {data: res.data.y} ]
+            }
+            this.$refs.c4.action(lineData)
+          })
+      },
+      // 订单金额、客单价、一周活跃
+      orderRetio() {
+        let data = {
+          shop_id: this.shopId,
+          time: this.tabList[this.tabNumber].value
+        }
+        NEchart.orderRetio(data)
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            // 主力客户一周下单数
+            let mainOrderCount = res.data.map(item => {
+              return item.main_order_count
+            })
+            // 客单价
+            let personMoney = res.data.map(item => {
+              return item.per_money
+            })
+            // 订单金额
+            let total = res.data.map(item => {
+              return item.total
+            })
+            // 日期
+            let day = res.data.map(item => {
+              return item.day
+            })
+
+            if (this.charTab === 1) {
+              let lineData = {
+                xAxisData: day,
+                seriesData: [ {data: mainOrderCount} ]
+              }
+              this.$refs.c4.action(lineData)
+            } else if (this.charTab === 2) {
+              let lineData = {
+                xAxisData: day,
+                seriesData: [ {data: personMoney} ]
+              }
+              let lineData2 = {
+                xAxisData: day,
+                seriesData: [ {data: total}, {data: res.data.y} ]
+              }
+              this.$refs.c5.action(lineData)
+              this.$refs.c6.action(lineData2)
+            }
+          })
+      },
       // 图表tab切换
       changeChart(item, index) {
         if (this.charTab === index) return
         this.charTab = index
         if (index === 0) {
           this.$nextTick(() => {
-            this.$refs.c1.action()
-            this.$refs.c2.action()
-            this.$refs.c3.action()
+            this.groupRetio()
+            this.PENSRetio()
           })
         } else if (index === 1) {
           this.$nextTick(() => {
-            this.$refs.c4.action()
+            this.actionRetio()
           })
         } else if (index === 2) {
           this.$nextTick(() => {
-            this.$refs.c5.action()
-            this.$refs.c6.action()
+            this.orderRetio()
           })
         }
       },
-      eConsole(param) {
-        if (param.name > 0) {
-          this.$router.push('/')
-        }
-      },
       getAllDataObj(time) {
-        Echart.getAllData(time).then(res => {
+        let data = {
+          shop_id: this.shopId,
+          time
+        }
+        Mine.getMineData(data).then(res => {
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
@@ -201,7 +327,6 @@
       }
     },
     components: {
-      Toast,
       Scroll,
       AiCharts
     }

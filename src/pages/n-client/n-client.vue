@@ -28,7 +28,7 @@
                 :key="index"
                 @click="check(item)"
             >
-              <slide-view :useType="1" @grouping="groupingHandler" :item="item"  @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
+              <slide-view :useType="1" @grouping="groupingHandler" :item="item"  @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="false" :ref="'slide' + index">
                 <user-card :userInfo="item" slot="content" :useType="checkedGroup.orderBy"></user-card>
               </slide-view>
             </li>
@@ -84,7 +84,7 @@
                 :key="index"
                 @click="toUserList(item)"
             >
-              <slide-view :useType="3" @del="delHandler" :item="item" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
+              <slide-view :useType="+item.type === 0 ? 3 : 4" @del="delHandler" :item="item" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="false" :ref="'slide' + index">
                 <div slot="content" class="user-list-item-wrapper">
                   <div class="users-avatar" :class="{'no-border': item.customers.length === 1}">
                     <img v-if="item.customers && item.customers.length && i < 9"
@@ -150,7 +150,7 @@
   import Scroll from 'components/scroll/scroll'
   import UserCard from 'components/client-user-card/client-user-card'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  import {Client} from 'api'
+  import {Client, NEchart} from 'api'
   import ActionSheet from 'components/action-sheet/action-sheet'
   import Toast from 'components/toast/toast'
   import {ERR_OK} from '../../common/js/config'
@@ -235,19 +235,8 @@
         this.moveIdx = -1
         if (index === 2) {
           this.$nextTick(() => {
-            let pieData = {
-              seriesData: [
-                {name: '男 50%', value: 50},
-                {name: '女 40%', value: 40},
-                {name: '未知 10%', value: 10}
-              ]
-            }
-            let barData = {
-              xAxisData: ['北京', '广州', '成都', '上海', '西安', '深圳'],
-              seriesData: [500, 300, 800, 1000, 200, 600]
-            }
-            this.$refs.c1.action(pieData)
-            this.$refs.c2.action(barData)
+            this.sexRetio()
+            this.cityRetio()
             this.$refs.c3.action()
           })
         }
@@ -267,6 +256,8 @@
       checkData(index) {
         if (this.dataIndex === index) return
         this.dataIndex = index
+        this.cityRetio()
+        this.sexRetio()
       },
       refresh() {
         this.isAll = false
@@ -274,6 +265,66 @@
         this.limit = LIMIT
         this.getGroupList()
         this.getCustomerList()
+      },
+      // 性别占比
+      sexRetio() {
+        let data = {
+          shop_id: this.$storage.get('info').shop_id,
+          time: this.data[this.dataIndex]
+        }
+        NEchart.sexRetio(data)
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            let count = 0
+            res.data.map(item => {
+              count += item.sex_count
+            })
+            let pieData = {
+              // seriesData: [
+              //   {name: '男 50%', value: 1},
+              //   {name: '女 40%', value: 1},
+              //   {name: '未知 10%', value: 1}
+              // ]
+              seriesData: res.data.map(item => {
+                let sex = item.sex === 0 ? '未知' : item.sex === 1 ? '男' : '女'
+                let percent = item.sex_count / count * 100
+                return {
+                  name: sex + ' ' + parseInt(percent) + '%',
+                  value: item.sex_count
+                }
+              })
+
+            }
+            this.$refs.c1.action(pieData)
+          })
+      },
+      // 城市占比
+      cityRetio() {
+        let data = {
+          shop_id: this.$storage.get('info').shop_id,
+          time: this.data[this.dataIndex]
+        }
+        NEchart.cityRetio(data)
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            let cityArr = res.data.map(item => {
+              return item.city
+            })
+            let dataArr = res.data.map(item => {
+              return item.city_count
+            })
+            let barData = {
+              xAxisData: cityArr,
+              seriesData: dataArr
+            }
+            this.$refs.c2.action(barData)
+          })
       },
       toSearch() {
         const path = `/client/client-search`
@@ -289,6 +340,7 @@
           if (res.error === ERR_OK) {
             let arr = res.data
             this.userListArr = arr
+            console.log(this.userListArr)
             this.tabList[1].number = arr.length
             this.userListIsEmpty = !arr.length
           } else {

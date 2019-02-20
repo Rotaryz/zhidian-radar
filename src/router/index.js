@@ -15,7 +15,7 @@ const Cdata = () => import('pages/detail-data/detail-data')
 // const ClientTag = () => import('pages/client-tag/client-tag')
 // const ClientSetGroup = () => import('pages/client-set-group/client-set-group')
 // const ClientCreateGroup = () => import('pages/client-create-group/client-create-group')
-const ClientAddUser = () => import('pages/client-add-user/client-add-user')
+// const ClientAddUser = () => import('pages/client-add-user/client-add-user')
 // const ClientSearch = () => import('pages/client-search/client-search')
 // const ClientUserList = () => import('pages/client-user-list/client-user-list')
 const EditCard = () => import('pages/edit-card/edit-card')
@@ -62,6 +62,7 @@ const NMine = () => import('pages/n-mine/n-mine')
 const NUsefulWord = () => import('pages/n-useful-word/n-useful-word')
 const NAddWord = () => import('pages/n-add-word/n-add-word')
 const NMyData = () => import('pages/n-my-data/n-my-data')
+const NClientAddUser = () => import('pages/n-client-add-user/n-client-add-user')
 
 Vue.use(Router)
 
@@ -422,7 +423,7 @@ const route = new Router({
             children: [
               {
                 path: 'client-add-user',
-                component: ClientAddUser,
+                component: NClientAddUser,
                 meta: {
                   title: '添加成员'
                 }

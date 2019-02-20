@@ -31,7 +31,7 @@ export default {
    */
   actionRetio(data) {
     let url = '/api/employee/analysis/active-chart'
-    return request.get(url, data)
+    return request.post(url, data)
   },
   /**
    * 兴趣商品占比
@@ -39,14 +39,14 @@ export default {
    */
   interestedRetio(data) {
     let url = '/api/employee/analysis/interest-rate-chart'
-    return request.get(url, data)
+    return request.post(url, data)
   },
   /**
    * 客单价、订单与金额、主力客户一周下单次数
    * @returns {*}
    */
   orderRetio(data) {
-    let url = 'api/brand/brand-boss/get-order-data-report'
+    let url = 'api/employee/ai/get-order-data-report'
     return request.get(url, data)
   },
   /**
@@ -54,7 +54,7 @@ export default {
    * @returns {*}
    */
   groupRetio(data) {
-    let url = 'api/brand/brand-boss/get-pnes-count-average'
+    let url = 'api/employee/ai/get-pnes-count-average'
     return request.get(url, data)
   },
   /**

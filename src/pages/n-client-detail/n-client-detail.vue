@@ -39,7 +39,7 @@
             <div class="tag">
               <h3 class="title">
                 <span class="left">用户标签</span>
-                <p class="right" v-if="labelList.length<3" @click="toClientTag"><span class="icon"></span><span class="text">添加标签</span></p>
+                <p class="right" @click="toClientTag"><span class="icon"></span><span class="text">添加标签</span></p>
               </h3>
               <ul class="tag-list">
                 <li class="tags" v-for="(item, index) in labelList" :key="index" @click="toClientTag">{{item.name}}</li>
@@ -103,7 +103,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {ClientDetail, Client, Echart} from 'api'
+  import {ClientDetail, Client, NEchart} from 'api'
   import {ERR_OK} from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import storage from 'storage-controller'
@@ -156,11 +156,6 @@
         highgt: 216,
         pageUrl: '',
         labelList: [],
-        pieData: [
-          {value: 1, name: '对我感兴趣'},
-          {value: 1, name: '对产品感兴趣'},
-          {value: 1, name: '对公司感兴趣'}
-        ],
         pieHint: PIEHINT,
         showTab: false,
         CHARTS_TYPE
@@ -171,9 +166,6 @@
       this.pageUrl = this.$route.path
       this.getClientId(this.id)
       this.getCusomerTagList()
-      this.getActionLineData()
-      this.getPieData()
-      // this.getBarData()
     },
     mounted() {
       this.highgt = this.$refs.eleven.offsetHeight
@@ -197,8 +189,8 @@
       getCusomerTagList() {
         Client.getCusomerTagList(this.id).then(res => {
           if (res.error === ERR_OK) {
-            let arr = res.data.labels.slice(0, 3)
-            this.labelList = arr
+            // let arr = res.data.labels.slice(0, 3)
+            this.labelList = res.data.labels
           }
         })
       },
@@ -230,8 +222,8 @@
         this.menuIdx = index
         if (index * 1 === 1) {
           this.$nextTick(() => {
-            this.$refs.c1.action()
-            this.$refs.c2.action()
+            this.actionRetio()
+            this.interestedRetio()
           })
         } else if (index * 1 === 0) {
           this.list = this.flowList
@@ -239,6 +231,38 @@
         setTimeout(() => {
           this.$refs.scroll.forceUpdate()
         }, 20)
+      },
+      actionRetio() {
+        NEchart.actionRetio({customer_id: this.id})
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            let lineData = {
+              xAxisData: res.data.x,
+              seriesData: [ {data: res.data.y} ]
+            }
+            this.$refs.c1.action(lineData)
+          })
+      },
+      interestedRetio() {
+        NEchart.interestedRetio()
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            let pieData = {
+              seriesData: [
+                {name: '护发素', value: 20},
+                {name: '洗发水', value: 10},
+                {name: '护手霜', value: 30},
+                {name: '美容水', value: 20}
+              ]
+            }
+            this.$refs.c2.action(pieData)
+          })
       },
       getClientId(id) {
         ClientDetail.getClientId(id).then((res) => {
@@ -366,33 +390,6 @@
         this.$nextTick(() => {
           this.$refs.scroll.destroy()
           this.$refs.scroll.initScroll()
-        })
-      },
-      getPieData() {
-        Echart.getPie(this.id).then(res => {
-          if (res.error === ERR_OK) {
-            this.pieData = res.data
-          } else {
-            this.$refs.toast.show(res.message)
-          }
-        })
-      },
-      getActionLineData() {
-        Echart.getActionLine(this.id).then(res => {
-          if (res.error === ERR_OK) {
-            this.ationLine = res.data
-          } else {
-            this.$refs.toast.show(res.message)
-          }
-        })
-      },
-      getBarData() {
-        Echart.getBar(this.id).then(res => {
-          if (res.error === ERR_OK) {
-            this.barData = res.data
-          } else {
-            this.$refs.toast.show(res.message)
-          }
         })
       }
     },
@@ -598,7 +595,7 @@
           width: 70px
           height: 24px
           line-height: 24px
-          border: 2px solid $color-main
+          border: 1.5px solid $color-main
           color: $color-main
           text-align: center
           font-size: $font-size-14
