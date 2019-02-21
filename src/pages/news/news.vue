@@ -107,7 +107,7 @@
           account: item.sessionId
         }
         this.setCurrent(currentMsg)
-        let url = '/chat/' + item.sessionId
+        let url = '/chat/' + item.sessionId + '?modelType=' + item.group_rule_name
         this.$router.push(url)
       },
       createGroup() {

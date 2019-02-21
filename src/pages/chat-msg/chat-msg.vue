@@ -18,7 +18,7 @@
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
                 <!--<div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>-->
-                <div class="avatar">
+                <div class="avatar" :style="{borderColor: modelType ? pnesColor[modelType] : '#e6e6e6'}">
                   <img class="avatar-img" :src="currentMsg.avatar" alt="">
                 </div>
                 <div class="chat-msg-box other" v-if="item.type * 1 === 1">
@@ -201,6 +201,7 @@
   import { ERR_OK, TIMELAG } from 'common/js/config'
   import utils from 'common/js/utils'
   import { emotionsFaceArr } from 'common/js/constants'
+  import {PNES_COLOR} from 'common/js/pnes'
   import wx from 'weixin-js-sdk'
   import * as COS from '@/utils/cos/cos'
 
@@ -220,6 +221,7 @@
     name: 'Chat',
     created() {
       this.id = this.$route.params.id
+      this.modelType = this.$route.query.modelType
       let data = {
         'end_date': this.endDate,
         limit: LIMIT,
@@ -921,7 +923,9 @@
         mortListShow: false,
         codeStatus: {},
         coverFullShow: false,
-        coverShowType: ''
+        coverShowType: '',
+        modelType: '', // pnes模型属性
+        pnesColor: PNES_COLOR
       }
     },
     components: {

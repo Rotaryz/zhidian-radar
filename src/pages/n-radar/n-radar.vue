@@ -18,50 +18,68 @@
         <img src="./bg-ld@2x.jpg" class="top-bc" v-show="topType">
         <div class="top-content" :class="{'active' : topType}">
           <div class="pnes-container" :class="{'active' : topType}">
-            <div class="refresh-box" v-if="topType">
+            <div class="refresh-box" v-show="topType">
               <img src="./pic-circle2@2x.png" class="refresh-bc">
-              <div class="refresh-btn"></div>
+              <div class="refresh-btn" :class="{'active' : loading}" @click="getPnesModel"></div>
             </div>
+            <transition name="fade">
+              <div class="pnes-content" v-if="topType">
+                <img src="./pnes-model.gif" class="content-bc">
+                <div class="pnes-item" v-for="(item, idx) in pnesObj" :key="idx" :class="item.type">
+                  <div class="pnes-title">{{item.valTxt}}</div>
+                  <div class="pnes-num-box">{{modelObj[item.valKey]}}%</div>
+                </div>
+              </div>
+            </transition>
           </div>
           <div class="top-container" :class="{'active' : topType}">
             <p class="top-title" v-if="!topType">用户生命周期智能诊断</p>
             <div class="icon-content">
-              <img src="./pic-diagnose_bg@2x.png" class="icon-bc-img">
-              <div class="icon-container">
-                <div class="icon-left">
-                  <div class="icon-item">
-                    <div class="icon-bc p">P</div>
-                  </div>
-                  <div class="icon-item">
-                    <div class="icon-bc n">N</div>
+              <img src="./pic-move@2x.png" class="move-img">
+              <div class="icon-item">
+                <div class="item-bc">
+                  <div class="icon-bc-center p">
+                    <img src="./pic-p@2x.png" class="icon-type-img" v-if="!topType">
+                    <span class="icon-type-num" v-if="topType">{{modelObj.p_count}}</span>
                   </div>
                 </div>
-                <div class="icon-right">
-                  <div class="icon-item">
-                    <div class="icon-bc e">E</div>
-                  </div>
-                  <div class="icon-item">
-                    <div class="icon-bc s">S</div>
-                  </div>
-                </div>
+                <div class="icon-txt">潜力客户</div>
               </div>
-            </div>
-            <div class="icon-txt-container">
-              <div class="txt-left">
-                <div class="icon-item">
-                  <div class="icon-txt">潜力客户</div>
-                </div>
-                <div class="icon-item">
-                  <div class="icon-txt">新客户</div>
-                </div>
+              <div class="line-item">
+                <img src="./pic-diagnose@2x.png" class="line-img">
               </div>
-              <div class="txt-right">
-                <div class="icon-item">
-                  <div class="icon-txt">主力客户</div>
+              <div class="icon-item">
+                <div class="item-bc">
+                  <div class="icon-bc-center n">
+                    <img src="./pic-n@2x.png" class="icon-type-img" v-if="!topType">
+                    <span class="icon-type-num" v-if="topType">{{modelObj.n_count}}</span>
+                  </div>
                 </div>
-                <div class="icon-item">
-                  <div class="icon-txt">沉睡客户</div>
+                <div class="icon-txt">新客户</div>
+              </div>
+              <div class="line-item">
+                <img src="./pic-diagnose@2x.png" class="line-img">
+              </div>
+              <div class="icon-item">
+                <div class="item-bc">
+                  <div class="icon-bc-center e">
+                    <img src="./pic-e@2x.png" class="icon-type-img" v-if="!topType">
+                    <span class="icon-type-num" v-if="topType">{{modelObj.e_count}}</span>
+                  </div>
                 </div>
+                <div class="icon-txt">主力客户</div>
+              </div>
+              <div class="line-item">
+                <img src="./pic-diagnose@2x.png" class="line-img">
+              </div>
+              <div class="icon-item">
+                <div class="item-bc">
+                  <div class="icon-bc-center s">
+                    <img src="./pic-s@2x.png" class="icon-type-img" v-if="!topType">
+                    <span class="icon-type-num" v-if="topType">{{modelObj.s_count}}</span>
+                  </div>
+                </div>
+                <div class="icon-txt">沉睡客户</div>
               </div>
             </div>
             <div v-if="!topType" class="top-btn" @click="diagnose">智能诊断</div>
@@ -74,7 +92,7 @@
           <span class="msg-hint">{{customCount}}条信息</span>
         </span>
         <div class="radar-list">
-          <div class="radar-item" v-for="(item, index) in list" :key="index">
+          <div class="radar-item" v-for="(item, index) in list" :key="index" @click="toDetail(item)">
             <div class="item-time" v-if="item.is_showtime">{{item.created_at | timeFormat}}</div>
             <div class="msg-item-content">
               <div class="flag" :style="{background: item.group_rule_name ? pnesColor[item.group_rule_name] : '#f3f3f3'}"></div>
@@ -160,6 +178,8 @@
         </div>
       </div>
     </scroll>
+    <router-view></router-view>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
@@ -172,11 +192,12 @@
   import {ease} from 'common/js/ease'
   import utils from 'common/js/utils'
   import {PNES_COLOR} from 'common/js/pnes'
+  import Toast from 'components/toast/toast'
   const PNES = [
-    {type: 'p', txt: '潜力客户'},
-    {type: 'n', txt: '新客户'},
-    {type: 'e', txt: '主力客户'},
-    {type: 's', txt: '沉睡客户'}
+    {type: 'p', txt: '潜力客户', valTxt: '新增率', valKey: 'growth_rate'},
+    {type: 'n', txt: '新客户', valTxt: '转化率', valKey: 'conversion_rate'},
+    {type: 'e', txt: '主力客户', valTxt: '流失率', valKey: 'churn_rate'},
+    {type: 's', txt: '沉睡客户', valTxt: '唤醒率', valKey: 'wakeup_rate'}
   ]
   export default {
     name: 'Radar',
@@ -188,23 +209,38 @@
         topHide: false, // 头部是否消失
         list: [],
         showNoMore: false,
+        loading: false,
+        timer: '',
+        loadingTime: '',
         listenScroll: true,
         pullUpLoad: true,
         pullUpLoadThreshold: 0,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         scrollToEasing: 'bounce',
-        scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce']
+        scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
+        modelObj: {
+          'p_count': 0,
+          'n_count': 0,
+          'e_count': 1,
+          's_count': 0,
+          'growth_rate': 0,
+          'conversion_rate': 0,
+          'churn_rate': 0,
+          'wakeup_rate': 0
+        } // pnes模型初始数据
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Toast
     },
     created() {
       if (!this.imIng) {
         this.$emit('login')
       }
       this.setCustomCount('clear')
+      this.getPnesVal()
       this.getRadarList()
       this._refreshInfo()
     },
@@ -214,6 +250,10 @@
         'setImIng',
         'setImInfo'
       ]),
+      toDetail(item) {
+        let url = '/radar/client-detail'
+        this.$router.push({path: url, query: {id: item.customer_id, pageUrl: url}})
+      },
       diagnose() {
         this.topType = true
         setTimeout(() => {
@@ -224,6 +264,36 @@
         Jwt.getEmployeeInfo().then((res) => {
           if (res.error === ERR_OK) {
             storage.set('info', res.data)
+          }
+        })
+      },
+      getPnesModel() {
+        if (this.loading) return
+        let timeS = Date.parse(new Date())
+        if (this.loadingTime && (timeS - this.loadingTime) < 60000) {
+          this.$refs.toast.show('数据已刷新，请稍后再试！')
+          return
+        }
+        this.loading = true
+        this.loadingTime = timeS
+        this.getPnesVal(() => {
+          clearTimeout(this.timer)
+          this.timer = setTimeout(() => {
+            this.loading = false
+            clearTimeout(this.timer)
+          }, 1000)
+        })
+      },
+      getPnesVal(callback) {
+        let data = {
+          merchant_id: this.userInfo.merchant_id,
+          store_id: this.userInfo.store_id,
+          shop_id: this.userInfo.shop_id
+        }
+        Radar.getPNESModel(data).then(res => {
+          if (res.error === ERR_OK) {
+            this.modelObj = res.data
+            callback && callback()
           }
         })
       },
@@ -325,6 +395,30 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
+  @keyframes lineMove {
+    0% {
+      left: 10vw
+    }
+    50% {
+      left: 38vw
+    }
+    100% {
+      left: 66vw
+    }
+  }
+
+  @keyframes spinning {
+    0% {
+      transform: translate(-50%, 0) rotateZ(360deg)
+    }
+    50% {
+      transform: translate(-50%, 0) rotateZ(720deg)
+    }
+    100% {
+      transform: translate(-50%, 0) rotateZ(1080deg)
+    }
+  }
+
   .radar
     width: 100vw
     z-index: 50
@@ -385,6 +479,40 @@
         position: relative
         border-radius: 4px 4px 0 0
         background: $color-F0F5FF
+        .pnes-content
+          position: absolute
+          all-center()
+          width: 88vw
+          .content-bc
+            width: 88vw
+          .pnes-item
+            position: absolute
+            &.p
+              left: 35vw
+              top: 16vw
+            &.n
+              left: 50vw
+              top: 27vw
+            &.e
+              right: 0
+              bottom: 10vw
+            &.s
+              right: 7vw
+              bottom: 25vw
+            .pnes-title
+              font-family: $font-family-regular
+              color: $color-text-main
+              font-size: $font-size-10
+              line-height: 14px
+            .pnes-num-box
+              width: 30px
+              height: 14px
+              background: $color-F94346
+              text-align: center
+              line-height: 14px
+              font-size: $font-size-10
+              color: $color-white
+              font-family: $font-family-regular
         .refresh-box
           position: absolute
           width: 64px
@@ -398,10 +526,13 @@
             width: 40px
             height: 40px
             position: absolute
+            z-index: 20
             left: 50%
             transform: translate(-50%, 0)
             top: 7px
             icon-image('icon-refresh')
+            &.active
+              animation: spinning 3s linear infinite
         &.active
           height: 64.8vw
       .top-container
@@ -415,7 +546,8 @@
         justify-content: center
         align-items: center
         &.active
-          height: 22.6vw
+          height: 22.66vw
+          background: $color-white
           border-radius: 0 0 4px 4px
         .top-title
           margin-bottom: 5.6vw
@@ -433,76 +565,69 @@
           font-family: $font-family-regular
           font-size: $font-size-14
           margin-top: 4.8vw
-        .icon-txt-container
-          margin-top: 7px
-          width: 100%
-          padding: 0 9.4vw
-          box-sizing: border-box
-          display: flex
-          justify-content: space-between
-          .txt-left, .txt-right
-            flex: 1
-            display: flex
-            justify-content: space-between
-          .txt-left
-            margin-right: 8.8vw
-          .icon-item
-            min-width: 10.66vw
-            font-size: $font-size-11
-            font-family: $font-family-regular
-            color: #0E1249
-            text-align: center
         .icon-content
-          width: 100%
-          padding: 0 9.4vw
-          box-sizing: border-box
+          display: flex
           position: relative
-          .icon-bc-img
-            width: 100%
-            height: 100%
-            display: block
-          .icon-container
-            padding: 0 9.4vw
+          .move-img
             position: absolute
-            top: 0
-            left: 0
-            right: 0
-            bottom: 0
-            display: flex
-            align-items: center
-            .icon-left, .icon-right
-              flex: 1
-              display: flex
-              justify-content: space-between
-            .icon-left
-              margin-right: 8.8vw
-            .icon-item
+            width: 21px
+            height: 10.5px
+            top: 6vw
+            left: 13vw
+            transform: translate(0, -50%)
+            animation: lineMove 5s linear infinite
+          .icon-item
+            width: 12vw
+            position: relative
+            .item-bc
               width: 12vw
               height: 12vw
-              display: flex
-              justify-content: center
-              align-items: center
-              .icon-bc
+              border-radius: 50%
+              background: #5929DC
+              position: relative
+              .icon-bc-center
                 width: 10.66vw
                 height: 10.66vw
                 border-radius: 50%
-                background: red
-                text-align: center
-                line-height: 10.66vw
-                color: $color-white
+                display: flex
+                align-items: center
+                justify-content: center
+                position: absolute
+                all-center()
+                .icon-type-img
+                  display: block
+                  width: 14px
+                  height: auto
+                .icon-type-num
+                  font-family: $font-family-bold
+                  font-size: 18px
+                  color: $color-white
                 &.p
-                  background: $color-pnes-p
+                  background: $color-linear-p
                 &.n
-                  background: $color-pnes-n
+                  background: $color-linear-n
                 &.e
-                  background: $color-pnes-e
+                  background: $color-linear-e
                 &.s
-                  background: $color-pnes-s
-              .icon-txt
-                font-family: $font-family-regular
-                color: #0E1249
-                font-size: $font-size-11
-
+                  background: $color-linear-s
+            .icon-txt
+              font-family: $font-family-regular
+              color: $color-0E1249
+              font-size: $font-size-11
+              opacity: 0.8
+              text-align: center
+              white-space: nowrap
+              margin-top: 7px
+          .line-item
+            width: 9.7vw
+            height: 12vw
+            margin: 0 -2px
+            display: flex
+            align-items: center
+            .line-img
+              width: 100%
+              height: auto
+              display: block
     .showTop
       height: 104vw
     .radar-content
