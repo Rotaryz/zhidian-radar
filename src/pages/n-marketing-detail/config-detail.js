@@ -171,7 +171,7 @@ export const CONFIG = {
         enableChangeType: 'group',
         groupArr: [
           {
-            text: '添加权益',
+            text: '选择人群',
             type: INCOME_TYPE.group.type,
             benefit_type: INCOME_TYPE.group.benefit_type
           }
