@@ -103,8 +103,10 @@
                 let goodsRes = Object.assign({}, res, goods)
                 this.addNowChat(goodsRes)
               }
-              if (Number(res.ext) === 20005) {
+              if (Number(res.ext) === 20005 && res.fromAccount !== this.currentMsg.account) {
                 window.$playAudio()
+              }
+              if (Number(res.ext) === 20005) {
                 this.addListCount(res)
                 this.addListMsg({msg: res, type: ''})
               }
@@ -113,12 +115,13 @@
               this.addListMsg({msg: res, type: ''})
               if (res.fromAccount === this.currentMsg.account) {
                 this.addNowChat(res)
+              } else {
+                window.$playAudio()
               }
             }
             let content = webimHandler.transitionMsg(res)
             let html = ''
             if (res.type === 'chat') {
-              window.$playAudio()
               html = Utils.msgFaceToHtml(content)
             }
             this.setNewMsg({avatar: res.avatar, content, html, type: res.type, nickName: res.fromAccountNick})
