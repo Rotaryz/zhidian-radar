@@ -45,7 +45,7 @@
       </div>
     </Scroll>
     <div class="cover">
-      <div class="center-box" :style="{background: 'url(https://zhidian-img.jkweixin.com/83/2019/01/07/shop_125_qrcode.png?timestamp=1550730136) no-repeat center center', backgroundSize: 'contain'}">
+      <div class="center-box">
         <img src="https://zhidian-img.jkweixin.com/83/2019/01/07/shop_125_qrcode.png?timestamp=1550730136" class="center-img">
       </div>
     </div>
@@ -173,13 +173,13 @@
       height: 200px
       all-center()
       .center-img
-        width: 200px
-        height: 200px
-        position: absolute
-        left: 0
-        top: 0
-        display: block
-        opacity: 0
+        width: 100%
+        height: 100%
+        padding:200px 0 0 200px !important
+        margin:-200px 0 0 -200px !important
+        position: relative
+        z-index: 25
+        -webkit-user-select: none
   div
     box-sizing: border-box
     -moz-box-sizing: border-box
