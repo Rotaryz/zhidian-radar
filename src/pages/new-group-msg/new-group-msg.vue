@@ -1,94 +1,96 @@
 <template>
-  <div class="new-group-msg">
-    <scroll :data="list"
-            :bcColor="'#f1f2f5'"
-            ref="scroll"
-            :pullUpLoad="pullUpLoadObj"
-            :showNoMore="showNoMore"
-            @pullingUp="onPullingUp">
-      <div class="news-list">
-        <div class="news-item" v-for="(item, index) in list" :key="index">
-          <div class="item-time">
-            <span class="time-box">{{item.created_at ? item.created_at : item.msgTimeStamp | timeFormat}}</span>
-          </div>
-          <div class="item-content">
-            <div class="item-title">群发组：<span v-for="(item1, index1) in item.groups" :key="index1">{{index1 == (item.groups.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
-            <div class="item-top">
-              <div class="item-text" v-html="item.html" v-if="item.type == 1"></div>
-              <div class="item-text item-text3" v-if="item.type == 3">
-                <!--[商品信息]-->
-                <div class="goods_img-box">
-                  <img :src="item.url" class="goods_img">
+  <transition name="slide">
+    <div class="new-group-msg">
+      <scroll :data="list"
+              :bcColor="'#f1f2f5'"
+              ref="scroll"
+              :pullUpLoad="pullUpLoadObj"
+              :showNoMore="showNoMore"
+              @pullingUp="onPullingUp">
+        <div class="news-list">
+          <div class="news-item" v-for="(item, index) in list" :key="index">
+            <div class="item-time">
+              <span class="time-box">{{item.created_at ? item.created_at : item.msgTimeStamp | timeFormat}}</span>
+            </div>
+            <div class="item-content">
+              <div class="item-title">群发组：<span v-for="(item1, index1) in item.groups" :key="index1">{{index1 == (item.groups.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
+              <div class="item-top">
+                <div class="item-text" v-html="item.html" v-if="item.type == 1"></div>
+                <div class="item-text item-text3" v-if="item.type == 3">
+                  <!--[商品信息]-->
+                  <div class="goods_img-box">
+                    <img :src="item.url" class="goods_img">
+                  </div>
+                  <p class="goods_title">{{item.title}}</p>
                 </div>
-                <p class="goods_title">{{item.title}}</p>
-              </div>
-              <div class="item-text item-text3" v-if="item.type == 4">
-                <!--[团购活动信息]-->
-                <div class="goods_img-box">
-                  <img :src="item.url" class="goods_img">
+                <div class="item-text item-text3" v-if="item.type == 4">
+                  <!--[团购活动信息]-->
+                  <div class="goods_img-box">
+                    <img :src="item.url" class="goods_img">
+                  </div>
+                  <p class="goods_title"><span class="tip">{{~~item.groupon_users}}人团</span>{{item.title}}</p>
                 </div>
-                <p class="goods_title"><span class="tip">{{~~item.groupon_users}}人团</span>{{item.title}}</p>
-              </div>
-              <div class="item-text item-text3" v-if="item.type == 5">
-                <!--[砍价活动信息]-->
-                <div class="goods_img-box">
-                  <img :src="item.url" class="goods_img">
+                <div class="item-text item-text3" v-if="item.type == 5">
+                  <!--[砍价活动信息]-->
+                  <div class="goods_img-box">
+                    <img :src="item.url" class="goods_img">
+                  </div>
+                  <p class="goods_title"><span class="tip">仅剩{{~~item.stock}}件</span>{{item.title}}</p>
                 </div>
-                <p class="goods_title"><span class="tip">仅剩{{~~item.stock}}件</span>{{item.title}}</p>
-              </div>
-              <div class="item-text item-text6" v-if="item.type == 6">
-                <!--[个人微信二维码]-->
-                <img src="./pic-code@3x.png" alt="" class="item-code-img">
-                <div class="content">
-                  <div class="content-title">欢迎加入我的微信福利群</div>
-                  <div class="content-text">点击本条消息加微信群，不定时抢购福利</div>
+                <div class="item-text item-text6" v-if="item.type == 6">
+                  <!--[个人微信二维码]-->
+                  <img src="./pic-code@3x.png" alt="" class="item-code-img">
+                  <div class="content">
+                    <div class="content-title">欢迎加入我的微信福利群</div>
+                    <div class="content-text">点击本条消息加微信群，不定时抢购福利</div>
+                  </div>
                 </div>
-              </div>
-              <div class="item-text item-text6" v-if="item.type == 7">
-                <!--[微信福利群]-->
-                <img :src="item.url" alt="" class="item-code-img">
-                <div class="content">
-                  <div class="content-title">欢迎加入我的微信福利群</div>
-                  <div class="content-text">点击本条消息加微信群，不定时抢购 福利</div>
+                <div class="item-text item-text6" v-if="item.type == 7">
+                  <!--[微信福利群]-->
+                  <img :src="item.url" alt="" class="item-code-img">
+                  <div class="content">
+                    <div class="content-title">欢迎加入我的微信福利群</div>
+                    <div class="content-text">点击本条消息加微信群，不定时抢购 福利</div>
+                  </div>
                 </div>
-              </div>
-              <!--图片-->
-              <img class="item-img" @load="refushBox" v-if="item.type == 20" :src="item.url"/>
-              <div class="chat-msg-coupon" v-if="item.type * 1 === 30">
-                <div class="coupon-content">
-                  <img src="./pic-coupon_bg@2x.png" class="coupon-bc">
-                  <div class="coupon-container">
-                    <div class="coupon-left">
-                      <div class="left-money">
-                        <span class="money-icon">¥</span>
-                        <span class="money-txt">{{item.coupon_num}}</span>
+                <!--图片-->
+                <img class="item-img" @load="refushBox" v-if="item.type == 20" :src="item.url"/>
+                <div class="chat-msg-coupon" v-if="item.type * 1 === 30">
+                  <div class="coupon-content">
+                    <img src="./pic-coupon_bg@2x.png" class="coupon-bc">
+                    <div class="coupon-container">
+                      <div class="coupon-left">
+                        <div class="left-money">
+                          <span class="money-icon">¥</span>
+                          <span class="money-txt">{{item.coupon_num}}</span>
+                        </div>
+                        <div class="left-money" v-if="item.coupon_type == 4">
+                          <span class="money-txt">{{item.coupon_num}}</span>
+                          <span class="discount-txt">折</span>
+                        </div>
                       </div>
-                      <div class="left-money" v-if="item.coupon_type == 4">
-                        <span class="money-txt">{{item.coupon_num}}</span>
-                        <span class="discount-txt">折</span>
+                      <div class="coupon-right">
+                        <div class="coupon-title">{{item.title}}</div>
+                        <div class="coupon-time">有效期至{{item.end_at}}</div>
                       </div>
-                    </div>
-                    <div class="coupon-right">
-                      <div class="coupon-title">{{item.title}}</div>
-                      <div class="coupon-time">有效期至{{item.end_at}}</div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="item-down">
-              <div class="item-down-btn" @click="toChat(item)">再发一条</div>
+              <div class="item-down">
+                <div class="item-down-btn" @click="toChat(item)">再发一条</div>
+              </div>
             </div>
           </div>
         </div>
+      </scroll>
+      <div class="bottom-box border-top-1px">
+        <div class="new-btn" @click="newGroup">新建群发</div>
       </div>
-    </scroll>
-    <div class="bottom-box border-top-1px">
-      <div class="new-btn" @click="newGroup">新建群发</div>
+      <toast ref="toast"></toast>
+      <router-view></router-view>
     </div>
-    <toast ref="toast"></toast>
-    <router-view></router-view>
-  </div>
+  </transition>
 </template>
 
 <script>
