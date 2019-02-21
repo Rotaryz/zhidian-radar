@@ -174,10 +174,9 @@
       background: $color-white
       all-center()
       .center-img
-        position: absolute
-        left: 0
-        top: 0
+        padding: 64px
         width: 100%
+        box-sizing: border-box
         height: 100%
         display: block
   div
