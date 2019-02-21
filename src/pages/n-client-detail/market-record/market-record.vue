@@ -2,7 +2,7 @@
   <div class="follow-box">
     <div class="follow-list" v-for="(item, index) in flowList" :key="index">
       <div class="time">{{item.created_at}}</div>
-      <div class="text">{{item.record}}</div>
+      <div class="text">{{item.content}}</div>
     </div>
   </div>
 </template>

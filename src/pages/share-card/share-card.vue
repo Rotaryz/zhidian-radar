@@ -1,4 +1,5 @@
 <template>
+  <transition name="slide">
   <div class="share-card" v-if="show">
     <div class="card-con"></div>
     <div class="card-main">
@@ -10,6 +11,7 @@
       </div>
     </div>
   </div>
+  </transition>
 </template>
 
 <script>
@@ -91,8 +93,11 @@
         color: $color-9B9B9B
 
   .share-card
-    height: 100vh
-    box-sizing: border-box
-    overflow: hidden
+    position: fixed
     background: $color-20202E
+    z-index: 20
+    left: 0
+    right: 0
+    bottom: 50px
+    top: 0
 </style>

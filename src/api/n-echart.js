@@ -34,6 +34,14 @@ export default {
     return request.post(url, data)
   },
   /**
+   * 客户近15天活跃度
+   * @returns {*}
+   */
+  actionCustomerRetio(data) {
+    let url = 'api/employee/ai/get-active-day-report'
+    return request.get(url, data)
+  },
+  /**
    * 兴趣商品占比
    * @returns {*}
    */

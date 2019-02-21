@@ -115,7 +115,7 @@ export function createCityTop(args = {}) {
         },
         barGap: '-100%',
         // barCategoryGap: '80%',
-        barWidth: '20%',
+        barWidth: '12px',
         data: dataShadow,
         animation: false,
         zlevel: 9
@@ -123,7 +123,7 @@ export function createCityTop(args = {}) {
       {
         type: 'bar',
         data: seriesData,
-        barWidth: '20%',
+        barWidth: '12px',
         zlevel: 11,
         itemStyle: {
           normal: {

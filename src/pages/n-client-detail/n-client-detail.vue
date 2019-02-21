@@ -58,6 +58,18 @@
               <div class="title-box">
                 <div class="title">兴趣的商品占比</div>
                 <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.SHOP"></ai-charts>
+                <div class="list">
+                  <h3 class="list-title">
+                    <span class="num">排序</span>
+                    <span class="name">商品名称</span>
+                    <span class="count">次数</span>
+                  </h3>
+                  <p class="item" v-for="(item, index) in goodsList" :key="index">
+                    <span class="num">{{index}}</span>
+                    <span class="name">{{item.name}}</span>
+                    <span class="count">{{item.count}}次</span>
+                  </p>
+                </div>
               </div>
 
             </div>
@@ -158,7 +170,29 @@
         labelList: [],
         pieHint: PIEHINT,
         showTab: false,
-        CHARTS_TYPE
+        CHARTS_TYPE,
+        goodsList: [
+          {
+            name: '护发素',
+            count: 20
+          },
+          {
+            name: '护发素',
+            count: 20
+          },
+          {
+            name: '护发素',
+            count: 20
+          },
+          {
+            name: '护发素',
+            count: 20
+          },
+          {
+            name: '护发素',
+            count: 20
+          }
+        ]
       }
     },
     created() {
@@ -220,20 +254,27 @@
         this.$refs.scroll.scrollTo(0, 0)
         this.scroll(0)
         this.menuIdx = index
-        if (index * 1 === 1) {
+        if (index * 1 === 0) {
+          this.list = this.flowList
+        } else if (index * 1 === 1) {
           this.$nextTick(() => {
-            this.actionRetio()
+            this.actionCustomerRetio()
             this.interestedRetio()
           })
-        } else if (index * 1 === 0) {
-          this.list = this.flowList
+        } else if (index * 1 === 2) {
+          this.getMarketRecord()
         }
         setTimeout(() => {
           this.$refs.scroll.forceUpdate()
         }, 20)
       },
-      actionRetio() {
-        NEchart.actionRetio({customer_id: this.id})
+      actionCustomerRetio() {
+        let data = {
+          customer_id: this.id,
+          shop_id: this.$storage.get('info').shop_id,
+          time: 'half_month'
+        }
+        NEchart.actionCustomerRetio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -282,25 +323,38 @@
               }
             })
             this.mobile = res.data.mobile
-            this.getNewFlowList(this.id, this.flowId)
+            this.getMarketRecord(this.id, this.flowId)
             this.getNewActionList(this.id)
           } else {
             this.$refs.toast.show(res.message)
           }
         })
       },
-      getNewFlowList(id, flowId) {
+      getMarketRecord() {
         this.flowPage = 1
-        ClientDetail.getFlowList(id, flowId, this.flowPage).then((res) => {
-          if (res.error === ERR_OK) {
+        let data = {
+          page: 1,
+          limit: 10,
+          customer_id: this.id
+        }
+        ClientDetail.marketRecord(data)
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
             this.flowList = res.data
             this._isAflowList(res)
-          }
-        })
+          })
       },
-      getMoreFlowList(id, flowId) {
+      getMoreFlowList() {
         if (this.noMore) return
-        ClientDetail.getFlowList(id, flowId, this.flowPage).then((res) => {
+        let data = {
+          page: this.flowPage,
+          limit: 10,
+          customer_id: this.id
+        }
+        ClientDetail.getFlowList(data).then((res) => {
           if (res.error === ERR_OK) {
             this.flowList.push(...res.data)
             this._isAflowList(res)
@@ -371,7 +425,7 @@
       },
       onPullingUp() {
         if (this.menuIdx * 1 === 2) {
-          this.getMoreFlowList(this.id, this.flowId)
+          this.getMoreFlowList()
         }
         if (this.menuIdx * 1 === 0) {
           this.getMoreActionList(this.id)
@@ -617,7 +671,7 @@
       box-shadow:  0 2px 16px 0 rgba(21,24,45,0.04)
       #myPie
         width: 100%
-        height: 305px
+        height: 530px
         margin: 0 auto
         padding: 20px
       #myLine
@@ -644,7 +698,6 @@
         width: 100%
         height: 45px
         line-height: 45px
-
         position: absolute
         font-size: $font-size-16
         color: #0E1249
@@ -659,6 +712,35 @@
           font-size: $font-size-small
           color: $color-text-88
           font-family: $font-family-regular
+        .list
+          margin: 0 15px
+          border-1px(#F1F3F6)
+          .list-title,.item
+            background: #F5F8FC
+            height: 40px
+            line-height: 40px
+            color: #333
+            display: flex
+            font-size: $font-size-14
+            font-family: $font-family-regular
+            text-align: left
+            .num
+              width: 60px
+              text-indent: 15px
+            .name
+              flex: 1
+              overflow: hidden
+              text-indent: 30px
+              text-overflow: ellipsis
+              white-space: nowrap
+            .count
+              width: 60px
+              text-indent: 15px
+          .item
+            background: #FFF
+            border-bottom-1px(#f4f5f7)
+          .list-title
+            opacity: 0.6
       .bottom-des
         position: absolute
         bottom: 15px

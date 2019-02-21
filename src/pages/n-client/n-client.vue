@@ -5,7 +5,7 @@
       <search @toNav="toSearch"></search>
       <dl class="tab-wrapper">
         <dt class="bg-wrap" :style="'transform: translate3d('+ selectTab * 100 +'%, 0, 0)'"></dt>
-        <dd class="tab" :class="{'active':selectTab === index}" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.title}}({{item.number}})</dd>
+        <dd class="tab" :class="{'active':selectTab === index}" v-for="(item,index) in tabList" :key="index" @click="changeTab(index)">{{item.title}}<span v-if="index !== 2">({{item.number}})</span></dd>
       </dl>
     </header>
 
@@ -28,7 +28,7 @@
                 :key="index"
                 @click="check(item)"
             >
-              <slide-view :useType="1" @grouping="groupingHandler" :item="item"  @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="false" :ref="'slide' + index">
+              <slide-view :useType="1" @grouping="groupingHandler" :item="item"  @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                 <user-card :userInfo="item" slot="content" :useType="checkedGroup.orderBy"></user-card>
               </slide-view>
             </li>
@@ -84,7 +84,7 @@
                 :key="index"
                 @click="toUserList(item)"
             >
-              <slide-view :useType="+item.type === 0 ? 3 : 4" @del="delHandler" :item="item" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="false" :ref="'slide' + index">
+              <slide-view :useType="+item.type === 0 ? 3 : 4" @del="delHandler" :item="item" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                 <div slot="content" class="user-list-item-wrapper">
                   <div class="users-avatar" :class="{'no-border': item.customers.length === 1}">
                     <img v-if="item.customers && item.customers.length && i < 9"
@@ -167,10 +167,6 @@
     name: '活跃指数',
     isCheck: false
   }, {
-    orderBy: '',
-    name: 'RFM指数',
-    isCheck: false
-  }, {
     orderBy: 'kol_index',
     name: 'KOL指数',
     isCheck: false
@@ -249,6 +245,8 @@
         this.tabIndex = index
         this.pullUpLoad = true
         this.isAll = false
+        let refName = 'slide' + this.moveIdx
+        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
         this.page = 1
         this.changeGroup()
       },
@@ -340,7 +338,6 @@
           if (res.error === ERR_OK) {
             let arr = res.data
             this.userListArr = arr
-            console.log(this.userListArr)
             this.tabList[1].number = arr.length
             this.userListIsEmpty = !arr.length
           } else {
@@ -405,7 +402,7 @@
         Client.delGroup(data).then(res => {
           if (res.error === ERR_OK) {
             let refName = 'slide' + this.moveIdx
-            this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+            this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
             this.moveIdx = -1
             const idx = this.userListArr.findIndex(val => val.id === this.checkedItem.id)
             this.userListArr.splice(idx, 1)
@@ -449,7 +446,7 @@
       touchBegin(idx) {
         if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
           let refName = 'slide' + this.moveIdx
-          this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
         }
       },
       touchEnd(idx) {
@@ -545,8 +542,7 @@
         height: 45px
         layout(row, block, nowrap)
         align-items: center
-        padding: 0 20px
-        justify-content: space-between
+        justify-content: space-around
         font-family: $font-family-medium
         font-size: $font-size-14
         color: $color-text-main
@@ -556,7 +552,7 @@
         border-bottom-1px(#E1E1E1)
         position: relative
         .line-tab
-          width: 25%
+          width: 33.333%
           height: 4px
           position: absolute
           left: 0

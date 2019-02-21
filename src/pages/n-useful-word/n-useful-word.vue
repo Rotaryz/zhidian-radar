@@ -4,7 +4,7 @@
       <scroll :bcColor="'#ffffff'" ref="scroll">
         <div class="word-list">
           <div class="word-item" v-for="(item, index) in wordList" :key="index">
-            <slide-view :useType="3" @del="del" @touchBegin="touchBegin" @touchEnd="touchEnd" :item="item" :index="index" :hasFn="false" :ref="'slide' + index">
+            <slide-view :useType="3" @del="del" @touchBegin="touchBegin" @touchEnd="touchEnd" :item="item" :index="index" :hasFn="true" :ref="'slide' + index">
               <div slot="content" class="list-content">
                 <div class="item-left">
                   <span>{{item.message}}</span>
@@ -20,7 +20,7 @@
         </div>
       </scroll>
       <div class="bottom">
-        <router-link tag="div" class="word-bottom" to="/mine/useful-word/add-word">新增话术</router-link>
+        <div class="word-bottom" @click="toAddWord">新增话术</div>
       </div>
       <!--<confirm-msg ref="confirm" @confirm="submitDelete"></confirm-msg>-->
       <toast ref="toast"></toast>
@@ -87,7 +87,7 @@
             })
             this.deleteAny = {}
             let refName = 'slide' + this.moveIdx
-            this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+            this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
             this.moveIdx = -1
             setTimeout(() => {
               this.allowConfirm = true
@@ -102,11 +102,18 @@
       },
       editItem(item, index) {
         this.$router.push(`/mine/useful-word/add-word?id=${item.id}`)
+        let refName = 'slide' + this.moveIdx
+        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+      },
+      toAddWord() {
+        this.$router.push('/mine/useful-word/add-word')
+        let refName = 'slide' + this.moveIdx
+        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
       },
       touchBegin(idx) {
         if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
           let refName = 'slide' + this.moveIdx
-          this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
         }
       },
       touchEnd(idx) {

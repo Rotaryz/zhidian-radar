@@ -82,12 +82,12 @@
     },
     methods: {
       toShareCard() {
-        this.$router.push('/shareCard')
+        this.$router.push('/mine/shareCard')
         if (this.ios) {
-          setTimeout(() => {
-            location.reload()
-            location.reload()
-          }, 200)
+          // setTimeout(() => {
+          //   location.reload()
+          //   location.reload()
+          // }, 200)
         }
       },
       _goPage (src) {
