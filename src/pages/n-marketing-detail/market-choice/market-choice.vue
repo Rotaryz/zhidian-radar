@@ -9,7 +9,7 @@
         <section class="top">
           <div class="left">
             <p class="title">{{item.title}}</p>
-            <p v-if="index === 0" class="explain">{{item.explain}}{{groupData.cover_count}}人)</p>
+            <p v-if="index === 0" class="explain">{{item.explain}}{{groupData.cover_count || groupData2.cover_count}}人)</p>
             <p v-else class="explain">{{item.explain}}</p>
           </div>
           <div v-if="isShowDelButton(index, item, 'group') && hasGroup" class="right" @click="delHandle(index, 'group')">
@@ -19,7 +19,22 @@
             <img class="del-icon" src="./icon-del_yx@2x.png" alt="">
           </div>
         </section>
-        <section v-if="item.title === '选择人群'" class="bottom one">
+        <section v-if="item.title === '选择人群' && MARKET_TYPE.newProduct === marketData.type" class="bottom one">
+          <!--<ul v-if="isShowGroupButton" class="button-group">-->
+            <!--<li v-for="(child, idx) in item.groupArr" :key="idx" class="button" @click="incomeHandle(child, idx, 'group')">-->
+              <!--<img class="add-icon" src="./icon-add@2x.png" alt="">-->
+              <!--<p class="text">{{child.text}}</p>-->
+            <!--</li>-->
+          <!--</ul>-->
+          <div v-if="!isShowGroupButton && hasGroup" class="left">
+            <customer-group :dataArray="groupData2.customers"></customer-group>
+          </div>
+          <div v-if="!isShowGroupButton && hasGroup" class="right">
+            <p class="title">{{groupData2.group_name}}</p>
+            <p class="explain">{{groupData2.group_desc}}</p>
+          </div>
+        </section>
+        <section v-else-if="item.title === '选择人群'" class="bottom one">
           <ul v-if="isShowGroupButton" class="button-group">
             <li v-for="(child, idx) in item.groupArr" :key="idx" class="button" @click="incomeHandle(child, idx, 'group')">
               <img class="add-icon" src="./icon-add@2x.png" alt="">
@@ -69,6 +84,7 @@
   import MarketActive from '../market-active/market-active'
   import MarketServerGoods from '../market-server-goods/market-server-goods'
   import {INCOME_TYPE} from '../config-detail'
+  import {MARKET_TYPE} from 'utils/constant'
 
   const COMPONENT_NAME = 'MARKET_CHOICE'
   export default {
@@ -81,7 +97,8 @@
     },
     data() {
       return {
-        INCOME_TYPE
+        INCOME_TYPE,
+        MARKET_TYPE
       }
     },
     computed: {
@@ -108,6 +125,24 @@
       groupData() {
         let group = this.marketData.group || []
         return group[0] || {}
+      },
+      groupData2() {
+        let customers = []
+        let groupName = []
+        let number = 0
+        this.marketData.group.forEach((item) => {
+          customers.push(...item.customers)
+          groupName.push(item.group_name)
+          number += item.cover_count
+        })
+        groupName = groupName.join('和')
+        let groupDesc = '进入店铺' + groupName || '客户'
+        return {
+          customers,
+          group_name: groupName,
+          group_desc: groupDesc,
+          cover_count: number
+        }
       },
       _checkDefault() {
         return true
