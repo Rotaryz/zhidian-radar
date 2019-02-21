@@ -38,7 +38,7 @@
         let marketData = this.marketData
         let checkArr = []
         let flag = false
-        if (+this.marketData.type === +MARKET_TYPE.DIY) {
+        if (+this.marketData.type === +MARKET_TYPE.DIY || !+this.$route.query.id) {
           flag = marketData.name.trim()
           !flag && checkArr.push('请输入活动名称')
         }
@@ -63,9 +63,7 @@
           cb && cb()
           return
         }
-        arr.forEach((item) => {
-          this.$toast.show(item)
-        })
+        this.$toast.show(arr[0])
       }
     }
   }
