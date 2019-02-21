@@ -41,14 +41,12 @@
               <span class="text">{{item.title}}</span>
             </li>
           </ul>
+          <div class="center-box">
+            <img src="https://zhidian-img.jkweixin.com/83/2019/01/07/shop_125_qrcode.png?timestamp=1550730136" class="center-img">
+          </div>
         </div>
       </div>
     </Scroll>
-    <div class="cover">
-      <div class="center-box">
-        <img src="https://zhidian-img.jkweixin.com/83/2019/01/07/shop_125_qrcode.png?timestamp=1550730136" class="center-img">
-      </div>
-    </div>
     <toast ref="toast"></toast>
     <router-view @refresh="refresh" v-if="show"></router-view>
   </div>
@@ -160,24 +158,16 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
-  .cover
-    position: fixed
-    background: rgba(0,0,0,0.8)
-    z-index: 20
-    left: 0
-    right: 0
-    bottom: 0
-    top: 0
-    .center-box
-      width: 200px
-      height: 200px
-      position: fixed
-      left: 50%
-      top: 50%
-      transform: translate(-50%, -50%)
-      .center-img
-        width: 100%
-        height: 100%
+
+  .center-box
+    width: 200px
+    height: 200px
+
+    .center-img
+      width: 100%
+      height: 100%
+      display: block
+
   div
     box-sizing: border-box
     -moz-box-sizing: border-box
@@ -285,7 +275,7 @@
         font-family: $font-family-medium
       .content-item
         padding: 30px 0
-        height: 200px
+        /*height: 200px*/
         .item
           width: 25%
           display: flex

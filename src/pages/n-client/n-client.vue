@@ -86,7 +86,7 @@
             >
               <slide-view :useType="+item.type === 0 ? 3 : 4" @del="delHandler" :item="item" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                 <div slot="content" class="user-list-item-wrapper">
-                  <div class="users-avatar" :class="{'no-border': item.customers.length === 1}">
+                  <div class="users-avatar" v-if="item.customers.length > 0" :class="{'no-border': item.customers.length === 1}">
                     <img v-if="item.customers && item.customers.length && i < 9"
                          v-for="(user,i) in item.customers"
                          class="avatar"
@@ -98,6 +98,12 @@
                          'six': item.customers.length > 4
                          }"
                     />
+                  </div>
+                  <div v-else class="no-customer">
+                    <span class="grey"></span>
+                    <span class="grey"></span>
+                    <span class="grey"></span>
+                    <span class="grey"></span>
                   </div>
                   <div class="name">{{item.name}}</div>
                   <div class="number">{{item.total || 0}}人</div>
@@ -721,6 +727,26 @@
                   margin-bottom: 0
             .no-border
               border: 0
+            .no-customer
+              width: 45px
+              height: 45px
+              background-color: #F4F4F4
+              border: 2px solid #f2f2f2
+              border-radius: 2px
+              overflow: hidden
+              margin-left: 15px
+              box-sizing: border-box
+              .grey
+                width: 20px
+                height: 20px
+                float: left
+                margin-right: 1px
+                margin-bottom: 1px
+                background: #E0E0E0
+                &:nth-child(2n)
+                  margin-right: 0
+                &:nth-child(n+2)
+                  margin-bottom: 0
             .name
               flex: 1
               margin: 0 10px
