@@ -161,7 +161,7 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   .cover
-    position: fixed
+    position: absolute
     background: rgba(0,0,0,0.8)
     z-index: 20
     left: 0
