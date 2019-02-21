@@ -13,12 +13,13 @@
               <div v-if="!item.total" class="select un-check"></div>
               <div v-else class="select" :class="item.isCheck?'is-check':'no-check'"></div>
               <article class="group-logo">
-                <img v-if="item.customers && item.customers.length && i<9"
-                     v-for="(user,i) in item.customers"
-                     class="avatar"
-                     :key="i"
-                     :src="user.avatar"
-                />
+                <!--<img v-if="item.customers && item.customers.length && i<9"-->
+                     <!--v-for="(user,i) in item.customers"-->
+                     <!--class="avatar"-->
+                     <!--:key="i"-->
+                     <!--:src="user.avatar"-->
+                <!--/>-->
+                <customer-group :dataArray="item.customers"></customer-group>
               </article>
               <div class="name">{{item.name}}</div>
               <div class="number">{{item.total}}人</div>
@@ -26,7 +27,10 @@
           </ul>
         </scroll>
       </section>
-      <section class="btn-confirm" v-if="dataArray.length" :class="checkArr.length ? '' : 'gray'" @click="checkOver">确定</section>
+      <!--<section class="btn-confirm" v-if="dataArray.length" :class="checkArr.length ? '' : 'gray'" @click="checkOver">确定</section>-->
+      <div class="btn-confirm border-top-1px">
+        <div class="btn" :class="checkArr.length ? '' : 'disable'" @click="checkOver">确定</div>
+      </div>
       <section class="exception-box" v-if="isEmpty && !dataArray.length">
         <exception errType="nodata"></exception>
       </section>
@@ -39,6 +43,7 @@
   import { mapActions } from 'vuex'
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
+  import CustomerGroup from 'components/customer-group/customer-group'
   import Toast from 'components/toast/toast'
   import { News } from 'api'
   import { ERR_OK } from '../../common/js/config'
@@ -47,7 +52,8 @@
     components: {
       Scroll,
       Exception,
-      Toast
+      Toast,
+      CustomerGroup
     },
     data() {
       return {
@@ -156,16 +162,22 @@
     left: 0
     right: 0
     bottom: 0
-    height: 44.5px
-    line-height: 44.5px
-    text-align: center
-    background: $color-20202E
-    font-family: $font-family-medium
-    font-size: $font-size-16
-    color: $color-white-fff
-    letter-spacing: 0.3px
-  .gray.btn-confirm
-    background: #ccc
+    height: 55px
+    padding: 7.5px 15px
+    box-sizing: border-box
+    background: $color-white
+    .btn
+      line-height: 40px
+      text-align: center
+      background: $color-white
+      font-family: $font-family-medium
+      font-size: $font-size-14
+      color: $color-white-fff
+      background-image: linear-gradient(135deg, #953DE1 0%, #4541F9 100%)
+      border-radius: 6px
+    .disable.btn
+      background-image: linear-gradient(135deg, #953DE1 0%, #4541F9 100%)
+      opacity: 0.5
 
   .news-add-group
     fill-box()
@@ -174,7 +186,7 @@
     .content
       fill-box(absolute)
       overflow: hidden
-      padding-bottom: 45px
+      padding-bottom: 55px
 
       .group-list
         background: $color-white-fff
@@ -190,12 +202,17 @@
             width: 20px
             height: 20px
             margin-right: 10px
+            box-sizing: border-box
             &.un-check
-              icon-image(icon-nocheck)
+              background: #F0F0F0
+              border: 1px solid #C7C7C7
+              border-radius: 50%
             &.no-check
-              icon-image(icon-uncheck)
+              background: $color-white
+              border: 1px solid #999999
+              border-radius: 50%
             &.is-check
-              icon-image(icon-selected)
+              icon-image(icon-pickup)
           .group-logo
             width: 45px
             height: 45px
@@ -211,14 +228,13 @@
           .name
             flex: 1
             font-size: $font-size-16
-            color: $color-20202E
-            letter-spacing: 0.6px
+            color: $color-text-main
             margin: 0 10px
             no-wrap()
           .number
             margin-right: 15px
-            font-size: $font-size-14
-            color: $color-888888
+            font-size: $font-size-16
+            color: $color-text-main
             letter-spacing: 0.3px
 
 

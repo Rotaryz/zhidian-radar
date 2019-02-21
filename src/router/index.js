@@ -241,7 +241,7 @@ const route = new Router({
         path: '/chat/:id',
         component: Chat,
         meta: {
-          title: ''
+          title: '聊天'
         },
         children: [{
           path: 'chat-list',

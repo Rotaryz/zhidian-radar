@@ -104,6 +104,7 @@
                 this.addNowChat(goodsRes)
               }
               if (Number(res.ext) === 20005) {
+                window.$playAudio()
                 this.addListCount(res)
                 this.addListMsg({msg: res, type: ''})
               }
@@ -117,7 +118,7 @@
             let content = webimHandler.transitionMsg(res)
             let html = ''
             if (res.type === 'chat') {
-              // window.$playAudio() // todo
+              window.$playAudio()
               html = Utils.msgFaceToHtml(content)
             }
             this.setNewMsg({avatar: res.avatar, content, html, type: res.type, nickName: res.fromAccountNick})
