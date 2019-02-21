@@ -176,8 +176,8 @@
         width: 200px
         height: 200px
         position: absolute
-        left: -100px
-        top: -100px
+        left: 0
+        top: 0
         display: block
         opacity: 0
   div
