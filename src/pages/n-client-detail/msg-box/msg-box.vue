@@ -13,6 +13,11 @@
             <p class="msgs-p" v-show="item.event_no * 1 === 10005"><span class="blue">保存</span>了你的<span class="blue">小店海报</span></p>
             <p class="msgs-p" v-show="item.event_no * 1 === 10006">给你<span class="blue">点了</span><span class="blue">赞</span>，看来认可你</p>
             <p class="msgs-p" v-show="item.event_no * 1 === 10007"><span class="blue">取消</span>给你点的<span class="blue">赞</span></p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 20001">正在查看大转盘，可能对该活动感兴趣</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 20002">正在转发你的大转盘，您的活动正在裂变</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 20003">正在参加大转盘活动</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 20004">中了大转盘的{{item.title | titleCut}}，现在去使用</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 20006">未中奖，返回了店铺首页</p>
             <p class="msgs-p" v-show="item.event_no * 1 === 30001">给拼团活动<span class="blue">{{item.title | titleCut}}</span>点了<span class="blue">赞</span></p>
             <p class="msgs-p" v-show="item.event_no * 1 === 30002">正在转发你的拼团活动<span class="blue">{{item.title | titleCut}}</span>，您的活动正在裂变</p>
             <p class="msgs-p" v-show="item.event_no * 1 === 30003"><span class="blue">保存</span>了你的拼团活动<span class="blue">{{item.title | titleCut}}</span>海报</p>
@@ -38,20 +43,37 @@
             <p class="msgs-p" v-show="item.event_no * 1 === 30023">提交了砍价活动<span class="blue">{{item.title  | titleCut}}</span>的订单，金额为<span class="blue">{{item.total | titleCut}}元</span>，并完成了支付</p>
             <p class="msgs-p" v-show="item.event_no * 1 === 40001">通过扫描他人分享的服务海报<span class="blue">查看</span>了<span class="blue">你的服务</span></p>
             <p class="msgs-p" v-show="item.event_no * 1 === 40002">通过点击他人分享的服务链接<span class="blue">查看</span>了<span class="blue">你的服务</span></p>
-            <p class="msgs-p" v-show="item.event_no * 1 === 40003">第{{item.count_sum}}次<span class="blue">查看</span>了你的服务<span class="blue">{{item.title  | titleCut}}</span>，请把握商机</p>
-            <p class="msgs-p" v-show="item.event_no * 1 === 40004"><span class="blue">转发</span>了你的服务<span class="blue">{{item.title  | titleCut}}</span>，你的服务正在裂变</p>
-            <p class="msgs-p" v-show="item.event_no * 1 === 40005"><span class="blue">保存</span>了你的服务<span class="blue">{{item.title  | titleCut}}</span>海报</p>
-            <p class="msgs-p" v-show="item.event_no * 1 === 40006">提交了服务<span class="blue">{{item.title  | titleCut}}</span>的订单，金额为<span class="blue">{{item.total}}元</span>，并完成了支付</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40003">正在<span class="blue">查看</span>你的服务<span class="blue">{{item.title | titleCut}}</span>，可能对该服务感兴趣</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40004"><span class="blue">转发</span>了你的服务<span class="blue">{{item.title | titleCut}}</span>，你的服务正在裂变</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40005"><span class="blue">保存</span>了你的服务<span class="blue">{{item.title | titleCut}}</span>海报</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40006">提交了服务<span class="blue">{{item.title | titleCut}}</span>的订单，金额为<span class="blue">{{item.total}}元</span>，并完成了支付</p>
             <p class="msgs-p" v-show="item.event_no * 1 === 40007">第{{item.count_sum}}次<span class="blue">查看</span>了你的<span class="blue">品牌故事</span>，请把握商机</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40008">正在查看门店的<span class="blue">相册</span>，对门店装修很感兴趣</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40009">正在查看门店的<span class="blue">位置</span>，在想如何去门店</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40010">正在查看门店的<span class="blue">联系方式</span>，对门店很感兴趣</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40013">正在购买服务<span class="blue">{{item.title | titleCut}}</span></p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40014">从{{item.title | titleCut}}返回您的店铺</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40017">通过扫描他人分享的服务海报<span class="blue">查看</span>了<span class="blue">你的服务</span></p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40016">通过点击他人分享的服务链接<span class="blue">查看</span>了<span class="blue">你的服务</span></p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40015">正在<span class="blue">查看</span>你的商品<span class="blue">{{item.title | titleCut}}</span>，可能对该商品感兴趣</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40018"><span class="blue">转发</span>了你的商品<span class="blue">{{item.title | titleCut}}</span>，你的商品正在裂变</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40019"><span class="blue">保存</span>了你的商品<span class="blue">{{item.title | titleCut}}</span>海报</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40020">正在对商品<span class="blue">{{item.title  | titleCut}}</span>向你<span class="blue">咨询</span>，请做好准备应答</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40023">提交了商品<span class="blue">{{item.title | titleCut}}</span>的订单，金额为<span class="blue">{{item.total}}元</span>，并完成了支付</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40022">从{{item.title | titleCut}}返回您的店铺</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 40021">正在购买商品{{item.title | titleCut}}</p>
             <p class="msgs-p" v-show="item.event_no * 1 === 50001">第{{item.count_sum}}次<span class="blue">查看</span>了你的<span class="blue">动态</span></p>
             <p class="msgs-p" v-show="item.event_no * 1 === 50002">通过扫描他人分享的动态海报<span class="blue">访问</span>了你的动态<span class="blue">{{item.title | titleCut}}</span></p>
             <p class="msgs-p" v-show="item.event_no * 1 === 50003">通过点击他人分享的动态链接<span class="blue">访问</span>了你的动态<span class="blue">{{item.title | titleCut}}</span></p>
             <p class="msgs-p" v-show="item.event_no * 1 === 50004"><span class="blue">评论</span>了你的<span class="blue">动态</span></p>
             <p class="msgs-p" v-show="item.event_no * 1 === 50005">给你的动态<span class="blue">{{item.title  | titleCut}}</span>点了<span class="blue">赞</span></p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 50006">正在<span class="blue">转发</span>你的<span class="blue">动态</span></p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 50007"><span class="blue">保存</span>你的<span class="blue">动态海报</span></p>
             <p class="msgs-p" v-show="item.event_no * 1 === 60001"><span class="blue">拨打</span>了你的<span class="blue">手机</span>，请记录跟进内容</p>
             <p class="msgs-p" v-show="item.event_no * 1 === 60002">正在对砍价活动<span class="blue">{{item.title  | titleCut}}</span>向你<span class="blue">咨询</span>，请做好准备应答</p>
             <p class="msgs-p" v-show="item.event_no * 1 === 60003">正在对拼团活动<span class="blue">{{item.title  | titleCut}}</span>向你<span class="blue">咨询</span>，请做好准备应答</p>
             <p class="msgs-p" v-show="item.event_no * 1 === 60004">正在对服务<span class="blue">{{item.title  | titleCut}}</span>向你<span class="blue">咨询</span>，请做好准备应答</p>
+            <p class="msgs-p" v-show="item.event_no * 1 === 60006"><span class="blue">保存</span>你的<span class="blue">微信号</span>，请准备通过好友</p>
           </div>
           <!--<img src="./icon-pressed@2x.png" class="msgs-rt">-->
         </div>

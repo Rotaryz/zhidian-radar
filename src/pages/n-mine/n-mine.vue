@@ -1,6 +1,6 @@
 <template>
   <div class="mine">
-    <Scroll bcColor="#f0f5ff">
+    <scroll :bcColor="'#f5f5f9'">
       <div class="mine-top">
         <div class="top-box">
           <div class="top-box-left">
@@ -43,7 +43,7 @@
           </ul>
         </div>
       </div>
-    </Scroll>
+    </scroll>
     <div class="cover">
       <div class="center-box">
         <img src="https://zhidian-img.jkweixin.com/83/2019/01/07/shop_125_qrcode.png?timestamp=1550730136" class="center-img">
@@ -168,6 +168,10 @@
     right: 0
     bottom: 0
     top: 0
+    overflow :hidden
+    display :flex
+    align-items :center
+    justify-content :center
     .center-box
       width: 200px
       height: 200px

@@ -68,7 +68,7 @@ const NClientAddUser = () => import('pages/n-client-add-user/n-client-add-user')
 Vue.use(Router)
 
 const route = new Router({
-  mode: 'history',
+  mode: 'hash',
   routes: [
     {
       path: '/z-test-charts',
