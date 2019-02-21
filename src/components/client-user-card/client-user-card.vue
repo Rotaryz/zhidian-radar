@@ -106,8 +106,8 @@
       .user-icon
         width: 40px
         height: 40px
-        border-radius: 50%
-        padding: 2px
+        border-radius: 40px
+        padding: 1.5px
         border: 1.5px solid $color-pnes-e
         margin-right: 10px
       .user-info

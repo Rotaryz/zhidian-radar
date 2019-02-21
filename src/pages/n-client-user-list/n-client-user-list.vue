@@ -14,7 +14,7 @@
                   @pullingUp="onPullingUp">
             <ul class="user-list">
               <li class="user-list-item" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
-                <slide-view @grouping="groupingHandler" :item="item" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="false" :ref="'slide' + index">
+                <slide-view @grouping="groupingHandler" :item="item" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                   <user-card :userInfo="item" slot="content" useType="join"></user-card>
                 </slide-view>
               </li>
@@ -210,7 +210,7 @@
       touchBegin(idx) {
         if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
           let refName = 'slide' + this.moveIdx
-          this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
         }
       },
       touchEnd(idx) {

@@ -82,11 +82,15 @@
       background: #F7F7F8
       border-bottom-1px($color-line)
     .content
-      margin: 20px 75px 0 20px
+      margin: 20px 15px
       layout(row, block, wrap)
       .item
         text-align: center
         line-height: 32px
+        width: 75px
+        text-overflow: ellipsis
+        white-space: nowrap
+        overflow: hidden
         padding: 0 10px
         border: 1px solid $color-main
         margin: 0 10px 10px 0

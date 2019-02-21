@@ -70,10 +70,6 @@ Vue.use(Router)
 const route = new Router({
   mode: 'history',
   routes: [
-    // {
-    //   path: '/',
-    //   redirect: '/shareCard'
-    // },
     {
       path: '/z-test-charts',
       component: zTestEcharts
@@ -96,6 +92,13 @@ const route = new Router({
           title: '我的'
         },
         children: [{
+          path: 'shareCard',
+          component: ShareCard,
+          meta: {
+            title: '分享名片'
+          }
+        },
+        {
           path: 'editCard',
           component: EditCard,
           meta: {
@@ -640,14 +643,6 @@ const route = new Router({
       component: PageError,
       meta: {
         title: '异常'
-      }
-    },
-    // 测试
-    {
-      path: '/shareCard',
-      component: ShareCard,
-      meta: {
-        title: '分享名片'
       }
     }
   ]

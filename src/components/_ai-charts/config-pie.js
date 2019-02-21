@@ -108,7 +108,12 @@ export function createShop(args = {}) {
 export function createGender(args = {}) {
   let {seriesData} = args
   if (!seriesData || !seriesData.length) {
-    seriesData = DEFAULT_SERIES_DATA_FN(3)
+    // seriesData = DEFAULT_SERIES_DATA_FN(3)
+    seriesData = [
+      {name: '男', value: 100},
+      {name: '女', value: 100},
+      {name: '未知', value: 100}
+    ]
   }
   const colorObj = [
     {

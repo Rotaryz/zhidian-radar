@@ -295,7 +295,7 @@
           })
         } else if (index === 1) {
           this.$nextTick(() => {
-            this.actionRetio()
+            this.orderRetio()
           })
         } else if (index === 2) {
           this.$nextTick(() => {
@@ -319,6 +319,13 @@
       getAllTab(item, index) {
         this.getAllDataObj(item.value)
         this.tabNumber = index
+        if (this.charTab === 0) {
+          this.groupRetio()
+          this.PENSRetio()
+          this.$refs.c3.action()
+        } else if (this.charTab === 1) {
+          this.orderRetio()
+        }
       }
     },
     computed: {
@@ -402,7 +409,7 @@
           font-size: $font-size-16
           margin-top: 15px
           .item
-            padding: 0 1.3vw
+            padding: 0 0.7vw
         .data-list
           padding: 17px 20px
           overflow: hidden

@@ -75,7 +75,7 @@
         page: 1,
         limit: LIMIT,
         isAll: false,
-        tabList: ['加入时间', '活跃指数', 'RFM指数', 'KOL指数'],
+        tabList: ['加入时间', '活跃指数', 'KOL指数'],
         tabListIndex: 0,
         selectText: 'join',
         isEmpty: false,
@@ -160,10 +160,6 @@
             this.getNewDataList()
             break
           case 2:
-            this.selectText = ''
-            this.getNewDataList()
-            break
-          case 3:
             this.selectText = 'kol_index'
             this.getNewDataList()
             break
@@ -257,7 +253,7 @@
           width: 40px
           height: 40px
           border-radius: 50%
-          padding: 2px
+          padding: 1.5px
           border: 1.5px solid $color-pnes-e
           margin: 0 10px
         .base-info
@@ -341,7 +337,7 @@
       flex: 1
       text-align: center
     .line-tab
-      width: 25%
+      width: 33.333%
       height: 4px
       position: absolute
       left: 0

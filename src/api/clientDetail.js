@@ -62,5 +62,13 @@ export default {
       limit
     }
     return request.get(url, data)
+  },
+  /**
+   * 营销记录
+   * @returns {*}
+   */
+  marketRecord(data, loading) {
+    const url = `/api/employee/ai-market/logs`
+    return request.get(url, data, loading)
   }
 }
