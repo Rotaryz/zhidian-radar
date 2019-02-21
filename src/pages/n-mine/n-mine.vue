@@ -44,11 +44,21 @@
         </div>
       </div>
     </scroll>
-    <div class="cover">
-      <div class="center-box">
-        <img src="https://zhidian-img.jkweixin.com/83/2019/01/07/shop_125_qrcode.png?timestamp=1550730136" class="center-img">
+    <transition name="fade">
+      <div class="cover" v-if="showCode">
+        <div class="bg" @click="hideCode"></div>
+        <div class="center-box">
+          <div class="top">
+            <img class="logo" :src="card.avatar" />
+            <p class="name">{{card.name}}</p>
+          </div>
+          <div class="bottom">
+            <img :src="card.qrcode" class="code">
+            <p class="text">长按识别二维码进店逛逛</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </transition>
     <toast ref="toast"></toast>
     <router-view @refresh="refresh" v-if="show"></router-view>
   </div>
@@ -56,7 +66,7 @@
 
 <script>
   import Scroll from 'components/scroll/scroll'
-  import { Mine } from 'api'
+  import { Mine, Business } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import storage from 'storage-controller'
   import {mapGetters} from 'vuex'
@@ -77,7 +87,9 @@
         mine: {},
         allDatas: {},
         show: true,
-        count: 0
+        count: 0,
+        showCode: false,
+        card: {name: '国颐堂', avatar: '', qrcode: ''}
       }
     },
     created () {
@@ -87,13 +99,13 @@
     },
     methods: {
       toShareCard() {
-        this.$router.push('/mine/shareCard')
-        if (this.ios) {
-          // setTimeout(() => {
-          //   location.reload()
-          //   location.reload()
-          // }, 200)
-        }
+        // this.$router.push('/mine/shareCard')
+        this.showCode = true
+        this.card.avatar = storage.get('info').avatar
+        this.card.name = storage.get('info').name
+      },
+      hideCode() {
+        this.showCode = false
       },
       _goPage (src) {
         if (!src) {
@@ -106,6 +118,11 @@
       },
       getMine () {
         this.mine = storage.get('info')
+        Business.Myshop({is_hyaline: 0, path: '/pages/guide'}).then((res) => {
+          if (res.data) {
+            this.card.qrcode = res.data.image_url
+          }
+        })
       },
       getMineData() {
         Mine.getMineData({shop_id: this.$storage.get('info').shop_id}).then(res => {
@@ -160,26 +177,6 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
-  .cover
-    position: fixed
-    background: rgba(0,0,0,0.8)
-    z-index: 20
-    left: 0
-    right: 0
-    bottom: 0
-    top: 0
-    overflow :hidden
-    display :flex
-    align-items :center
-    justify-content :center
-    .center-box
-      width: 200px
-      height: 200px
-      .center-img
-        width: 100%
-        height: 100%
-        display: block
-
   div
     box-sizing: border-box
     -moz-box-sizing: border-box
@@ -312,5 +309,61 @@
             color: #333
             margin-top: 10px
             display: block
+
+  .cover
+    position: fixed
+    z-index: 20
+    left: 0
+    right: 0
+    bottom: 0
+    top: 0
+    overflow :hidden
+    display :flex
+    align-items :center
+    justify-content :center
+    .bg
+      position: absolute
+      left: 0
+      top: 0
+      width: 100%
+      height: 100%
+      background: rgba(0,0,0,0.8)
+    .center-box
+      width: 80vw
+      height: 106vw
+      border-radius: 6px
+      background: #FFF
+      overflow: hidden
+      position: relative
+      .top
+        width: 100%
+        height: 32vw
+        icon-image(pic-mycodebg)
+        .logo
+          width: 14vw
+          height: 14vw
+          border: 2px solid rgba(255,255,255,0.5)
+          border-radius: 50px
+          margin: 5.3vw auto 2vw
+          display: block
+        .name
+          font-size: $font-size-16
+          color: #FFF
+          text-align: center
+          padding: 0 5vw
+          font-family: $font-family-medium
+      .bottom
+        height: 74vw
+        .code
+          width: 45vw
+          height: 45vw
+          margin: 10.6vw auto 0
+          display: block
+        .text
+          font-family: $font-family-regular
+          font-size: $font-size-14
+          color: #999
+          text-align: center
+          margin-top: 5.3vw
 
 </style>
