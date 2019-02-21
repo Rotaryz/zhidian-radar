@@ -22,7 +22,13 @@
     'noservice': ['pic-nogroup', '暂无服务'],
     'nonews': ['pic-nonews', '暂无消息'],
     'noresult': ['pic-noresult', '找不到您所要的结果'],
-    'nocode': ['pic-nocode', '暂无群二维码']
+    'nocode': ['pic-nocode', '暂无群二维码'],
+    // AI智能运营无数据背景
+    'noflow': ['pic-notalk', '暂无话术'],
+    'noactive': ['pic-noactivity', '暂无活动'],
+    'nogoods': ['pic-nogoods', '暂无商品'],
+    'nocoupon': ['pic-nocoupon', '暂无优惠券'],
+    'nosearch': ['pic-noadult', '暂无搜索结果']
   }
   export default {
     props: {
@@ -73,6 +79,26 @@
           icon-image("pic-nocode")
         &.pic-closed
           icon-image("pic-shopsuspend")
+        &.pic-notalk
+          width: 103px
+          height: 90px
+          icon-image("pic-notalk")
+        &.pic-noactivity
+          width: 103px
+          height: 90px
+          icon-image("pic-noactivity")
+        &.pic-nogoods
+          width: 103px
+          height: 90px
+          icon-image("pic-nogoods")
+        &.pic-nocoupon
+          width: 103px
+          height: 90px
+          icon-image("pic-nocoupon")
+        &.pic-noadult
+          width: 103px
+          height: 90px
+          icon-image("pic-noadult")
       .err-msg
         font-family: $font-family-regular
         font-size: $font-size-14

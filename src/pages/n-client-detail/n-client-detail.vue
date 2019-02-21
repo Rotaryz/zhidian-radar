@@ -47,37 +47,23 @@
               </ul>
             </div>
             <div class="pie-box">
-              <div id="myLine"></div>
-              <div class="title-box">
-                <div class="title">近15天活跃度</div>
-                <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
-              </div>
+              <div class="title">近15天活跃度</div>
+              <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
             </div>
             <div class="pie-box">
-              <div id="myPie"></div>
-              <div class="title-box">
-                <div class="title">兴趣的商品占比</div>
-                <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.SHOP"></ai-charts>
-                <div class="list">
-                  <h3 class="list-title">
-                    <span class="num">排序</span>
-                    <span class="name">商品名称</span>
-                    <span class="count">次数</span>
-                  </h3>
-                  <p class="item" v-for="(item, index) in goodsList" :key="index">
-                    <span class="num">{{index}}</span>
-                    <span class="name">{{item.name}}</span>
-                    <span class="count">{{item.count}}次</span>
-                  </p>
-                </div>
-              </div>
-
-            </div>
-            <div class="pie-box" v-if="false">
-              <div id="myBar"></div>
-              <div class="title-box">
-                <div class="title">客户与我的互动</div>
-                <div class="sub-title">(每天0点更新)</div>
+              <div class="title">兴趣的商品占比</div>
+              <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.SHOP"></ai-charts>
+              <div class="list" v-if="goodsList.length > 0">
+                <h3 class="list-title">
+                  <span class="num">排序</span>
+                  <span class="name">商品名称</span>
+                  <span class="count">次数</span>
+                </h3>
+                <p class="item" v-for="(item, index) in goodsList" :key="index">
+                  <span class="num">{{index}}</span>
+                  <span class="name">{{item.name}}</span>
+                  <span class="count">{{item.value}}次</span>
+                </p>
               </div>
             </div>
           </div>
@@ -110,6 +96,7 @@
       <router-view @refresh="refresh"></router-view>
       <toast ref="toast"></toast>
       <modal ref="modal"></modal>
+      <base-tip ref="tip"></base-tip>
     </div>
   </transition>
 </template>
@@ -174,23 +161,23 @@
         goodsList: [
           {
             name: '护发素',
-            count: 20
+            value: 20
           },
           {
             name: '护发素',
-            count: 20
+            value: 20
           },
           {
             name: '护发素',
-            count: 20
+            value: 20
           },
           {
             name: '护发素',
-            count: 20
+            value: 20
           },
           {
             name: '护发素',
-            count: 20
+            value: 20
           }
         ]
       }
@@ -292,21 +279,40 @@
               return
             }
             let lineData = {
-              xAxisData: res.data.x,
-              seriesData: [ {data: res.data.y} ]
+              xAxisData: res.data.x || [],
+              seriesData: [ {data: res.data.y || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]} ]
             }
             this.$refs.c1.action(lineData)
           })
       },
       interestedRetio() {
-        NEchart.interestedRetio()
+        let info = this.$storage.get('info')
+        let data = {
+          customer_id: this.id,
+          shop_id: info.shop_id,
+          merchant_id: info.merchant_id
+        }
+        NEchart.interestedRetio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
+              let pieData = {
+                seriesData: [
+                  {name: '护发素', value: 20},
+                  {name: '洗发水', value: 10},
+                  {name: '护手霜', value: 30},
+                  {name: '美容水', value: 20}
+                ]
+              }
+              this.$refs.c2.action(pieData)
               this.$toast.show(res.message)
               return
             }
+            let seriesData = res.data.map(item => {
+              return {name: item.title, value: item.counts}
+            })
+            this.goodsList = seriesData
             let pieData = {
-              seriesData: [
+              seriesData: seriesData.slice(0, 4) || [
                 {name: '护发素', value: 20},
                 {name: '洗发水', value: 10},
                 {name: '护手霜', value: 30},
@@ -675,83 +681,47 @@
           left: 0
           top: 0
     .pie-box
-      margin: 15px 0
-      background: $color-white
-      border-radius: 6px
-      border-1px(#E9F0FE, 12PX)
-      box-shadow:  0 2px 16px 0 rgba(21,24,45,0.04)
-      #myPie
-        width: 100%
-        height: 530px
-        margin: 0 auto
-        padding: 20px
-      #myLine
-        width: 100%
-        height: 305px
-        margin: 0 auto
-        padding: 35px 10px 0
-      #myAddLine
-        width: 100%
-        height: 305px
-        margin: 0 auto
-        padding: 35px 10px 0
-      #myBar
-        width: 100%
-        height: 305px
-        margin: 0 auto
-        padding: 35px 10px 0
-      #myChartfour
-        width: 100%
-        height: 305px
-        margin: 0 auto
-        padding: 35px 0 0
-      .title-box
-        width: 100%
-        height: 45px
-        line-height: 45px
-        position: absolute
-        font-size: $font-size-16
+      margin: 12px 0
+      background: #FFFFFF
+      box-shadow: 0 0 10px 0 rgba(141,151,158,0.30)
+      border-radius: 4px
+      overflow :hidden
+      .title
+        font-family: PingFangSC-Regular
+        font-size: 16px
         color: #0E1249
-        font-family: $font-family-regular
-        left: 0
-        top: 0
-        .title
-          margin: 0 15px
-          border-bottom-1px(#E1E1E1)
-        .sub-title
-          margin-top: 5px
-          font-size: $font-size-small
-          color: $color-text-88
+        line-height: 16px
+        padding: 13.5px 0
+        margin: 0 15px
+      .list
+        margin: 0 15px
+        border-1px(#F1F3F6)
+        .list-title,.item
+          background: #F5F8FC
+          height: 40px
+          line-height: 40px
+          color: #333
+          display: flex
+          font-size: $font-size-14
           font-family: $font-family-regular
-        .list
-          margin: 0 15px
-          border-1px(#F1F3F6)
-          .list-title,.item
-            background: #F5F8FC
-            height: 40px
-            line-height: 40px
-            color: #333
-            display: flex
-            font-size: $font-size-14
-            font-family: $font-family-regular
-            text-align: left
-            .num
-              width: 60px
-              text-indent: 15px
-            .name
-              flex: 1
-              overflow: hidden
-              text-indent: 30px
-              text-overflow: ellipsis
-              white-space: nowrap
-            .count
-              width: 60px
-              text-indent: 15px
-          .item
-            background: #FFF
-            border-bottom-1px(#f4f5f7)
-          .list-title
-            opacity: 0.6
+          text-align: left
+          .num
+            width: 60px
+            text-indent: 15px
+          .name
+            flex: 1
+            overflow: hidden
+            text-indent: 30px
+            text-overflow: ellipsis
+            white-space: nowrap
+          .count
+            width: 60px
+            text-indent: 15px
+        .item
+          background: #FFF
+          border-bottom-1px(#f4f5f7)
+        .list-title
+          opacity: 0.6
       .bottom-des
         position: absolute
         bottom: 15px
@@ -806,6 +776,8 @@
             font-size: $font-size-small
             color: #202020
             font-family: $font-family-regular
+    .pie-box:last-child
+      padding-bottom: 15px
   .bottom-box
     layout(row)
     border-top-1px(#E1E1E1)

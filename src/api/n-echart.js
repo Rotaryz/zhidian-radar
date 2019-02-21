@@ -46,8 +46,8 @@ export default {
    * @returns {*}
    */
   interestedRetio(data) {
-    let url = '/api/employee/analysis/interest-rate-chart'
-    return request.post(url, data)
+    let url = 'api/employee/ai/get-user-interests'
+    return request.get(url, data)
   },
   /**
    * 客单价、订单与金额、主力客户一周下单次数

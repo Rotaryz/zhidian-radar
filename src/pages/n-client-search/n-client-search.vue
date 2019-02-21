@@ -23,7 +23,7 @@
         </scroll>
       </div>
       <section class="exception-box" v-if="isEmpty">
-        <exception errType="noresult"></exception>
+        <exception errType="nosearch"></exception>
       </section>
       <toast ref="toast"></toast>
     </article>

@@ -2,7 +2,7 @@
   <div class="client-user-card">
     <!--最新加入-->
     <section class="container" v-if="useType==='join'">
-      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes[userInfo.group_rule_name]}" :src="userInfo.image_url" alt=""/>
+      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes[userInfo.group_rule_name || 'd']}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
