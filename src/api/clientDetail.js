@@ -70,5 +70,13 @@ export default {
   marketRecord(data, loading) {
     const url = `/api/employee/ai-market/logs`
     return request.get(url, data, loading)
+  },
+  /**
+   * 客户活跃度 KOL RFM值
+   * @returns {*}
+   */
+  clientData(data, loading) {
+    const url = `/api/employee/ai/get-values-data`
+    return request.post(url, data, loading)
   }
 }

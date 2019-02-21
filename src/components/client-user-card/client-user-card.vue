@@ -2,18 +2,18 @@
   <div class="client-user-card">
     <!--最新加入-->
     <section class="container" v-if="useType==='join'">
-      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes.p}" :src="userInfo.image_url" alt=""/>
+      <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes[userInfo.group_rule_name]}" :src="userInfo.image_url" alt=""/>
       <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
       <article class="user-info">
         <section class="base-info">
           <div class="name">
-            <div class="txt">{{userInfo.name}}</div>
+            <div class="txt">{{userInfo.name || userInfo.nickname}}</div>
             <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
           </div>
           <div class="last-time">{{userInfo.sources}}</div>
         </section>
         <div class="tags">
-          <div class="left">{{userInfo.last_follow_day}}</div>
+          <div class="left">{{userInfo.last_follow_at ? '已跟进' : '还未跟进'}}</div>
           <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
@@ -28,10 +28,10 @@
             <div class="txt">{{userInfo.name}}</div>
             <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
           </div>
-          <div class="last-time">活跃指数{{userInfo.active_value}}</div>
+          <div class="last-time">活跃指数{{userInfo.active_value || 0}}</div>
         </section>
         <div class="tags">
-          <div class="left">{{userInfo.last_follow_day}}</div>
+          <div class="left">{{userInfo.last_follow_at ? '已跟进' : '还未跟进'}}</div>
           <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
@@ -49,7 +49,7 @@
           <div class="last-time">最后跟进</div>
         </section>
         <div class="tags">
-          <div class="left">{{userInfo.last_follow_day}}</div>
+          <div class="left">{{userInfo.last_follow_at ? '已跟进' : '还未跟进'}}</div>
           <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
@@ -64,10 +64,10 @@
             <div class="txt">{{userInfo.name}}</div>
             <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
           </div>
-          <div class="last-time">KOL指数{{userInfo.kol_value}}</div>
+          <div class="last-time">KOL指数{{userInfo.kol_value || 0}}</div>
         </section>
         <div class="tags">
-          <div class="left">{{userInfo.flow_join_at}}</div>
+          <div class="left">{{userInfo.last_follow_at ? '已跟进' : '还未跟进'}}</div>
           <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
