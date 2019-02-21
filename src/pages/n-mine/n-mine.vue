@@ -161,7 +161,7 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   .cover
-    position: absolute
+    position: fixed
     background: rgba(0,0,0,0.8)
     z-index: 20
     left: 0
@@ -174,6 +174,9 @@
       background: $color-white
       all-center()
       .center-img
+        position: absolute
+        left: 0
+        top: 0
         width: 100%
         height: 100%
         display: block
