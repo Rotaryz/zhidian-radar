@@ -171,6 +171,7 @@
     .center-box
       width: 200px
       height: 200px
+      margin: 100px
       .center-img
         width: 100%
         height: 100%
