@@ -232,6 +232,9 @@
           border: 1.5px solid red
           border-radius: 50%
           overflow: hidden
+          width: 45px
+          height: 45px
+          box-sizing: border-box
           .left-img
             width: 39px
             height: 39px

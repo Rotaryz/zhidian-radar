@@ -1,7 +1,7 @@
 <template>
   <div class="mine">
-    <!--<scroll :bcColor="'#f5f5f9'"></scroll>-->
-    <div class="mine-top">
+    <scroll :bcColor="'#f5f5f9'">
+      <div class="mine-top">
         <div class="top-box">
           <div class="top-box-left">
             <img v-if="mine.avatar&&mine.avatar.length" class="mine-header" :src="mine.avatar">
@@ -43,6 +43,7 @@
           </ul>
         </div>
       </div>
+    </scroll>
     <div class="cover">
       <div class="center-box">
         <img src="https://zhidian-img.jkweixin.com/83/2019/01/07/shop_125_qrcode.png?timestamp=1550730136" class="center-img">
@@ -256,8 +257,8 @@
               height: 20px
               right: 0
               margin: auto
-//              col-center()
-              /*position: absolute*/
+              col-center()
+              position: absolute
             &:last-child:after
               width: 0
               border: 0
