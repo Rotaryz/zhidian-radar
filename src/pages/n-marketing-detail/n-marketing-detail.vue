@@ -66,7 +66,7 @@
           group_id: groupId
         }
         Client.getGroupCustomerList(data).then(res => {
-          if (res.error === this.$.ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             let group = [{
               group_id: groupId,
               group_name: groupName,
