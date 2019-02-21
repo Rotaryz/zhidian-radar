@@ -171,15 +171,13 @@
     .center-box
       width: 200px
       height: 200px
-      all-center()
+      position: fixed
+      left: 50%
+      top: 50%
+      transform: translate(-50%, -50%)
       .center-img
         width: 100%
         height: 100%
-        padding:200px 0 0 200px !important
-        margin:-200px 0 0 -200px !important
-        position: relative
-        z-index: 25
-        -webkit-user-select: none
   div
     box-sizing: border-box
     -moz-box-sizing: border-box
