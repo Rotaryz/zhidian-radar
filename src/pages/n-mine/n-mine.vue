@@ -176,6 +176,7 @@
       .center-img
         width: 100%
         height: 100%
+        pointer-events: none
   div
     box-sizing: border-box
     -moz-box-sizing: border-box
