@@ -141,7 +141,7 @@
         })
       },
       marketing() {
-        this.$router.push(`/market?groupId=${this.id}&groupName=${this.title}`)
+        this.$router.push(`/market/market-detail?groupId=${this.id}&groupName=${this.title}`)
       },
       toAddUser() {
         const path = `/client/client-user-list/client-add-user`
@@ -153,7 +153,7 @@
       },
       groupingHandler(index, item) {
         const path = `/client/client-user-list/client-set-group`
-        this.$router.push({path, query: {id: item.id}}) // 客户id
+        this.$router.push({path, query: {id: item.customer_id}}) // 客户id
       },
       delHandler(index, item) {
         this.checkedItem = item
@@ -162,12 +162,14 @@
       msgConfirm() {
         const data = {
           // group_id: this.id, // 分组id
-          customer_id: this.checkedItem.id
+          customer_id: this.checkedItem.customer_id
         }
         Client.delCustomer(data, this.id).then(res => {
           if (res.error === ERR_OK) {
-            const idx = this.dataArray.findIndex(val => val.id === this.checkedItem.id)
+            const idx = this.dataArray.findIndex(val => val.customer_id === this.checkedItem.customer_id)
             this.dataArray.splice(idx, 1)
+            let refName = 'slide' + this.moveIdx
+            this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
           } else {
             this.$refs.toast.show(res.message)
           }

@@ -6,15 +6,15 @@
       <div class="text">{{clientData.sources}}</div>
       <div class="data">
         <div class="item">
-          <span class="num">200</span>
+          <span class="num">{{clientData.active_values || 0}}</span>
           <span class="text">活跃指数</span>
         </div>
         <div class="item">
-          <span class="num">55</span>
+          <span class="num">{{clientData.rfm_values || 0}}</span>
           <span class="text">RFM指数</span>
         </div>
         <div class="item">
-          <span class="num">200</span>
+          <span class="num">{{clientData.kol_values || 0}}</span>
           <span class="text">KOL指数</span>
         </div>
       </div>
@@ -110,7 +110,6 @@
             overflow: hidden
             white-space: nowrap
             text-overflow: ellipsis
-
             display: block
 
 </style>

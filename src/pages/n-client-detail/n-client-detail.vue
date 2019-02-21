@@ -200,6 +200,7 @@
       this.pageUrl = this.$route.path
       this.getClientId(this.id)
       this.getCusomerTagList()
+      this.getClientData()
     },
     mounted() {
       this.highgt = this.$refs.eleven.offsetHeight
@@ -219,6 +220,16 @@
           this.getClientId(this.id)
           this.getCusomerTagList()
         }, 300)
+      },
+      getClientData() {
+        ClientDetail.clientData()
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            this.clientData = Object.assign(this.clientData, res.data)
+          })
       },
       getCusomerTagList() {
         Client.getCusomerTagList(this.id).then(res => {

@@ -28,7 +28,7 @@
                 <div class="type">活跃指数</div>
                 <div class="time">{{item.active_value}}</div>
               </div>
-              <div class="ai" v-if="selectText === 'follow'">
+              <div class="ai" v-if="selectText === 'rfm'">
                 <div class="type">RFM指数</div>
                 <div class="time">{{item.last_follow_at}}</div>
               </div>
