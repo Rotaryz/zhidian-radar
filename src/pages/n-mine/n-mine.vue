@@ -168,6 +168,10 @@
     right: 0
     bottom: 0
     top: 0
+    overflow :hidden
+    display :flex
+    align-items :center
+    justify-content :center
     .center-box
       width: 200px
       height: 200px
