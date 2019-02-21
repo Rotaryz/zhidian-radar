@@ -131,8 +131,8 @@
         this.styles = 'width: 0px; transition: all .3s ease-out'
         this.show = false
       },
-      _itemInit() {
-        this.styles = 'width: 0px; transition: all .3s ease-out'
+      _itemInit(animation = true) {
+        this.styles = `width: 0px; transition: ${animation ? 'all .3s ease-out' : ''}`
         this.show = false
       }
     }

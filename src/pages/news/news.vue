@@ -47,6 +47,7 @@
     </scroll>
     <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <toast ref="toast"></toast>
+    <router-view/>
   </div>
 </template>
 
@@ -106,12 +107,13 @@
           account: item.sessionId
         }
         this.setCurrent(currentMsg)
-        let url = '/chat/' + item.sessionId
+        let url = '/chat/' + item.sessionId + '?modelType=' + item.group_rule_name
         this.$router.push(url)
       },
       createGroup() {
-        let url = '/new-group-msg'
-        this.$router.push(url)
+        let pageUrl = this.$route.path
+        let path = `${pageUrl}/new-group-msg`
+        this.$router.push(path)
       },
       delHandler(idx, item) {
         this.checkedItem = item
@@ -133,7 +135,7 @@
             })
             this.saveList(newList)
             let refName = 'slide' + this.checkedIdx
-            this.$refs[refName][0] && this.$refs[refName][0]._itemInit()
+            this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -184,6 +186,7 @@
     left: 0
     top: 0
     right: 0
+    z-index: 30
     bottom: 45px
     background: $color-white
     .news-list

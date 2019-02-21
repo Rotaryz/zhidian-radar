@@ -162,7 +162,9 @@ const mutations = {
         nickName: state.currentMsg.nickName,
         sessionId: msg.fromAccount,
         unreadMsgCount: 0,
-        type: desc.log_type
+        type: desc.log_type,
+        width: data.width,
+        height: data.height
       }
     }
     if (state.nowChat.length) {

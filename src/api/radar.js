@@ -12,5 +12,15 @@ export default {
       employee_id: id
     }
     return request.post(url, data, loading)
+  },
+  // pnes模型数据
+  getPNESModel(data, loading = false) {
+    const url = `/api/employee/ai/get-pnes-model-data`
+    return request.post(url, data, loading)
+  },
+  // 获取诊断状态
+  getDiagnose(data, loading = false) {
+    const url = `/api/employee/ai/check-ai-state`
+    return request.post(url, data, loading)
   }
 }
