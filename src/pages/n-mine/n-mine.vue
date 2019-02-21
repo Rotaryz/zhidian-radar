@@ -1,49 +1,47 @@
 <template>
   <div class="mine">
-    <Scroll bcColor="#f0f5ff">
-      <div class="mine-top">
-        <div class="top-box">
-          <div class="top-box-left">
-            <img v-if="mine.avatar&&mine.avatar.length" class="mine-header" :src="mine.avatar">
-            <img v-else class="mine-header" src="./pic-default_people@2x.png">
-            <p class="peo-name">
-              <span>{{mine.name}}</span><br />
-              <span class="data">到期日期：至{{mine.merchant.expire_time | timeFormat}}</span>
-            </p>
-          </div>
-          <div class="top-box-right" @click="toShareCard">
-            <span class="code"></span>
-          </div>
+    <div class="mine-top">
+      <div class="top-box">
+        <div class="top-box-left">
+          <img v-if="mine.avatar&&mine.avatar.length" class="mine-header" :src="mine.avatar">
+          <img v-else class="mine-header" src="./pic-default_people@2x.png">
+          <p class="peo-name">
+            <span>{{mine.name}}</span><br />
+            <span class="data">到期日期：至{{mine.merchant.expire_time | timeFormat}}</span>
+          </p>
         </div>
-        <div class="mine-shadow">
-          <router-link class="mian-box" to="mine/my-data">
-            <div class="main">
-              <div class="item-box">
-                <div class="number">{{allDatas.module_e_count || 0}}</div>
-                <div class="text">主力客户</div>
-              </div>
-              <div class="item-box">
-                <div class="number">{{allDatas.order_count || 0}}</div>
-                <div class="text">活跃度</div>
-              </div>
-              <div class="item-box">
-                <div class="number">{{allDatas.per_money || 0}}</div>
-                <div class="text">客单价</div>
-              </div>
-            </div>
-          </router-link>
-        </div>
-        <div class="main-content">
-          <h3 class="title">工作台</h3>
-          <ul class="content-item">
-            <li class="item" v-for="(item, index) in contentList" :key="index" @click="_goPage(item.src)">
-              <span class="icon" :class="item.icon"></span>
-              <span class="text">{{item.title}}</span>
-            </li>
-          </ul>
+        <div class="top-box-right" @click="toShareCard">
+          <span class="code"></span>
         </div>
       </div>
-    </Scroll>
+      <div class="mine-shadow">
+        <router-link class="mian-box" to="mine/my-data">
+          <div class="main">
+            <div class="item-box">
+              <div class="number">{{allDatas.module_e_count || 0}}</div>
+              <div class="text">主力客户</div>
+            </div>
+            <div class="item-box">
+              <div class="number">{{allDatas.order_count || 0}}</div>
+              <div class="text">活跃度</div>
+            </div>
+            <div class="item-box">
+              <div class="number">{{allDatas.per_money || 0}}</div>
+              <div class="text">客单价</div>
+            </div>
+          </div>
+        </router-link>
+      </div>
+      <div class="main-content">
+        <h3 class="title">工作台</h3>
+        <ul class="content-item">
+          <li class="item" v-for="(item, index) in contentList" :key="index" @click="_goPage(item.src)">
+            <span class="icon" :class="item.icon"></span>
+            <span class="text">{{item.title}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
     <div class="cover">
       <div class="center-box">
         <img src="https://zhidian-img.jkweixin.com/83/2019/01/07/shop_125_qrcode.png?timestamp=1550730136" class="center-img">
