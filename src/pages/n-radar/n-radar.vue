@@ -13,7 +13,7 @@
             @pullingUp="onPullingUp"
             @scroll="viewScroll"
             >
-      <div class="radar-top" :class="{'showTop' : topType}" ref="radarTop">
+      <div class="radar-top" :class="{'showTop' : topType}" ref="radarTop" v-if="hasLoading">
         <img src="./pic-bg_ld@2x.jpg" class="top-bc" v-show="!topType">
         <img src="./bg-ld@2x.jpg" class="top-bc" v-show="topType">
         <div class="top-content" :class="{'active' : topType}">
@@ -206,6 +206,7 @@
         pnesObj: PNES,
         pnesColor: PNES_COLOR,
         topType: false, // 头部信息是否点击诊断
+        hasLoading: false, // 头部信息是否返回
         topHide: false, // 头部是否消失
         list: [],
         showNoMore: false,
@@ -240,7 +241,7 @@
         this.$emit('login')
       }
       this.setCustomCount('clear')
-      this.getPnesVal()
+      this.getDiagnoseState()
       this.getRadarList()
       this._refreshInfo()
     },
@@ -258,6 +259,7 @@
         this.topType = true
         setTimeout(() => {
           this.$refs.scroll && this.$refs.scroll.forceUpdate()
+          this.getPnesModel(1)
         }, 20)
       },
       _refreshInfo() {
@@ -267,7 +269,21 @@
           }
         })
       },
-      getPnesModel() {
+      getDiagnoseState() {
+        Radar.getDiagnose().then(res => {
+          if (res.error === ERR_OK) {
+            this.topType = res.data.ai_state
+            this.hasLoading = true
+            if (this.topType) {
+              setTimeout(() => {
+                this.$refs.scroll && this.$refs.scroll.forceUpdate()
+                this.getPnesModel()
+              }, 20)
+            }
+          }
+        })
+      },
+      getPnesModel(type = 0) {
         if (this.loading) return
         let timeS = Date.parse(new Date())
         if (this.loadingTime && (timeS - this.loadingTime) < 60000) {
@@ -276,7 +292,7 @@
         }
         this.loading = true
         this.loadingTime = timeS
-        this.getPnesVal(() => {
+        this.getPnesVal(type, () => {
           clearTimeout(this.timer)
           this.timer = setTimeout(() => {
             this.loading = false
@@ -284,11 +300,12 @@
           }, 1000)
         })
       },
-      getPnesVal(callback) {
+      getPnesVal(type = 0, callback) {
         let data = {
           merchant_id: this.userInfo.merchant_id,
           store_id: this.userInfo.store_id,
-          shop_id: this.userInfo.shop_id
+          shop_id: this.userInfo.shop_id,
+          operation: type
         }
         Radar.getPNESModel(data).then(res => {
           if (res.error === ERR_OK) {

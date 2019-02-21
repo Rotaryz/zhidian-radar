@@ -17,5 +17,10 @@ export default {
   getPNESModel(data, loading = false) {
     const url = `/api/employee/ai/get-pnes-model-data`
     return request.post(url, data, loading)
+  },
+  // 获取诊断状态
+  getDiagnose(data, loading = false) {
+    const url = `/api/employee/ai/check-ai-state`
+    return request.post(url, data, loading)
   }
 }
