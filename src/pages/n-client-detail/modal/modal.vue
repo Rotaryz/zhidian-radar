@@ -2,10 +2,10 @@
   <transition name="fade">
     <div class="bg" v-if="modalShow" @click="hideModal">
       <div class="content">
-        <p class="num">13584260103</p>
+        <p class="num">{{mobile}}</p>
         <div class="btns">
-          <a class="left btn" v-clipboard:copy="13584260103" v-clipboard:success="onCopy" v-clipboard:error="onError">复制号码</a>
-          <a class="right btn" href="tel:13584260103" @click="hideModal">拨打号码</a>
+          <a class="left btn" v-clipboard:copy="mobile" v-clipboard:success="onCopy" v-clipboard:error="onError">复制号码</a>
+          <a class="right btn" :href="'tel:' + mobile" @click="hideModal">拨打号码</a>
         </div>
       </div>
     </div>
@@ -20,11 +20,13 @@
     name: 'detail-msg',
     data() {
       return {
-        modalShow: false
+        modalShow: false,
+        mobile: ''
       }
     },
     methods: {
-      showModal() {
+      showModal(mobile) {
+        this.mobile = mobile
         this.modalShow = true
       },
       hideModal() {

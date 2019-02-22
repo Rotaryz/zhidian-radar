@@ -96,7 +96,7 @@
       <router-view @refresh="refresh"></router-view>
       <toast ref="toast"></toast>
       <modal ref="modal"></modal>
-      <base-tip ref="tip"></base-tip>
+      <base-tip ref="tip" type="mobile"></base-tip>
     </div>
   </transition>
 </template>
@@ -420,7 +420,11 @@
         })
       },
       phoneCall() {
-        this.$refs.modal.showModal()
+        if (this.clientData.mobile) {
+          this.$refs.modal.showModal(this.clientData.mobile)
+        } else {
+          this.$refs.baseTip.show()
+        }
       },
       toAddFlow() {
         let path = `${this.pageUrl}/addflow?id=${this.id}&flowId=${this.flowId}`

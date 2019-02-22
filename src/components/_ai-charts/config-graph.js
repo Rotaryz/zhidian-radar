@@ -41,8 +41,8 @@ const jjj = {
     }
   })
 }
-// console.log(jjj.nodes)
-// console.log(jjj.links)
+// console.log(jjj.nodes, 1)
+// console.log(jjj.links, 2)
 // console.log(jjj.categories)
 export function createUserTop6() {
   return {

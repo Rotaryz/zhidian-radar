@@ -48,8 +48,22 @@
               <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.PNES"></ai-charts>
             </article>
             <router-link tag="div" to="" class="panel">
-              <router-link tag="div" to="z-test" class="title">KOL传播 TOP10</router-link>
+              <router-link tag="div" to="z-test" class="title">用户来源-KOL分享传播</router-link>
               <ai-charts ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+              <div class="list" v-if="personList.length > 0">
+                <h3 class="list-title">
+                  <span class="num">排序</span>
+                  <span class="name">用户</span>
+                  <span class="person">人数</span>
+                  <span class="count">次数</span>
+                </h3>
+                <p class="item" v-for="(item, index) in personList" :key="index">
+                  <span class="num">{{index}}</span>
+                  <span class="name">{{item.name}}</span>
+                  <span class="person">{{item.value}}</span>
+                  <span class="count">{{item.value}}次</span>
+                </p>
+              </div>
             </router-link>
           </div>
           <div v-if="charTab === 1">
@@ -131,7 +145,24 @@
         groupList,
         charTab: 0,
         CHARTS_TYPE,
-        shopId: ''
+        shopId: '',
+        personList: [
+          {
+            name: '李明',
+            person: 30,
+            value: 20
+          },
+          {
+            name: '李明',
+            person: 30,
+            value: 20
+          },
+          {
+            name: '李明',
+            person: 30,
+            value: 20
+          }
+        ]
       }
     },
     created() {
@@ -505,4 +536,35 @@
         border-bottom-1px(#E1E1E1)
         &:after
           opacity: 0.3
+      .list
+        margin: 0 15px
+        .list-title,.item
+          height: 40px
+          line-height: 40px
+          color: #333
+          display: flex
+          font-size: $font-size-14
+          font-family: $font-family-regular
+          text-align: left
+          background: #FFF
+          border-bottom-1px(#f4f5f7)
+          .num
+            width: 60px
+            text-indent: 15px
+          .name
+            flex: 1
+            overflow: hidden
+            text-indent: 30px
+            text-overflow: ellipsis
+            white-space: nowrap
+          .person
+            width: 60px
+            text-indent: 15px
+          .count
+            width: 60px
+            text-indent: 15px
+        .list-title
+          opacity: 0.6
+    .panel:last-child
+      padding-bottom: 15px
 </style>
