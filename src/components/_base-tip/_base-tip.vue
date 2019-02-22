@@ -5,6 +5,7 @@
         <p class="context" v-if="type === 'outline'">网络异常用户生命周期无法诊断<br />请检查手机网络</p>
         <p class="context" v-if="type === 'fail'">用户生命周期智能诊断失败<br />请重新诊断</p>
         <p class="context" v-if="type === 'overtime'">用户生命周期智能诊断已超时<br />请重新诊断</p>
+        <p class="context" v-if="type === 'mobile'">该用户没有授权手机号</p>
         <p class="context" v-if="type === ''">{{text1}}<br />{{text2}}</p>
         <div class="btn" @click="hide">确定</div>
       </div>

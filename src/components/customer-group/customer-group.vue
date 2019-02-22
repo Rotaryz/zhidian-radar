@@ -1,6 +1,6 @@
 <template>
   <div class="customer-group">
-    <ul class="container">
+    <ul class="container" :class="{'no-border':dataArray.length === 1, 'bg': dataArray.length === 0}">
       <template v-for="(item,index) in dataArray">
         <li v-if="index < 9"  :key="index" class="avatar-wrapper":style="avatarWrapperStyles">
           <div class="avatar" :class="{single: dataArray.length <= 1}">
@@ -71,4 +71,9 @@
             width :100%
             height :100%
             object-fit :cover
+    .no-border
+      border: 0
+    .bg
+      border: 2px solid #F2F2F2
+      icon-image(pic-nogroup)
 </style>

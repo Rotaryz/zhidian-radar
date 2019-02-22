@@ -23,7 +23,7 @@
         </div>
       </div>
       <section class="exception-box" v-if="isEmpty">
-        <exception errType="nodata"></exception>
+        <exception errType="customer"></exception>
       </section>
       <div class="bottom">
         <div class="btn" @click="marketing">
@@ -31,10 +31,10 @@
           <span class="text">场景营销</span>
         </div>
         <span style="width: 12px"></span>
-        <router-link tag="div" to="" class="btn ">
+        <div class="btn" @click="newGroup">
           <span class="icon"></span>
           <span class="text">发消息</span>
-        </router-link>
+        </div>
       </div>
       <confirm-msg ref="confirm" @confirm="msgConfirm" @cancel="msgCancel"></confirm-msg>
       <toast ref="toast"></toast>
@@ -53,6 +53,7 @@
   import Toast from 'components/toast/toast'
   import {ERR_OK} from 'common/js/config'
   import Exception from 'components/exception/exception'
+  import {mapActions, mapGetters} from 'vuex'
 
   const LIMIT = 10
   export default {
@@ -86,13 +87,15 @@
         isEmpty: false,
         moveIdx: -1,
         groupType: null,
-        userInfo: ''
+        userInfo: '',
+        groups: []
       }
     },
     created() {
       this.userInfo = this.$storage.get('info')
       this.getParams()
       this.getCustomerList()
+      this.getGroupList()
       document.title = this.title
     },
     beforeRouteLeave(to, from, next) {
@@ -102,6 +105,7 @@
     mounted() {
     },
     methods: {
+      ...mapActions(['setCurrentGroupMsg']),
       refresh() {
         this.page = 1
         this.limit = LIMIT
@@ -119,6 +123,21 @@
         this.title = this.$route.query.title
         this.id = this.$route.query.id
         this.groupType = this.$route.query.groupType
+      },
+      getGroupList() {
+        let data = {
+          shop_id: this.userInfo.shop_id
+        }
+        Client.getGroupList(data).then(res => {
+          if (res.error === ERR_OK) {
+            let groupArr = res.data
+            this.groups = groupArr.filter(item => {
+              return item.id === this.id
+            })
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
       },
       getCustomerList() {
         this.page = 1
@@ -139,6 +158,16 @@
             this.$refs.toast.show(res.message)
           }
         })
+      },
+      newGroup() {
+        if (this.groupMsgIng) {
+          this.$refs.toast.show('群发消息发送中，请稍后再发')
+          return
+        }
+        this.setCurrentGroupMsg(this.groups)
+        let pageUrl = this.$route.path
+        let path = `${pageUrl}/news-chat-group`
+        this.$router.push(path)
       },
       marketing() {
         this.$router.push(`/market/market-detail?groupId=${this.id}&groupName=${this.title}`)
@@ -229,6 +258,7 @@
       }
     },
     computed: {
+      ...mapGetters(['groupMsgIng']),
       pullUpLoadObj: function () {
         return this.pullUpLoad ? {
           threshold: parseInt(this.pullUpLoadThreshold),

@@ -179,6 +179,7 @@
       </div>
     </scroll>
     <router-view></router-view>
+    <base-tip ref="baseTip" :type="'fail'"></base-tip>
     <toast ref="toast"></toast>
   </div>
 </template>
@@ -311,6 +312,9 @@
           if (res.error === ERR_OK) {
             this.modelObj = res.data
             callback && callback()
+          } else {
+            callback && callback()
+            this.$refs.baseTip && this.$refs.baseTip.show()
           }
         })
       },

@@ -237,6 +237,9 @@
             } else {
               this.noMore = true
               this.page--
+              setTimeout(() => {
+                this.$refs.scroll && this.$refs.scroll.forceUpdate()
+              }, 20)
             }
           }
         })

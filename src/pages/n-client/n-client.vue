@@ -114,7 +114,7 @@
         </scroll>
       </article>
       <section class="exception-box" v-if="userListIsEmpty">
-        <exception errType="nodata"></exception>
+        <exception errType="nogroup"></exception>
       </section>
     </section>
 
@@ -336,8 +336,6 @@
       },
       getGroupList() {
         let data = {
-          page: 1,
-          limit: 10,
           shop_id: this.shopId
         }
         Client.getGroupList(data).then(res => {
@@ -427,7 +425,6 @@
       },
       onPullingUp() {
         // 更新数据
-        console.info('pulling up and load data')
         if (!this.pullUpLoad) return
         if (this.isAll) return this.$refs.scroll.forceUpdate()
 
@@ -452,7 +449,7 @@
       touchBegin(idx) {
         if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
           let refName = 'slide' + this.moveIdx
-          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(true)
         }
       },
       touchEnd(idx) {
@@ -631,19 +628,18 @@
             border-bottom-1px($color-col-line)
 
       .panel
-        margin :12px
+        margin: 12px
         background: #FFFFFF
-        box-shadow: 0 2px 20px 0 rgba(21,24,45,0.12)
-        border-radius: 6px
+        box-shadow: 0 0 10px 0 rgba(141,151,158,0.30)
+        border-radius: 4px
         overflow :hidden
         .title
           font-family: PingFangSC-Regular
           font-size: 16px
           color: #0E1249
           line-height: 16px
-          padding :13.5px 0
-          margin : 0 15px 10px
-          border-bottom-1px(#E1E1E1)
+          padding: 13.5px 0
+          margin: 0 15px
   .group-content
     font-family: $font-family-regular
     font-size: $font-size-16

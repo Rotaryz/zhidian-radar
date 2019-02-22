@@ -467,6 +467,13 @@ const route = new Router({
             },
             children: [
               {
+                path: 'news-chat-group',
+                component: NewsChatGroup,
+                meta: {
+                  title: '群发'
+                }
+              },
+              {
                 path: 'client-add-user',
                 component: NClientAddUser,
                 meta: {

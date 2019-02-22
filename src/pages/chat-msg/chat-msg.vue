@@ -623,7 +623,7 @@
               url: '',
               title,
               shop_name: item.shop_name,
-              coupon_id: item.recommend_coupon_id,
+              coupon_id: item.id,
               end_at: item.end_at,
               coupon_type: item.coupon_type,
               coupon_num: item.denomination,
@@ -665,7 +665,7 @@
             url = item.image_url
             data = {
               url,
-              goods_id: item.goods_id,
+              goods_id: item.recommend_goods_id,
               title,
               goods_price: item.platform_price,
               original_price: item.original_price,
@@ -729,7 +729,7 @@
             url = item.image_url
             data = {
               url,
-              goods_id: item.activity_id,
+              goods_id: item.recommend_activity_id,
               title,
               goods_price: item.platform_price,
               original_price: item.original_price,
