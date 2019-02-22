@@ -48,6 +48,10 @@ export function createShop(args = {}) {
       borderRadius: 0,
       bottom: 12,
       padding: [0, 25, 0, 25],
+      textStyle: {color: '#858585',
+        fontSize: '12px',
+        fontFamily: 'PingFangSC-Regular'
+      },
       data: legendData
     },
     tooltip: {
@@ -241,12 +245,12 @@ export function createUser(args = {}) {
       itemWidth: 14,
       itemHeight: 14,
       borderRadius: 0,
-      itemGap: 25,
+      itemGap: 20,
       textStyle: {color: '#858585', fontSize: '12px', fontFamily: 'PingFangSC-Regular'},
       orient: 'vertical',
       x: '60%',
-      y: '-5%',
-      padding: [50, 25, 50, 50],
+      y: '-10%',
+      padding: [50, 25, 10, 50],
       data: legendData
     },
     tooltip: {

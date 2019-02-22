@@ -38,7 +38,7 @@
             </ul>
           </div>
 
-          <div v-if="charTab === 0">
+          <div v-show="charTab === 0">
             <article class="panel">
               <h1 class="title">用户分组</h1>
               <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.USER"></ai-charts>
@@ -66,13 +66,13 @@
               </div>
             </router-link>
           </div>
-          <div v-if="charTab === 1">
+          <div v-show="charTab === 1">
             <article class="panel">
               <h1 class="title ">活跃度</h1>
               <ai-charts ref="c4" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
             </article>
           </div>
-          <div v-if="charTab === 2">
+          <div v-show="charTab === 2">
             <article class="panel">
               <h1 class="title ">客单价</h1>
               <ai-charts ref="c5" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
@@ -216,7 +216,6 @@
             let day = res.data.map(item => {
               return item.day
             })
-            console.log(day)
             // 新增
             let growth = res.data.map(item => {
               return item.growth
@@ -240,12 +239,12 @@
             //   {data: [60, 10, 100, 90, 60]}
             // ]
             let lineData = {
-              xAxisData: ['3/10', '3/15', '3/20', '3/25', '3/30'],
+              xAxisData: day.length > 1 ? day : ['3/10', '3/15', '3/20', '3/25', '3/30'],
               seriesData: [
-                {data: growth},
-                {data: conversion},
-                {data: churn},
-                {data: wakeup}
+                {data: growth.length > 1 ? growth : [0, 0, 0, 0, 0]},
+                {data: conversion.length > 1 ? conversion : [0, 0, 0, 0, 0]},
+                {data: churn.length > 1 ? churn : [0, 0, 0, 0, 0]},
+                {data: wakeup.length > 1 ? wakeup : [0, 0, 0, 0, 0]}
               ]
             }
             this.$refs.c2.action(lineData)
@@ -297,18 +296,18 @@
 
             if (this.charTab === 1) {
               let lineData = {
-                xAxisData: day,
-                seriesData: [ {data: mainOrderCount} ]
+                xAxisData: day.length ? day : ['3/10', '3/15', '3/20', '3/25', '3/30'],
+                seriesData: [ {data: mainOrderCount.length ? mainOrderCount : [0, 0, 0, 0, 0]} ]
               }
               this.$refs.c4.action(lineData)
             } else if (this.charTab === 2) {
               let lineData = {
-                xAxisData: day,
-                seriesData: [ {data: personMoney} ]
+                xAxisData: day.length ? day : ['3/10', '3/15', '3/20', '3/25', '3/30'],
+                seriesData: [ {data: personMoney.length ? personMoney : [0, 0, 0, 0, 0]} ]
               }
               let lineData2 = {
-                xAxisData: day,
-                seriesData: [ {data: total}, {data: res.data.y} ]
+                xAxisData: day.length ? day : ['3/10', '3/15', '3/20', '3/25', '3/30'],
+                seriesData: [ {data: total.length ? total : [0, 0, 0, 0, 0]}, {data: res.data.y ? res.data.y : [0, 0, 0, 0, 0]} ]
               }
               this.$refs.c5.action(lineData)
               this.$refs.c6.action(lineData2)
@@ -323,6 +322,7 @@
           this.$nextTick(() => {
             this.groupRetio()
             this.PENSRetio()
+            this.$refs.c3.action()
           })
         } else if (index === 1) {
           this.$nextTick(() => {
@@ -522,20 +522,18 @@
           border-radius: 4px
           background: $color-linear-main
     .panel
-      margin: 15px 12px
+      margin: 12px
       background: #FFFFFF
-      box-shadow: 0 2px 20px 0 rgba(21,24,45,0.12)
-      border-radius: 6px
+      box-shadow: 0 0 10px 0 rgba(141,151,158,0.30)
+      border-radius: 4px
       overflow :hidden
       .title
         font-family: PingFangSC-Regular
         font-size: 16px
         color: #0E1249
         line-height: 16px
-        padding: 15px 13.5px
-        border-bottom-1px(#E1E1E1)
-        &:after
-          opacity: 0.3
+        padding: 13.5px 0
+        margin: 0 15px
       .list
         margin: 0 15px
         .list-title,.item
@@ -565,6 +563,4 @@
             text-indent: 15px
         .list-title
           opacity: 0.6
-    .panel:last-child
-      padding-bottom: 15px
 </style>

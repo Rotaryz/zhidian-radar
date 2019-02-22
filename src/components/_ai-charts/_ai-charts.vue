@@ -35,10 +35,14 @@
       }
     },
     mounted() {
-      this.myChart = this.$echarts.init(this.$refs.chartItem)
+    },
+    beforeDestroy() {
+      this.myChart = null
     },
     methods: {
       action(data) {
+        this.myChart = this.$echarts.init(this.$refs.chartItem)
+        if (this.myChart == null) return
         let config = this.CHARTS_CONFIG.createOption(data)
         this.myChart.setOption(config)
       }

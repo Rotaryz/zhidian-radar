@@ -323,7 +323,7 @@ export function createPNES(args = {}) {
       top: '8.149779735682818%',
       // top: '0',
       left: '4.415954415954416%',
-      right: '4%',
+      right: '20px',
       bottom: '18.828193832599119%',
       containLabel: true
     },
@@ -478,7 +478,7 @@ export function createVitality(args = {}) {
     grid: {
       top: '8.149779735682818%',
       left: '4.415954415954416%',
-      right: '4%',
+      right: '20px',
       bottom: '8.828193832599119%',
       containLabel: true
     },

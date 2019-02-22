@@ -113,7 +113,7 @@
       touchBegin(idx) {
         if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
           let refName = 'slide' + this.moveIdx
-          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(true)
         }
       },
       touchEnd(idx) {

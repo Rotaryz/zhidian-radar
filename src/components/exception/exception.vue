@@ -12,7 +12,7 @@
 <script type="text/ecmascript-6">
   const imgJson = {
     '404': ['pic-404', '网络异常，请刷新重试'],
-    'customer': ['pic-customer', '暂无客户'],
+    'customer': ['pic-nocustomer', '暂无客户'],
     'orderfrom': ['pic-customer', '暂无订单'],
     'delcard': ['pic-delcard', '名片被删除，请联系公司管理员'],
     'disablecard': ['pic-disablecard', '名片被禁用，请联系公司管理员'],
@@ -60,11 +60,15 @@
         height: 117px
         margin-bottom: 20px
         &.pic-nogroup
+          width: 123px
+          height: 94px
           icon-image("pic-nogroup")
         &.pic-404
           icon-image("pic-404")
-        &.pic-customer
-          icon-image("pic-customer")
+        &.pic-nocustomer
+          width: 123px
+          height: 94px
+          icon-image("pic-nocustomer")
         &.pic-delcard
           icon-image("pic-delcard")
         &.pic-disablecard
@@ -80,20 +84,20 @@
         &.pic-closed
           icon-image("pic-shopsuspend")
         &.pic-notalk
-          width: 103px
-          height: 90px
+          width: 123px
+          height: 94px
           icon-image("pic-notalk")
         &.pic-noactivity
-          width: 103px
-          height: 90px
+          width: 123px
+          height: 94px
           icon-image("pic-noactivity")
         &.pic-nogoods
-          width: 103px
-          height: 90px
+          width: 123px
+          height: 94px
           icon-image("pic-nogoods")
         &.pic-nocoupon
-          width: 103px
-          height: 90px
+          width: 123px
+          height: 94px
           icon-image("pic-nocoupon")
         &.pic-noadult
           width: 103px
