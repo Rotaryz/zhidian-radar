@@ -134,7 +134,6 @@
             this.groups = groupArr.filter(item => {
               return item.id === this.id
             })
-            console.log(this.groups, 333)
           } else {
             this.$refs.toast.show(res.message)
           }
