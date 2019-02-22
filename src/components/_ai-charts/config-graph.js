@@ -9,7 +9,7 @@ const jjj = {
     return {
       name: `元素${index + 1}`,
       symbol: `image://${hostUrl}/${index === 0 ? 'pic-xcx@1x.png' : 'pic-default@1x.png'}`,
-      symbolSize: index === 0 ? 30 : Math.random() * 10 > 5 ? 25 : 20,
+      symbolSize: index === 0 ? 40 : Math.random() * 10 > 5 ? 25 : 20,
       symbolKeepAspect: true,
       itemStyle: {
         borderColor: '#8867F2',
