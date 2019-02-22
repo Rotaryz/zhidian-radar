@@ -523,7 +523,7 @@
             url = item.image_url
             message = {
               url,
-              goods_id: item.goods_id,
+              goods_id: item.recommend_goods_id,
               title,
               goods_price: item.platform_price,
               original_price: item.original_price,
@@ -551,7 +551,7 @@
             url = item.image_url
             message = {
               url,
-              goods_id: item.activity_id,
+              goods_id: item.recommend_activity_id,
               title,
               goods_price: item.platform_price,
               original_price: item.original_price,

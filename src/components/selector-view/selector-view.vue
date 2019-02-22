@@ -2,12 +2,18 @@
   <div class="selector-view">
     <div class="selector-cover" @click.stop="hideModel" v-show="modelShow"></div>
     <div class="selector-container" :class="modelShow ? 'show' : ''" @click.stop="">
-      <div class="selector-title" v-if="showType === 'words'">选择话术</div>
-      <div class="selector-title" v-if="showType === 'coupon'">可用<span class="red-num">{{total}}</span>张优惠券</div>
-      <div class="selector-title" v-if="showType === 'goods'">上线<span class="red-num">{{total}}</span>个商品</div>
-      <div class="selector-title" v-if="showType === 'service'">上线<span class="red-num">{{total}}</span>个服务</div>
-      <div class="selector-title" v-if="showType === 'activity'">上线<span class="red-num">{{total}}</span>个活动</div>
-      <div class="selector-title" v-if="showType === 'group'">可用<span class="red-num">{{total}}</span>组用户</div>
+      <div class="selector-title" v-if="showType === 'words' && list.length">选择话术</div>
+      <div class="selector-title" v-if="showType === 'words' && !list.length">话术</div>
+      <div class="selector-title" v-if="showType === 'coupon' && list.length">可用<span class="red-num">{{total}}</span>张优惠券</div>
+      <div class="selector-title" v-if="showType === 'coupon' && !list.length">优惠券</div>
+      <div class="selector-title" v-if="showType === 'goods' && list.length">上线<span class="red-num">{{total}}</span>个商品</div>
+      <div class="selector-title" v-if="showType === 'goods' && !list.length">商品</div>
+      <div class="selector-title" v-if="showType === 'service' && list.length">上线<span class="red-num">{{total}}</span>个服务</div>
+      <div class="selector-title" v-if="showType === 'service' && !list.length">服务</div>
+      <div class="selector-title" v-if="showType === 'activity' && list.length">上线<span class="red-num">{{total}}</span>个活动</div>
+      <div class="selector-title" v-if="showType === 'activity' && !list.length">活动</div>
+      <div class="selector-title" v-if="showType === 'group' && list.length">可用<span class="red-num">{{total}}</span>组用户</div>
+      <div class="selector-title" v-if="showType === 'group' && !list.length">用户组</div>
       <div class="selector-list">
         <scroll
           ref="scroll"
@@ -16,7 +22,7 @@
           :pullUpLoad="pullUpLoadObj"
           :showNoMore="showNoMore"
           @pullingUp="onPullingUp">
-          <div class="list-container">
+          <div class="list-container" v-if="list.length">
             <div class="words-list" v-if="showType === 'words'">
               <div class="words-item" v-for="(item, index) in list" :key="index" @click.stop="chioceItem(index, item)">
                 <div class="item-left">
@@ -113,11 +119,15 @@
               </div>
             </div>
           </div>
+          <div class="empty-box" v-if="hasNone">
+            <exception :errType="emptyObj[showType]"></exception>
+          </div>
         </scroll>
       </div>
-      <div class="bottom-btn border-top-1px" @click="submitHandle">
+      <div v-if="list.length" class="bottom-btn border-top-1px" @click="submitHandle">
         <div class="btn">发送</div>
       </div>
+      <div v-if="hasNone" class="empty-btn"></div>
     </div>
   </div>
 </template>
@@ -127,11 +137,21 @@
   import CustomerGroup from 'components/customer-group/customer-group'
   import { Im, Coupon, Client } from 'api'
   import { ERR_OK } from 'common/js/config'
+  import Exception from 'components/exception/exception'
   import {ease} from 'common/js/ease'
+  const EMPTYOBJ = {
+    words: 'noflow',
+    coupon: 'nocoupon',
+    goods: 'nogoods',
+    service: 'nogoods',
+    activity: 'noactive',
+    group: 'noactive'
+  }
   export default {
     components: {
       Scroll,
-      CustomerGroup
+      CustomerGroup,
+      Exception
     },
     props: {
       // hasFn是否要等方法执行完再收起遮罩
@@ -146,7 +166,9 @@
         showNoMore: false,
         showType: 'words', // 话术库words 优惠券coupon 商品goods 服务service 活动activity 分组group
         list: [],
+        emptyObj: EMPTYOBJ,
         pullUpLoad: true,
+        hasNone: false,
         page: 1,
         total: 0, // 总数
         checkIdx: -1, // 被选中索引
@@ -168,6 +190,7 @@
         this.page = 1
         this.checkIdx = -1
         this.checkItem = {}
+        this.hasNone = false
       },
       onPullingUp() {
         if (this.showNoMore) {
@@ -247,6 +270,9 @@
           if (res.error === ERR_OK) {
             this.list = res.data
             this.total = res.meta.total
+            if (!this.list.length) {
+              this.hasNone = true
+            }
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -296,6 +322,9 @@
             if (this.total < 15) {
               this.showNoMore = true
             }
+            if (!this.list.length) {
+              this.hasNone = true
+            }
             setTimeout(() => {
               this.$refs.scroll && this.$refs.scroll.forceUpdate()
               this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
@@ -341,6 +370,9 @@
             this.total = res.meta.total
             if (this.total < 15) {
               this.showNoMore = true
+            }
+            if (!this.list.length) {
+              this.hasNone = true
             }
             setTimeout(() => {
               this.$refs.scroll && this.$refs.scroll.forceUpdate()
@@ -388,6 +420,9 @@
             if (this.total < 15) {
               this.showNoMore = true
             }
+            if (!this.list.length) {
+              this.hasNone = true
+            }
             setTimeout(() => {
               this.$refs.scroll && this.$refs.scroll.forceUpdate()
               this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
@@ -434,6 +469,9 @@
             if (this.total < 15) {
               this.showNoMore = true
             }
+            if (!this.list.length) {
+              this.hasNone = true
+            }
             setTimeout(() => {
               this.$refs.scroll && this.$refs.scroll.forceUpdate()
               this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
@@ -472,6 +510,9 @@
           if (res.error === ERR_OK) {
             this.list = res.data
             this.showNoMore = true
+            if (!this.list.length) {
+              this.hasNone = true
+            }
             setTimeout(() => {
               this.$refs.scroll && this.$refs.scroll.forceUpdate()
               this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0, 0, ease[this.scrollToEasing])
@@ -535,6 +576,8 @@
           font-family: $font-family-medium
           color: #f94346
           padding: 0 5px
+      .empty-box
+        padding-top: 62px
       .selector-list
         height: 85vw
         position: relative
@@ -853,6 +896,8 @@
           font-family: $font-family-medium
           font-size: $font-size-14
 
+      .empty-btn
+        height: 55px
 
 
 </style>
