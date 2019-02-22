@@ -34,11 +34,9 @@
         return styles
       }
     },
-    mounted() {
-      this.myChart = this.$echarts.init(this.$refs.chartItem)
-    },
     methods: {
       action(data) {
+        this.myChart = this.$echarts.init(this.$refs.chartItem)
         let config = this.CHARTS_CONFIG.createOption(data)
         this.myChart.setOption(config)
       }
