@@ -1,13 +1,15 @@
 // import json2 from './bbb'
 // console.log(json2)
+// pic-xcx@1x.png
+// pic-default@1x.png
 const hostUrl = `${window.location.protocol}//${window.location.host}/static/chart-icon`
 const number = 20
 const jjj = {
   nodes: new Array(number).fill(1).map((item, index) => {
     return {
       name: `元素${index + 1}`,
-      symbol: `image://${hostUrl}/${'pic-default@1x.png'}`,
-      symbolSize: Math.random() * 2 >= 1 ? 30 : 20,
+      symbol: `image://${hostUrl}/${index === 0 ? 'pic-xcx@1x.png' : 'pic-default@1x.png'}`,
+      symbolSize: index === 0 ? 30 : Math.random() * 10 > 5 ? 25 : 20,
       symbolKeepAspect: true,
       itemStyle: {
         borderColor: '#8867F2',
@@ -32,7 +34,7 @@ const jjj = {
     // })
     return {
       source: `元素${index % number + 1}`,
-      target: `元素${~~(Math.random() * number) + 1}`
+      target: `元素${1}`
       // lineStyle: {
       //   normal: {
       //     color: 'red'
@@ -54,15 +56,15 @@ export function createUserTop6() {
         layout: 'force',
         force: {
           // repulsion: Math.max(jjj.links.length * 9, jjj.nodes.length * 6, 6 * 12),
-          repulsion: Math.max(jjj.links.length * 2, jjj.nodes.length * 2, 2 * 12),
-          gravity: 0.1,
-          edgeLength: 30
+          repulsion: Math.max(jjj.links.length * 10, jjj.nodes.length * 10, 10 * 12),
+          gravity: 0.2,
+          edgeLength: 20
         },
         data: jjj.nodes,
         links: jjj.links,
         // categories: jjj.categories,
         focusNodeAdjacency: true,
-        roam: true,
+        roam: false,
         label: {
           normal: {
             show: true
