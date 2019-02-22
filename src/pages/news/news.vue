@@ -187,7 +187,7 @@
     top: 0
     right: 0
     z-index: 30
-    bottom: 45px
+    bottom: 50px
     background: $color-white
     .news-list
       background: $color-white
