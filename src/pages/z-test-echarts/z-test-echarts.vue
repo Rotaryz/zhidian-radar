@@ -2,6 +2,10 @@
   <div class="z-test-echarts">
     <scroll>
       <div style="height: 12px"></div>
+      <article class="panel c0">
+        <h1 class="title ">能力模型</h1>
+        <ai-charts ref="c0" :CHARTS_TYPE="CHARTS_TYPE.POWER"></ai-charts>
+      </article>
       <article class="panel">
         <h1 class="title ">PNES动力模型</h1>
         <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.PNES"></ai-charts>
@@ -85,6 +89,7 @@
         this.$toast.show('test')
       }, 1000)
       this.$loading.show()
+      this.$refs.c0.action()
       this.$refs.c1.action()
       this.$refs.c2.action()
       this.$refs.c3.action()
@@ -152,6 +157,8 @@
       box-shadow: 0 0 10px 0 rgba(141,151,158,0.30);
       border-radius: 8px;
       overflow :hidden
+      &.c0
+        margin :0
       .title
         font-family: PingFangSC-Regular;
         font-size: 16px;

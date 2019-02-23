@@ -3,6 +3,7 @@ import {createGender, createShop, createUser} from 'components/_ai-charts/config
 import {createCityTop} from 'components/_ai-charts/config-bar'
 import {createUserTop6, createUserTop6Detail} from 'components/_ai-charts/config-graph'
 import {createSEM} from 'components/_ai-charts/config-line-sem'
+import {createPower} from 'components/_ai-charts/config-radar'
 
 export const BASE_CHARTS_HEIGHT = 64.67236467236467 // 折线图高度百分比
 export const CHARTS_TYPE = {
@@ -15,7 +16,8 @@ export const CHARTS_TYPE = {
   USER_TOP6: 'USER_TOP6', // kol 用户TOP6
   USER_TOP6_DETAIL: 'USER_TOP6_DETAIL', // kol 用户TOP6
   ORDER_AMOUNT: 'ORDER_AMOUNT', // 金额和订单
-  SEM_LIST: 'SEM_LIST' // 营销列表缩略图
+  SEM_LIST: 'SEM_LIST', // 营销列表缩略图
+  POWER: 'POWER'
 }
 export const CHARTS_CONFIG = {
   [CHARTS_TYPE.PNES]: {
@@ -52,5 +54,9 @@ export const CHARTS_CONFIG = {
   [CHARTS_TYPE.SEM_LIST]: {
     createOption: createSEM,
     height: 61
+  },
+  [CHARTS_TYPE.POWER]: {
+    createOption: createPower,
+    height: 61.33333333333333
   }
 }

@@ -34,8 +34,6 @@
         return styles
       }
     },
-    mounted() {
-    },
     beforeDestroy() {
       this.myChart = null
     },
