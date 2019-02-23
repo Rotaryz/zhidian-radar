@@ -9,7 +9,7 @@
       </scroll>
     </section>
     <market-button></market-button>
-    <selector-view ref="selector" @submit="submitHandle"></selector-view>
+    <selector-view ref="selector" buttonText="确定" @submit="submitHandle"></selector-view>
   </div>
 </template>
 
@@ -91,6 +91,7 @@
         this.chooseType = chooseType
       },
       submitHandle(item) {
+        if (!item.id) return
         if (this.chooseType === 'group') {
           let group = [{
             group_id: item.id,

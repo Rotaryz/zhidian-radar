@@ -1,5 +1,5 @@
 <template>
-  <footer class="market-button" @click="submitHandle">
+  <footer class="market-button border-top-1px" @click="submitHandle">
     <div class="button">{{CONFIG.submitButton && CONFIG.submitButton.text}}</div>
   </footer>
 </template>
@@ -82,7 +82,6 @@
     left :0
     padding :0 15px
     background: #FFFFFF;
-    box-shadow: 0 -1px 0 0 #E1E1E1;
     line-height :@height
     z-index :60
     .button
