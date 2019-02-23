@@ -237,7 +237,7 @@
           width :4vw
           height :@width
           border-radius :100%
-          background: #d6d6d6
+          background-image: linear-gradient(167deg, #EDEDED 5%, #D6D6D6 99%);
           font-family: $font-family-medium
           font-size: 2.666666666666667vw
           color: #969696;
@@ -254,6 +254,7 @@
           left :1.7333333333333332vw
           width :1px
           height :112%
+          transform :scaleX(0.5)
           background :repeating-linear-gradient(0deg,#D6D6D6,#D6D6D6 6px,$color-background 0,$color-background 8px)
           &.active
             background :repeating-linear-gradient(0deg,#8867F2,#8867F2 6px,$color-background 0,$color-background 8px)
@@ -272,6 +273,7 @@
           position :relative
           display :flex
           align-items :center
+          overflow :hidden
           &:after
             content: ""
             display: block
@@ -281,6 +283,7 @@
             bottom: 0
             width: 100%
             transform-origin: 0 bottom
+            transform :scaleX(3)
           .left
             flex:1
             font-family: $font-family-regular
