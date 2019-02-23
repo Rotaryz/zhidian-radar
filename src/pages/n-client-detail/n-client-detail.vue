@@ -27,10 +27,10 @@
           </div>
           <!--来访记录-->
           <div class="visitor-box" v-if="menuIdx * 1 === 0">
-            <section class="exception-box" v-if="actionList.length * 1 === 0">
+            <section class="exception-box" v-if="actionList.length === 0">
               <exception errType="nodata"></exception>
             </section>
-            <section v-if="actionList.length * 1 !== 0">
+            <section v-if="actionList.length !== 0">
               <msg-box :actionList="actionList"></msg-box>
             </section>
           </div>
@@ -60,7 +60,7 @@
                   <span class="count">次数</span>
                 </h3>
                 <p class="item" v-for="(item, index) in goodsList" :key="index">
-                  <span class="num">{{index}}</span>
+                  <span class="num">{{index+1}}</span>
                   <span class="name">{{item.name}}</span>
                   <span class="count">{{item.value}}次</span>
                 </p>
@@ -69,10 +69,10 @@
           </div>
 
           <!--营销记录-->
-          <section class="exception-box" v-if="menuIdx * 1 === 2 && flowList.length * 1 === 0">
+          <section class="exception-box" v-if="menuIdx * 1 === 2 && flowList.length === 0">
             <exception errType="nodata"></exception>
           </section>
-          <section v-if="menuIdx * 1 === 2 && flowList.length * 1 !== 0">
+          <section v-if="menuIdx * 1 === 2 && flowList.length !== 0">
             <market-record :flowList="flowList"></market-record>
           </section>
         </scroll>
@@ -257,6 +257,7 @@
         } else if (index * 1 === 1) {
           this.$nextTick(() => {
             this.actionCustomerRetio()
+            this.classifyRetio()
             this.interestedRetio()
           })
         } else if (index * 1 === 2) {
@@ -295,15 +296,6 @@
         NEchart.interestedRetio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
-              let pieData = {
-                seriesData: [
-                  {name: '护发素', value: 20},
-                  {name: '洗发水', value: 10},
-                  {name: '护手霜', value: 30},
-                  {name: '美容水', value: 20}
-                ]
-              }
-              this.$refs.c2.action(pieData)
               this.$toast.show(res.message)
               return
             }
@@ -311,12 +303,49 @@
               return {name: item.title, value: item.counts}
             })
             this.goodsList = seriesData
+          })
+      },
+      classifyRetio() {
+        let info = this.$storage.get('info')
+        let data = {
+          customer_id: this.id,
+          shop_id: info.shop_id,
+          merchant_id: info.merchant_id
+        }
+        NEchart.classifyRetio(data)
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              let pieData = {
+                seriesData: [
+                  {name: '拼团', value: 0},
+                  {name: '砍价', value: 0},
+                  {name: '服务', value: 0},
+                  {name: '商品', value: 0}
+                ]
+              }
+              this.$refs.c2.action(pieData)
+              this.$toast.show(res.message)
+              return
+            }
+            let seriesData = [
+              {name: '拼团', value: 0},
+              {name: '砍价', value: 0},
+              {name: '服务', value: 0},
+              {name: '商品', value: 0}
+            ]
+            let newArr = []
+            for (let item in res.data) {
+              newArr.push(item)
+            }
+            seriesData.forEach((item, index) => {
+              item.value = res.data[newArr[index]]
+            })
             let pieData = {
               seriesData: seriesData.slice(0, 4) || [
-                {name: '护发素', value: 20},
-                {name: '洗发水', value: 10},
-                {name: '护手霜', value: 30},
-                {name: '美容水', value: 20}
+                {name: '拼团', value: 0},
+                {name: '砍价', value: 0},
+                {name: '服务', value: 0},
+                {name: '商品', value: 0}
               ]
             }
             this.$refs.c2.action(pieData)
@@ -441,7 +470,7 @@
           account: this.clientData.im_account
         }
         this.setCurrent(currentMsg)
-        let url = '/chat/' + this.clientData.im_account
+        let url = '/chat/' + this.clientData.im_account + '?modelType=' + this.clientData.pnes
         this.$router.push(url)
       },
       onPullingUp() {

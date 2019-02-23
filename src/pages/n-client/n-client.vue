@@ -86,24 +86,27 @@
             >
               <slide-view :useType="+item.type === 0 ? 3 : 4" @del="delHandler" :item="item" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                 <div slot="content" class="user-list-item-wrapper">
-                  <div class="users-avatar" v-if="item.customers.length > 0" :class="{'no-border': item.customers.length === 1}">
-                    <img v-if="item.customers && item.customers.length && i < 9"
-                         v-for="(user,i) in item.customers"
-                         class="avatar"
-                         :key="i"
-                         :src="user.avatar"
-                         :class="{
-                         'one':item.customers.length === 1,
-                         'four': (item.customers.length > 1 && item.customers.length < 5),
-                         'six': item.customers.length > 4
-                         }"
-                    />
-                  </div>
-                  <div v-else class="no-customer">
-                    <span class="grey"></span>
-                    <span class="grey"></span>
-                    <span class="grey"></span>
-                    <span class="grey"></span>
+                  <!--<div class="users-avatar" v-if="item.customers.length > 0" :class="{'no-border': item.customers.length === 1}">-->
+                    <!--<img v-if="item.customers && item.customers.length && i < 9"-->
+                         <!--v-for="(user,i) in item.customers"-->
+                         <!--class="avatar"-->
+                         <!--:key="i"-->
+                         <!--:src="user.avatar"-->
+                         <!--:class="{-->
+                         <!--'one':item.customers.length === 1,-->
+                         <!--'four': (item.customers.length > 1 && item.customers.length < 5),-->
+                         <!--'six': item.customers.length > 4-->
+                         <!--}"-->
+                    <!--/>-->
+                  <!--</div>-->
+                  <!--<div v-else class="no-customer">-->
+                    <!--<span class="grey"></span>-->
+                    <!--<span class="grey"></span>-->
+                    <!--<span class="grey"></span>-->
+                    <!--<span class="grey"></span>-->
+                  <!--</div>-->
+                  <div class="users-avatar">
+                    <customer-group :dataArray="item.customers"></customer-group>
                   </div>
                   <div class="name">{{item.name}}</div>
                   <div class="number">{{item.total || 0}}人</div>
@@ -162,6 +165,7 @@
   import {ERR_OK} from '../../common/js/config'
   import Exception from 'components/exception/exception'
   import AiCharts from 'components/_ai-charts/_ai-charts'
+  import CustomerGroup from 'components/customer-group/customer-group'
   import {CHARTS_TYPE} from 'utils/constants-charts'
 
   const groupList = [{
@@ -492,7 +496,8 @@
       ActionSheet,
       Toast,
       Exception,
-      AiCharts
+      AiCharts,
+      CustomerGroup
     }
   }
 </script>
@@ -687,12 +692,7 @@
             .users-avatar
               width: 45px
               height: 45px
-              background-color: #E6E6E6
-              border: 2px solid #EBEBEB
-              border-radius: 2px
-              overflow: hidden
               margin-left: 15px
-              box-sizing: border-box
               .avatar
                 float: left
                 box-sizing: border-box

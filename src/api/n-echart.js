@@ -42,11 +42,19 @@ export default {
     return request.get(url, data)
   },
   /**
-   * 兴趣商品占比
+   * 兴趣商品占比top5
    * @returns {*}
    */
   interestedRetio(data) {
     let url = 'api/employee/ai/get-user-interests'
+    return request.get(url, data)
+  },
+  /**
+   * 兴趣商品分类
+   * @returns {*}
+   */
+  classifyRetio(data) {
+    let url = 'api/employee/ai/get-event-count-by-group'
     return request.get(url, data)
   },
   /**

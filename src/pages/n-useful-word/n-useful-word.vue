@@ -17,6 +17,9 @@
               </div>
             </slide-view>
           </div>
+          <section class="exception-box" v-if="!wordList.length">
+            <exception errType="nodata"></exception>
+          </section>
         </div>
       </scroll>
       <div class="bottom">
@@ -38,6 +41,7 @@
   import SlideView from 'components/slide-view/slide-view'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import Modal from './modal/modal'
+  import Exception from 'components/exception/exception'
 
   export default {
     name: 'News',
@@ -125,7 +129,8 @@
       Toast,
       ConfirmMsg,
       SlideView,
-      Modal
+      Modal,
+      Exception
     }
   }
 </script>
@@ -201,4 +206,6 @@
       font-size: $font-size-14
       letter-spacing: 0.3px
       border-radius: 6px
+  .exception-box
+    padding-top: 70px
 </style>

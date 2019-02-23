@@ -68,7 +68,7 @@
           </div>
           <div v-show="charTab === 1">
             <article class="panel">
-              <h1 class="title ">活跃度</h1>
+              <h1 class="title ">活跃度-主力客户一周期内下单次数</h1>
               <ai-charts ref="c4" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
             </article>
           </div>
