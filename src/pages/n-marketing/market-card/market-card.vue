@@ -205,18 +205,18 @@
               border:1px solid #02D392
             .circle
               position :absolute
-              top:0.5px
-              left :0
+              left :0.13333333333333333vw
+              col-center()
               width :4.5vw
               height :@width
               box-sizing :border-box
               background :#fff
               border-radius :100%
-              transform : translate(0,0,0)
-              transition :transform 0.5s
+              transform : translate(0,-50%,0)
+              transition :all 0.5s
               box-shadow: 0 0 4px 0 rgba(0,0,0,0.20), 0 4px 23px 0 rgba(0,0,0,0.08), -2px 4px 4px 0 rgba(0,0,0,0.10);
               &.active
-                transform :translate3d(5.1vw, 0, 0)
+                transform :translate3d(5.1vw, -50%, 0)
       .bottom
         flex:1.9545454545454546
         layout(row,block,nowrap)
