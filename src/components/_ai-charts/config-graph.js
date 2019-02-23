@@ -28,7 +28,7 @@ const jjj = {
   //     name: `元素${index + 1}`
   //   }
   // }),
-  links: new Array(number * 1).fill(1).map((item, index) => {
+  links: new Array(number * 1).fill(1).map((item, index, arr) => {
     // new Array(number).fill(1).map((child, idx) => {
     //
     // })
@@ -48,8 +48,9 @@ const jjj = {
 // console.log(jjj.categories)
 export function createUserTop6() {
   return {
-    animationDurationUpdate: 1500,
-    animationEasingUpdate: 'quinticInOut',
+    // animation: false,
+    // animationDurationUpdate: 500,
+    // animationEasingUpdate: 'quinticInOut',
     series: [
       {
         type: 'graph',
@@ -76,7 +77,7 @@ export function createUserTop6() {
             opacity: 1,
             color: '#8867F2',
             width: 2,
-            curveness: 0.1
+            curveness: 0.3
           }
         }
       }
