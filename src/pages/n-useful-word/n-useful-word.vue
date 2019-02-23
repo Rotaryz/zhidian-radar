@@ -7,7 +7,7 @@
             <slide-view :useType="3" @del="del" @touchBegin="touchBegin" @touchEnd="touchEnd" :item="item" :index="index" :hasFn="true" :ref="'slide' + index">
               <div slot="content" class="list-content">
                 <div class="item-left">
-                  <span>{{item.message}}</span>
+                  <span class="text">{{item.message}}</span>
                 </div>
                 <div class="item-right">
                   <div class="icon-box editor-box" @click="editItem(item, index)">
@@ -169,6 +169,11 @@
           font-family: $font-family-regular
           font-size: $font-size-14
           color: $color-000
+          .text
+            overflow: hidden
+            display: -webkit-box
+            -webkit-line-clamp: 3
+            -webkit-box-orient: vertical
         .item-right
           display: flex
           align-items: center
