@@ -27,7 +27,7 @@
           </div>
           <!--来访记录-->
           <div class="visitor-box" v-if="menuIdx * 1 === 0">
-            <section class="exception-box" v-if="actionList.length === 0">
+            <section class="exception-box" v-if="noRecord">
               <exception errType="nodata"></exception>
             </section>
             <section v-if="actionList.length !== 0">
@@ -157,6 +157,7 @@
         labelList: [],
         pieHint: PIEHINT,
         showTab: false,
+        noRecord: false,
         CHARTS_TYPE,
         goodsList: [
           {
@@ -421,6 +422,7 @@
         ClientDetail.getActionList(id).then((res) => {
           if (res.error === ERR_OK) {
             this.actionList = res.data
+            this.noRecord = !res.data.length
           } else {
             this.noActionMore = true
             this.$refs.toast.show(res.message)

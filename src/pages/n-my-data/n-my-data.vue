@@ -33,9 +33,10 @@
               <h1 class="title">PNES动力模型</h1>
               <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.PNES"></ai-charts>
             </article>
-            <router-link tag="div" to="" class="panel">
-              <router-link tag="div" to="z-test" class="title">用户来源-KOL分享传播</router-link>
-              <ai-charts ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+            <div class="panel">
+              <div class="title">用户来源-KOL分享传播</div>
+              <div v-if="false" class="no-data">暂无数据</div>
+              <ai-charts v-if="true" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
               <div class="list" v-if="personList.length > 0">
                 <h3 class="list-title">
                   <span class="num">排序</span>
@@ -50,7 +51,7 @@
                   <span class="count">{{item.value}}次</span>
                 </p>
               </div>
-            </router-link>
+            </div>
           </div>
           <div v-show="charTab === 1">
             <article class="panel">
@@ -141,23 +142,7 @@
         charTab: 0,
         CHARTS_TYPE,
         shopId: '',
-        personList: [
-          {
-            name: '李明',
-            person: 30,
-            value: 20
-          },
-          {
-            name: '李明',
-            person: 30,
-            value: 20
-          },
-          {
-            name: '李明',
-            person: 30,
-            value: 20
-          }
-        ],
+        personList: [],
         pop: false
       }
     },
@@ -167,11 +152,9 @@
       this.getAllDataObj('all')
     },
     mounted() {
-      this.$nextTick(() => {
-        this.groupRetio()
-        this.PENSRetio()
-        this.$refs.c3.action()
-      })
+      this.groupRetio()
+      this.PENSRetio()
+      this.$refs.c3 && this.$refs.c3.action()
     },
     methods: {
       showPop(index) {
@@ -186,7 +169,7 @@
       groupRetio() {
         let data = {
           shop_id: this.shopId,
-          time: this.tabList[this.tabNumber].value
+          time: 'week'
         }
         NEchart.groupRetio(data)
           .then(res => {
@@ -209,7 +192,7 @@
       PENSRetio() {
         let data = {
           shop_id: this.shopId,
-          time: this.tabList[this.tabNumber].value
+          time: 'week'
         }
         NEchart.PENSRetio(data)
           .then(res => {
@@ -256,7 +239,7 @@
       },
       // 活跃度
       actionRetio() {
-        NEchart.actionRetio({customer_id: this.id})
+        NEchart.actionRetio({customer_id: this.id, time: 'week'})
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -273,7 +256,7 @@
       orderRetio() {
         let data = {
           shop_id: this.shopId,
-          time: this.tabList[this.tabNumber].value
+          time: 'week'
         }
         NEchart.orderRetio(data)
           .then(res => {
@@ -326,7 +309,7 @@
           this.$nextTick(() => {
             this.groupRetio()
             this.PENSRetio()
-            this.$refs.c3.action()
+            this.$refs.c3 && this.$refs.c3.action()
           })
         } else if (index === 1) {
           this.$nextTick(() => {
@@ -354,13 +337,6 @@
       getAllTab(item, index) {
         this.getAllDataObj(item.value)
         this.tabNumber = index
-        if (this.charTab === 0) {
-          this.groupRetio()
-          this.PENSRetio()
-          this.$refs.c3.action()
-        } else if (this.charTab === 1) {
-          this.orderRetio()
-        }
       }
     },
     computed: {
@@ -512,6 +488,13 @@
         line-height: 16px
         padding: 13.5px 0
         margin: 0 15px
+      .no-data
+        height: 223px
+        line-height: 223px
+        text-align: center
+        font-size: $font-size-14
+        color: #333
+        font-family: $font-family-regular
       .list
         margin: 0 15px
         .list-title,.item

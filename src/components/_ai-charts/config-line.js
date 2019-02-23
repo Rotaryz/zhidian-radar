@@ -104,7 +104,7 @@ export function createOrderAmount(args = {}) {
           opacity: 0,
           lineStyle: {
             color: colorObj[index].color,
-            width: 3
+            width: 2
           }
         }
       }
@@ -303,7 +303,7 @@ export function createPNES(args = {}) {
           opacity: 1,
           lineStyle: {
             color: colorObj[index].color,
-            width: 3
+            width: 2
           }
         }
       }
@@ -468,7 +468,7 @@ export function createVitality(args = {}) {
           opacity: 1,
           lineStyle: {
             color: colorObj[index].color,
-            width: 3
+            width: 2
           }
         }
       }

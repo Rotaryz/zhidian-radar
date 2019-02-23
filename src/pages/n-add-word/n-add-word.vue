@@ -145,13 +145,14 @@
         color: #979797
       }
     .text
+      padding-bottom: 25px
       border-1px(#E1E1E1, 4px)
     .text:after
       background: #FFF
       z-index: 1
     .textarea-number
       position: absolute
-      bottom: 25px
+      bottom: 15px
       right: 25px
       font-size: $font-size-12
       font-family: $font-family-regular

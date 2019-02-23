@@ -138,10 +138,10 @@
             <h1 class="title ">客户城市占比 TOP6</h1>
             <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.CITY_TOP"></ai-charts>
           </article>
-          <router-link tag="div" to="" class="panel">
-            <router-link tag="div" to="z-test" class="title ">KOL传播 TOP10</router-link>
+          <div class="panel">
+            <div class="title">KOL传播 TOP10</div>
             <ai-charts ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
-          </router-link>
+          </div>
           <div style="height: 5px"></div>
         </scroll>
       </div>
