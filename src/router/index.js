@@ -120,7 +120,7 @@ const route = new Router({
           path: 'my-data',
           component: NMyData,
           meta: {
-            title: '我的图表'
+            title: '报表'
           }
         },
         {
