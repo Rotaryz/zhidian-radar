@@ -109,6 +109,7 @@
       },
       _goPage (src) {
         if (!src) {
+          this.$toast.show('正在努力研发・敬请期待')
           return
         }
         this.$router.push(src)
