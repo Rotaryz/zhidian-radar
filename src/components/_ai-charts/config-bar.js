@@ -102,7 +102,10 @@ export function createCityTop(args = {}) {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
-        type: 'line'
+        type: 'shadow',
+        shadowStyle: {
+          opacity: 0
+        },
       },
       formatter(prams) {
         return `${prams[1].name}：${prams[1].value}`
@@ -117,18 +120,23 @@ export function createCityTop(args = {}) {
             color: '#F5F6F9'
           }
         },
+        emphasis: {
+          itemStyle: {
+            color: '#F5F6F9'
+          }
+        },
         barGap: '-100%',
         // barCategoryGap: '80%',
         barWidth: '12px',
         data: dataShadow,
         animation: false,
-        zlevel: 9
+        zlevel: 11
       },
       {
         type: 'bar',
         data: seriesData,
         barWidth: '12px',
-        zlevel: 11,
+        zlevel: 12,
         itemStyle: {
           normal: {
             barBorderRadius: 30,
