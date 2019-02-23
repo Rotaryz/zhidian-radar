@@ -92,7 +92,7 @@ export function createSEM(args = {}) {
           opacity: 0,
           lineStyle: {
             color: colorObj[index].color,
-            width: 3
+            width: 2
           }
         }
       }

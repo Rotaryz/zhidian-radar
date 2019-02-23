@@ -2,7 +2,9 @@
   <nav class="market-choice">
     <section v-for="(item, index) in dataArray" :key="index" class="panel-wrapper">
       <aside v-if="dataArray" class="line-wrapper">
-        <div v-if="dataArray.length - index >= 1" class="icon" :class="{active:lineCheckHandle(index)}">{{index+1}}</div>
+        <div v-if="dataArray.length - index >= 1" class="icon" :class="{active:lineCheckHandle(index)}">
+          <p class="before">{{index+1}}</p>
+        </div>
         <p v-if="dataArray.length - index > 1" class="line" :class="{active:lineCheckHandle(index)}"></p>
       </aside>
       <div class="panel" :class="{active: index===0}">
@@ -194,6 +196,7 @@
   }
 </script>
 
+
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
@@ -234,24 +237,33 @@
         top:16px
         .icon
           position :absolute
-          width :4vw
+          width :20px
           height :@width
           border-radius :100%
-          background-image: linear-gradient(167deg, #EDEDED 5%, #D6D6D6 99%);
-          font-family: $font-family-medium
-          font-size: 2.666666666666667vw
-          color: #969696;
-          line-height: @height
-          text-align :center
+          background :#e7ebf4
           z-index :2
+          .before
+            width :15px
+            height :@width
+            all-center()
+            border-radius :100%
+            background-image: linear-gradient(167deg, #EDEDED 5%, #D6D6D6 99%)
+            font-family: $font-family-medium
+            font-size: 2.666666666666667vw
+            color: #969696
+            line-height: @height
+            text-align :center
           &.active
-            background-image: linear-gradient(133deg, #7D2EF6 9%, #4541F9 96%);
-            box-shadow: 0 2px 8px 0 rgba(89,41,220,0.40);
-            color: #fff
+            background :#dad6fb
+            .before
+              background-image: linear-gradient(133deg, #7D2EF6 9%, #4541F9 96%);
+              box-shadow: 0 2px 8px 0 rgba(89,41,220,0.40);
+              color: #fff
+
         .line
           position:absolute
           top:0
-          left :1.7333333333333332vw
+          left :2.54vw
           width :1px
           height :112%
           transform :scaleX(0.5)

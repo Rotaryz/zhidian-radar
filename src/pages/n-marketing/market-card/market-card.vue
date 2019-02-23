@@ -218,7 +218,7 @@
               transition :all 0.5s
               box-shadow: 0 0 4px 0 rgba(0,0,0,0.20), 0 4px 23px 0 rgba(0,0,0,0.08), -2px 4px 4px 0 rgba(0,0,0,0.10);
               &.active
-                transform :translate3d(5.1vw, -50%, 0)
+                transform :translate3d(4.9vw, -50%, 0)
       .bottom
         flex:1.9545454545454546
         layout(row,block,nowrap)
@@ -236,7 +236,7 @@
         .item-text
           width :26.93333333333333vw
           .number
-            font-family: $font-family-regular-din
+            font-family: $font-family-bold
             font-size: 5.333333333333334vw
             color: #999
             line-height: 5.333333333333334vw
@@ -245,7 +245,7 @@
             &.active
               color: #0E1249
           .text
-            font-family: PingFangSC-Regular;
+            font-family: $font-family-regular
             font-size: 3.2vw
             color: #949494
             line-height: @font-size
