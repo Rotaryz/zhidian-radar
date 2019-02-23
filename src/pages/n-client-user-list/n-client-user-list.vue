@@ -215,9 +215,10 @@
         let limit = this.limit
         const data = {
           page: page,
-          limit: limit
+          limit: limit,
+          group_id: this.id
         }
-        Client.getGroupCustomerList(this.id, data).then(res => {
+        Client.getGroupCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             if (res.data && res.data.length) {
               let arr = this.dataArray.concat(res.data)

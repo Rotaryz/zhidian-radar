@@ -3,8 +3,10 @@
     <div class="add-box">
       <div class="data-bottom">
         <div class="textarea-number">{{editorMsg.length}}<span>/200</span></div>
-        <textarea class="data-area" v-model="editorMsg" @touchmove.stop maxlength="200" name="" id="" cols="30" rows="10"
+        <div class="text">
+          <textarea class="data-area" v-model="editorMsg" @touchmove.stop maxlength="200" name="" id="" cols="30" rows="10"
                   placeholder="请输入话术内容，最多200字"></textarea>
+        </div>
       </div>
       <div class="bot-btn" @click="addWord">确定</div>
     </div>
@@ -127,25 +129,34 @@
       font-family: $font-family-regular
     .data-area
       width: 100%
-      border-color: #E1E1E1
+      border: 0
       padding: 15px
       font-size: $font-size-14
-      color: #20202e
+      color: #333
       font-family: $font-family-regular
       height: 185px
       outline:none
       resize: none
       border-radius: 4px
+      position: relative
+      z-index: 2
+      background: none
       &::-webkit-input-placeholder{
         color: #979797
       }
+    .text
+      border-1px(#E1E1E1, 4px)
+    .text:after
+      background: #FFF
+      z-index: 1
     .textarea-number
       position: absolute
       bottom: 25px
       right: 25px
       font-size: $font-size-12
-      font-family: $font-family-medium
+      font-family: $font-family-regular
       color: #333
+      z-index: 2
       span
         color: #AFAFAF
 
