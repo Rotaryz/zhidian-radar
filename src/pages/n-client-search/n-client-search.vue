@@ -17,7 +17,7 @@
         >
           <ul class="user-list">
             <li class="user-box border-bottom-1px" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
-              <user-card :userInfo="item"></user-card>
+              <user-card :userInfo="item" useType="join"></user-card>
             </li>
           </ul>
         </scroll>
@@ -82,10 +82,16 @@
         this.isAll = false
         this.page = 1
         this.limit = LIMIT
-        const data = {name, page: 1, limit: LIMIT}
+        const data = {
+          name,
+          page: 1,
+          limit: LIMIT,
+          shop_id: this.$storage.get('info').shop_id
+        }
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             this.dataArray = [...res.data]
+            console.log(res.data, this.dataArray)
             this.isEmpty = !this.dataArray.length
           } else {
             this.$refs.toast.show(res.message)
@@ -214,7 +220,7 @@
         height: 100%
         font-family: $font-family-medium
         font-size: $font-size-14
-        color: #5929DC
+        color: #333
         layout()
         justify-content: center
         align-items: center

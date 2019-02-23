@@ -5,7 +5,7 @@
         <div class="title">设置分组</div>
         <section class="content">
           <div v-if="dataArray.length"
-               :class="['item',item.selected?'active':'']"
+               :class="['item',item.selected?'active':'', item.type === 0 ? '':'grey']"
                v-for="(item,index) in dataArray"
                :key="index"
                @click="check(item)">
@@ -57,7 +57,9 @@
     },
     methods: {
       check(item) {
-        item.selected = !item.selected
+        if (item.type === 0) {
+          item.selected = !item.selected
+        }
       }
     },
     components: {
@@ -91,7 +93,7 @@
         text-overflow: ellipsis
         white-space: nowrap
         overflow: hidden
-        padding: 0 10px
+        padding: 0 5px
         border: 1px solid $color-main
         margin: 0 10px 10px 0
         font-family: $font-family-regular
@@ -106,6 +108,9 @@
           background: $color-linear-main
           color: $color-white-fff
           border-color: #863de5
+        &.grey
+          color: #CCC
+          border-color: #CCC
   .exception-box
     fill-box(absolute)
     padding-top: 137px

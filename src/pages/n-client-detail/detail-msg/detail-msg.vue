@@ -1,7 +1,7 @@
 <template>
   <div class="cliten-box">
     <div class="cliten-con">
-      <img :src="clientData.image_url" class="logo" :style="{borderColor: pnes.p}" alt="">
+      <img :src="clientData.image_url" class="logo" :style="{borderColor: pnes[clientData.pnes || 'd']}" alt="">
       <div class="label-name">{{clientData.name}}</div>
       <div class="text">{{clientData.sources}}</div>
       <div class="data">
@@ -104,7 +104,7 @@
             height: 30px
             col-center()
           .num
-            font-family: DIN-Regular
+            font-family: $font-family-bold
             font-size: $font-size-18
             margin-bottom: 10px
             overflow: hidden

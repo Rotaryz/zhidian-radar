@@ -356,8 +356,8 @@
     padding: 0 12px
     box-sizing: border-box
     .icon
-      width: 18px
-      height: 18px
+      width: 16px
+      height: 16px
       margin-right: 5px
     .btn
       flex: 1

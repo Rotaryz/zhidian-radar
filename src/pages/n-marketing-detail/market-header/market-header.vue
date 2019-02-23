@@ -115,8 +115,7 @@
         height :36px
         margin :12px 0
         background: #FFFFFF;
-        border: 1px solid #E1E1E1;
-        border-radius: 4px;
+        border-1px($color-line, 4px)
         display :flex
         padding :0 12px
         align-items :center

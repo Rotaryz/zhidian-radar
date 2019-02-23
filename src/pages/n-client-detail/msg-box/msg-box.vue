@@ -173,7 +173,7 @@
           line-height: 18px
           color: #151515
           font-size: $font-size-14
-          font-family: $font-family-medium
+          font-family: $font-family-regular
           .blue
             color: #4B92F2
       .msgs-rt

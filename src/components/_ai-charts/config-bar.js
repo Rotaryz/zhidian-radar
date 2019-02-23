@@ -7,12 +7,13 @@ const itemNumber = 6
 const DEFAULT_X_DATA = new Array(itemNumber).fill(1).map((item, index) => {
   return `城市${(index + 1)}`
 })
+// const DEFAULT_X_DATA = []
 /**
  * 默认y轴的值=>seriesData
  * @type {Array}
  */
 let DEFAULT_SERIES_DATA = new Array(itemNumber).fill(1).map(() => {
-  return ~~(Math.random() * 1000) // todo
+  return ~~(Math.random() * 0) // todo
   // return 0
 })
 let dataShadow = new Array(itemNumber).fill(1000)
@@ -24,6 +25,9 @@ export function createCityTop(args = {}) {
   if (!seriesData || !seriesData.length) {
     seriesData = DEFAULT_SERIES_DATA
   }
+  dataShadow = dataShadow.map((item, index) => {
+    return Math.max(seriesData[0], 1)
+  })
   return {
     grid: {
       top: '8.149779735682818%',
@@ -98,7 +102,7 @@ export function createCityTop(args = {}) {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
-        type: 'shadow'
+        type: 'line'
       },
       formatter(prams) {
         return `${prams[1].name}：${prams[1].value}`

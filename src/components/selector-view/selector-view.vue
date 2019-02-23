@@ -125,7 +125,7 @@
         </scroll>
       </div>
       <div v-if="list.length" class="bottom-btn border-top-1px" @click="submitHandle">
-        <div class="btn" :class="{'disable' : checkIdx === -1}">发送</div>
+        <div class="btn" :class="{'disable' : checkIdx === -1}">{{buttonText}}</div>
       </div>
       <div v-if="hasNone" class="empty-btn"></div>
     </div>
@@ -158,6 +158,10 @@
       'hasFn': {
         type: Boolean,
         default: false
+      },
+      buttonText: {
+        type: String,
+        default: '发送'
       }
     },
     data() {
