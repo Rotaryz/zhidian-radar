@@ -71,7 +71,8 @@
       }
     },
     created() {
-      this._getGroupList()
+      this.shopId = this.$storage.get('info').shop_id
+      this._getGroupList({shop_id: this.shopId})
     },
     methods: {
       ...mapActions([
@@ -120,7 +121,7 @@
         if (!this.pullUpLoad) return // 防止下拉报错
         if (!this.hasMore) return this.$refs.scroll && this.$refs.scroll.forceUpdate()
         let page = ++this.page
-        this._getGroupList({page})
+        this._getGroupList({page, shop_id: this.shopId})
         console.info('pulling up and load data')
       },
       rebuildScroll() {

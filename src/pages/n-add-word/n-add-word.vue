@@ -131,7 +131,7 @@
       padding: 15px
       font-size: $font-size-14
       color: #20202e
-      font-family: $font-family-medium
+      font-family: $font-family-regular
       height: 185px
       outline:none
       resize: none
