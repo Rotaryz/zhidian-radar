@@ -21,10 +21,12 @@
               <div class="item-box">
                 <div class="number">{{allDatas.module_e_count || 0}}</div>
                 <div class="text">主力客户</div>
+                <span class="line"></span>
               </div>
               <div class="item-box">
                 <div class="number">{{allDatas.order_count || 0}}</div>
                 <div class="text">活跃度</div>
+                <span class="line"></span>
               </div>
               <div class="item-box">
                 <div class="number">{{allDatas.per_money || 0}}</div>
@@ -247,18 +249,21 @@
             width: 33.33%
             text-align: center
             position: relative
-            border-right-1px(#E1E1E1)
-            &:after
-              content: ''
-              display: block
+            .line
+              width: 1px
               height: 20px
+              display: block
               right: 0
               margin: auto
-              col-center()
+              top: 50%
               position: absolute
-            &:last-child:after
-              width: 0
-              border: 0
+              background: #E1E1E1
+              @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2)
+                height: 100%
+                transform: scale(.5) translateY(-100%)
+              @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3)
+                height: 150%
+                transform: scale(1 / 3) translateY(-150%)
             .number
               color: #333
               font-family: $font-family-bold
