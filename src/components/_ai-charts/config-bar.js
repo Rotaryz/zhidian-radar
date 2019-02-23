@@ -105,7 +105,7 @@ export function createCityTop(args = {}) {
         type: 'shadow',
         shadowStyle: {
           opacity: 0
-        },
+        }
       },
       formatter(prams) {
         return `${prams[1].name}：${prams[1].value}`
