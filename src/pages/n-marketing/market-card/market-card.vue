@@ -236,7 +236,7 @@
         .item-text
           width :26.93333333333333vw
           .number
-            font-family: $font-family-regular-din
+            font-family: $font-family-bold
             font-size: 5.333333333333334vw
             color: #999
             line-height: 5.333333333333334vw
@@ -245,7 +245,7 @@
             &.active
               color: #0E1249
           .text
-            font-family: PingFangSC-Regular;
+            font-family: $font-family-regular
             font-size: 3.2vw
             color: #949494
             line-height: @font-size

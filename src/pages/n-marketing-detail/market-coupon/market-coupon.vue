@@ -5,7 +5,7 @@
         <div class="top">
           <p v-if="info.coupon_type === 3" class="unit">¥</p>
           <p class="number">{{info.coupon_denomination}}</p>
-          <p v-if="info.coupon_type === 4" class="unit">折</p>
+          <p v-if="info.coupon_type === 4" class="unit discount">折</p>
         </div>
         <div class="bottom">{{info.coupon_condition_str}}</div>
       </section>
@@ -62,7 +62,7 @@
           layout(row,block,nowrap)
           align-items :flex-end
           justify-content :center
-          font-family: DINAlternate-Bold;
+          font-family: $font-family-bold
           color: #F94346;
           overflow :hidden
           line-height :1
@@ -70,6 +70,8 @@
             font-size: 3.8vw
             position :relative
             bottom :0.6vw
+            &.discount
+              font-family :$font-family-regular
           .number
             margin :0 1px
             font-size: 7.333333333333334vw
