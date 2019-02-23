@@ -255,8 +255,6 @@
         this.tabIndex = index
         this.pullUpLoad = true
         this.isAll = false
-        let refName = 'slide' + this.moveIdx
-        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
         this.page = 1
         this.changeGroup()
       },
@@ -395,9 +393,17 @@
           limit: this.limit
         }
         Client.getCustomerList(data).then(res => {
-          if (res.data) {
+          if (res.error === this.$ERR_OK) {
             this.dataArray = res.data
             this.total = res.meta.total // 共多少人
+            this.$nextTick(() => {
+              if (this.moveIdx !== -1) {
+                let refName = 'slide' + this.moveIdx
+                this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+              }
+            })
+          } else {
+            this.$toast.show(res.message)
           }
         })
       },
@@ -434,7 +440,12 @@
 
         let page = ++this.page
         let limit = this.limit
-        const data = {order_by: this.checkedGroup.orderBy, page, limit}
+        const data = {
+          order_by: this.checkedGroup.orderBy,
+          shop_id: this.shopId,
+          page,
+          limit
+        }
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             if (res.data && res.data.length) {

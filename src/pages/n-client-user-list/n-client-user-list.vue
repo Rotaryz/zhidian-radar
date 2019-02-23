@@ -14,7 +14,7 @@
                   @pullingUp="onPullingUp">
             <ul class="user-list">
               <li class="user-list-item" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
-                <slide-view @grouping="groupingHandler" :item="item" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
+                <slide-view @grouping="groupingHandler" :useType="+groupType !== 0 ? 4 : 1" :item="item" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                   <user-card :userInfo="item" slot="content" useType="join"></user-card>
                 </slide-view>
               </li>
@@ -178,7 +178,7 @@
       },
       check(item) {
         const path = `/client/client-user-list/client-detail`
-        this.$router.push({path, query: {id: item.id, pageUrl: path}})
+        this.$router.push({path, query: {id: item.customer_id, pageUrl: path}})
       },
       groupingHandler(index, item) {
         const path = `/client/client-user-list/client-set-group`

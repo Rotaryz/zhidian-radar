@@ -20,7 +20,7 @@ let dataShadow = new Array(itemNumber).fill(1000)
 export function createCityTop(args = {}) {
   let {xAxisData, seriesData} = args
   if (!xAxisData || !xAxisData.length) {
-    xAxisData = DEFAULT_X_DATA
+    xAxisData = ['北京', '上海', '广州', '杭州', '天津'] || DEFAULT_X_DATA
   }
   if (!seriesData || !seriesData.length) {
     seriesData = DEFAULT_SERIES_DATA
