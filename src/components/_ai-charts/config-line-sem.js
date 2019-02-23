@@ -99,13 +99,15 @@ export function createSEM(args = {}) {
     }
   })
   return {
-    // grid: {
-    //   top: '1%',
-    //   left: '1%',
-    //   right: '1%',
-    //   bottom: '1%',
-    //   containLabel: true
-    // },
+    grid: {
+      top: '2%',
+      left: '2%',
+      right: '2%',
+      bottom: '2%',
+      show: true,
+      borderWidth: 0
+      // containLabel: true
+    },
     xAxis: {
       show: false,
       type: 'category',
