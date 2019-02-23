@@ -218,7 +218,7 @@
               transition :all 0.5s
               box-shadow: 0 0 4px 0 rgba(0,0,0,0.20), 0 4px 23px 0 rgba(0,0,0,0.08), -2px 4px 4px 0 rgba(0,0,0,0.10);
               &.active
-                transform :translate3d(5.1vw, -50%, 0)
+                transform :translate3d(4.9vw, -50%, 0)
       .bottom
         flex:1.9545454545454546
         layout(row,block,nowrap)

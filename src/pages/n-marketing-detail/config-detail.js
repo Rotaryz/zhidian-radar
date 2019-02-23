@@ -131,7 +131,7 @@ export const CONFIG = {
       },
       {
         title: '选择渠道',
-        explain: '(消息模板)',
+        explain: '(页面弹窗)',
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
     ],
@@ -151,7 +151,7 @@ export const CONFIG = {
       },
       {
         title: '选择渠道',
-        explain: '(消息模板)',
+        explain: '(页面弹窗)',
         channelTextArr: ['页面弹窗', '消息模板', '微信机器人']
       }
     ],
