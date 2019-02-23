@@ -533,7 +533,8 @@
               line-height: 14px
               font-size: $font-size-10
               color: $color-white
-              font-family: $font-family-regular
+              font-family: $font-family-bold
+              border-radius: 2px
         .refresh-box
           position: absolute
           width: 64px
@@ -722,7 +723,7 @@
                   border: 2px solid #f3f3f3
                   border-radius: 50%
                   margin-right: 5px
-                .top-name
+                .left-name
                   font-family: $font-family-regular
                   color: $color-text-sub
                   font-size: $font-size-14
