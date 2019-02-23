@@ -104,7 +104,7 @@
             height: 30px
             col-center()
           .num
-            font-family: DIN-Regular
+            font-family: $font-family-bold
             font-size: $font-size-18
             margin-bottom: 10px
             overflow: hidden

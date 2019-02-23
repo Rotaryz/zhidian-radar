@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="mine-shadow">
-          <router-link class="mian-box" to="mine/my-data">
+          <div class="mian-box">
             <div class="main">
               <div class="item-box">
                 <div class="number">{{allDatas.module_e_count || 0}}</div>
@@ -31,7 +31,7 @@
                 <div class="text">客单价</div>
               </div>
             </div>
-          </router-link>
+          </div>
         </div>
         <div class="main-content">
           <h3 class="title">工作台</h3>
@@ -109,7 +109,7 @@
       },
       _goPage (src) {
         if (!src) {
-          this.$toast.show('正在努力研发・敬请期待')
+          this.$toast.show('正在研发中・敬请期待')
           return
         }
         this.$router.push(src)
@@ -261,8 +261,8 @@
               width: 0
               border: 0
             .number
-              color: #0E1249
-              font-family: DIN-Regular
+              color: #333
+              font-family: $font-family-bold
               font-size: $font-size-18
               margin-bottom: 14px
             .text

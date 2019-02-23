@@ -131,7 +131,7 @@
               justify-content: center
               align-items: center
               background-color: #FFF
-              font-family: $font-family-medium
+              font-family: $font-family-regular
               font-size: $font-size-14
               color: $color-main
               margin-bottom: 15px

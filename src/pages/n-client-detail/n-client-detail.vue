@@ -835,8 +835,8 @@
       color: #FFF
       margin-right: 10px
       .btn-img
-        width: 15px
-        height: 17px
+        width: 16px
+        height: 16px
         display: block
         margin-right: 4px
       .text
@@ -847,7 +847,8 @@
       margin-right: 0
       background: linear-gradient(131deg, #02E68B, #06D4AA)
       .btn-img
-        width: 18px
+        width: 15px
+        height: 15px
         padding-top: 2px
 
   .add-jump

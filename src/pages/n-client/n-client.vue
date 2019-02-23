@@ -585,7 +585,7 @@
           position: relative
           .user-list-item
             height: 70px
-            border-bottom-1px($color-col-line)
+            lr-border-bottom-1px()
 
     .data-content
       .custom-tab

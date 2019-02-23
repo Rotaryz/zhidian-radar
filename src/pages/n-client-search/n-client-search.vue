@@ -220,7 +220,7 @@
         height: 100%
         font-family: $font-family-medium
         font-size: $font-size-14
-        color: #5929DC
+        color: #333
         layout()
         justify-content: center
         align-items: center

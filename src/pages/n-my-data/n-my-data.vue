@@ -5,27 +5,13 @@
         <div class="data-top">
           <div class="cliten-box">
             <div class="data-number-box">
-              <div class="data-tab">
-                <div class="bg" :style="{left: tabNumber * 25 + '%' }"></div>
-                <div class="tab"   v-for="(item, index) in tabList" :key="index" :class="tabNumber === index ? 'active' : '' " @click="getAllTab(item, index)">{{item.text}}</div>
-              </div>
-
-              <div class="tip">
-                <span class="item">营收</span>
-                <span class="item">=</span>
-                <span class="item">主力客户</span>
-                <span class="item">×</span>
-                <span class="item">活跃度</span>
-                <span class="item">×</span>
-                <span class="item">客单价</span>
-              </div>
+              <nav class="data-tab-wrapper">
+                <div v-for="(item, index) in tabList" :key="index" class="tab" :class="tabNumber === index ? 'active' : '' " @click="getAllTab(item, index)">{{item.text}}</div>
+              </nav>
               <div class="data-list">
-                <div class="list-item" v-for="(item, index) in dataArr" :key="index">
-                  <div class="title">
-                    <span class="icon" :class="item.icon"></span>
-                    <span class="text">{{item.name}}</span>
-                  </div>
+                <div v-for="(item, index) in dataArr" :key="index" class="list-item" @click="showPop(index)">
                   <div class="num">{{allDatas[item.type] || 0}}</div>
+                  <div class="title">{{item.name}}<span class="icon" v-if="index === 0"></span></div>
                 </div>
               </div>
             </div>
@@ -85,6 +71,15 @@
           <div style="height: 5px"></div>
         </div>
       </scroll>
+      <transition name="fade">
+        <div class="pop" v-if="pop">
+          <div class="pop-main">
+            <h3 class="title">营收 =（主力客户&活跃度&客单价）<span class="icon"></span></h3>
+            <p class="text">主力客户、活跃度和客单价的增长转化等于店铺的营收</p>
+            <div class="btn" @click="closePop">知道了</div>
+          </div>
+        </div>
+      </transition>
     </article>
   </transition>
 </template>
@@ -162,7 +157,8 @@
             person: 30,
             value: 20
           }
-        ]
+        ],
+        pop: false
       }
     },
     created() {
@@ -178,6 +174,14 @@
       })
     },
     methods: {
+      showPop(index) {
+        if (index === 0) {
+          this.pop = true
+        }
+      },
+      closePop() {
+        this.pop = false
+      },
       // 用户分组占比
       groupRetio() {
         let data = {
@@ -387,101 +391,75 @@
     position: relative
     .cliten-box
       position: relative
-      padding: 20px 15px 0
+      padding: 15px 15px 0
       width: 100%
       z-index: 2
       .data-number-box
         padding-top: 15px
         position: relative
         background: #fff
-        box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04)
+        box-shadow: 0 2px 16px 0 rgba(21,24,45,0.06)
         border-radius: 6px
         background: $color-white
         display: block
         border-1px(#D9F0FE, 12px)
-        .data-tab
+        .data-tab-wrapper
           position: relative
           z-index: 11
           layout(row)
           margin: 0 auto
-          width: 80vw
-          border-radius: $font-size-18
-          background: #DDD6FF
-          .bg
-            width: 25%
-            height: 8vw
-            border-radius: 8vw
-            background: $color-linear-main
-            transition: all 0.3s
-            position: absolute
-            left: 0
-            top: 0
+          width: 64vw
+          border-radius: 2px
+          border-1px(rgba(32,32,46,0.1))
           .tab
-            height: 8vw
+            border-right-1px(rgba(32,32,46,0.1))
+            height: 30px
             font-size: $font-size-14
-            color: #20202E
+            color: #333
             font-family: $font-family-regular
-            line-height: 8vw
+            line-height: 30px
             width: 25%
             text-align: center
             transition: all 0.3s
-            position: relative
           .tab:last-child
             border-right: 0
           .active
-            color: #fff
-        .tip
-          font-family: $font-family-regular
-          background: #F7F7F7
-          text-align: center
-          height: 40px
-          line-height: 40px
-          color: #0E1249
-          font-size: $font-size-16
-          margin-top: 15px
-          .item
-            padding: 0 0.7vw
+            color: $color-main
         .data-list
-          padding: 17px 20px
+          padding: 30px 20px 25px
           overflow: hidden
           .list-item
             width: 50%
-            border-top-1px(#E1E1E1)
-            border-right-1px(#E1E1E1)
+            border-top-1px(#f3f3f6)
+            border-right-1px(#f3f3f6)
             float: left
-            padding: 14px 0 10px
+            text-align: center
+            padding: 0 0 15px
             &:before
               border-top: 0
             &:nth-child(n+3):before
-              border-top: 1px solid #E1E1E1
-            &:nth-child(2n)
-              padding-left: 20px
-              &:after
-                border-right: 0
+              border-top: 1px solid #f3f3f6
+            &:nth-child(n+3)
+              padding-top: 18px
+            &:nth-child(2n):after
+              border-right: 0
             .title
+              font-size: 13px
+              font-family: $font-family-regular
+              color: #0E1249
+              margin-top: 8px
+              opacity: 0.6
               display: flex
+              justify-content: center
               align-items: center
               .icon
-                width: 15px
-                height: 15px
-                margin-right: 6px
-              .money
-                icon-image(icon-sum)
-              .business
-                icon-image(icon-main)
-              .active
-                icon-image(icon-liveness)
-              .price
-                icon-image(icon-passenger)
-              .text
-                font-size: 13px
-                color: #0E1249
-                opacity: 0.6
+                width: 12px
+                height: 12px
+                margin-left: 3px
+                icon-image(icon-help)
             .num
-              margin-top: 8px
-              padding-left: 20px
-              font-size: $font-size-20
-              font-family: $font-family-bold
+              font-size: 25px
+              font-family: "DINAlternate-Bold"
 
     .chart-tab
       border-bottom-1px(#E1E1E1)
@@ -491,9 +469,9 @@
       layout(row, block, nowrap)
       align-items: center
       justify-content: space-between
-      font-family: $font-family-medium
+      font-family: $font-family-regular
       font-size: $font-size-16
-      color: #0E1249
+      color: #333
       letter-spacing: 0.52px
       text-align: center
       line-height: 45px
@@ -563,4 +541,50 @@
             text-indent: 15px
         .list-title
           opacity: 0.6
+  .pop
+    position: fixed
+    background: rgba(0,0,0,0.7)
+    right: 0
+    top: 0
+    bottom: 0
+    left: 0
+    z-index: 20
+    .pop-main
+      border-radius: 6px
+      width: 80vw
+      padding: 0 20px
+      box-sizing: border-box
+      position: absolute
+      all-center()
+      background: #FFF
+      .title
+        color: #333
+        font-size: 16px
+        margin-top: 45px
+        font-family: $font-family-medium
+        text-align: center
+        line-height: 1.2
+        .icon
+          width: 9px
+          height: 15px
+          margin-bottom: -3px
+          icon-image(icon-upup)
+      .text
+        font-family: $font-family-regular
+        font-size: 14px
+        color: #666
+        text-align: center
+        line-height: 1.2
+        margin-top: 15px
+        padding: 0 20px
+      .btn
+        width: 110px
+        height: 34px
+        line-height: 34px
+        font-size: 14px
+        font-family: "PingFangSC-Regular"
+        color: $color-main
+        border-1px($color-main, 40px)
+        text-align: center
+        margin: 30px auto 20px
 </style>
