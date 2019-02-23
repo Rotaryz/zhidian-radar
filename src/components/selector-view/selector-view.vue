@@ -125,7 +125,7 @@
         </scroll>
       </div>
       <div v-if="list.length" class="bottom-btn border-top-1px" @click="submitHandle">
-        <div class="btn">发送</div>
+        <div class="btn" :class="{'disable' : checkIdx === -1}">发送</div>
       </div>
       <div v-if="hasNone" class="empty-btn"></div>
     </div>
@@ -182,6 +182,9 @@
     },
     methods: {
       submitHandle() {
+        if (this.checkIdx === -1) {
+          return
+        }
         this.$emit('submit', this.checkItem, this.showType)
         if (this.hasFn) return
         this.hideModel()
@@ -895,7 +898,9 @@
           color: $color-white
           font-family: $font-family-medium
           font-size: $font-size-14
-
+          &.disable
+            background-image: linear-gradient(135deg, #953DE1 0%, #4541F9 100%)
+            opacity: 0.5
       .empty-btn
         height: 55px
 
