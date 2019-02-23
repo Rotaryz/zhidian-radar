@@ -58,7 +58,7 @@
                   <div class="item-icon" :class="item.icon"></div>
                 </div>
                 <p class="item-txt">{{item.txt}}</p>
-                <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
+                <base-wx-input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1"></base-wx-input>
               </div>
             </div>
           </div>
