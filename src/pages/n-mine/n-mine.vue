@@ -251,7 +251,6 @@
             &:after
               content: ''
               display: block
-              background: #000
               height: 20px
               right: 0
               margin: auto
