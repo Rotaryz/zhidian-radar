@@ -205,7 +205,7 @@
               border:1px solid #02D392
             .circle
               position :absolute
-              top:0
+              top:0.5px
               left :0
               width :4.5vw
               height :@width
