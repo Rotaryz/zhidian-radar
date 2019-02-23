@@ -150,6 +150,7 @@
         flex:1
         position: relative
         display :flex
+        overflow :hidden
         &:after
           content: ""
           display: block
@@ -159,6 +160,7 @@
           bottom: 0
           width: 100%
           transform-origin: 0 bottom
+          transform :scaleX(3)
         .left
           display :flex
           align-items :center
