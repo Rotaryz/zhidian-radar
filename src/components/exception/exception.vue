@@ -74,7 +74,7 @@
         &.pic-disablecard
           icon-image("pic-disablecard")
         &.pic-nodata
-          icon-image("pic-nodata")
+          icon-image("no-data")
         &.pic-nonews
           icon-image("pic-nonews")
         &.pic-noresult

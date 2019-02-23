@@ -115,9 +115,17 @@ function _formatUpdateData(data) {
     }
   })
   let benefit = data.benefit.map((item) => {
-    return {
-      benefit_id: item.benefit_id,
-      recommend_benefit_id: item.recommend_benefit_id
+    if (data.benefit_type === 4) {
+      return {
+        benefit_id: item.benefit_id,
+        recommend_benefit_id: item.recommend_benefit_id,
+        activity_type: item.activity_type || 0
+      }
+    } else {
+      return {
+        benefit_id: item.benefit_id,
+        recommend_benefit_id: item.recommend_benefit_id
+      }
     }
   })
   return {
