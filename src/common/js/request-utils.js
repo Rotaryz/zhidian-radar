@@ -46,7 +46,8 @@ export function defaultMiddleWare(res, ...args) {
     _loadingHide()
   }
   // 错误处理
-  if (res == null || res.error == null) {
+  if (!res || res.error == null) {
+    toast && _toastShow('系统异常')
     throw new Error('' + res)
   }
   // toast处理
