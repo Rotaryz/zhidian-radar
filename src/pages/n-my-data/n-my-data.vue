@@ -410,9 +410,9 @@
           margin: 0 auto
           width: 64vw
           border-radius: 2px
-          border-1px(rgba(32,32,46,0.1))
+          border: 1px solid rgba(32,32,46,0.1)
           .tab
-            border-right-1px(rgba(32,32,46,0.1))
+            border-right: 1px solid rgba(32,32,46,0.1)
             height: 30px
             font-size: $font-size-14
             color: #333
@@ -584,7 +584,7 @@
         font-size: 14px
         font-family: "PingFangSC-Regular"
         color: $color-main
-        border-1px($color-main, 40px)
+        border-1px($color-main, 100px)
         text-align: center
         margin: 30px auto 20px
 </style>
