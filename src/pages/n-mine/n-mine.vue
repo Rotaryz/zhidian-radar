@@ -30,7 +30,7 @@
               </div>
               <div class="item-box">
                 <div class="number">{{allDatas.per_money || 0}}</div>
-                <div class="text">客单价</div>
+                <div class="text">笔单价</div>
               </div>
             </div>
           </div>

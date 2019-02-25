@@ -243,9 +243,9 @@
         this.moveIdx = -1
         if (index === 2) {
           this.$nextTick(() => {
-            this.sexRetio()
-            this.cityRetio()
-            this.KOLRetio()
+            this.sexRatio()
+            this.cityRatio()
+            this.KOLRatio()
           })
         }
       },
@@ -264,8 +264,8 @@
       checkData(index) {
         if (this.dataIndex === index) return
         this.dataIndex = index
-        this.cityRetio()
-        this.sexRetio()
+        this.cityRatio()
+        this.sexRatio()
       },
       refresh() {
         this.isAll = false
@@ -275,12 +275,12 @@
         this.getCustomerList()
       },
       // 性别占比
-      sexRetio() {
+      sexRatio() {
         let data = {
           shop_id: this.shopId,
           time: this.data[this.dataIndex]
         }
-        NEchart.sexRetio(data)
+        NEchart.sexRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -310,12 +310,12 @@
           })
       },
       // 城市占比
-      cityRetio() {
+      cityRatio() {
         let data = {
           shop_id: this.shopId,
           time: this.data[this.dataIndex]
         }
-        NEchart.cityRetio(data)
+        NEchart.cityRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -334,12 +334,12 @@
             this.$refs.c2.action(barData)
           })
       },
-      KOLRetio() {
+      KOLRatio() {
         let data = {
           shop_id: this.shopId,
           time: 'week'
         }
-        NEchart.KOLRetio(data)
+        NEchart.KOLRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)

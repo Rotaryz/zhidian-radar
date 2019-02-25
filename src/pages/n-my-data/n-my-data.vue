@@ -61,7 +61,7 @@
           </div>
           <div v-show="charTab === 2">
             <article class="panel">
-              <h1 class="title ">客单价</h1>
+              <h1 class="title ">笔单价</h1>
               <ai-charts ref="c5" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
             </article>
             <article class="panel">
@@ -75,8 +75,8 @@
       <transition name="fade">
         <div class="pop" v-if="pop">
           <div class="pop-main">
-            <h3 class="title">营收 =（主力客户&活跃度&客单价）<span class="icon"></span></h3>
-            <p class="text">主力客户、活跃度和客单价的增长转化等于店铺的营收</p>
+            <h3 class="title">营收 =（主力客户&活跃度&笔单价）<span class="icon"></span></h3>
+            <p class="text">主力客户、活跃度和笔单价的增长转化等于店铺的营收</p>
             <div class="btn" @click="closePop">知道了</div>
           </div>
         </div>
@@ -99,7 +99,7 @@
     {name: '交易金额', icon: 'money', type: 'total'},
     {name: '主力客户', icon: 'business', type: 'order_count'},
     {name: '活跃度', icon: 'active', type: 'per_money'},
-    {name: '客单价', icon: 'price', type: 'module_e_count'}
+    {name: '笔单价', icon: 'price', type: 'module_e_count'}
   ]
   const groupList = [{
     orderBy: 'join',
@@ -153,9 +153,9 @@
       this.getAllDataObj('all')
     },
     mounted() {
-      this.groupRetio()
-      this.PENSRetio()
-      this.KOLRetio()
+      this.groupRatio()
+      this.PENSRatio()
+      this.KOLRatio()
       this.KOLList()
     },
     methods: {
@@ -168,12 +168,12 @@
         this.pop = false
       },
       // 用户分组占比
-      groupRetio() {
+      groupRatio() {
         let data = {
           shop_id: this.shopId,
           time: 'week'
         }
-        NEchart.groupRetio(data)
+        NEchart.groupRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -191,12 +191,12 @@
           })
       },
       // PNES动力模型
-      PENSRetio() {
+      PENSRatio() {
         let data = {
           shop_id: this.shopId,
           time: 'week'
         }
-        NEchart.PENSRetio(data)
+        NEchart.PENSRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -240,12 +240,12 @@
           })
       },
       // KOL传播
-      KOLRetio() {
+      KOLRatio() {
         let data = {
           shop_id: this.shopId,
           time: 'week'
         }
-        NEchart.KOLRetio(data)
+        NEchart.KOLRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -266,13 +266,13 @@
             this.personList = res.data
           })
       },
-      // 订单金额、客单价、一周活跃
-      orderRetio() {
+      // 订单金额、笔单价、一周活跃
+      orderRatio() {
         let data = {
           shop_id: this.shopId,
           time: 'week'
         }
-        NEchart.orderRetio(data)
+        NEchart.orderRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -282,7 +282,7 @@
             let mainOrderCount = res.data.map(item => {
               return item.main_order_count
             })
-            // 客单价
+            // 笔单价
             let personMoney = res.data.map(item => {
               return item.per_money
             })
@@ -321,18 +321,18 @@
         this.charTab = index
         if (index === 0) {
           this.$nextTick(() => {
-            this.groupRetio()
-            this.PENSRetio()
-            this.KOLRetio()
+            this.groupRatio()
+            this.PENSRatio()
+            this.KOLRatio()
             this.KOLList()
           })
         } else if (index === 1) {
           this.$nextTick(() => {
-            this.orderRetio()
+            this.orderRatio()
           })
         } else if (index === 2) {
           this.$nextTick(() => {
-            this.orderRetio()
+            this.orderRatio()
           })
         }
       },

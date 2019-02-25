@@ -257,9 +257,9 @@
           this.list = this.flowList
         } else if (index * 1 === 1) {
           this.$nextTick(() => {
-            this.actionCustomerRetio()
-            this.classifyRetio()
-            this.interestedRetio()
+            this.actionCustomerRatio()
+            this.classifyRatio()
+            this.interestedRatio()
           })
         } else if (index * 1 === 2) {
           this.getMarketRecord()
@@ -268,13 +268,13 @@
           this.$refs.scroll.forceUpdate()
         }, 20)
       },
-      actionCustomerRetio() {
+      actionCustomerRatio() {
         let data = {
           customer_id: this.id,
           shop_id: this.$storage.get('info').shop_id,
           time: 'half_month'
         }
-        NEchart.actionCustomerRetio(data)
+        NEchart.actionCustomerRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -287,14 +287,14 @@
             this.$refs.c1.action(lineData)
           })
       },
-      interestedRetio() {
+      interestedRatio() {
         let info = this.$storage.get('info')
         let data = {
           customer_id: this.id,
           shop_id: info.shop_id,
           merchant_id: info.merchant_id
         }
-        NEchart.interestedRetio(data)
+        NEchart.interestedRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -306,14 +306,14 @@
             this.goodsList = seriesData
           })
       },
-      classifyRetio() {
+      classifyRatio() {
         let info = this.$storage.get('info')
         let data = {
           customer_id: this.id,
           shop_id: info.shop_id,
           merchant_id: info.merchant_id
         }
-        NEchart.classifyRetio(data)
+        NEchart.classifyRatio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               let pieData = {
