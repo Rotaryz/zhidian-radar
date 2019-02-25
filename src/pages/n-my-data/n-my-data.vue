@@ -223,7 +223,7 @@
               return item.wakeup_rate
             })
             let lineData = {
-              xAxisData: day.length ? day : ['3/10', '3/15', '3/20', '3/25', '3/30'],
+              xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
               seriesData: [
                 {data: growth.length ? growth : [0, 0, 0, 0, 0]},
                 {data: conversion.length ? conversion : [0, 0, 0, 0, 0]},
@@ -298,17 +298,17 @@
 
             if (this.charTab === 1) {
               let lineData = {
-                xAxisData: day.length ? day : ['3/10', '3/15', '3/20', '3/25', '3/30'],
+                xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
                 seriesData: [ {data: mainOrderCount.length ? mainOrderCount : [0, 0, 0, 0, 0]} ]
               }
               this.$refs.c4.action(lineData)
             } else if (this.charTab === 2) {
               let lineData = {
-                xAxisData: day.length ? day : ['3/10', '3/15', '3/20', '3/25', '3/30'],
+                xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
                 seriesData: [ {data: personMoney.length ? personMoney : [0, 0, 0, 0, 0]} ]
               }
               let lineData2 = {
-                xAxisData: day.length ? day : ['3/10', '3/15', '3/20', '3/25', '3/30'],
+                xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
                 seriesData: [ {data: total.length ? total : [0, 0, 0, 0, 0]}, {data: res.data.y ? res.data.y : [0, 0, 0, 0, 0]} ]
               }
               this.$refs.c5.action(lineData)
