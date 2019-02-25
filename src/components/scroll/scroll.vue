@@ -189,7 +189,7 @@
           // bounceTime: 500,
           // swipeTime: 500,
           // swipeBounceTime: 500,
-          deceleration: 0.015
+          deceleration: 0.0015 * 2
         }
         this.scroll = new BScroll(this.$refs.wrapper, options)
         if (this.listenScroll) {
