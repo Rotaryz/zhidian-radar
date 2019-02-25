@@ -286,7 +286,7 @@
       ]),
       toChatList() {
         let pageUrl = this.$route.path
-        let path = `${pageUrl}/chat-list?id=${this.id}`
+        let path = `${pageUrl}/chat-list?id=${this.id}&modelType=${this.modelType}`
         this.$router.push(path)
       },
       showPic(item) {
