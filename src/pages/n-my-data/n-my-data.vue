@@ -231,7 +231,6 @@
                 {data: wakeup.length ? wakeup : [0, 0, 0, 0, 0]}
               ]
             }
-            console.log(lineData)
             this.$refs.c2.action(lineData)
           })
       },

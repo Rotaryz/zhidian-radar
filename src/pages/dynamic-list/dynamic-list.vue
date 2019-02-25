@@ -201,7 +201,6 @@
     },
     methods: {
       _seeImage (index, image) {
-        console.log(index, image)
         let imageArr = image.map(item => item.file_url)
         // console.log(imageArr[index], imageArr)
         // 预览图片，正式上面需要打开注释

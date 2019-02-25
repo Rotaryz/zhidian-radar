@@ -53,7 +53,6 @@ export function createUserTop6(data) {
     })
   }
   jjj.nodes.unshift(wx)
-  console.log(jjj)
   return {
     // animation: false,
     // animationDurationUpdate: 500,
