@@ -186,9 +186,10 @@
           mouseWheel: this.mouseWheel,
           bounce: this.bounce,
           zoom: this.zoom,
-          bounceTime: 500,
-          swipeTime: 500,
-          swipeBounceTime: 500
+          // bounceTime: 500,
+          // swipeTime: 500,
+          // swipeBounceTime: 500,
+          deceleration: 0.015
         }
         this.scroll = new BScroll(this.$refs.wrapper, options)
         if (this.listenScroll) {
