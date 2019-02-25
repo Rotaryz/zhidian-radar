@@ -185,7 +185,8 @@
           freeScroll: this.freeScroll,
           mouseWheel: this.mouseWheel,
           bounce: this.bounce,
-          zoom: this.zoom
+          zoom: this.zoom,
+          bounceTime: 500
         }
         this.scroll = new BScroll(this.$refs.wrapper, options)
         if (this.listenScroll) {
