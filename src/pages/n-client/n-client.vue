@@ -208,7 +208,7 @@
         clientGroup,
         tabList: [{title: '客户', number: 0}, {title: '分组', number: 0}, {title: '客户分析', number: 0}],
         dataList: ['昨天', '近7天', '近30天', '全部'],
-        data: ['today', 'week', 'month', 'all'],
+        data: ['yesterday', 'week', 'month', 'all'],
         selectTab: 0,
         userListArr: [],
         dataArray: [],
@@ -266,6 +266,7 @@
         this.dataIndex = index
         this.cityRatio()
         this.sexRatio()
+        this.KOLRatio()
       },
       refresh() {
         this.isAll = false
@@ -337,7 +338,7 @@
       KOLRatio() {
         let data = {
           shop_id: this.shopId,
-          time: 'week'
+          time: this.data[this.dataIndex]
         }
         NEchart.KOLRatio(data)
           .then(res => {

@@ -222,7 +222,6 @@
       getCusomerTagList() {
         Client.getCusomerTagList(this.id).then(res => {
           if (res.error === ERR_OK) {
-            // let arr = res.data.labels.slice(0, 3)
             this.labelList = res.data.labels
           }
         })
@@ -268,6 +267,7 @@
           this.$refs.scroll.forceUpdate()
         }, 20)
       },
+      // 活跃度
       actionCustomerRatio() {
         let data = {
           customer_id: this.id,
@@ -280,13 +280,21 @@
               this.$toast.show(res.message)
               return
             }
+            let x = res.data.map(item => {
+              let day = item.day.slice(5).split('-').join('/')
+              return day
+            })
+            let y = res.data.map(item => {
+              return item.active_values
+            })
             let lineData = {
-              xAxisData: res.data.x || [],
-              seriesData: [ {data: res.data.y || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]} ]
+              xAxisData: x || [],
+              seriesData: [ {data: y.length ? y : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]} ]
             }
             this.$refs.c1.action(lineData)
           })
       },
+      // 兴趣占比
       interestedRatio() {
         let info = this.$storage.get('info')
         let data = {
@@ -306,6 +314,7 @@
             this.goodsList = seriesData
           })
       },
+      // 兴趣商品分类
       classifyRatio() {
         let info = this.$storage.get('info')
         let data = {
