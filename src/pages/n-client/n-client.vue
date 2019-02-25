@@ -489,8 +489,8 @@
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs.scroll && this.$refs.scroll.destroy()
+          this.$refs.scroll && this.$refs.scroll.initScroll()
         })
       }
     },

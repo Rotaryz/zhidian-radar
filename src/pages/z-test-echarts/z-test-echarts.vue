@@ -11,7 +11,7 @@
         <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.PNES"></ai-charts>
       </article>
       <article class="panel">
-        <h1 class="title ">近15天活跃度</h1>
+        <h1 class="title ">近7天活跃度</h1>
         <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
       </article>
       <article class="panel">

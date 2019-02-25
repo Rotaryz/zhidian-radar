@@ -3,7 +3,7 @@
     <article class="client-user-list">
       <section class="add-user">
         <p class="txt">{{this.title}}（{{dataArray.length}}人）</p>
-        <div v-if="this.groupType === 0" class="icon" @click="toAddUser"></div>
+        <div v-if="+groupType === 0" class="icon" @click="toAddUser"></div>
       </section>
       <div class="simple-scroll"  v-if="dataArray.length">
         <div class="scroll-list-wrap">
@@ -14,7 +14,7 @@
                   @pullingUp="onPullingUp">
             <ul class="user-list">
               <li class="user-list-item" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
-                <slide-view @grouping="groupingHandler" :useType="+groupType !== 0 ? 4 : 1" :item="item" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
+                <slide-view @grouping="groupingHandler" :useType="+groupType === 0 ? 2 : 1" :item="item" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :index="index" :hasFn="true" :ref="'slide' + index">
                   <user-card :userInfo="item" slot="content" useType="join"></user-card>
                 </slide-view>
               </li>
@@ -146,8 +146,7 @@
           page: this.page,
           limit: this.limit,
           group_id: this.id,
-          group_type: this.groupType, // 分组类型0自定义1pens，2kol，3活跃新客，4已购客户
-          store_id: this.userInfo.store_id,
+          shop_id: this.userInfo.shop_id,
           merchant_id: this.userInfo.merchant_id
         }
         Client.getGroupCustomerList(data).then(res => {
@@ -197,6 +196,9 @@
           if (res.error === ERR_OK) {
             const idx = this.dataArray.findIndex(val => val.customer_id === this.checkedItem.customer_id)
             this.dataArray.splice(idx, 1)
+            if (!this.dataArray.length) {
+              this.isEmpty = true
+            }
             let refName = 'slide' + this.moveIdx
             this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
           } else {
@@ -216,7 +218,9 @@
         const data = {
           page: page,
           limit: limit,
-          group_id: this.id
+          group_id: this.id,
+          shop_id: this.userInfo.shop_id,
+          merchant_id: this.userInfo.merchant_id
         }
         Client.getGroupCustomerList(data).then(res => {
           if (res.error === ERR_OK) {

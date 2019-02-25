@@ -64,35 +64,41 @@
       height: 160px
       background-color: $color-white-fff
       border: 1px solid rgba(32, 32, 46, 0.10)
-      border-radius: 2px
+      border-radius: 6px
       layout()
       .msg
         flex: 1
         layout()
         justify-content: center
         align-items: center
-        font-family: $font-family-regular
-        font-size: $font-size-16
-        color: $color-20202E
-        letter-spacing: 0.8px
         text-align: center
+        color: #20202E
+        font-size: $font-size-18
+        font-family: $font-family-medium
+        letter-spacing: 0.8px
         line-height: 24px
         padding: 0 30px
       .btn-group
-        height: 45px
-        layout(row)
-        border-top: 0.5px solid rgba(32, 32, 46, 0.10)
+        display: flex
+        justify-content: space-between
+        padding: 0 30px
+        align-items: center
+        margin-bottom: 20px
         .btn
-          box-sizing: border-box
-          flex: 1
-          height: 100%
-          text-align: center
-          line-height: 45px
-          font-family: $font-family-regular
+          width: 110px
+          height: 34px
+          line-height: 34px
           font-size: $font-size-14
-          color: $color-20202E
-          letter-spacing: 0.6px
+          font-family: $font-family-regular
+          border-radius: 40px
+          text-align: center
+          color: $color-main
+          background: #FFF
+          box-sizing: border-box
+          border: 1px solid $color-main
           &.confirm
-            border-left: 0.5px solid rgba(32, 32, 46, 0.10)
-            color: $color-56BA15
+            color: #FFF
+            border: 0
+            background: $color-linear-main
+
 </style>

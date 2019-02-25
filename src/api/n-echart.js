@@ -26,7 +26,7 @@ export default {
     return request.get(url, data)
   },
   /**
-   * 客户近15天活跃度
+   * 客户近7天活跃度
    * @returns {*}
    */
   actionCustomerRatio(data) {

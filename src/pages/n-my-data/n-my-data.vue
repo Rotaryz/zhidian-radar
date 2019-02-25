@@ -257,7 +257,11 @@
       },
       // KOL列表
       KOLList() {
-        Mine.KOLList()
+        let data = {
+          shop_id: this.shopId,
+          time: 'week'
+        }
+        Mine.KOLList(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)

@@ -53,10 +53,12 @@
         pullUpLoadNoMoreTxt: '没有更多了',
         page: 1,
         limit: LIMIT,
-        isAll: false
+        isAll: false,
+        shopId: ''
       }
     },
     created() {
+      this.shopId = this.$storage.get('info').shop_id
       this.searchUser(this.userName)
     },
     mounted() {
@@ -86,12 +88,11 @@
           name,
           page: 1,
           limit: LIMIT,
-          shop_id: this.$storage.get('info').shop_id
+          shop_id: this.shopId
         }
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             this.dataArray = [...res.data]
-            console.log(res.data, this.dataArray)
             this.isEmpty = !this.dataArray.length
           } else {
             this.$refs.toast.show(res.message)
@@ -103,12 +104,16 @@
       },
       onPullingUp() {
         // 更新数据
-        console.info('pulling up and load data')
         if (!this.pullUpLoad) return // 防止下拉报错
         if (this.isAll) return this.$refs.scroll && this.$refs.scroll.forceUpdate()
         let page = ++this.page
         let limit = this.limit
-        const data = {name: this.userName, page, limit}
+        const data = {
+          name: this.userName,
+          shop_id: this.shopId,
+          page,
+          limit
+        }
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             if (res.data && res.data.length) {

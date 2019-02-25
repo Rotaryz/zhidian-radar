@@ -123,7 +123,13 @@
 
         let page = ++this.page
         let limit = this.limit
-        const data = {group_id: this.id, page, limit, order_by: this.selectText}
+        const data = {
+          group_id: this.id,
+          page,
+          limit,
+          order_by: this.selectText,
+          shop_id: this.$storage.get('info').shop_id
+        }
         Client.getCustomerList(data).then(res => {
           if (res.error !== ERR_OK) {
             this.$refs.toast.show(res.message)
@@ -238,7 +244,7 @@
           width: 20px
           height: 20px
           border-radius: 50%
-          border-1px(#999, 20px)
+          border-1px(#999, 40px)
           box-sizing: border-box
           background: url("")
           &.active

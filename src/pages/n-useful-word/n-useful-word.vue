@@ -5,19 +5,19 @@
         <div class="word-list">
           <div class="word-item" v-for="(item, index) in wordList" :key="index">
             <slide-view :useType="3" @del="del" @touchBegin="touchBegin" @touchEnd="touchEnd" :item="item" :index="index" :hasFn="true" :ref="'slide' + index">
-              <div slot="content" class="list-content">
+              <div slot="content" class="list-content" @click="editItem(item, index)">
                 <div class="item-left">
                   <span class="text">{{item.message}}</span>
                 </div>
                 <div class="item-right">
-                  <div class="icon-box editor-box" @click="editItem(item, index)">
+                  <div class="icon-box editor-box">
                     <div class="right-icon-editor right-icon"></div>
                   </div>
                 </div>
               </div>
             </slide-view>
           </div>
-          <section class="exception-box" v-if="!wordList.length">
+          <section class="exception-box" v-if="noWord">
             <exception errType="nodata"></exception>
           </section>
         </div>
@@ -60,13 +60,18 @@
         allowSend: true,
         allowConfirm: true,
         item: {},
-        moveIdx: -1
+        moveIdx: -1,
+        noWord: false
       }
     },
     methods: {
       getMsgList() {
         Im.getMyWordList().then(res => {
           if (res.error === ERR_OK) {
+            if (res.data.length === 0) {
+              this.noWord = true
+              return
+            }
             this.wordList = res.data
             setTimeout(() => {
               this.$refs.scroll.refresh()
@@ -89,6 +94,7 @@
             this.wordList = this.wordList.filter((item) => {
               return item.id !== this.deleteAny.id
             })
+            if (this.wordList.length === 0) this.noWord = true
             this.deleteAny = {}
             let refName = 'slide' + this.moveIdx
             this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
