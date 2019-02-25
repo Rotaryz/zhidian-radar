@@ -22,16 +22,8 @@ export default {
    * @returns {*}
    */
   KOLRetio(data) {
-    let url = 'api/employee/ai/city-report'
+    let url = 'api/employee/ai/get-kol-relation'
     return request.get(url, data)
-  },
-  /**
-   * 近15天活跃度
-   * @returns {*}
-   */
-  actionRetio(data) {
-    let url = '/api/employee/analysis/active-chart'
-    return request.post(url, data)
   },
   /**
    * 客户近15天活跃度

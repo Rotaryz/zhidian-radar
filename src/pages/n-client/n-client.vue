@@ -140,7 +140,8 @@
           </article>
           <div class="panel">
             <div class="title">KOL传播 TOP10</div>
-            <ai-charts ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+            <ai-charts v-if="KOLData" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+            <div v-else class="no-data">暂无数据</div>
           </div>
           <div style="height: 5px"></div>
         </scroll>
@@ -226,7 +227,8 @@
         dataIndex: 0,
         CHARTS_TYPE: CHARTS_TYPE,
         moveIdx: -1,
-        shopId: null
+        shopId: null,
+        KOLData: false
       }
     },
     created() {
@@ -243,7 +245,7 @@
           this.$nextTick(() => {
             this.sexRetio()
             this.cityRetio()
-            this.$refs.c3.action()
+            this.KOLRetio()
           })
         }
       },
@@ -275,7 +277,7 @@
       // 性别占比
       sexRetio() {
         let data = {
-          shop_id: this.$storage.get('info').shop_id,
+          shop_id: this.shopId,
           time: this.data[this.dataIndex]
         }
         NEchart.sexRetio(data)
@@ -310,7 +312,7 @@
       // 城市占比
       cityRetio() {
         let data = {
-          shop_id: this.$storage.get('info').shop_id,
+          shop_id: this.shopId,
           time: this.data[this.dataIndex]
         }
         NEchart.cityRetio(data)
@@ -330,6 +332,21 @@
               seriesData: dataArr
             }
             this.$refs.c2.action(barData)
+          })
+      },
+      KOLRetio() {
+        let data = {
+          shop_id: this.shopId,
+          time: 'week'
+        }
+        NEchart.KOLRetio(data)
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            this.KOLData = res.data.elements.length
+            this.$refs.c3 && this.$refs.c3.action(res.data)
           })
       },
       toSearch() {
@@ -562,7 +579,7 @@
         layout(row, block, nowrap)
         align-items: center
         justify-content: space-around
-        font-family: $font-family-medium
+        font-family: $font-family-regular
         font-size: $font-size-14
         color: $color-text-main
         letter-spacing: 0.52px
@@ -570,6 +587,12 @@
         line-height: 45px
         border-bottom-1px(#E1E1E1)
         position: relative
+        .tab-item
+          flex: 1
+          transition: all 0.3s
+        .active
+          font-size: 16px
+          font-family: $font-family-medium
         .line-tab
           width: 33.333%
           height: 4px
@@ -604,7 +627,7 @@
         layout(row, block, nowrap)
         align-items: center
         justify-content: space-around
-        font-family: $font-family-medium
+        font-family: $font-family-regular
         font-size: $font-size-14
         color: $color-text-main
         letter-spacing: 0.52px
@@ -615,6 +638,10 @@
         .tab-item
           flex: 1
           text-align: center
+          transition: all 0.3s
+        .active
+          font-size: 16px
+          font-family: $font-family-medium
         .line-tab
           width: 25%
           height: 4px
@@ -656,6 +683,13 @@
           line-height: 16px
           padding: 13.5px 0
           margin: 0 15px
+        .no-data
+          height: 223px
+          line-height: 223px
+          text-align: center
+          font-size: $font-size-14
+          color: #333
+          font-family: $font-family-regular
   .group-content
     font-family: $font-family-regular
     font-size: $font-size-16

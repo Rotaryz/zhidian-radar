@@ -35,8 +35,8 @@
             </article>
             <div class="panel">
               <div class="title">用户来源-KOL分享传播</div>
-              <div v-if="false" class="no-data">暂无数据</div>
-              <ai-charts v-if="true" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+              <ai-charts v-if="KOLData.length" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+              <div v-else class="no-data">暂无数据</div>
               <div class="list" v-if="personList.length > 0">
                 <h3 class="list-title">
                   <span class="num">排序</span>
@@ -45,10 +45,10 @@
                   <span class="count">次数</span>
                 </h3>
                 <p class="item" v-for="(item, index) in personList" :key="index">
-                  <span class="num">{{index}}</span>
+                  <span class="num">{{index+1}}</span>
                   <span class="name">{{item.name}}</span>
-                  <span class="person">{{item.value}}</span>
-                  <span class="count">{{item.value}}次</span>
+                  <span class="person">{{item.share_person_count}}</span>
+                  <span class="count">{{item.share_times}}次</span>
                 </p>
               </div>
             </div>
@@ -143,7 +143,8 @@
         CHARTS_TYPE,
         shopId: '',
         personList: [],
-        pop: false
+        pop: false,
+        KOLData: false
       }
     },
     created() {
@@ -154,7 +155,8 @@
     mounted() {
       this.groupRetio()
       this.PENSRetio()
-      this.$refs.c3 && this.$refs.c3.action()
+      this.KOLRetio()
+      this.KOLList()
     },
     methods: {
       showPop(index) {
@@ -237,19 +239,31 @@
             this.$refs.c2.action(lineData)
           })
       },
-      // 活跃度
-      actionRetio() {
-        NEchart.actionRetio({customer_id: this.id, time: 'week'})
+      // KOL传播
+      KOLRetio() {
+        let data = {
+          shop_id: this.shopId,
+          time: 'week'
+        }
+        NEchart.KOLRetio(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
               return
             }
-            let lineData = {
-              xAxisData: res.data.x,
-              seriesData: [ {data: res.data.y} ]
+            this.KOLData = res.data.elements.length
+            this.$refs.c3 && this.$refs.c3.action(res.data)
+          })
+      },
+      // KOL列表
+      KOLList() {
+        Mine.KOLList()
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
             }
-            this.$refs.c4.action(lineData)
+            this.personList = res.data
           })
       },
       // 订单金额、客单价、一周活跃
@@ -309,7 +323,8 @@
           this.$nextTick(() => {
             this.groupRetio()
             this.PENSRetio()
-            this.$refs.c3 && this.$refs.c3.action()
+            this.KOLRetio()
+            this.KOLList()
           })
         } else if (index === 1) {
           this.$nextTick(() => {
@@ -446,7 +461,7 @@
       align-items: center
       justify-content: space-between
       font-family: $font-family-regular
-      font-size: $font-size-16
+      font-size: $font-size-14
       color: #333
       letter-spacing: 0.52px
       text-align: center
@@ -459,6 +474,7 @@
         transition: all 0.3s
       .active
         opacity: 1
+        font-size: $font-size-16
         font-family: $font-family-medium
       .line-tab
         width: 33.333%

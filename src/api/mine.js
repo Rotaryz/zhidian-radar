@@ -136,5 +136,14 @@ export default {
   getWechatStatus (data) {
     let url = 'api/employee/mock-login-status'
     return request.get(url, data)
+  },
+  /**
+   * KOL排名列表
+   * @param data
+   * @returns {*}
+   */
+  KOLList (data) {
+    let url = 'api/employee/ai/get-kol-list'
+    return request.get(url, data)
   }
 }

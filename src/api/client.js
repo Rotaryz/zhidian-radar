@@ -60,5 +60,10 @@ export default {
   updateTag(data, customerId, loading) {
     const url = `/api/employee/customers/${customerId}/labels`
     return request.post(url, data, loading)
+  },
+  // KOL分享列表
+  kolList(data, customerId, loading) {
+    const url = `api/employee/ai/get-kol-list`
+    return request.post(url, data, loading)
   }
 }
