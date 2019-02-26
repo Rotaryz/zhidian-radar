@@ -55,6 +55,7 @@
         if (id && !this.marketData.id) {
           await this.requestMarketData({id})
         }
+        document.title = this.marketData.name || document.title
         this._getGroupInfo()
       },
       _getGroupInfo() {
