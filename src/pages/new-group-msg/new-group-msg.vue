@@ -13,7 +13,7 @@
               <span class="time-box">{{item.created_at ? item.created_at : item.msgTimeStamp | timeFormat}}</span>
             </div>
             <div class="item-content">
-              <div class="item-title">群发组：<span v-for="(item1, index1) in item.groups" :key="index1">{{index1 == (item.groups.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
+              <div class="item-title">群发组：<span v-for="(item1, index1) in item.groups" :key="index1">{{index1 == (item.groups.length - 1) ? item1.name + (item1.customers.length ? '(' + item1.customers.length + ')' : '') : item1.name + (item1.customers.length ? '(' + item1.customers.length + ')，' : '')}}</span></div>
               <div class="item-top">
                 <div class="item-text" v-html="item.html" v-if="item.type == 1"></div>
                 <div class="item-text item-text3" v-if="item.type == 3">
@@ -78,7 +78,7 @@
                 </div>
               </div>
               <div class="item-down">
-                <div class="item-down-btn" @click="toChat(item)">再发一条</div>
+                <div class="item-down-btn" :class="{'gray' : checkNum(item.groups)}" @click="toChat(item)">再发一条</div>
               </div>
             </div>
           </div>
@@ -144,6 +144,12 @@
         'setGroupItem',
         'setCurrentGroupMsg'
       ]),
+      checkNum(arr) {
+        if (!arr) return true
+        return arr.some((item) => {
+          return !item.customers.length
+        })
+      },
       chatMsg(item) {
         let currentMsg = {
           nickName: item.nickName,
@@ -155,13 +161,14 @@
         this.$router.push(url)
       },
       toChat(item) {
+        if (this.checkNum(item.groups)) return
         if (this.groupMsgIng) {
           this.$refs.toast.show('群发消息发送中，请稍后再发')
           return
         }
         this.setCurrentGroupMsg(item.groups)
         let pageUrl = this.$route.path
-        let path = `${pageUrl}/news-chat-group`
+        let path = `${pageUrl}/news-chat-group?id=${item.id}`
         this.$router.push(path)
       },
       onPullingUp() {
@@ -432,6 +439,9 @@
               font-family: $font-family-regular
               font-size: $font-size-14
               color: #5929DC
+              &.gray
+                color: #cccccc
+                border-1px(#cccccc, 26px)
 
   .bottom-box
     padding: 7.5px 15px
