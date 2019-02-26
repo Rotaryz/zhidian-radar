@@ -96,7 +96,7 @@
       <router-view @refresh="refresh"></router-view>
       <toast ref="toast"></toast>
       <modal ref="modal"></modal>
-      <base-tip ref="tip" type="mobile"></base-tip>
+      <base-tip ref="baseTip" type="mobile"></base-tip>
     </div>
   </transition>
 </template>
