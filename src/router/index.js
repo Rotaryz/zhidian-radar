@@ -355,14 +355,14 @@ const route = new Router({
             path: 'new-group-msg',
             component: NewGroupMsg,
             meta: {
-              title: '新建群发'
+              title: '群发小秘书'
             },
             children: [
               {
                 path: 'news-add-group',
                 component: NewsAddGroup,
                 meta: {
-                  title: '添加组'
+                  title: '新建群发'
                 },
                 children: [
                   {
@@ -389,7 +389,7 @@ const route = new Router({
         path: '/news-add-group',
         component: NewsAddGroup,
         meta: {
-          title: '添加组'
+          title: '新建群发'
         }
       },
       {
@@ -433,7 +433,7 @@ const route = new Router({
         path: '/new-group-msg',
         component: NewGroupMsg,
         meta: {
-          title: '新建群发'
+          title: '群发小秘书'
         }
       },
       {
