@@ -75,6 +75,11 @@
         return CONFIG[key]
       }
     },
+    watch: {
+      info() {
+        this._initChatData()
+      }
+    },
     mounted() {
       this._initChatData()
     },
@@ -82,16 +87,20 @@
       ...Helpers.marketMethods,
       _initChatData() {
         let key = this.CONFIG.leftKey
-        let {xAxisData, seriesData, isClosed} = this
+        let {isClosed} = this
         if (this.info.market_type) {
           this.isClosed = isClosed = true
         }
         let report = this.info.report || []
+        let s = []
+        let x = []
         report.forEach((item) => {
-          xAxisData.push(item.at)
-          seriesData[0].data.push(item[key])
+          s.push(item[key])
+          x.push(item.at)
         })
-        this._chartActions({xAxisData, seriesData, isClosed})
+        this.seriesData[0].data = s
+        this.xAxisData = x
+        this._chartActions({xAxisData: this.xAxisData, seriesData: this.seriesData, isClosed})
       },
       async navHandle() {
         await this.requestMarketData(this.info)

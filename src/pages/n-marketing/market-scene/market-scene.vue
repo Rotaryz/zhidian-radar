@@ -11,7 +11,7 @@
     <market-card-button :dataArray="dataArray"></market-card-button>
     <div class="empty"></div>
     <section v-for="(item, index) in dataArray" :key="index" class="item-wrapper">
-      <market-card :info="item"></market-card>
+      <market-card ref="cards" :info="item"></market-card>
     </section>
     <div class="empty"></div>
   </scroll>
@@ -63,11 +63,18 @@
         this.page = 1
         this.pullUpLoad = true
         this._getList(false)
+        // this._refreshCardCharts()
       },
       onPullingUp() {
         this.page++
         this._getList(false)
+        // this._refreshCardCharts()
       }
+      // _refreshCardCharts() {
+      //   this.$refs.cards && this.$refs.cards.forEach(item => {
+      //     item && item._initChatData()
+      //   })
+      // }
     }
   }
 </script>

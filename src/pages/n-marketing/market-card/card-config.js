@@ -16,7 +16,7 @@ export const CONFIG = {
     leftText: '触达数',
     middleText: '进店数',
     rightText: 'charts',
-    leftKey: 'reach_count',
+    leftKey: 'send_tpl_count',
     middleKey: 'into_shop_count'
   },
   [CARD_TYPE.sevenBack]: { // 7天召回
@@ -25,7 +25,7 @@ export const CONFIG = {
     leftText: '触达数',
     middleText: '进店数',
     rightText: 'charts',
-    leftKey: 'reach_count',
+    leftKey: 'send_tpl_count',
     middleKey: 'into_shop_count'
   },
   [CARD_TYPE.weChat]: { // 加个人微信
@@ -52,7 +52,7 @@ export const CONFIG = {
     leftText: '触达数',
     middleText: '进店数',
     rightText: 'charts',
-    leftKey: 'reach_count',
+    leftKey: 'send_tpl_count',
     middleKey: 'into_shop_count'
   },
   [CARD_TYPE.activeCustomer]: { // 活跃新客
@@ -61,7 +61,7 @@ export const CONFIG = {
     leftText: '触达数',
     middleText: '领取数',
     rightText: 'charts',
-    leftKey: 'reach_count',
+    leftKey: 'send_tpl_count',
     middleKey: 'take_count'
   },
   [CARD_TYPE.boughtCustomer]: { // 已购新客
@@ -70,7 +70,7 @@ export const CONFIG = {
     leftText: '触达数',
     middleText: '进店数',
     rightText: 'charts',
-    leftKey: 'reach_count',
+    leftKey: 'send_tpl_count',
     middleKey: 'into_shop_count'
   }
 }
