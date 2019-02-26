@@ -210,7 +210,14 @@
         }, 300)
       },
       getClientData() {
-        ClientDetail.clientData()
+        let info = this.$storage.get('info')
+        let data = {
+          customer_id: this.id,
+          shop_id: info.shop_id,
+          merchant_id: info.merchant_id,
+          employee_id: 0
+        }
+        ClientDetail.clientData(data)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -272,7 +279,7 @@
         let data = {
           customer_id: this.id,
           shop_id: this.$storage.get('info').shop_id,
-          time: 'half_month'
+          time: 'week'
         }
         NEchart.actionCustomerRatio(data)
           .then(res => {
