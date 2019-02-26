@@ -125,11 +125,13 @@
         codeStatus: {},
         coverFullShow: false,
         coverShowType: '',
-        isSending: false
+        isSending: false,
+        msgId: 0 // 是否再发一条，是则有id
       }
     },
     created() {
       // this.getQrCodeStatus()
+      this.msgId = this.$route.query.id || 0
       if (this.currentGroupMsg.length < 1) {
         this.$router.replace('/new-group-msg')
       }
@@ -183,6 +185,7 @@
         return res2
       },
       _splitSendGroupMsg(arr, type, content) {
+        if (!arr.length) return
         this.setGroupMsgIng(true)
         arr.forEach(item => {
           this._sendGroupMsg(item, type, content)
@@ -614,10 +617,20 @@
         let groupIds = this.currentGroupMsg.map(item => {
           return item.id
         })
+        let customers = []
+        this.currentGroupMsg.forEach(item => {
+          if (item.customers && item.customers.length) {
+            item.customers.forEach(item1 => {
+              customers.push(item1)
+            })
+          }
+        })
         data = {
           group_ids: groupIds,
           type,
-          message
+          message,
+          message_id: this.msgId,
+          customers
         }
         News.sendGroupMessage(data).then(res => {
           this.isSending = false
