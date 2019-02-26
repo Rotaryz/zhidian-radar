@@ -108,7 +108,7 @@
         height: 40px
         border-radius: 40px
         padding: 1.5px
-        border: 1.5px solid $color-pnes-e
+        border: 1.5px solid #F3F3F3
         margin-right: 10px
       .user-info
         flex: 1

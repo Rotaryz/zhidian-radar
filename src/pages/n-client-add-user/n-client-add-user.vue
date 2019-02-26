@@ -260,7 +260,7 @@
           height: 40px
           border-radius: 50%
           padding: 1.5px
-          border: 1.5px solid $color-pnes-e
+          border: 1.5px solid #F3F3F3
           margin: 0 10px
         .base-info
           flex: 1

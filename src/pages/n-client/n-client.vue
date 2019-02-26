@@ -353,6 +353,8 @@
       toSearch() {
         const path = `/client/client-search`
         this.$router.push({path})
+        let refName = 'slide' + this.moveIdx
+        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
       },
       getGroupList() {
         let data = {

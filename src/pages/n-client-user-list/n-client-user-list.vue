@@ -174,6 +174,8 @@
       toAddUser() {
         const path = `/client/client-user-list/client-add-user`
         this.$router.push({path, query: {id: this.id}}) // 分组id
+        let refName = 'slide' + this.moveIdx
+        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
       },
       check(item) {
         const path = `/client/client-user-list/client-detail`
@@ -246,7 +248,7 @@
       touchBegin(idx) {
         if (+idx !== +this.moveIdx && this.moveIdx !== -1) {
           let refName = 'slide' + this.moveIdx
-          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(true)
         }
       },
       touchEnd(idx) {
