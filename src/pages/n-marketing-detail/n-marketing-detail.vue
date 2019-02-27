@@ -55,7 +55,7 @@
         if (id && !this.marketData.id) {
           await this.requestMarketData({id})
         }
-        document.title = this.marketData.name || document.title
+        document.title = this.marketData.name || '新建营销'
         this._getGroupInfo()
       },
       _getGroupInfo() {
