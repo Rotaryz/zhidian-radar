@@ -386,7 +386,6 @@
               }
             })
             this.mobile = res.data.mobile
-            this.getMarketRecord(this.id, this.flowId)
             this.getNewActionList(this.id)
           } else {
             this.$refs.toast.show(res.message)
@@ -396,7 +395,6 @@
       getMarketRecord() {
         this.flowPage = 1
         let data = {
-          page: 1,
           limit: 10,
           customer_id: this.id
         }
@@ -413,7 +411,6 @@
       getMoreFlowList() {
         if (this.noMore) return
         let data = {
-          page: this.flowPage,
           limit: 10,
           customer_id: this.id
         }
