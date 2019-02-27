@@ -12,7 +12,7 @@
     <!--客户列表-->
     <section class="custom-content" v-if="selectTab === 0">
       <ul class="custom-tab border-bottom-1px" v-if="dataArray.length">
-        <li v-for="(item, index) in groupList" :key="index" class="tab-item" :class="item.isCheck?'active':''" @click="checkCustom(item, index)">{{item.name}}</li>
+        <li v-for="(item, index) in groupList" :key="index" class="tab-item" :class="+tabIndex === +index" @click="checkCustom(item, index)">{{item.name}}</li>
         <li class="line-tab" :style="'transform: translate3d('+ tabIndex * 100 +'%, 0, 0)'"></li>
       </ul>
       <div class="custom-scroll" v-if="dataArray.length">

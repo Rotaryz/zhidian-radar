@@ -13,18 +13,27 @@ const wx = {
 // console.log(jjj.links, 2)
 // console.log(jjj.categories)
 export function createUserTop6(data) {
+  // console.log(data)
+  // console.log(data)
+  // data.elements.unshift = wx
+  data.elements.unshift(wx)
+  console.log(data.elements, '---')
   const jjj = {
     nodes: data.elements.map((item, index) => {
       return {
         name: item.customer_id,
-        symbol: `image://${hostUrl}/${index === 0 ? 'pic-xcx@1x.png' : item.image_url || 'pic-default@1x.png'}`,
+        symbol: `image://${index === 0 ? `${hostUrl}/pic-xcx@1x.png` : item.image_url || hostUrl + 'pic-default@1x.png'}`,
         symbolSize: index === 0 ? 40 : item.share_person_count > 1 ? 25 : 20,
         symbolKeepAspect: true,
+        category: 1,
         itemStyle: {
-          borderColor: '#8867F2',
-          borderWidth: 1,
-          shadowBlur: 1,
-          shadowColor: '#8867F2'
+          normal: {
+            borderColor: '#8867F2',
+            borderWidth: 4,
+            shadowBlur: 1,
+            shadowColor: '#8867F2',
+            color: '#8867F2'
+          }
         },
         label: {
           show: false
@@ -52,7 +61,7 @@ export function createUserTop6(data) {
       }
     })
   }
-  jjj.nodes.unshift(wx)
+  console.log(jjj, 33)
   return {
     // animation: false,
     // animationDurationUpdate: 500,
