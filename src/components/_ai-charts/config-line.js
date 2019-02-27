@@ -75,6 +75,9 @@ export function createOrderAmount(args = {}) {
       data: item.data,
       type: 'line',
       smooth,
+      symbol: 'circle',
+      symbolSize: 3,
+      showSymbol: false,
       yAxisIndex: index,
       areaStyle: {
         color: {
@@ -98,10 +101,10 @@ export function createOrderAmount(args = {}) {
       },
       itemStyle: {
         normal: {
-          name: colorObj[index].name,
           color: colorObj[index].color,
           borderWidth: 1,
-          opacity: 0,
+          borderColor: '#fff',
+          opacity: 0.9,
           lineStyle: {
             color: colorObj[index].color,
             width: 2
@@ -132,9 +135,6 @@ export function createOrderAmount(args = {}) {
         formatter: '{value}',
         color: '#666',
         show: true
-        // showMinLabel: true,
-        // showMaxLabel: true,
-        // formatter: function (value) { return value }
       },
       axisLine: {
         show: false,
@@ -290,17 +290,10 @@ export function createPNES(args = {}) {
       },
       itemStyle: {
         normal: {
-          // color: colorObj[index].color,
-          // borderWidth: 1,
-          // opacity: 0,
-          // lineStyle: {
-          //   color: colorObj[index].color,
-          //   width: 3
-          // }
-          color: '#fff',
+          color: colorObj[index].color,
           borderWidth: 1,
-          borderColor: colorObj[index].color,
-          opacity: 1,
+          borderColor: '#fff',
+          opacity: 0.9,
           lineStyle: {
             color: colorObj[index].color,
             width: 2
@@ -461,11 +454,10 @@ export function createVitality(args = {}) {
       },
       itemStyle: {
         normal: {
-          // color: colorObj[index].color,
-          color: '#fff',
+          color: colorObj[index].color,
           borderWidth: 1,
-          borderColor: colorObj[index].color,
-          opacity: 1,
+          borderColor: '#fff',
+          opacity: 0.9,
           lineStyle: {
             color: colorObj[index].color,
             width: 2
