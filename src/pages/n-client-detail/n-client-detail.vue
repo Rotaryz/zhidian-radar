@@ -395,6 +395,7 @@
       getMarketRecord() {
         this.flowPage = 1
         let data = {
+          page: this.flowPage,
           limit: 10,
           customer_id: this.id
         }
@@ -411,6 +412,7 @@
       getMoreFlowList() {
         if (this.noMore) return
         let data = {
+          page: this.flowPage,
           limit: 10,
           customer_id: this.id
         }
