@@ -232,7 +232,9 @@
       }
     },
     created() {
-      // this.$emit('tabChange', 3)
+      // 初始化groupList值防止切换导航再切回来导致列表展示错误的问题
+      this.groupList.forEach(item => { item.isCheck = false })
+      this.groupList[0].isCheck = true
       this.shopId = this.$storage.get('info').shop_id
       this.getGroupList()
       this.getCustomerList()
@@ -245,8 +247,8 @@
           this.$nextTick(() => {
             this.sexRatio()
             this.cityRatio()
-            this.KOLRatio()
           })
+          this.KOLRatio()
         }
       },
       // 客户列表切换
@@ -347,7 +349,9 @@
               return
             }
             this.KOLData = res.data.elements.length
-            this.$refs.c3 && this.$refs.c3.action(res.data)
+            this.$nextTick(() => {
+              this.$refs.c3 && this.$refs.c3.action(res.data)
+            })
           })
       },
       toSearch() {
