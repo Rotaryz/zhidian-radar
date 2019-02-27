@@ -18,28 +18,34 @@ function getImgData(imgSrc) {
       canvas.height = diameter
       ctx.clearRect(0, 0, diameter, diameter)
       ctx.save()
-      // ctx.fillStyle = '#f00'
       ctx.beginPath()
       ctx.arc(radius, radius, radius, 0, 2 * Math.PI) // 画出圆
       ctx.clip() // 裁剪上面的圆形
       ctx.drawImage(img, 0, 0, diameter, diameter, 0, 0, diameter, diameter) // 在刚刚裁剪的园上画图
       ctx.restore() // 还原状态
-      console.log(ctx.getImageData(0, 0, img.width, img.height))
       resolve(canvas.toDataURL('image/png', 1))
-      // resolve(ctx.getImageData(0, 0, img.width, img.height).data)
     }
     img.src = imgSrc
   })
 }
+const toDataURL = url => fetch(url)
+  .then(response => response.blob())
+  .then(blob => new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  }))
 
 // 批量处理图片
 function getImgArrayData(arr) {
-  return Promise.all(arr.map((item) => {
-    let radius = (item.share_person_count > 1 ? 25 : 200) / 2
-    return getImgData(item.image_url, radius, {x: radius, y: radius})
+  // toDataURL(arr[0].image_url).then(res => console.info(res, '=-=-'))
+  return Promise.all(arr.map(async (item) => {
+    let image = await toDataURL(item.image_url)
+    console.log(image)
+    return getImgData(image)
   }))
 }
-
 // function testTodo(arr) {
 //   // for (let i = 0; i < 15; i++) {
 //   //   arr = arr.concat(arr)
@@ -62,7 +68,7 @@ export async function createUserTop6(data) {
     nodes: data.elements.map((item, index) => {
       return {
         name: item.customer_id + '', // todo
-        symbol: [`image://${index === 0 ? hostUrl + '/pic-xcx@1x.png' : item.image_url || hostUrl + '/pic-default@1x.png'}`, 'circle'],
+        symbol: `image://${index === 0 ? hostUrl + '/pic-xcx@1x.png' : item.image_url || hostUrl + '/pic-default@1x.png'}`,
         symbolSize: index === 0 ? 40 : item.share_person_count > 1 ? 25 : 20,
         symbolKeepAspect: true,
         // fixed: index === 0,
