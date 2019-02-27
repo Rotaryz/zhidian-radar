@@ -34,7 +34,7 @@ if (APP_CONFIG.env === 'production') {
 }
 
 /**
- * 订单和金额
+ * 订单数和交易金额
  * @param args
  * @returns {{yAxis: Array, xAxis: {axisLabel: {color: string, fontSize: number, align: string}, data, offset: number, axisLine: {lineStyle: {color: string, width: number}, show: boolean}, splitLine: {lineStyle: {color: string, width: number}, show: boolean}, axisTick: {lineStyle: {color: string, width: number}, show: boolean}, type: string, boundaryGap: boolean}, legend: {padding: number[], borderRadius: number, data: {name: *, icon: string}[], bottom: number, itemHeight: number, show: boolean, itemWidth: number}, grid: {top: string, left: string, bottom: string, right: string, containLabel: boolean}, series: Array, tooltip: {padding: number[], axisPointer: {lineStyle: {color: string, width: number}}, trigger: string, textStyle: {align: string}}}}
  */
@@ -43,7 +43,7 @@ export function createOrderAmount(args = {}) {
   const smooth = 0.5
   const colorObj = [
     {
-      name: '订单金额',
+      name: '订单数',
       color: '#59DF78',
       colorStops0: 'rgba(89,223,120,0.55)',
       colorStops1: 'rgba(89,223,120,0.05)'
@@ -407,11 +407,11 @@ export function createPNES(args = {}) {
  * @private
  */
 export function createVitality(args = {}) {
-  let {xAxisData, seriesData} = args
+  let {xAxisData, seriesData, name} = args
   const smooth = 0.5
   const colorObj = [
     {
-      name: '活跃度',
+      name: name || '活跃度',
       color: '#8867F2',
       colorStops0: 'rgba(136,103,242,0.55)',
       colorStops1: 'rgba(136,103,242,0.05)'

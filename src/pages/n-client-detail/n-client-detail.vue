@@ -51,7 +51,7 @@
               <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
             </div>
             <div class="pie-box">
-              <div class="title">兴趣的商品占比</div>
+              <div class="title">兴趣占比</div>
               <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.SHOP"></ai-charts>
               <div class="list" v-if="goodsList.length > 0">
                 <h3 class="list-title">
@@ -392,9 +392,11 @@
           }
         })
       },
+      // 营销记录
       getMarketRecord() {
         this.flowPage = 1
         let data = {
+          page: this.flowPage,
           limit: 10,
           customer_id: this.id
         }
@@ -411,6 +413,7 @@
       getMoreFlowList() {
         if (this.noMore) return
         let data = {
+          page: this.flowPage,
           limit: 10,
           customer_id: this.id
         }
