@@ -10,6 +10,7 @@ function getImgData(imgSrc) {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     const img = new Image()
+    img.setAttribute('crossOrigin', 'anonymous')
     img.onload = function () {
       let radius = img.width / 2
       let diameter = 2 * radius
@@ -17,7 +18,6 @@ function getImgData(imgSrc) {
       canvas.height = diameter
       ctx.clearRect(0, 0, diameter, diameter)
       ctx.save()
-      // ctx.fillStyle = '#f00'
       ctx.beginPath()
       ctx.arc(radius, radius, radius, 0, 2 * Math.PI) // 画出圆
       ctx.clip() // 裁剪上面的圆形
@@ -28,15 +28,22 @@ function getImgData(imgSrc) {
     img.src = imgSrc
   })
 }
+const toDataURL = url => fetch(url)
+  .then(response => response.blob())
+  .then(blob => new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  }))
 
 // 批量处理图片
 function getImgArrayData(arr) {
-  return Promise.all(arr.map((item) => {
-    let radius = (item.share_person_count > 1 ? 25 : 200) / 2
-    return getImgData(item.image_url, radius, {x: radius, y: radius})
+  return Promise.all(arr.map(async (item) => {
+    let image = await toDataURL(item.image_url)
+    return getImgData(image)
   }))
 }
-
 // function testTodo(arr) {
 //   // for (let i = 0; i < 15; i++) {
 //   //   arr = arr.concat(arr)
@@ -49,7 +56,6 @@ function getImgArrayData(arr) {
 // }
 
 export async function createUserTop6(data) {
-  // data.elements = testTodo(data.elements)
   const arr = await getImgArrayData(data.elements)
   data.elements = data.elements.map((item, index) => {
     item.image_url = arr[index]
