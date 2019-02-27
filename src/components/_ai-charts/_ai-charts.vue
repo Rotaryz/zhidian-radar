@@ -38,10 +38,10 @@
       this.myChart = null
     },
     methods: {
-      action(data) {
+      async action(data) {
         this.myChart = this.$echarts.init(this.$refs.chartItem)
         if (this.myChart == null) return
-        let config = this.CHARTS_CONFIG.createOption(data)
+        let config = await this.CHARTS_CONFIG.createOption(data)
         this.myChart.setOption(config)
       }
     }
