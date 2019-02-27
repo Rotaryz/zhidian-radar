@@ -287,7 +287,11 @@
             let personMoney = res.data.map(item => {
               return item.per_money
             })
-            // 订单金额
+            // 订单数
+            let count = res.data.map(item => {
+              return item.order_count
+            })
+            // 交易金额
             let total = res.data.map(item => {
               return item.total
             })
@@ -300,17 +304,19 @@
             if (this.charTab === 1) {
               let lineData = {
                 xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
-                seriesData: [ {data: mainOrderCount.length ? mainOrderCount : [0, 0, 0, 0, 0]} ]
+                seriesData: [ {data: mainOrderCount.length ? mainOrderCount : [0, 0, 0, 0, 0]} ],
+                name: '活跃度'
               }
               this.$refs.c4.action(lineData)
             } else if (this.charTab === 2) {
               let lineData = {
                 xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
-                seriesData: [ {data: personMoney.length ? personMoney : [0, 0, 0, 0, 0]} ]
+                seriesData: [ {data: personMoney.length ? personMoney : [0, 0, 0, 0, 0]} ],
+                name: '笔单价'
               }
               let lineData2 = {
                 xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
-                seriesData: [ {data: total.length ? total : [0, 0, 0, 0, 0]}, {data: res.data.y ? res.data.y : [0, 0, 0, 0, 0]} ]
+                seriesData: [ {data: count.length ? count : [0, 0, 0, 0, 0]}, {data: total.length ? total : [0, 0, 0, 0, 0]} ]
               }
               this.$refs.c5.action(lineData)
               this.$refs.c6.action(lineData2)
