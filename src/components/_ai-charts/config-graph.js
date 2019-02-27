@@ -39,10 +39,8 @@ const toDataURL = url => fetch(url)
 
 // 批量处理图片
 function getImgArrayData(arr) {
-  // toDataURL(arr[0].image_url).then(res => console.info(res, '=-=-'))
   return Promise.all(arr.map(async (item) => {
     let image = await toDataURL(item.image_url)
-    console.log(image)
     return getImgData(image)
   }))
 }
