@@ -40,7 +40,12 @@ const toDataURL = url => fetch(url)
 // 批量处理图片
 function getImgArrayData(arr) {
   return Promise.all(arr.map(async (item) => {
-    let image = await toDataURL(item.image_url)
+    let image = ''
+    try {
+      image = await toDataURL(item.image_url)
+    } catch (e) {
+      console.error(e)
+    }
     return getImgData(image)
   }))
 }
