@@ -116,7 +116,7 @@ export async function createUserTop6(data) {
           normal: {
             opacity: 1,
             color: '#8867F2',
-            width: 3,
+            width: 2,
             curveness: 0.3
           }
         }
