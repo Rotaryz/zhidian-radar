@@ -10,6 +10,7 @@ function getImgData(imgSrc) {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     const img = new Image()
+    img.setAttribute('crossOrigin', 'anonymous')
     img.onload = function () {
       let radius = img.width / 2
       let diameter = 2 * radius
@@ -23,7 +24,9 @@ function getImgData(imgSrc) {
       ctx.clip() // 裁剪上面的圆形
       ctx.drawImage(img, 0, 0, diameter, diameter, 0, 0, diameter, diameter) // 在刚刚裁剪的园上画图
       ctx.restore() // 还原状态
+      console.log(ctx.getImageData(0, 0, img.width, img.height))
       resolve(canvas.toDataURL('image/png', 1))
+      // resolve(ctx.getImageData(0, 0, img.width, img.height).data)
     }
     img.src = imgSrc
   })
@@ -49,7 +52,6 @@ function getImgArrayData(arr) {
 // }
 
 export async function createUserTop6(data) {
-  // data.elements = testTodo(data.elements)
   const arr = await getImgArrayData(data.elements)
   data.elements = data.elements.map((item, index) => {
     item.image_url = arr[index]
@@ -60,7 +62,7 @@ export async function createUserTop6(data) {
     nodes: data.elements.map((item, index) => {
       return {
         name: item.customer_id + '', // todo
-        symbol: `image://${index === 0 ? hostUrl + '/pic-xcx@1x.png' : item.image_url || hostUrl + '/pic-default@1x.png'}`,
+        symbol: [`image://${index === 0 ? hostUrl + '/pic-xcx@1x.png' : item.image_url || hostUrl + '/pic-default@1x.png'}`, 'circle'],
         symbolSize: index === 0 ? 40 : item.share_person_count > 1 ? 25 : 20,
         symbolKeepAspect: true,
         // fixed: index === 0,

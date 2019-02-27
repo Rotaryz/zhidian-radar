@@ -11,7 +11,7 @@
         <section class="top">
           <div class="left">
             <p class="title">{{item.title}}</p>
-            <p v-if="index === 0" class="explain">{{item.explain}}{{groupData.cover_count || groupData2.cover_count}}人)</p>
+            <p v-if="index === 0" class="explain">{{item.explain}}{{groupData2.cover_count || groupData.cover_count}}人)</p>
             <p v-else class="explain">{{item.explain}}</p>
           </div>
           <div v-if="isShowDelButton(index, item, 'group') && hasGroup" class="right" @click="delHandle(index, 'group')">
