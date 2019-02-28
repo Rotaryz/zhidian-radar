@@ -700,6 +700,7 @@
           line-height: 16px
           padding: 13.5px 0
           margin: 0 15px
+          border-bottom-1px(#E1E1E1)
         .no-data
           height: 223px
           line-height: 223px
