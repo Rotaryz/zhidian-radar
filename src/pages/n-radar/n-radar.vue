@@ -82,7 +82,11 @@
                 <div class="icon-txt">沉睡客户</div>
               </div>
             </div>
-            <div v-if="!topType" class="top-btn" @click="diagnose">智能诊断</div>
+            <div v-if="!topType" class="top-btn" @click="diagnose">
+              <span v-show="!loadingStatus">智能诊断</span>
+              <span v-show="loadingStatus">诊断中</span>
+              <img src="./loading.gif" class="loading-img" v-show="loadingStatus">
+            </div>
           </div>
         </div>
       </div>
@@ -213,6 +217,7 @@
         showNoMore: false,
         loading: false,
         timer: '',
+        loadingStatus: false, // 诊断过程中
         loadingTime: '',
         listenScroll: true,
         pullUpLoad: true,
@@ -257,11 +262,13 @@
         this.$router.push({path: url, query: {id: item.customer_id, pageUrl: url}})
       },
       diagnose() {
-        this.topType = true
+        this.loadingStatus = true
         setTimeout(() => {
+          this.topType = true
           this.$refs.scroll && this.$refs.scroll.forceUpdate()
           this.getPnesModel(1)
-        }, 20)
+          this.loadingStatus = false
+        }, 2000)
       },
       _refreshInfo() {
         Jwt.getEmployeeInfo().then((res) => {
@@ -273,7 +280,7 @@
       getDiagnoseState() {
         Radar.getDiagnose().then(res => {
           if (res.error === ERR_OK) {
-            this.topType = +res.data.ai_state
+            // this.topType = +res.data.ai_state
             this.hasLoading = true
             if (this.topType) {
               setTimeout(() => {
@@ -567,6 +574,7 @@
         flex-direction: column
         justify-content: center
         align-items: center
+        position: relative
         &.active
           height: 22.66vw
           background: $color-white
@@ -587,6 +595,13 @@
           font-family: $font-family-regular
           font-size: $font-size-14
           margin-top: 4.8vw
+          display: flex
+          align-items: center
+          justify-content: center
+          .loading-img
+            width: 16px
+            height: 16px
+            margin-left: 3px
         .icon-content
           display: flex
           position: relative
