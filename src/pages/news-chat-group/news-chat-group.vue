@@ -756,7 +756,7 @@
           flex: 1
           overflow-x: hidden
           min-height: 28px
-          border: 1px solid rgba(0, 0, 0, 0.10)
+          border-radius: 4px
           background: $color-white
           max-height: 100px
           overflow-y: auto

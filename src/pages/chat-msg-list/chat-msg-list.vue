@@ -388,6 +388,9 @@
             border-radius: 50%
             border: 1.5px solid #e6e6e6
             box-sizing: border-box
+            display: flex
+            align-items: center
+            justify-content: center
             .avatar-img
               width: 39px
               height: 39px

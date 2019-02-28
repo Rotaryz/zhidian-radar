@@ -2,7 +2,7 @@
   <div class="news">
     <scroll :data="latelyList" :bcColor="'#ffffff'" ref="scroll">
       <div class="news-item group-item border-bottom-1px" @click="createGroup">
-        <div class="news-left">
+        <div class="news-left group">
           <img src="./icon-mass@2x.png" class="left-img group-icon">
         </div>
         <div class="news-right">
@@ -226,15 +226,15 @@
       .news-left
         width: 46px
         height: 46px
-        display: flex
         position: relative
         margin-right: 10px
+        display: flex
+        align-items: center
+        justify-content: center
         .avatar-box
           border: 1.5px solid red
           border-radius: 50%
           overflow: hidden
-          width: 45px
-          height: 45px
           box-sizing: border-box
           .left-img
             width: 39px

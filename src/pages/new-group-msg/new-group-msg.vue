@@ -286,9 +286,8 @@
             line-height: 14px
         .item-content
           background: $color-white
-          border: 1px solid rgba(32,32,46,0.10)
-          box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
-          border-radius: 2px
+          border-1px(#D6DCE0, 4px)
+          border-radius: 4px
           overflow: hidden
           .item-title
             padding: 11px 15px
@@ -434,14 +433,15 @@
               width: 84px
               height: 26px
               line-height: 26px
-              border-1px(#5929DC, 26px)
+              border-radius: 13px
+              border: 1px solid #5929DC
               text-align: center
               font-family: $font-family-regular
               font-size: $font-size-14
               color: #5929DC
               &.gray
                 color: #cccccc
-                border-1px(#cccccc, 26px)
+                border: 1px solid #cccccc
 
   .bottom-box
     padding: 7.5px 15px

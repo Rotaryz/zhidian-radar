@@ -1067,6 +1067,9 @@
           .avatar
             width: 45px
             height: 45px
+            display: flex
+            align-items: center
+            justify-content: center
             border-radius: 50%
             border: 1.5px solid #e6e6e6
             box-sizing: border-box
@@ -1405,7 +1408,7 @@
           flex: 1
           overflow-x: hidden
           min-height: 28px
-          border: 1px solid rgba(0, 0, 0, 0.10)
+          border-radius: 4px
           background: $color-white
           max-height: 100px
           overflow-y: auto
