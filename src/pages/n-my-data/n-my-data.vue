@@ -35,7 +35,7 @@
             </article>
             <div class="panel">
               <div class="title">用户来源-KOL分享传播</div>
-              <ai-charts v-if="KOLData.length" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+              <ai-charts v-if="KOLData" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
               <div v-else class="no-data">暂无数据</div>
               <div class="list" v-if="personList.length > 0">
                 <h3 class="list-title">
@@ -97,9 +97,9 @@
   const SUCCESSHINT = [{text: '0-50%', icon: ''}, {text: '51-80%', icon: 'two'}, {text: '81-99%', icon: 'thr'}, {text: '100%', icon: 'four'}]
   const DATA_ARR = [
     {name: '交易金额', icon: 'money', type: 'total'},
-    {name: '主力客户', icon: 'business', type: 'order_count'},
-    {name: '活跃度', icon: 'active', type: 'per_money'},
-    {name: '笔单价', icon: 'price', type: 'module_e_count'}
+    {name: '主力客户', icon: 'business', type: 'module_e_count'},
+    {name: '活跃度', icon: 'active', type: 'order_count'},
+    {name: '笔单价', icon: 'price', type: 'per_money'}
   ]
   const groupList = [{
     orderBy: 'join',
@@ -247,7 +247,9 @@
               return
             }
             this.KOLData = res.data.elements.length
-            this.$refs.c3 && this.$refs.c3.action(res.data)
+            this.$nextTick(() => {
+              this.$refs.c3 && this.$refs.c3.action(res.data)
+            })
           })
       },
       // KOL列表
@@ -285,7 +287,11 @@
             let personMoney = res.data.map(item => {
               return item.per_money
             })
-            // 订单金额
+            // 订单数
+            let count = res.data.map(item => {
+              return item.order_count
+            })
+            // 交易金额
             let total = res.data.map(item => {
               return item.total
             })
@@ -298,17 +304,19 @@
             if (this.charTab === 1) {
               let lineData = {
                 xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
-                seriesData: [ {data: mainOrderCount.length ? mainOrderCount : [0, 0, 0, 0, 0]} ]
+                seriesData: [ {data: mainOrderCount.length ? mainOrderCount : [0, 0, 0, 0, 0]} ],
+                name: '活跃度'
               }
               this.$refs.c4.action(lineData)
             } else if (this.charTab === 2) {
               let lineData = {
                 xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
-                seriesData: [ {data: personMoney.length ? personMoney : [0, 0, 0, 0, 0]} ]
+                seriesData: [ {data: personMoney.length ? personMoney : [0, 0, 0, 0, 0]} ],
+                name: '笔单价'
               }
               let lineData2 = {
                 xAxisData: day.length ? day : ['03/10', '03/15', '03/20', '03/25', '03/30'],
-                seriesData: [ {data: total.length ? total : [0, 0, 0, 0, 0]}, {data: res.data.y ? res.data.y : [0, 0, 0, 0, 0]} ]
+                seriesData: [ {data: count.length ? count : [0, 0, 0, 0, 0]}, {data: total.length ? total : [0, 0, 0, 0, 0]} ]
               }
               this.$refs.c5.action(lineData)
               this.$refs.c6.action(lineData2)
@@ -323,9 +331,9 @@
           this.$nextTick(() => {
             this.groupRatio()
             this.PENSRatio()
-            this.KOLRatio()
             this.KOLList()
           })
+          this.KOLRatio()
         } else if (index === 1) {
           this.$nextTick(() => {
             this.orderRatio()

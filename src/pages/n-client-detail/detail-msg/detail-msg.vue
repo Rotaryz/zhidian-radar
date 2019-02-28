@@ -36,6 +36,9 @@
       return {
         pnes: PNES_COLOR
       }
+    },
+    mounted() {
+      console.log(this.clientData, 333)
     }
   }
 </script>

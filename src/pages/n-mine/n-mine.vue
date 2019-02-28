@@ -8,7 +8,7 @@
             <img v-else class="mine-header" src="./pic-default_people@2x.png">
             <p class="peo-name">
               <span>{{mine.name}}</span><br />
-              <span class="data">到期日期：至{{mine.merchant.expire_time | timeFormat}}</span>
+              <span class="data">到期日期：{{mine.merchant.expire_time | timeFormat}}</span>
             </p>
           </div>
           <div class="top-box-right" @click="toShareCard">

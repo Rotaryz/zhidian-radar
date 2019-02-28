@@ -51,7 +51,7 @@
               <ai-charts ref="c1" :CHARTS_TYPE="CHARTS_TYPE.VITALITY"></ai-charts>
             </div>
             <div class="pie-box">
-              <div class="title">兴趣的商品占比</div>
+              <div class="title">兴趣占比</div>
               <ai-charts ref="c2" :CHARTS_TYPE="CHARTS_TYPE.SHOP"></ai-charts>
               <div class="list" v-if="goodsList.length > 0">
                 <h3 class="list-title">
@@ -188,7 +188,6 @@
       this.pageUrl = this.$route.path
       this.getClientId(this.id)
       this.getCusomerTagList()
-      this.getClientData()
     },
     mounted() {
       this.highgt = this.$refs.eleven.offsetHeight
@@ -223,7 +222,8 @@
               this.$toast.show(res.message)
               return
             }
-            this.clientData = Object.assign(this.clientData, res.data)
+            this.clientData = JSON.parse(JSON.stringify(Object.assign(this.clientData, res.data)))
+            console.log(this.clientData)
           })
       },
       getCusomerTagList() {
@@ -381,22 +381,23 @@
                 } else {
                   this.clientData.name = res.data.flow.nickname
                 }
+                this.getClientData()
               } else {
                 this.$refs.toast.show(res.message)
               }
             })
             this.mobile = res.data.mobile
-            this.getMarketRecord(this.id, this.flowId)
             this.getNewActionList(this.id)
           } else {
             this.$refs.toast.show(res.message)
           }
         })
       },
+      // 营销记录
       getMarketRecord() {
         this.flowPage = 1
         let data = {
-          page: 1,
+          page: this.flowPage,
           limit: 10,
           customer_id: this.id
         }

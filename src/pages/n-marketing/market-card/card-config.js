@@ -50,10 +50,10 @@ export const CONFIG = {
     icon: require('./icon-custom@2x.png'),
     buttonType: 'status',
     leftText: '触达数',
-    middleText: '进店数',
+    middleText: '领取数',
     rightText: 'charts',
-    leftKey: 'send_tpl_count',
-    middleKey: 'into_shop_count'
+    leftKey: 'reach_count',
+    middleKey: 'take_count'
   },
   [CARD_TYPE.activeCustomer]: { // 活跃新客
     icon: require('./icon-active@2x.png'),
@@ -61,16 +61,16 @@ export const CONFIG = {
     leftText: '触达数',
     middleText: '领取数',
     rightText: 'charts',
-    leftKey: 'send_tpl_count',
+    leftKey: 'reach_count',
     middleKey: 'take_count'
   },
   [CARD_TYPE.boughtCustomer]: { // 已购新客
     icon: require('./icon-already@2x.png'),
     buttonType: 'status',
     leftText: '触达数',
-    middleText: '进店数',
+    middleText: '领取数',
     rightText: 'charts',
-    leftKey: 'send_tpl_count',
-    middleKey: 'into_shop_count'
+    leftKey: 'reach_count',
+    middleKey: 'take_count'
   }
 }

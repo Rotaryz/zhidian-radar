@@ -132,7 +132,7 @@
           if (res.error === ERR_OK) {
             let groupArr = res.data
             this.groups = groupArr.filter(item => {
-              return item.id === this.id
+              return +item.id === +this.id
             })
           } else {
             this.$refs.toast.show(res.message)
@@ -174,8 +174,10 @@
       toAddUser() {
         const path = `/client/client-user-list/client-add-user`
         this.$router.push({path, query: {id: this.id}}) // 分组id
-        let refName = 'slide' + this.moveIdx
-        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+        if (this.moveIdx !== -1) {
+          let refName = 'slide' + this.moveIdx
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+        }
       },
       check(item) {
         const path = `/client/client-user-list/client-detail`
