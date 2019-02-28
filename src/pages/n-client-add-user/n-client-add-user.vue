@@ -15,7 +15,8 @@
           <ul class="user-list">
             <li class="user-box" v-if="dataArray.length" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
               <div :class="['check-box',item.is_member?'un-check':'' ,item.isCheck?'active':'']"></div>
-              <img class="user-icon" :src="item.image_url" alt="" :style="{borderColor: pnes[item.group_rule_name || 'd']}" >
+              <img v-if="item.image_url" class="user-icon" :src="item.image_url" alt="" :style="{borderColor: pnes[item.group_rule_name || 'd']}" >
+              <img v-else class="user-icon" src="./pic-default_people@2x.png" alt="" :style="{borderColor: pnes[item.group_rule_name || 'd']}" >
               <section class="base-info">
                 <div class="name">{{item.name}}</div>
                 <div class="status">{{item.last_follow_day}}</div>
