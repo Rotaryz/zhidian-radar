@@ -101,7 +101,7 @@
     .header
       font-family: $font-family-regular
       line-height: 1
-      font-size: 14px;
+      font-size: 3.733333333333334vw;
       color: #0E1249;
       layout(row,block,nowrap)
       padding :0 15px

@@ -220,7 +220,7 @@
   .market-choice
     display :flex
     flex-wrap wrap
-    padding :0 15px
+    padding :0 4vw
     .panel-wrapper
       layout(row,block,nowrap)
       width :100%
@@ -234,16 +234,16 @@
         flex: 1
         height :100%
         position :relative
-        top:16px
+        top:4.266666666666667vw
         .icon
           position :absolute
-          width :20px
+          width :5.333333333333334vw
           height :@width
           border-radius :100%
           background :#e7ebf4
           z-index :2
           .before
-            width :15px
+            width :4vw
             height :@width
             all-center()
             border-radius :100%
@@ -357,10 +357,10 @@
                 .add-icon
                   display :inline-block
                   text-align :center
-                  width :10.666666666666668vw
+                  width :12.666666666666668vw
                   height :@width
                 .text
-                  margin-top :1.3333333333333335vw
+                  margin-top :0.3333333333333335vw
                   font-family: $font-family-regular
                   font-size: 3.2vw
                   color: #333333;
@@ -380,12 +380,14 @@
               align-items :center
               justify-content :center
               .add-icon
+                margin-top : -5px
                 display :inline-block
                 text-align :center
-                width :10.666666666666668vw
+                width :12.666666666666668vw
                 height :@width
               .text
-                margin-top :1.3333333333333335vw
+                position :relative
+                top: 1px
                 font-family: $font-family-regular
                 font-size: 3.2vw
                 color: #333333;
