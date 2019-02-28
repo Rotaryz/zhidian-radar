@@ -1,7 +1,8 @@
 <template>
   <div class="cliten-box">
     <div class="cliten-con">
-      <img :src="clientData.image_url" class="logo" :style="{borderColor: pnes[clientData.pnes || 'd']}" alt="">
+      <img v-if="clientData.image_url" :src="clientData.image_url" class="logo" :style="{borderColor: pnes[clientData.pnes || 'd']}" alt="">
+      <img v-else class="logo" src="./pic-default_people@2x.png" :style="{borderColor: pnes[clientData.pnes || 'd']}">
       <div class="label-name">{{clientData.name}}</div>
       <div class="text">{{clientData.sources}}</div>
       <div class="data">
@@ -36,9 +37,6 @@
       return {
         pnes: PNES_COLOR
       }
-    },
-    mounted() {
-      console.log(this.clientData, 333)
     }
   }
 </script>

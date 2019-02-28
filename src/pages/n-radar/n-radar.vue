@@ -102,7 +102,8 @@
               <div class="flag" :style="{background: item.group_rule_name ? pnesColor[item.group_rule_name] : '#f3f3f3'}"></div>
               <div class="item-top">
                 <div class="top-left">
-                  <img :src="item.image_url" class="top-avatar">
+                  <img v-if="item.image_url" :src="item.image_url" class="top-avatar">
+                  <img v-else class="top-avatar" src="./pic-default_people@2x.png">
                   <p class="left-name">{{item.nickname}}</p>
                 </div>
                 <div class="top-right"></div>
@@ -262,6 +263,7 @@
         this.$router.push({path: url, query: {id: item.customer_id, pageUrl: url}})
       },
       diagnose() {
+        if (this.loadingStatus) return
         this.loadingStatus = true
         setTimeout(() => {
           this.topType = true

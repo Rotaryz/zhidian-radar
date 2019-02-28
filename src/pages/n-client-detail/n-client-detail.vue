@@ -223,7 +223,6 @@
               return
             }
             this.clientData = JSON.parse(JSON.stringify(Object.assign(this.clientData, res.data)))
-            console.log(this.clientData)
           })
       },
       getCusomerTagList() {
