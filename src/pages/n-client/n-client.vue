@@ -12,7 +12,7 @@
     <!--客户列表-->
     <section class="custom-content" v-if="selectTab === 0">
       <ul class="custom-tab border-bottom-1px" v-if="dataArray.length">
-        <li v-for="(item, index) in groupList" :key="index" class="tab-item" :class="+tabIndex === +index" @click="checkCustom(item, index)">{{item.name}}</li>
+        <li v-for="(item, index) in groupList" :key="index" class="tab-item" :class="{'active': +tabIndex === +index}" @click="checkCustom(item, index)">{{item.name}}</li>
         <li class="line-tab" :style="'transform: translate3d('+ tabIndex * 100 +'%, 0, 0)'"></li>
       </ul>
       <div class="custom-scroll" v-if="dataArray.length">
@@ -362,8 +362,10 @@
       toSearch() {
         const path = `/client/client-search`
         this.$router.push({path})
-        let refName = 'slide' + this.moveIdx
-        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+        if (this.moveIdx !== -1) {
+          let refName = 'slide' + this.moveIdx
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+        }
       },
       getGroupList() {
         let data = {
@@ -614,6 +616,7 @@
           display: flex
           justify-content: center
           transition: all 0.3s
+          z-index: 1
           &:after
             content: ''
             height: 4px
@@ -663,6 +666,7 @@
           display: flex
           justify-content: center
           transition: all 0.3s
+          z-index: 1
           &:after
             content: ''
             height: 4px

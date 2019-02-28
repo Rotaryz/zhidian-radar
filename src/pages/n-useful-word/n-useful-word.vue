@@ -112,13 +112,17 @@
       },
       editItem(item, index) {
         this.$router.push(`/mine/useful-word/add-word?id=${item.id}`)
-        let refName = 'slide' + this.moveIdx
-        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+        if (this.moveIdx !== -1) {
+          let refName = 'slide' + this.moveIdx
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+        }
       },
       toAddWord() {
         this.$router.push('/mine/useful-word/add-word')
-        let refName = 'slide' + this.moveIdx
-        this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+        if (this.moveIdx !== -1) {
+          let refName = 'slide' + this.moveIdx
+          this.$refs[refName][0] && this.$refs[refName][0]._itemInit(false)
+        }
       },
       touchBegin(idx) {
         if (+idx !== +this.moveIdx && this.moveIdx !== -1) {

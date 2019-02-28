@@ -1,6 +1,6 @@
 <template>
   <div class="mine">
-    <scroll :bcColor="'#f5f5f9'">
+    <scroll :bcColor="'#f0f5ff'">
       <div class="mine-top">
         <div class="top-box">
           <div class="top-box-left">
@@ -195,7 +195,7 @@
   .mine-top
     bg-image('bg-my')
     padding: 25px 15px
-    height: 172px
+    height: 150px
     background-size: 100% 100%
     box-sizing: border-box
     position: relative
@@ -239,9 +239,14 @@
         box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04)
         border-radius: 6px
         background: $color-white
-        padding: 15px 15px 20px
+        padding: 18px 15px
         display: block
-        border-1px(#D9F0FE, 12px)
+        border-1px(#D9F0FE, 14px)
+        background-color: #FFF
+        background-image: url("./data@2x.png")
+        background-repeat: no-repeat
+        background-size: 100%
+        background-position: left bottom
         .main
           layout(row)
           align-items: center
@@ -268,7 +273,7 @@
               color: #333
               font-family: $font-family-bold
               font-size: $font-size-18
-              margin-bottom: 14px
+              margin-bottom: 12px
             .text
               color: #333
               font-family: $font-family-regular

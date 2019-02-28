@@ -27,12 +27,12 @@
       </section>
       <div class="bottom">
         <div class="btn" @click="marketing">
-          <span class="icon"></span>
+          <img class="icon" src="./icon-addwechat@2x.png">
           <span class="text">场景营销</span>
         </div>
         <span style="width: 12px"></span>
         <div class="btn" @click="newGroup">
-          <span class="icon"></span>
+          <img class="icon" src="./icon-sendnews@2x.png">
           <span class="text">发消息</span>
         </div>
       </div>
@@ -368,6 +368,7 @@
       width: 16px
       height: 16px
       margin-right: 5px
+      object-fit: cover
     .btn
       flex: 1
       overflow: hidden
@@ -380,11 +381,7 @@
       color: #FFF
       font-size: $font-size-14
       font-family: $font-family-regular
-      .icon
-        icon-image(icon-addwechat)
       &:last-child
         background: linear-gradient(129deg, #02E68B, #06D4AA)
-        .icon
-          icon-image(icon-sendnews)
 
 </style>
