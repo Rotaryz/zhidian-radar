@@ -332,7 +332,7 @@
     layout(row, block, nowrap)
     align-items: center
     justify-content: space-around
-    font-family: $font-family-medium
+    font-family: $font-family-regular
     font-size: $font-size-14
     color: $color-text-main
     letter-spacing: 0.52px
@@ -343,6 +343,10 @@
     .tab-item
       flex: 1
       text-align: center
+      transition: all 0.3s
+    .active
+      font-size: $font-size-16
+      font-family: $font-family-medium
     .line-tab
       width: 33.333%
       height: 4px
@@ -352,6 +356,7 @@
       display: flex
       justify-content: center
       transition: all 0.3s
+      z-index: 1
       &:after
         content: ''
         height: 4px

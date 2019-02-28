@@ -76,30 +76,30 @@
             top: -2px
             right: -1px
           &.icon-radar
-            bg-image('./icon-radar')
+            icon-image('./icon-radar')
           &.icon-news
-            bg-image('./icon-news')
+            icon-image('./icon-news')
           &.icon-market
-            bg-image('./icon-marketing')
+            icon-image('./icon-marketing')
           &.icon-client
-            bg-image('./icon-customer')
+            icon-image('./icon-customer')
           &.icon-mine
-            bg-image('./icon-mine')
+            icon-image('./icon-mine')
         .icon-text
           font-family: $font-family-regular
           color: #15182D
           font-size: $font-size-10
       &.router-link-active .item-container
         .icon-radar
-          bg-image('./icon-radar_pressed')
+          icon-image('./icon-radar_pressed')
         .icon-news
-          bg-image('./icon-news_pressed')
+          icon-image('./icon-news_pressed')
         .icon-market
-          bg-image('./icon-marketing_pressed')
+          icon-image('./icon-marketing_pressed')
         .icon-client
-          bg-image('./icon-customer_pressed')
+          icon-image('./icon-customer_pressed')
         .icon-mine
-          bg-image('./icon-mine_pressed')
+          icon-image('./icon-mine_pressed')
         .icon-text
           color: $color-main
 </style>
