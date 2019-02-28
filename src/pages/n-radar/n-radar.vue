@@ -339,7 +339,7 @@
       },
       viewScroll(e) {
         let topHeight = this.$refs.radarTop.clientHeight
-        this.topHide = (e.y + topHeight - 7) < 0
+        this.topHide = (e.y + topHeight - 40) < 0
       },
       clearNum() {
         Radar.getRadarList(0, 30, this.userInfo.id).then((res) => {
@@ -674,7 +674,7 @@
       background: $color-F0F5FF
       margin-top: -18px
       border-radius: 15px 15px 0 0
-      padding-top: 50px
+      padding-top: 20px
       .msg-box
         min-width: 95px
         height: 30px
@@ -683,7 +683,7 @@
         line-height: 30px
         font-size: 0
         position: absolute
-        top: 20px
+        top: 13px
         right: 0
         z-index: 20
         transition: all .3s
@@ -708,6 +708,7 @@
             color: $color-text-main
             font-size: $font-size-16
             margin-bottom: 15px
+            padding-top: 10px
           .msg-item-content
             background: $color-white
             border: 1px solid #E9F0FE
