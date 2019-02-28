@@ -7,58 +7,64 @@ const wx = {
 // 定义抠图方法
 function getImgData(imgSrc) {
   return new Promise((resolve) => {
+    if (!imgSrc) {
+      resolve('')
+      return
+    }
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     const img = new Image()
     img.setAttribute('crossOrigin', 'anonymous')
-    img.onload = function () {
-      let radius = img.width / 2
-      let diameter = 2 * radius
-      canvas.width = diameter
-      canvas.height = diameter
-      ctx.clearRect(0, 0, diameter, diameter)
-      ctx.save()
-      ctx.beginPath()
-      ctx.arc(radius, radius, radius, 0, 2 * Math.PI) // 画出圆
-      ctx.clip() // 裁剪上面的圆形
-      ctx.drawImage(img, 0, 0, diameter, diameter, 0, 0, diameter, diameter) // 在刚刚裁剪的园上画图
-      ctx.restore() // 还原状态
-      resolve(canvas.toDataURL('image/png', 1))
+    try {
+      img.onload = function () {
+        let radius = img.width / 2
+        let diameter = 2 * radius
+        canvas.width = diameter
+        canvas.height = diameter
+        ctx.clearRect(0, 0, diameter, diameter)
+        ctx.save()
+        ctx.beginPath()
+        ctx.arc(radius, radius, radius, 0, 2 * Math.PI) // 画出圆
+        ctx.clip() // 裁剪上面的圆形
+        ctx.drawImage(img, 0, 0, diameter, diameter, 0, 0, diameter, diameter) // 在刚刚裁剪的园上画图
+        ctx.restore() // 还原状态
+        resolve(canvas.toDataURL('image/png', 1))
+      }
+    } catch (e) {
+      resolve('')
     }
     img.src = imgSrc
   })
 }
+
 const toDataURL = url => fetch(url)
-  .then(response => response.blob())
+  .then(response => response.blob()).catch(e => console.error(e))
   .then(blob => new Promise((resolve, reject) => {
     const reader = new FileReader()
-    reader.onloadend = () => resolve(reader.result)
+    reader.onloadend = () => {
+      if (/image/.test(reader.result)) {
+        resolve(reader.result)
+      } else {
+        resolve('')
+      }
+    }
     reader.onerror = reject
     reader.readAsDataURL(blob)
-  }))
+  })).catch(e => console.error(e))
 
 // 批量处理图片
 function getImgArrayData(arr) {
-  return Promise.all(arr.map(async (item) => {
+  return Promise.all(arr.map(async (item, index, arr) => {
     let image = ''
     try {
       image = await toDataURL(item.image_url)
     } catch (e) {
-      console.error(e)
+      image = ''
     }
+    // image = image.replace('text/html', 'image/jpeg')
     return getImgData(image)
   }))
 }
-// function testTodo(arr) {
-//   // for (let i = 0; i < 15; i++) {
-//   //   arr = arr.concat(arr)
-//   // }
-//   while (arr.length < 20) {
-//     arr = arr.concat(arr)
-//   }
-//   arr = arr.splice(0, 20)
-//   return arr
-// }
 
 export async function createUserTop6(data) {
   const arr = await getImgArrayData(data.elements)
@@ -100,6 +106,7 @@ export async function createUserTop6(data) {
       }
     })
   }
+  const gap = 30
   return {
     // animation: false,
     // animationDurationUpdate: 500,
@@ -110,9 +117,9 @@ export async function createUserTop6(data) {
         layout: 'force',
         force: {
           // repulsion: Math.max(jjj.links.length * 9, jjj.nodes.length * 6, 6 * 12),
-          repulsion: Math.max(jjj.links.length * 10, jjj.nodes.length * 10, 10 * 20),
-          gravity: 0.2
-          // edgeLength: 20
+          repulsion: Math.max(jjj.links.length * gap, jjj.nodes.length * gap, gap * 20),
+          gravity: 0.2,
+          edgeLength: 30
         },
         data: jjj.nodes,
         links: jjj.links,
@@ -128,7 +135,7 @@ export async function createUserTop6(data) {
             opacity: 1,
             color: '#8867F2',
             width: 2,
-            curveness: 0.3
+            curveness: 0.2
           }
         }
       }
@@ -136,6 +143,7 @@ export async function createUserTop6(data) {
   }
 }
 
+/* ------------------------------------------------------ */
 const number2 = 48
 const json = {
   nodes: new Array(number2).fill(1).map((item, index) => {
