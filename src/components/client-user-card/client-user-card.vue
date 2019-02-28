@@ -3,7 +3,7 @@
     <!--最新加入-->
     <section class="container" v-if="useType==='join'">
       <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes[userInfo.group_rule_name || 'd']}" :src="userInfo.image_url" alt=""/>
-      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" :style="{borderColor: pnes[userInfo.group_rule_name || 'd']}" alt=""/>
       <article class="user-info">
         <section class="base-info">
           <div class="name">
@@ -21,7 +21,7 @@
     <!--活跃指数-->
     <section class="container" v-else-if="useType==='active_index'">
       <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes[userInfo.group_rule_name || 'd']}" :src="userInfo.image_url" alt=""/>
-      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" :style="{borderColor: pnes[userInfo.group_rule_name || 'd']}" alt=""/>
       <article class="user-info">
         <section class="base-info">
           <div class="name">
@@ -39,7 +39,7 @@
     <!--RFM指数-->
     <section class="container" v-else-if="useType==='rfm'">
       <img v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes[userInfo.group_rule_name || 'd']}" :src="userInfo.image_url" alt=""/>
-      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" :style="{borderColor: pnes[userInfo.group_rule_name || 'd']}" alt=""/>
       <article class="user-info">
         <section class="base-info">
           <div class="name">
@@ -57,7 +57,7 @@
     <!--KOL指数-->
     <section class="container" v-else-if="useType==='kol_index'">
       <img  v-if="userInfo.image_url&&userInfo.image_url.length" class="user-icon" :style="{borderColor: pnes[userInfo.group_rule_name || 'd']}" :src="userInfo.image_url" alt=""/>
-      <img v-else class="user-icon" src="./pic-default_people@2x.png" alt=""/>
+      <img v-else class="user-icon" src="./pic-default_people@2x.png" :style="{borderColor: pnes[userInfo.group_rule_name || 'd']}" alt=""/>
       <article class="user-info">
         <section class="base-info">
           <div class="name">

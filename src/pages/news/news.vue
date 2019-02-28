@@ -25,7 +25,8 @@
             <div slot="content" class="news-item-content">
               <div class="news-left">
                 <div class="avatar-box" :style="{borderColor: item.group_rule_name ? pnesColor[item.group_rule_name] : '#f3f3f3'}">
-                  <img :src="item.avatar" class="left-img">
+                  <img v-if="item.avatar" :src="item.avatar" class="left-img">
+                  <img v-else src="./pic-default_people@2x.png" class="left-img">
                 </div>
               </div>
               <div class="news-right">
