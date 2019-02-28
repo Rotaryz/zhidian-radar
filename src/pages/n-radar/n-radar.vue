@@ -280,7 +280,7 @@
       getDiagnoseState() {
         Radar.getDiagnose().then(res => {
           if (res.error === ERR_OK) {
-            // this.topType = +res.data.ai_state
+            this.topType = +res.data.ai_state
             this.hasLoading = true
             if (this.topType) {
               setTimeout(() => {
