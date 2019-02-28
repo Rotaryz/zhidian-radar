@@ -418,12 +418,14 @@
             font-family: $font-family-regular
             line-height: 30px
             width: 25%
+            background: #FFF
             text-align: center
             transition: all 0.3s
           .tab:last-child
             border-right: 0
           .active
-            color: $color-main
+            background: $color-linear-main
+            color: #FFF
         .data-list
           padding: 30px 20px 25px
           overflow: hidden
@@ -468,8 +470,6 @@
       layout(row, block, nowrap)
       align-items: center
       justify-content: space-between
-      font-family: $font-family-regular
-      font-size: $font-size-14
       color: #333
       letter-spacing: 0.52px
       text-align: center
@@ -480,9 +480,10 @@
         text-align: center
         opacity: 0.8
         transition: all 0.3s
+        font-family: $font-family-regular
+        font-size: $font-size-16
       .active
         opacity: 1
-        font-size: $font-size-16
         font-family: $font-family-medium
       .line-tab
         width: 33.333%
@@ -513,6 +514,7 @@
         line-height: 16px
         padding: 13.5px 0
         margin: 0 15px
+        border-bottom-1px(#E1E1E1)
       .no-data
         height: 223px
         line-height: 223px
@@ -592,7 +594,8 @@
         font-size: 14px
         font-family: "PingFangSC-Regular"
         color: $color-main
-        border-1px($color-main, 100px)
+        border-radius: 100px
+        border: 1px solid $color-main
         text-align: center
         margin: 30px auto 20px
 </style>

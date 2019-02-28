@@ -112,6 +112,8 @@
             white-space: nowrap
             text-overflow: ellipsis
             display: block
+          .text
+            color: #333
         .item:last-child:after
           border: 0
 </style>

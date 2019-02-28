@@ -348,8 +348,7 @@
       .user-list
         position: relative
         .user-list-item
-          height: 76px
-          lr-border-bottom-1px()
+          height: 70px
   .bottom
     height: 55px
     width: 100%
@@ -365,8 +364,8 @@
     padding: 0 12px
     box-sizing: border-box
     .icon
-      width: 16px
-      height: 16px
+      width: 18px
+      height: 18px
       margin-right: 5px
       object-fit: cover
     .btn

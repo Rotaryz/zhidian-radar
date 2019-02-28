@@ -101,8 +101,9 @@
       layout(row, block, no-warp)
       align-items: center
       padding: 12px 0
-      height: 45px
+      height: 46px
       overflow: hidden
+      border-bottom-1px(#E1E1E1)
       .user-icon
         width: 40px
         height: 40px

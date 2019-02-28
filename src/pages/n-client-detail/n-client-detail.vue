@@ -36,8 +36,8 @@
           </div>
           <!--AI分析-->
           <div class="ai-box" v-if="menuIdx * 1 === 1">
-            <div class="tag">
-              <h3 class="title">
+            <div class="tag" :class="{'no-border': !labelList.length}">
+              <h3 class="title" :class="{'no-border': !labelList.length}">
                 <span class="left">用户标签</span>
                 <p class="right" @click="toClientTag"><img class="icon" src="./icon-addlabel@2x.png"><span class="text">添加标签</span></p>
               </h3>
@@ -598,12 +598,11 @@
     .tab
       flex: 1
       text-align: center
-      font-size: $font-size-14
+      font-size: $font-size-16
       color: $color-text
       font-family: $font-family-regular
       transition: all 0.3s
     .active
-      font-size: $font-size-16
       font-family: $font-family-medium
     .line
       position: absolute
@@ -702,22 +701,25 @@
           display: flex
           align-items: center
         .icon
-          width: 16px
-          height: 16px
+          width: 18px
+          height: 18px
           margin-right: 5px
           object-fit: cover
         .text
           font-size: $font-size-14
           color: #333
           opacity: 0.6
+      .no-border:after
+        border: 0
       .tag-list
         display: flex
         flex-wrap: wrap
         position: relative
         .tags
-          width: 70px
+          width: 60px
           height: 24px
           line-height: 24px
+          padding: 0 5px
           border: 1.5px solid $color-main
           color: $color-main
           text-align: center
@@ -726,16 +728,34 @@
           border-radius: 4px
           float: left
           margin: 15px 4px 15px 0
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
         .line
           width: 100%
-          border-bottom-1px($color-line)
           position: absolute
           left: 0
           top: 0
+          right :0
+          height :1px
+          overflow :hidden
+          &:after
+            content: ""
+            display: block
+            position: absolute
+            border-bottom: 1px dotted $color-row-line
+            left: 0
+            bottom: 0
+            width: 100%
+            transform-origin: 0 bottom
+            transform :scaleX(3)
+
+    .no-border
+      padding-bottom: 0
     .pie-box
       margin: 12px 0
       background: #FFFFFF
-      box-shadow: 0 0 10px 0 rgba(141,151,158,0.30)
+      box-shadow:  0 2px 16px 0 rgba(21,24,45,0.04)
       border-radius: 4px
       overflow :hidden
       .title
@@ -745,6 +765,7 @@
         line-height: 16px
         padding: 13.5px 0
         margin: 0 15px
+        border-bottom-1px(#E1E1E1)
       .list
         margin: 0 15px
         border-1px(#F1F3F6)
@@ -854,8 +875,8 @@
       color: #FFF
       margin-right: 10px
       .btn-img
-        width: 16px
-        height: 16px
+        width: 18px
+        height: 18px
         display: block
         margin-right: 4px
         object-fit: cover
@@ -867,8 +888,8 @@
       margin-right: 0
       background: linear-gradient(131deg, #02E68B, #06D4AA)
       .btn-img
-        width: 15px
-        height: 15px
+        width: 18px
+        height: 18px
         object-fit: cover
         padding-top: 2px
 

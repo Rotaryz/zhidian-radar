@@ -73,7 +73,7 @@
       border-bottom-1px(#E1E1E1)
     .content
       padding: 15px
-      border-1px($color-line, 8px, solid)
+      border-1px($color-line, 6px, solid)
       border-radius: 4px
       margin: 15px 15px 20px
       .input

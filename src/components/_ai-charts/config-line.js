@@ -316,7 +316,8 @@ export function createPNES(args = {}) {
       itemHeight: 8,
       borderRadius: 0,
       bottom: 12,
-      padding: [0, 25, 0, 25],
+      itemGap: 20,
+      padding: [0, 10, 0, 10],
       data: legendData
     },
     grid: {

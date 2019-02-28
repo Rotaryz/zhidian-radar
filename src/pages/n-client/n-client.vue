@@ -593,8 +593,7 @@
         layout(row, block, nowrap)
         align-items: center
         justify-content: space-around
-        font-family: $font-family-regular
-        font-size: $font-size-14
+
         color: $color-text-main
         letter-spacing: 0.52px
         text-align: center
@@ -604,8 +603,10 @@
         .tab-item
           flex: 1
           transition: all 0.3s
+          font-family: $font-family-regular
+          font-size: $font-size-14
         .active
-          font-size: 16px
+          font-size: $font-size-16
           font-family: $font-family-medium
         .line-tab
           width: 33.333%
@@ -634,7 +635,6 @@
           position: relative
           .user-list-item
             height: 70px
-            lr-border-bottom-1px()
 
     .data-content
       .custom-tab
@@ -654,8 +654,10 @@
           flex: 1
           text-align: center
           transition: all 0.3s
+          font-family: $font-family-regular
+          font-size: $font-size-14
         .active
-          font-size: 16px
+          font-size: $font-size-16
           font-family: $font-family-medium
         .line-tab
           width: 25%
@@ -684,7 +686,6 @@
           position: relative
           .user-list-item
             height: 70px
-            border-bottom-1px($color-col-line)
 
       .panel
         margin: 12px

@@ -245,7 +245,7 @@
           width: 20px
           height: 20px
           border-radius: 50%
-          border-1px(#999, 40px)
+          border: 1px solid #999
           box-sizing: border-box
           background: url("")
           &.active
@@ -284,7 +284,6 @@
           width: 142px
           height: 100%
           padding-right: 15px
-          padding-top: 5px
           font-family: $font-family-regular
           font-size: $font-size-12
           color: $color-888888
@@ -293,6 +292,7 @@
             text-align: right
             font-family: $font-family-regular
             font-size: $font-size-12
+            line-height: 20px
             color: #333
           .time
             text-align: right
@@ -332,7 +332,6 @@
     layout(row, block, nowrap)
     align-items: center
     justify-content: space-around
-    font-family: $font-family-regular
     font-size: $font-size-14
     color: $color-text-main
     letter-spacing: 0.52px
@@ -344,8 +343,9 @@
       flex: 1
       text-align: center
       transition: all 0.3s
-    .active
       font-size: $font-size-16
+      font-family: $font-family-regular
+    .active
       font-family: $font-family-medium
     .line-tab
       width: 33.333%
