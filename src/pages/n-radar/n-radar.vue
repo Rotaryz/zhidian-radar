@@ -102,8 +102,10 @@
               <div class="flag" :style="{background: item.group_rule_name ? pnesColor[item.group_rule_name] : '#f3f3f3'}"></div>
               <div class="item-top">
                 <div class="top-left">
-                  <img v-if="item.image_url" :src="item.image_url" class="top-avatar">
-                  <img v-else class="top-avatar" src="./pic-default_people@2x.png">
+                  <div class="avatar-box">
+                    <img v-if="item.image_url" :src="item.image_url" class="top-avatar">
+                    <img v-else class="top-avatar" src="./pic-default_people@2x.png">
+                  </div>
                   <p class="left-name">{{item.nickname}}</p>
                 </div>
                 <div class="top-right"></div>
@@ -711,9 +713,9 @@
             padding-top: 10px
           .msg-item-content
             background: $color-white
-            border: 1px solid #F5F8FD
-            border-1px(#E9F0FE, 6px)
-            box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04);
+            border: 1px solid #E9F0FE
+            box-sizing: border-box
+            box-shadow: 0 2px 16px 0 rgba(21,24,45,0.06)
             border-radius: 3px
             min-height: 63px
             padding: 8px 15px 0
@@ -736,10 +738,15 @@
                 align-items: center
                 flex: 1
                 overflow: hidden
+                .avatar-box
+                  width: 28px
+                  height: 28px
+                  border: 1px solid #f3f3f3
+                  border-radius: 50%
                 .top-avatar
                   width: 26px
                   height: 26px
-                  border: 2px solid #f3f3f3
+                  border: 1px solid #ffffff
                   border-radius: 50%
                   margin-right: 5px
                 .left-name
