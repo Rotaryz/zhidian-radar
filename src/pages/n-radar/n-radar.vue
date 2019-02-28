@@ -262,6 +262,7 @@
         this.$router.push({path: url, query: {id: item.customer_id, pageUrl: url}})
       },
       diagnose() {
+        if (this.loadingStatus) return
         this.loadingStatus = true
         setTimeout(() => {
           this.topType = true
