@@ -140,7 +140,7 @@
           </article>
           <div class="panel">
             <div class="title">KOL传播 TOP10</div>
-            <ai-charts v-if="KOLData" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+            <ai-charts v-if="KOLData && KOLRefresh" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
             <div v-else class="no-data">暂无数据</div>
           </div>
           <div style="height: 5px"></div>
@@ -228,7 +228,8 @@
         CHARTS_TYPE: CHARTS_TYPE,
         moveIdx: -1,
         shopId: null,
-        KOLData: false
+        KOLData: false,
+        KOLRefresh: true
       }
     },
     created() {
@@ -265,10 +266,14 @@
       // 客户分析切换时间
       checkData(index) {
         if (this.dataIndex === index) return
+        this.KOLRefresh = false // 修改KOL刷新的问题 todo
         this.dataIndex = index
         this.cityRatio()
         this.sexRatio()
         this.KOLRatio()
+        this.$nextTick(() => {
+          this.KOLRefresh = true
+        })
       },
       refresh() {
         this.isAll = false

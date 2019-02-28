@@ -43,7 +43,11 @@
         if (this.myChart == null) return
         let config = await this.CHARTS_CONFIG.createOption(data)
         this.myChart.setOption(config)
+      },
+      resizeCharts() {
+        this.myChart && this.myChart.resize()
       }
+
     }
   }
 </script>

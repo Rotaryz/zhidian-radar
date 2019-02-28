@@ -259,6 +259,13 @@ export function createPNES(args = {}) {
   if (!seriesData || !seriesData.length) {
     seriesData = DEFAULT_SERIES_DATA_FN(4)
   }
+  // todo
+  seriesData = seriesData.map((item) => {
+    item.data = item.data.map((child) => {
+      return Math.max(child, 0)
+    })
+    return item
+  })
   let series = seriesData.map((item, index) => {
     return {
       name: colorObj[index].name,
