@@ -493,6 +493,7 @@
         display: flex
         justify-content: center
         transition: all 0.3s
+        z-index: 1
         &:after
           content: ''
           height: 4px

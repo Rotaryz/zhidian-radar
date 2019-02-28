@@ -39,7 +39,7 @@
             <div class="tag">
               <h3 class="title">
                 <span class="left">用户标签</span>
-                <p class="right" @click="toClientTag"><span class="icon"></span><span class="text">添加标签</span></p>
+                <p class="right" @click="toClientTag"><img class="icon" src="./icon-addlabel@2x.png"><span class="text">添加标签</span></p>
               </h3>
               <ul class="tag-list">
                 <li class="tags" v-for="(item, index) in labelList" :key="index" @click="toClientTag">{{item.name}}</li>
@@ -611,6 +611,7 @@
       height: 4px
       bottom: 0
       transition: all .3s
+      z-index: 1
       .chilen-line
         height: 4px
         width: 42px
@@ -703,8 +704,8 @@
         .icon
           width: 16px
           height: 16px
-          icon-image(icon-addlabel)
           margin-right: 5px
+          object-fit: cover
         .text
           font-size: $font-size-14
           color: #333
@@ -857,6 +858,7 @@
         height: 16px
         display: block
         margin-right: 4px
+        object-fit: cover
       .text
         font-size: $font-size-14
         font-family: $font-family-regular
@@ -867,6 +869,7 @@
       .btn-img
         width: 15px
         height: 15px
+        object-fit: cover
         padding-top: 2px
 
   .add-jump

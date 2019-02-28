@@ -136,7 +136,7 @@
               color: $color-main
               margin-bottom: 15px
               border-radius: 4px
-              border-1px($color-main, 8px)
+              border: 1px solid $color-main
               &.active
                 background: $color-linear-main
                 color: #FFF

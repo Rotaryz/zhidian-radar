@@ -54,7 +54,7 @@
     height: 100%
     border-radius: 6px
     background: #FFF
-    box-shadow: 0 2px 20px 0 rgba(21,24,45,0.1)
+    box-shadow: 0 1px 10px 0 rgba(21,24,45,0.1)
     .cliten-con
       width: 100%
       height: 100%
@@ -112,5 +112,6 @@
             white-space: nowrap
             text-overflow: ellipsis
             display: block
-
+        .item:last-child:after
+          border: 0
 </style>
