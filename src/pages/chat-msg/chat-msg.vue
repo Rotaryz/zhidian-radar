@@ -148,7 +148,7 @@
             <textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>
           </div>
           <div class="addimg-box" v-if="!inputMsg" @click.stop="showMoreList">
-            <img src="../../../static/img/icon-add_im@2x.png" class="addimg-icon">
+            <img src="./icon-addnews@2x.png" class="addimg-icon">
           </div>
           <div class="submit-btn" @click="sendMsg" v-if="inputMsg">发送</div>
         </div>
