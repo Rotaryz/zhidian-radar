@@ -188,7 +188,6 @@
       this.pageUrl = this.$route.path
       this.getClientId(this.id)
       this.getCusomerTagList()
-      this.getClientData()
     },
     mounted() {
       this.highgt = this.$refs.eleven.offsetHeight
@@ -223,7 +222,8 @@
               this.$toast.show(res.message)
               return
             }
-            this.clientData = Object.assign(this.clientData, res.data)
+            this.clientData = JSON.parse(JSON.stringify(Object.assign(this.clientData, res.data)))
+            console.log(this.clientData)
           })
       },
       getCusomerTagList() {
@@ -381,6 +381,7 @@
                 } else {
                   this.clientData.name = res.data.flow.nickname
                 }
+                this.getClientData()
               } else {
                 this.$refs.toast.show(res.message)
               }

@@ -13,7 +13,7 @@
           <div class="last-time">{{userInfo.sources}}</div>
         </section>
         <div class="tags">
-          <div class="left">{{userInfo.last_follow_at ? '已跟进' : '还未跟进'}}</div>
+          <div class="left">{{userInfo.last_follow_day}}</div>
           <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
@@ -31,8 +31,8 @@
           <div class="last-time">活跃指数{{userInfo.active_value || 0}}</div>
         </section>
         <div class="tags">
-          <div class="left">{{userInfo.last_follow_at ? '已跟进' : '还未跟进'}}</div>
-          <div class="tags-right">{{userInfo.flow_join_at}}</div>
+          <div class="left">{{userInfo.last_follow_day}}</div>
+          <div class="tags-right">{{userInfo.last_active_at}}</div>
         </div>
       </article>
     </section>
@@ -49,7 +49,7 @@
           <div class="last-time">最后跟进</div>
         </section>
         <div class="tags">
-          <div class="left">{{userInfo.last_follow_at ? '已跟进' : '还未跟进'}}</div>
+          <div class="left">{{userInfo.last_follow_day}}</div>
           <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
@@ -67,8 +67,8 @@
           <div class="last-time">KOL指数{{userInfo.kol_value || 0}}</div>
         </section>
         <div class="tags">
-          <div class="left">{{userInfo.last_follow_at ? '已跟进' : '还未跟进'}}</div>
-          <div class="tags-right">{{userInfo.flow_join_at}}</div>
+          <div class="left">{{userInfo.last_follow_day}}</div>
+          <!--<div class="tags-right">{{userInfo.flow_join_at}}</div>-->
         </div>
       </article>
     </section>
