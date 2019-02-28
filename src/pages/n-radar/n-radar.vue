@@ -711,7 +711,8 @@
             padding-top: 10px
           .msg-item-content
             background: $color-white
-            border: 1px solid #E9F0FE
+            border: 1px solid #F5F8FD
+            border-1px(#E9F0FE, 6px)
             box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04);
             border-radius: 3px
             min-height: 63px
