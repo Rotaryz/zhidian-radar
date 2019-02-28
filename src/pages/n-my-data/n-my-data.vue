@@ -35,7 +35,7 @@
             </article>
             <div class="panel">
               <div class="title">用户来源-KOL分享传播</div>
-              <ai-charts v-if="KOLData" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
+              <ai-charts v-if="KOLData && KOLRefresh" ref="c3" :CHARTS_TYPE="CHARTS_TYPE.USER_TOP6"></ai-charts>
               <div v-else class="no-data">暂无数据</div>
               <div class="list" v-if="personList.length > 0">
                 <h3 class="list-title">
@@ -144,7 +144,8 @@
         shopId: '',
         personList: [],
         pop: false,
-        KOLData: false
+        KOLData: false,
+        KOLRefresh: true
       }
     },
     created() {
@@ -326,9 +327,11 @@
       // 图表tab切换
       changeChart(item, index) {
         if (this.charTab === index) return
+        this.KOLRefresh = false
         this.charTab = index
         if (index === 0) {
           this.$nextTick(() => {
+            this.KOLRefresh = true
             this.groupRatio()
             this.PENSRatio()
             this.KOLList()
