@@ -184,8 +184,8 @@
             line-height: @font-size
             margin :0 1.866666666666667vw 0 1.6vw
           .arrow-right
-            width : 1.3333333333333335vw
-            height : 2.666666666666667vw
+            width : 1.866666666666667vw
+            height : 3.2vw
         .right
           flex: 1
           display :flex

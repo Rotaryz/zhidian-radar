@@ -76,7 +76,7 @@ export async function createUserTop6(data) {
   const jjj = {
     nodes: data.elements.map((item, index) => {
       return {
-        name: item.customer_id + '', // todo
+        name: item.customer_id + '',
         symbol: `image://${index === 0 ? hostUrl + '/pic-xcx@1x.png' : item.image_url || hostUrl + '/pic-default@1x.png'}`,
         symbolSize: index === 0 ? 40 : item.share_person_count > 1 ? 25 : 20,
         symbolKeepAspect: true,
@@ -98,7 +98,7 @@ export async function createUserTop6(data) {
     }),
     links: data.relation.map((item, index, arr) => {
       return {
-        source: item.customer_id + '', // todo
+        source: item.customer_id + '',
         target: item.from_customer_id + '',
         value: 10,
         lineStyle: {
@@ -117,7 +117,7 @@ export async function createUserTop6(data) {
       }
     })
   }
-  const gap = 40
+  const gap = 10
   return {
     // animation: false,
     // animationDurationUpdate: 500,
@@ -128,7 +128,7 @@ export async function createUserTop6(data) {
         layout: 'force',
         force: {
           // repulsion: Math.max(jjj.links.length * 9, jjj.nodes.length * 6, 6 * 12),
-          repulsion: Math.max(jjj.links.length * gap, jjj.nodes.length * gap, gap * 20),
+          repulsion: Math.max(jjj.links.length * gap, jjj.nodes.length * gap, gap * 50),
           // repulsion: 400,
           gravity: 0.4,
           edgeLength: [1, 10],
