@@ -82,6 +82,8 @@ export async function createUserTop6(data) {
         symbolKeepAspect: true,
         // fixed: index === 0,
         // fixed: true,
+        // x: index === 0 ? '50%' : null,
+        // y: index === 0 ? '50%' : null,
         itemStyle: {
           borderColor: '#8867F2',
           borderWidth: 4,
@@ -97,7 +99,16 @@ export async function createUserTop6(data) {
     links: data.relation.map((item, index, arr) => {
       return {
         source: item.customer_id + '', // todo
-        target: item.from_customer_id + ''
+        target: item.from_customer_id + '',
+        value: 10,
+        lineStyle: {
+          normal: {
+            opacity: 1,
+            color: '#8867F2',
+            width: 2,
+            curveness: 0.2
+          }
+        }
         // lineStyle: {
         //   normal: {
         //     color: 'red'
@@ -106,7 +117,7 @@ export async function createUserTop6(data) {
       }
     })
   }
-  const gap = 30
+  const gap = 40
   return {
     // animation: false,
     // animationDurationUpdate: 500,
@@ -118,8 +129,10 @@ export async function createUserTop6(data) {
         force: {
           // repulsion: Math.max(jjj.links.length * 9, jjj.nodes.length * 6, 6 * 12),
           repulsion: Math.max(jjj.links.length * gap, jjj.nodes.length * gap, gap * 20),
-          gravity: 0.2,
-          edgeLength: 30
+          // repulsion: 400,
+          gravity: 0.4,
+          edgeLength: [1, 10],
+          layoutAnimation: false
         },
         data: jjj.nodes,
         links: jjj.links,
@@ -128,14 +141,6 @@ export async function createUserTop6(data) {
         label: {
           normal: {
             show: true
-          }
-        },
-        lineStyle: {
-          normal: {
-            opacity: 1,
-            color: '#8867F2',
-            width: 2,
-            curveness: 0.2
           }
         }
       }
