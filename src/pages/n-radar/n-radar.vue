@@ -24,7 +24,7 @@
             </div>
             <transition name="fade">
               <div class="pnes-content" v-if="topType">
-                <img src="./pnes-bc@2x.png" class="content-bc">
+                <img src="./pnes_bc@2x.png" class="content-bc">
                 <img src="./NES_iSpt.gif" class="content-gif">
                 <div class="pnes-item" v-for="(item, idx) in pnesObj" :key="idx" :class="item.type">
                   <div class="pnes-title">{{item.valTxt}}</div>
