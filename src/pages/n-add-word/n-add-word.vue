@@ -30,6 +30,7 @@
     },
     created () {
       this.wordId = this.$route.query.id
+      if (this.$route.query.id) document.title = '编辑话术'
       this.getMsgList()
     },
     methods: {
