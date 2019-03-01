@@ -685,7 +685,6 @@
     .tag
       padding: 0 15px 8px
       border-radius: 6px
-      border-1px(#E9F0FE, 12PX)
       box-shadow:  0 2px 16px 0 rgba(21,24,45,0.04)
       .title
         display: flex
@@ -715,6 +714,7 @@
         display: flex
         flex-wrap: wrap
         position: relative
+        overflow: hidden
         .tags
           width: 60px
           height: 24px
@@ -738,17 +738,14 @@
           top: 0
           right :0
           height :1px
-          overflow :hidden
-          &:after
-            content: ""
-            display: block
-            position: absolute
-            border-bottom: 1px dotted $color-row-line
-            left: 0
-            bottom: 0
-            width: 100%
-            transform-origin: 0 bottom
-            transform :scaleX(3)
+          background-image: repeating-linear-gradient(90deg, #ebeef3 0,#ebeef3 4px, #fff 4px, #fff 6px)
+          transform: scale(1, 1)
+          @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2)
+            width: 200%
+            transform: scale(1, .5)
+          @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3)
+            width: 300%
+            transform: scale(1, 1 / 3)
 
     .no-border
       padding-bottom: 0
@@ -767,7 +764,7 @@
         margin: 0 15px
         border-bottom-1px(#E1E1E1)
       .list
-        margin: 0 15px
+        margin: 15px 15px 0
         border-1px(#F1F3F6)
         .list-title,.item
           background: #F5F8FC

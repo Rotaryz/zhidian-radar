@@ -75,7 +75,7 @@
   .client-set-group
     fill-box()
     background-color: $color-white-fff
-    z-index: 10
+    z-index: 20
     .title
       font-family: $font-family-regular
       font-size: $font-size-16
