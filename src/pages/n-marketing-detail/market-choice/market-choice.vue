@@ -295,7 +295,7 @@
             bottom: 0
             width: 100%
             transform-origin: 0 bottom
-            transform :scaleX(3)
+            transform : scaleX(0.5)
           .left
             flex:1
             font-family: $font-family-regular

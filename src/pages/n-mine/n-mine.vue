@@ -241,7 +241,6 @@
         background: $color-white
         padding: 18px 15px
         display: block
-        border-1px(#D9F0FE, 14px)
         background-color: #FFF
         background-image: url("./data@2x.png")
         background-repeat: no-repeat
@@ -286,7 +285,7 @@
       background: $color-white
       padding: 15px 15px 20px
       display: block
-      border-1px(#D9F0FE, 12px)
+      border-1px(#D9F0FE, 6px)
       margin-top: 10px
       .title
         color: #333
