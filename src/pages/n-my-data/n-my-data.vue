@@ -481,12 +481,10 @@
       .tab-item
         flex: 1
         text-align: center
-        opacity: 0.8
         transition: all 0.3s
         font-family: $font-family-regular
         font-size: $font-size-16
       .active
-        opacity: 1
         font-family: $font-family-medium
       .line-tab
         width: 33.333%
