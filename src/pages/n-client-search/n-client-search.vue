@@ -16,7 +16,7 @@
                 @pullingUp="onPullingUp"
         >
           <ul class="user-list">
-            <li class="user-box border-bottom-1px" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
+            <li class="user-box" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
               <user-card :userInfo="item" useType="join"></user-card>
             </li>
           </ul>
@@ -239,7 +239,6 @@
 
       .user-list
         position: relative
-        padding-left: 15px
         .user-box
           layout(row, block, nowrap)
 </style>
