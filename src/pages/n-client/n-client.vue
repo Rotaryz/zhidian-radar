@@ -604,8 +604,10 @@
           font-family: $font-family-regular
           height: 45px
           line-height: 45px
-          font-size: $font-size-14
+          font-size: $font-size-16
+          opacity: 0.8
         .active
+          opacity: 1
           font-size: $font-size-16
           font-family: $font-family-medium
         .line-tab
@@ -656,8 +658,10 @@
           height: 45px
           line-height: 45px
           font-family: $font-family-regular
-          font-size: $font-size-14
+          font-size: $font-size-16
+          opacity: 0.8
         .active
+          opacity: 0.8
           font-size: $font-size-16
           font-family: $font-family-medium
         .line-tab
