@@ -343,9 +343,12 @@
       flex: 1
       text-align: center
       transition: all 0.3s
+      color: #3333
       font-size: $font-size-16
+      opacity: 0.8
       font-family: $font-family-regular
     .active
+      opacity: 1
       font-family: $font-family-medium
     .line-tab
       width: 33.333%
