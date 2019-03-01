@@ -602,9 +602,7 @@
       color: #333
       font-family: $font-family-regular
       transition: all 0.3s
-      opacity: 0.8
     .active
-      opacity: 1
       font-family: $font-family-medium
     .line
       position: absolute
