@@ -602,6 +602,7 @@
           flex: 1
           transition: all 0.3s
           font-family: $font-family-regular
+          height: 45px
           line-height: 45px
           font-size: $font-size-14
         .active
@@ -646,13 +647,14 @@
         color: $color-text-main
         letter-spacing: 0.52px
         text-align: center
-        line-height: 45px
         border-bottom-1px(#E1E1E1)
         position: relative
         .tab-item
           flex: 1
           text-align: center
           transition: all 0.3s
+          height: 45px
+          line-height: 45px
           font-family: $font-family-regular
           font-size: $font-size-14
         .active
