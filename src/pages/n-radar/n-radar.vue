@@ -24,7 +24,8 @@
             </div>
             <transition name="fade">
               <div class="pnes-content" v-if="topType">
-                <img src="./pnes-model.gif" class="content-bc">
+                <img src="./pnes-bc@2x.png" class="content-bc">
+                <img src="./NES_iSpt.gif" class="content-gif">
                 <div class="pnes-item" v-for="(item, idx) in pnesObj" :key="idx" :class="item.type">
                   <div class="pnes-title">{{item.valTxt}}</div>
                   <div class="pnes-num-box">{{modelObj[item.valKey]}}%</div>
@@ -517,6 +518,12 @@
           width: 88vw
           .content-bc
             width: 88vw
+          .content-gif
+            position: absolute
+            left: 0
+            top: 0
+            width: 100%
+            height: 100%
           .pnes-item
             position: absolute
             &.p
