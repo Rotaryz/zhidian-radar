@@ -518,6 +518,7 @@
           width: 88vw
           .content-bc
             width: 88vw
+            display: block
           .content-gif
             position: absolute
             left: 0
