@@ -403,7 +403,7 @@
               &.android
                 width: 37px
                 height: 37px
-                border: 2px solid #e6e6e6
+                border: 2px solid #fff
           .chat-msg-box
             flex: 1
             overflow: hidden
