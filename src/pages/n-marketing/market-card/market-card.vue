@@ -1,7 +1,7 @@
 <template>
   <div class="market-card">
     <div class="wrapper">
-      <article class="top">
+      <article class="top-wrapper">
         <section class="left" @click="navHandle">
           <img class="logo" :src="CONFIG.icon" alt="">
           <p class="title">{{info.name}}</p>
@@ -16,7 +16,7 @@
           </article>
         </section>
       </article>
-      <article class="bottom">
+      <article class="bottom-wrapper">
         <section class="left item-text">
           <p class="number" :class="{active: isClosed}">{{info[CONFIG.leftKey] || 0}}</p>
           <p class="text">{{CONFIG.leftText}}</p>
@@ -154,7 +154,7 @@
       fill-box(absolute)
       layout(column,block,nowrap)
       padding :0 4vw
-      .top
+      .top-wrapper
         flex:1
         position: relative
         display :flex
@@ -232,7 +232,7 @@
               box-shadow: 0 0 4px 0 rgba(0,0,0,0.20), 0 4px 23px 0 rgba(0,0,0,0.08), -2px 4px 4px 0 rgba(0,0,0,0.10);
               &.active
                 transform :translate3d(18.5px, -50%, 0)
-      .bottom
+      .bottom-wrapper
         flex:1.9545454545454546
         layout(row,block,nowrap)
         align-items :center
