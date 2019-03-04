@@ -18,8 +18,8 @@
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
                 <!--<div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>-->
-                <div class="avatar" :style="{borderColor: modelType ? pnesColor[modelType] : '#e6e6e6'}">
-                  <img class="avatar-img" :src="currentMsg.avatar" alt="">
+                <div class="avatar" :class="{'android' : !isIos}" :style="{borderColor: modelType ? pnesColor[modelType] : '#e6e6e6'}">
+                  <img class="avatar-img" :class="{'android' : !isIos}" :src="currentMsg.avatar" alt="">
                 </div>
                 <div class="chat-msg-box other" v-if="item.type * 1 === 1">
                   <div class="arrow-box">
@@ -131,8 +131,8 @@
                   </div>
                 </div>
                 <!--<div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>-->
-                <div class="avatar">
-                  <img class="avatar-img" :src="userInfo.avatar" alt="">
+                <div class="avatar" :class="{'android' : !isIos}">
+                  <img class="avatar-img" :class="{'android' : !isIos}" :src="userInfo.avatar" alt="">
                 </div>
               </div>
             </div>
@@ -925,7 +925,8 @@
         coverFullShow: false,
         coverShowType: '',
         modelType: '', // pnes模型属性
-        pnesColor: PNES_COLOR
+        pnesColor: PNES_COLOR,
+        isIos: storage.get('isIos')
       }
     },
     components: {
@@ -1073,12 +1074,18 @@
             border-radius: 50%
             border: 1.5px solid #e6e6e6
             box-sizing: border-box
+            &.android
+              border: 2px solid #e6e6e6
             .avatar-img
               width: 39px
               height: 39px
               border-radius: 50%
               object-fit: cover
               border: 1.5px solid #fff
+              &.android
+                width: 37px
+                height: 37px
+                border: 2px solid #e6e6e6
           .chat-msg-box
             flex: 1
             overflow: hidden
