@@ -9,6 +9,7 @@
 <script>
   import Tab from 'components/tab/tab'
   import Ceiling from 'components/ceiling/ceiling'
+  import storage from 'storage-controller'
 
   const COMPONENT_NAME = 'home'
 
@@ -18,6 +19,9 @@
       return {}
     },
     created() {
+      let ua = '' + window.navigator.userAgent.toLowerCase()
+      let isIos = /\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(ua) // 是IOS系统
+      storage.set('isIos', isIos)
     },
     methods: {
       login() {
