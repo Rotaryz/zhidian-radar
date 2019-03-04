@@ -209,7 +209,7 @@
               line-height: @font-size
           .switch-wrapper-card
             position :relative
-            width :10.133333333333333vw
+            width :10vw
             height :5.3vw
             background-color: #fdfdfd
             border-radius: 8.3vw
@@ -223,15 +223,13 @@
               position :absolute
               left :0.13333333333333333vw
               col-center()
-              margin-top :-0.13333333333333333vw
               width :4.5vw
               height :@width
-              box-sizing :border-box
               background :#fff
-              border-radius :@width
+              border-radius :100%
               transform : translate(0,-50%,0)
               transition :all 0.5s
-              box-shadow: 0 0 4px 0 rgba(0,0,0,0.20), 0 4px 12px 0 rgba(0,0,0,0.08), -2px 4px 4px 0 rgba(0,0,0,0.10);
+              box-shadow: 0px 0px 4px 0 rgba(0,0,0,0.20), 0 4px 12px 0 rgba(0,0,0,0.08), -2px 4px 4px 0 rgba(0,0,0,0.10);
               &.active
                 transform :translate3d(4.9vw, -50%, 0)
       .bottom
