@@ -211,7 +211,7 @@
     {txt: '个人微信', icon: 'im-weixin', type: 4},
     // {txt: '微信群码', icon: 'im-group', type: 5},
     {txt: '常用语', icon: 'im-useful', type: 6},
-    {txt: '优惠券', icon: 'im-server', type: 30},
+    {txt: '优惠券', icon: 'im-coupon', type: 30},
     {txt: '商品', icon: 'im-goods', type: 20},
     {txt: '服务', icon: 'im-server', type: 2},
     {txt: '活动', icon: 'im-activity', type: 3}
@@ -1469,6 +1469,8 @@
                 icon-image('./icon-wechatadd')
               .im-group
                 icon-image('./icon-groupcode')
+              .im-coupon
+                icon-image('./icon-coupon_add')
               .im-useful
                 icon-image('./icon-Comlanguage')
               .im-goods
@@ -1476,7 +1478,7 @@
               .im-activity
                 icon-image('./icon-activity')
               .im-server
-                icon-image('./icon-coupon_add')
+                icon-image('./icon-service')
             .item-txt
               margin-top: 7.5px
               font-size: $font-size-12
