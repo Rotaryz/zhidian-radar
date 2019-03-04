@@ -254,7 +254,6 @@
       this.getDiagnoseState()
       this.getRadarList()
       this._refreshInfo()
-      alert('测试234')
     },
     methods: {
       ...mapActions([
