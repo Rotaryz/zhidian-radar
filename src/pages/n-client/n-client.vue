@@ -299,21 +299,31 @@
               count += item.sex_count
             })
             let pieData = {
-              // seriesData: [
-              //   {name: '男 50%', value: 1},
-              //   {name: '女 40%', value: 1},
-              //   {name: '未知 10%', value: 1}
-              // ]
-              seriesData: res.data.map(item => {
-                let sex = item.sex === 0 ? '未知' : item.sex === 1 ? '男' : '女'
-                let percent = item.sex_count / count * 100
-                return {
-                  name: sex + ' ' + parseInt(percent) + '%',
-                  value: item.sex_count
-                }
-              })
-
+              seriesData: []
             }
+            let arr = res.data.filter((item, index) => {
+              return (index > 0) && item
+            })
+            arr = arr.map(item => {
+              let sex = item.sex === 0 ? '未知' : item.sex === 1 ? '男' : '女'
+              let percent = item.sex_count / count * 100
+              return {
+                name: sex + ' ' + parseInt(percent) + '%',
+                value: item.sex_count
+              }
+            })
+
+            let item
+            res.data.map(val => {
+              if (+val.sex === 0) {
+                item = {
+                  name: '未知 ' + parseInt(val.sex_count / count * 100) + '%',
+                  value: val.sex_count
+                }
+              }
+            })
+            pieData.seriesData = [...arr]
+            item && pieData.seriesData.push(item)
             this.$refs.c1.action(pieData)
           })
       },
