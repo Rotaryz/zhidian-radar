@@ -281,11 +281,11 @@
 
     .main-content
       box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04)
+      border-1px(#D9F0FE, 6px)
       border-radius: 6px
       background: $color-white
       padding: 15px 15px 20px
       display: block
-      border-1px(#D9F0FE, 6px)
       margin-top: 10px
       .title
         color: #333

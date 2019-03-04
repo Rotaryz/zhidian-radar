@@ -343,6 +343,7 @@
       flex: 1
       text-align: center
       transition: all 0.3s
+      color: #333
       font-size: $font-size-16
       font-family: $font-family-regular
     .active

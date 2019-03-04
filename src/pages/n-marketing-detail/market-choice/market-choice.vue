@@ -290,12 +290,18 @@
             content: ""
             display: block
             position: absolute
-            border-bottom: 1px dotted $color-row-line
+            height: 1px
             left: 0
             bottom: 0
             width: 100%
-            transform-origin: 0 bottom
-            transform : scaleX(0.5)
+            background-image: repeating-linear-gradient(90deg, #E1E1E1 0,#E1E1E1 4px, #fff 4px, #fff 6px)
+            transform: scale(1, 1)
+            @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2)
+              width: 200%
+              transform: scale(1, .5)
+            @media (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3)
+              width: 300%
+              transform: scale(1, 1 / 3)
           .left
             flex:1
             font-family: $font-family-regular

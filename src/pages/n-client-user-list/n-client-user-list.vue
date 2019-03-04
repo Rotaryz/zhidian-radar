@@ -3,7 +3,7 @@
     <article class="client-user-list">
       <section class="add-user">
         <p class="txt">{{this.title}}（{{dataArray.length}}人）</p>
-        <div v-if="+groupType === 0" class="icon" @click="toAddUser"></div>
+        <img v-if="+groupType === 0" src="./icon-addgroup@2x.png" class="icon" @click="toAddUser">
       </section>
       <div class="simple-scroll"  v-if="dataArray.length">
         <div class="scroll-list-wrap">
@@ -86,7 +86,6 @@
         isAll: false,
         isEmpty: false,
         moveIdx: -1,
-        groupType: null,
         userInfo: '',
         groups: []
       }
@@ -122,7 +121,6 @@
       getParams() {
         this.title = this.$route.query.title
         this.id = this.$route.query.id
-        this.groupType = this.$route.query.groupType
       },
       getGroupList() {
         let data = {
@@ -273,6 +271,9 @@
           threshold: parseInt(this.pullUpLoadThreshold),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
+      },
+      groupType() {
+        return this.$route.query.groupType
       }
     },
     components: {
@@ -322,7 +323,7 @@
       .icon
         width: 30px
         height: 30px
-        icon-image(icon-addgroup)
+        object-fit: cover
 
     .total
       height: 29px

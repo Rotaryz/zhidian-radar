@@ -599,7 +599,7 @@
       flex: 1
       text-align: center
       font-size: $font-size-16
-      color: $color-text
+      color: #333
       font-family: $font-family-regular
       transition: all 0.3s
     .active
@@ -685,7 +685,8 @@
     .tag
       padding: 0 15px 8px
       border-radius: 6px
-      box-shadow:  0 2px 16px 0 rgba(21,24,45,0.04)
+      box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04)
+      border-1px(#D9F0FE, 6px)
       .title
         display: flex
         justify-content: space-between
@@ -752,7 +753,8 @@
     .pie-box
       margin: 12px 0
       background: #FFFFFF
-      box-shadow:  0 2px 16px 0 rgba(21,24,45,0.04)
+      box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04)
+      border-1px(#D9F0FE, 6px)
       border-radius: 4px
       overflow :hidden
       .title

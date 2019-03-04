@@ -299,21 +299,31 @@
               count += item.sex_count
             })
             let pieData = {
-              // seriesData: [
-              //   {name: '男 50%', value: 1},
-              //   {name: '女 40%', value: 1},
-              //   {name: '未知 10%', value: 1}
-              // ]
-              seriesData: res.data.map(item => {
-                let sex = item.sex === 0 ? '未知' : item.sex === 1 ? '男' : '女'
-                let percent = item.sex_count / count * 100
-                return {
-                  name: sex + ' ' + parseInt(percent) + '%',
-                  value: item.sex_count
-                }
-              })
-
+              seriesData: []
             }
+            let arr = res.data.filter((item, index) => {
+              return (index > 0) && item
+            })
+            arr = arr.map(item => {
+              let sex = item.sex === 0 ? '未知' : item.sex === 1 ? '男' : '女'
+              let percent = item.sex_count / count * 100
+              return {
+                name: sex + ' ' + parseInt(percent) + '%',
+                value: item.sex_count
+              }
+            })
+
+            let item
+            res.data.map(val => {
+              if (+val.sex === 0) {
+                item = {
+                  name: '未知 ' + parseInt(val.sex_count / count * 100) + '%',
+                  value: val.sex_count
+                }
+              }
+            })
+            pieData.seriesData = [...arr]
+            item && pieData.seriesData.push(item)
             this.$refs.c1.action(pieData)
           })
       },
@@ -602,10 +612,10 @@
           flex: 1
           transition: all 0.3s
           font-family: $font-family-regular
+          height: 45px
           line-height: 45px
-          font-size: $font-size-14
-        .active
           font-size: $font-size-16
+        .active
           font-family: $font-family-medium
         .line-tab
           width: 33.333%
@@ -646,17 +656,17 @@
         color: $color-text-main
         letter-spacing: 0.52px
         text-align: center
-        line-height: 45px
         border-bottom-1px(#E1E1E1)
         position: relative
         .tab-item
           flex: 1
           text-align: center
           transition: all 0.3s
+          height: 45px
+          line-height: 45px
           font-family: $font-family-regular
-          font-size: $font-size-14
-        .active
           font-size: $font-size-16
+        .active
           font-family: $font-family-medium
         .line-tab
           width: 25%
