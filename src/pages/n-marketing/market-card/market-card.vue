@@ -222,13 +222,14 @@
             .circle-1
               position :absolute
               col-center()
-              width :18px
+              left :0.5px
+              width :16px
               height :@width
               background :#fff
               border-radius :100%
               transform : translate(0,-50%,0)
               transition :all 0.5s
-              box-shadow: 0px 0px 4px 0 rgba(0,0,0,0.20), 0 4px 12px 0 rgba(0,0,0,0.08), -2px 4px 4px 0 rgba(0,0,0,0.10);
+              box-shadow: 0 0 4px 0 rgba(0,0,0,0.20), 0 4px 23px 0 rgba(0,0,0,0.08), -2px 4px 4px 0 rgba(0,0,0,0.10);
               &.active
                 transform :translate3d(18.5px, -50%, 0)
       .bottom
