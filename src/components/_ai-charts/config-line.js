@@ -207,7 +207,18 @@ export function createOrderAmount(args = {}) {
           width: 0.5
         }
       },
-      formatter: '{b}<br />{a0}: {c0}<br />{a1}: {c1}',
+      formatter: (params, ticket, callback) => {
+        let html
+        if (!params.length) {
+          return ''
+        } else {
+          html = params[0].name + '<br />'
+          params.forEach(item => {
+            html += (item.seriesName + ' ' + item.data + '<br />')
+          })
+        }
+        return html
+      },
       padding: 5
     },
     yAxis,
@@ -374,7 +385,18 @@ export function createPNES(args = {}) {
           width: 0.5
         }
       },
-      formatter: '{b}<br />{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%<br />{a3}: {c3}%',
+      formatter: (params, ticket, callback) => {
+        let html
+        if (!params.length) {
+          return ''
+        } else {
+          html = params[0].name + '<br />'
+          params.forEach(item => {
+            html += (item.seriesName + ' ' + item.data + '%<br />')
+          })
+        }
+        return html
+      },
       padding: 5
     },
     yAxis: {
