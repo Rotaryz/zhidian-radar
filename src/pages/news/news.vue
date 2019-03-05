@@ -92,8 +92,7 @@
         checkedIdx: -1,
         moveIdx: -1,
         pnesColor: PNES_COLOR,
-        isIos: storage.get('isIos')
-        pnesColor: PNES_COLOR,
+        isIos: storage.get('isIos'),
         created: false
       }
     },
