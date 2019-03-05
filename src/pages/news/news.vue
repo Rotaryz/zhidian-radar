@@ -91,7 +91,8 @@
         checkedItem: {},
         checkedIdx: -1,
         moveIdx: -1,
-        pnesColor: PNES_COLOR
+        pnesColor: PNES_COLOR,
+        created: false
       }
     },
     methods: {
@@ -112,6 +113,11 @@
         this.$router.push(url)
       },
       createGroup() {
+        if (this.created) return
+        this.created = true
+        setTimeout(() => {
+          this.created = false
+        }, 1000)
         let pageUrl = this.$route.path
         let path = `${pageUrl}/new-group-msg`
         this.$router.push(path)
