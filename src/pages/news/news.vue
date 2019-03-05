@@ -23,10 +23,10 @@
           </div>
           <slide-view :useType="3" @del="delHandler" @touchBegin="touchBegin" @touchEnd="touchEnd" :item="item" :index="index" :hasFn="true" :ref="'slide' + index">
             <div slot="content" class="news-item-content">
-              <div class="news-left">
-                <div class="avatar-box" :style="{borderColor: item.group_rule_name ? pnesColor[item.group_rule_name] : '#f3f3f3'}">
-                  <img v-if="item.avatar" :src="item.avatar" class="left-img">
-                  <img v-else src="./pic-default_people@2x.png" class="left-img">
+              <div class="news-left" :class="{'android' : !isIos}">
+                <div class="avatar-box" :class="{'android' : !isIos}" :style="{borderColor: item.group_rule_name ? pnesColor[item.group_rule_name] : '#f3f3f3'}">
+                  <img v-if="item.avatar" :src="item.avatar" class="left-img" :class="{'android' : !isIos}">
+                  <img v-else src="./pic-default_people@2x.png" class="left-img" :class="{'android' : !isIos}">
                 </div>
               </div>
               <div class="news-right">
@@ -91,6 +91,8 @@
         checkedItem: {},
         checkedIdx: -1,
         moveIdx: -1,
+        pnesColor: PNES_COLOR,
+        isIos: storage.get('isIos')
         pnesColor: PNES_COLOR,
         created: false
       }
@@ -230,8 +232,8 @@
         display: flex
         align-items: center
       .news-left
-        width: 46px
-        height: 46px
+        width: 47px
+        height: 47px
         position: relative
         margin-right: 10px
         display: flex
@@ -240,14 +242,20 @@
         .avatar-box
           border: 1.5px solid red
           border-radius: 50%
-          overflow: hidden
           box-sizing: border-box
+          overflow: hidden
+          &.android
+            border: 2px solid red
           .left-img
             width: 39px
             height: 39px
             border: 1.5px solid #fff
             border-radius: 50%
             display: block
+            &.android
+              width: 38px
+              height: 38px
+              border: 2px solid #fff
         .news-count
           display: inline-block
           min-width: 7px

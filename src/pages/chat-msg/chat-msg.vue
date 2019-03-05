@@ -18,8 +18,8 @@
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
                 <!--<div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>-->
-                <div class="avatar" :style="{borderColor: modelType ? pnesColor[modelType] : '#e6e6e6'}">
-                  <img class="avatar-img" :src="currentMsg.avatar" alt="">
+                <div class="avatar" :class="{'android' : !isIos}" :style="{borderColor: modelType ? pnesColor[modelType] : '#e6e6e6'}">
+                  <img class="avatar-img" :class="{'android' : !isIos}" :src="currentMsg.avatar" alt="">
                 </div>
                 <div class="chat-msg-box other" v-if="item.type * 1 === 1">
                   <div class="arrow-box">
@@ -131,8 +131,8 @@
                   </div>
                 </div>
                 <!--<div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>-->
-                <div class="avatar">
-                  <img class="avatar-img" :src="userInfo.avatar" alt="">
+                <div class="avatar" :class="{'android' : !isIos}">
+                  <img class="avatar-img" :class="{'android' : !isIos}" :src="userInfo.avatar" alt="">
                 </div>
               </div>
             </div>
@@ -211,7 +211,7 @@
     {txt: '个人微信', icon: 'im-weixin', type: 4},
     // {txt: '微信群码', icon: 'im-group', type: 5},
     {txt: '常用语', icon: 'im-useful', type: 6},
-    {txt: '优惠券', icon: 'im-server', type: 30},
+    {txt: '优惠券', icon: 'im-coupon', type: 30},
     {txt: '商品', icon: 'im-goods', type: 20},
     {txt: '服务', icon: 'im-server', type: 2},
     {txt: '活动', icon: 'im-activity', type: 3}
@@ -925,7 +925,8 @@
         coverFullShow: false,
         coverShowType: '',
         modelType: '', // pnes模型属性
-        pnesColor: PNES_COLOR
+        pnesColor: PNES_COLOR,
+        isIos: storage.get('isIos')
       }
     },
     components: {
@@ -1073,12 +1074,18 @@
             border-radius: 50%
             border: 1.5px solid #e6e6e6
             box-sizing: border-box
+            &.android
+              border: 2px solid #e6e6e6
             .avatar-img
               width: 39px
               height: 39px
               border-radius: 50%
               object-fit: cover
               border: 1.5px solid #fff
+              &.android
+                width: 37px
+                height: 37px
+                border: 2px solid #fff
           .chat-msg-box
             flex: 1
             overflow: hidden
@@ -1469,6 +1476,8 @@
                 icon-image('./icon-wechatadd')
               .im-group
                 icon-image('./icon-groupcode')
+              .im-coupon
+                icon-image('./icon-coupon_add')
               .im-useful
                 icon-image('./icon-Comlanguage')
               .im-goods
@@ -1476,7 +1485,7 @@
               .im-activity
                 icon-image('./icon-activity')
               .im-server
-                icon-image('./icon-coupon_add')
+                icon-image('./icon-service')
             .item-txt
               margin-top: 7.5px
               font-size: $font-size-12

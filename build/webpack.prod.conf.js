@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+// const Version = new Date().getTime() // 处理缓存
 
 const env = process.env.BUILD_ENV === 'production' ? require('../config/prod.env') :
   process.env.BUILD_ENV === 'test' ? require('../config/test.env') : process.env.BUILD_ENV === 'dev' ? require('../config/dev.env') : require('../config/local.env')

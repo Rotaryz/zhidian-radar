@@ -1,22 +1,22 @@
 <template>
   <div class="market-card">
     <div class="wrapper">
-      <article class="top">
+      <article class="top-wrapper">
         <section class="left" @click="navHandle">
           <img class="logo" :src="CONFIG.icon" alt="">
           <p class="title">{{info.name}}</p>
           <img class="arrow-right" src="./icon_pressed@2x.png" alt="">
         </section>
         <section class="right">
-          <article v-if="CONFIG.buttonType === 'switch'" class="switch-wrapper" :class="{active: isClosed}" @click="switchHandle">
-            <div class="circle" :class="{active: isClosed}"></div>
+          <article v-if="CONFIG.buttonType === 'switch'" class="switch-wrapper-card" :class="{active: isClosed}" @click="switchHandle">
+            <div class="circle-1" :class="{active: isClosed}"></div>
           </article>
           <article v-if="CONFIG.buttonType === 'status'" class="status-wrapper" :style="{borderColor: STATUS_COLOR[info.exec_status]}">
             <span class="text" :style="{color: STATUS_COLOR[info.exec_status]}">{{info.exec_status_str}}</span>
           </article>
         </section>
       </article>
-      <article class="bottom">
+      <article class="bottom-wrapper">
         <section class="left item-text">
           <p class="number" :class="{active: isClosed}">{{info[CONFIG.leftKey] || 0}}</p>
           <p class="text">{{CONFIG.leftText}}</p>
@@ -86,7 +86,7 @@
     methods: {
       ...Helpers.marketMethods,
       _initChatData() {
-        let key = this.CONFIG.leftKey
+        let key = this.CONFIG.middleKey
         let {isClosed} = this
         if (this.info.market_type) {
           this.isClosed = isClosed = true
@@ -113,7 +113,6 @@
         let {xAxisData, seriesData, isClosed} = this
         isClosed = !isClosed
         this._updateStatus(isClosed, () => {
-          this.$toast.show('操作成功!')
           this._chartActions({xAxisData, seriesData, isClosed})
           this.isClosed = isClosed
         })
@@ -155,7 +154,7 @@
       fill-box(absolute)
       layout(column,block,nowrap)
       padding :0 4vw
-      .top
+      .top-wrapper
         flex:1
         position: relative
         display :flex
@@ -208,33 +207,32 @@
               font-size: 3.4666666666666663vw
               color: #CDCDCD
               line-height: @font-size
-          .switch-wrapper
+          .switch-wrapper-card
             position :relative
-            width :10.133333333333333vw
-            height :5.333333333333334vw
+            width :38px
+            height :20px
             background-color: #fdfdfd
-            border-radius: 8.266666666666666vw
+            border-radius: 31px
             border:1px solid #e3e3e3
             box-sizing :border-box
             transition :background-color 0.2s
             &.active
               background-color: #02D392
-              border:1px solid #02D392
-            .circle
+              border-color:#02D392
+            .circle-1
               position :absolute
-              left :0.13333333333333333vw
               col-center()
-              width :4.5vw
+              left :0.5px
+              width :16px
               height :@width
-              box-sizing :border-box
               background :#fff
               border-radius :100%
               transform : translate(0,-50%,0)
               transition :all 0.5s
               box-shadow: 0 0 4px 0 rgba(0,0,0,0.20), 0 4px 23px 0 rgba(0,0,0,0.08), -2px 4px 4px 0 rgba(0,0,0,0.10);
               &.active
-                transform :translate3d(4.9vw, -50%, 0)
-      .bottom
+                transform :translate3d(18.5px, -50%, 0)
+      .bottom-wrapper
         flex:1.9545454545454546
         layout(row,block,nowrap)
         align-items :center
