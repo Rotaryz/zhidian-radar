@@ -417,7 +417,7 @@
           limit: 10,
           customer_id: this.id
         }
-        ClientDetail.getFlowList(data).then((res) => {
+        ClientDetail.marketRecord(data).then((res) => {
           if (res.error === ERR_OK) {
             this.flowList.push(...res.data)
             this._isAflowList(res)

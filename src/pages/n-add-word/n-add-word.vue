@@ -51,7 +51,7 @@
         if (!this.allowSend) return
         this.allowSend = false
         if (!this.editorMsg) {
-          this.$refs.toast.show('请先输入内容')
+          this.$toast.show('请先输入内容')
           setTimeout(() => {
             this.allowSend = true
           }, 300)
@@ -76,7 +76,7 @@
                 this.allowSend = true
               }, 300)
             } else {
-              this.$refs.toast.show(res.message)
+              this.$toast.show(res.message)
               setTimeout(() => {
                 this.allowSend = true
               }, 300)
@@ -94,7 +94,7 @@
                 this.allowSend = true
               }, 300)
             } else {
-              this.$refs.toast.show(res.message)
+              this.$toast.show(res.message)
               setTimeout(() => {
                 this.allowSend = true
               }, 300)
