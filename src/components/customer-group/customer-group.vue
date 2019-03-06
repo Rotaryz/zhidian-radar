@@ -4,7 +4,7 @@
       <template v-for="(item,index) in dataArray">
         <li v-if="index < 9"  :key="index" class="avatar-wrapper":style="avatarWrapperStyles">
           <div class="avatar" :class="{single: dataArray.length <= 1}">
-            <img v-if="item && item.avatar" class="avatar-img" :src="item.avatar" alt="">
+            <img v-if="item && (item.avatar || item.image_url)" class="avatar-img" :src="item.avatar || item.image_url" alt="">
             <img v-else class="avatar-img" src="./pic-default_people@2x.png" alt="">
           </div>
         </li>
@@ -29,6 +29,9 @@
     data() {
       return {
       }
+    },
+    mounted() {
+      console.log(this.dataArray)
     },
     computed: {
       avatarWrapperStyles() {
