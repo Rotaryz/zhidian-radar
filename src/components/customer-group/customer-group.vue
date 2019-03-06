@@ -30,9 +30,6 @@
       return {
       }
     },
-    mounted() {
-      console.log(this.dataArray)
-    },
     computed: {
       avatarWrapperStyles() {
         let len = this.dataArray.length || 1

@@ -318,6 +318,9 @@
               return {name: item.title, value: item.counts}
             })
             this.goodsList = seriesData
+            setTimeout(() => {
+              this.$refs.scroll.forceUpdate()
+            })
           })
       },
       // 兴趣商品分类
@@ -753,7 +756,6 @@
       padding-bottom: 0
     .pie-box
       margin: 12px 0
-      background: #FFFFFF
       box-shadow: 0 2px 16px 0 rgba(21,24,45,0.04)
       border-1px(#D9F0FE, 6px)
       border-radius: 4px
