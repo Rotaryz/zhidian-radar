@@ -394,10 +394,11 @@
       },
       // 营销记录
       getMarketRecord() {
+        this.noMore = false
         this.flowPage = 1
         let data = {
           page: this.flowPage,
-          limit: 10,
+          limit: 5,
           customer_id: this.id
         }
         ClientDetail.marketRecord(data)
@@ -414,7 +415,7 @@
         if (this.noMore) return
         let data = {
           page: this.flowPage,
-          limit: 10,
+          limit: 5,
           customer_id: this.id
         }
         ClientDetail.marketRecord(data).then((res) => {
