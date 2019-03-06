@@ -398,7 +398,7 @@
         this.flowPage = 1
         let data = {
           page: this.flowPage,
-          limit: 5,
+          limit: 10,
           customer_id: this.id
         }
         ClientDetail.marketRecord(data)
@@ -415,7 +415,7 @@
         if (this.noMore) return
         let data = {
           page: this.flowPage,
-          limit: 5,
+          limit: 10,
           customer_id: this.id
         }
         ClientDetail.marketRecord(data).then((res) => {
