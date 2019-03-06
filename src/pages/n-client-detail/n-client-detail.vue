@@ -394,6 +394,7 @@
       },
       // 营销记录
       getMarketRecord() {
+        this.noMore = false
         this.flowPage = 1
         let data = {
           page: this.flowPage,
